@@ -1,5 +1,11 @@
 # MoWen
 
+## The Internet connected the world.
+
+## MoWen connects trust.
+
+---
+
 欢迎回来。
 
 回到诚实。
@@ -8,8 +14,6 @@
 
 ---
 
-MoWen
+**Honesty is where civilization begins.**
 
-只是诚实运行。
-
-没有别的。
+An Open Protocol for Responsible Language.
