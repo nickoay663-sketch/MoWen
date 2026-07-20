@@ -1,29 +1,43 @@
+
 function verifyLanguage() {
 
     let text = document.getElementById("inputText").value;
 
     let result = "";
 
-    if(text.trim()==""){
-        result="请输入需要验证的证词。";
-    }else{
+    if (text.trim() == "") {
 
-        result="<h3>莫问验证结果</h3>";
+        result = "<h3>莫问</h3>";
 
-        result+="<p>正在分析证词……</p>";
+        result += "<p>欢迎回来。</p>";
+        result += "<p>回到诚实。</p>";
+        result += "<p>文明开始的地方。</p>";
 
-        result+="<p>① 是否存在证词？ ✔</p>";
+    } else {
 
-        result+="<p>② 是否存在对象？ ✔</p>";
+        result = "<h3>莫问</h3>";
 
-        result+="<p>③ 是否存在定义？ ✔</p>";
+        result += "<p><strong>正在诚实运行……</strong></p>";
+        result += "<hr>";
 
-        result+="<p>④ 是否存在逻辑跳跃？（开发中）</p>";
+        result += "<p><strong>输入：</strong></p>";
+        result += "<blockquote>" + text + "</blockquote>";
 
-        result+="<p>⑤ 是否存在无法验证证词？（开发中）</p>";
+        result += "<hr>";
+
+        result += "<p>① 概念（运行中）</p>";
+        result += "<p>② 对象（运行中）</p>";
+        result += "<p>③ 定义（运行中）</p>";
+        result += "<p>④ 证词（运行中）</p>";
+        result += "<p>⑤ 对应（运行中）</p>";
+        result += "<p>⑥ 承担（运行中）</p>";
+
+        result += "<hr>";
+
+        result += "<p><strong>莫问只是诚实运行，没有别的。</strong></p>";
 
     }
 
-    document.getElementById("result").innerHTML=result;
+    document.getElementById("result").innerHTML = result;
 
 }
