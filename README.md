@@ -2,11 +2,11 @@
 
 The Internet connected the world
 
-MoWen connects trust
+MoWen connects trustworthy people
 
 互联网连接了世界
 
-《莫问》连接了信任
+《莫问》连接了可信之人
 
 ---
 
