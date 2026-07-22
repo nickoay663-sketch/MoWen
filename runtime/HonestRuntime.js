@@ -1,104 +1,36 @@
-/*
-MoWen Honest Runtime v1.0
-*/
+import RecognitionEngine from "./RecognitionEngine.js";
+import DefinitionEngine from "./DefinitionEngine.js";
+import EvidenceEngine from "./EvidenceEngine.js";
+import CorrespondenceEngine from "./CorrespondenceEngine.js";
+import ReasoningEngine from "./ReasoningEngine.js";
+import ResponsibilityEngine from "./ResponsibilityEngine.js";
+import GeneratorEngine from "./GeneratorEngine.js";
 
 class HonestRuntime {
 
-    constructor(text) {
-
+    constructor(text){
         this.text = text;
+    }
 
-        this.result = {
+    run(){
 
-            status: "initialized",
+        return{
 
-            originalText: this.text,
+            recognition: new RecognitionEngine(this.text).run(),
 
-            concepts: [],
+            definition: new DefinitionEngine(this.text).run(),
 
-            objects: [],
+            evidence: new EvidenceEngine(this.text).run(),
 
-            definitions: [],
+            correspondence: new CorrespondenceEngine(this.text).run(),
 
-            evidence: [],
+            reasoning: new ReasoningEngine(this.text).run(),
 
-            correspondence: [],
+            responsibility: new ResponsibilityEngine(this.text).run(),
 
-            reasoning: [],
-
-            expression: [],
-
-            responsibility: [],
-
-            generatedText: ""
+            generator: new GeneratorEngine(this.text).run()
 
         };
-
-    }
-
-    run() {
-
-        this.result.status = "running";
-
-        this.identify();
-
-        this.define();
-
-        this.collectEvidence();
-
-        this.checkCorrespondence();
-
-        this.reason();
-
-        this.checkResponsibility();
-
-        this.generate();
-
-        this.result.status = "completed";
-
-        return this.result;
-
-    }
-
-    identify() {
-
-        // Recognition Engine
-
-    }
-
-    define() {
-
-        // Definition Engine
-
-    }
-
-    collectEvidence() {
-
-        // Evidence Engine
-
-    }
-
-    checkCorrespondence() {
-
-        // Correspondence Engine
-
-    }
-
-    reason() {
-
-        // Reasoning Engine
-
-    }
-
-    checkResponsibility() {
-
-        // Responsibility Engine
-
-    }
-
-    generate() {
-
-        // Generator Engine
 
     }
 
