@@ -1,12 +1,20 @@
 class ResponsibilityEngine {
 
-    constructor(text) {
+    constructor(text){
         this.text = text;
     }
 
-    run() {
+    run(){
 
-        return [];
+        return{
+
+            originalText: this.text,
+
+            responsibility: [],
+
+            status: "waiting"
+
+        };
 
     }
 
