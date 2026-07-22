@@ -23,3 +23,44 @@ Welcome back
 Return to honesty
 
 Where civilization begins
+## Project Structure
+
+```
+definitions/      Concept definitions
+evidence/         Evidence library
+examples/         Runtime examples
+protocol/         Runtime protocol
+runtime/          Runtime engines
+tests/            Runtime tests
+ui/               User interface
+```
+
+## Runtime
+
+MoWen Runtime executes language through:
+
+Recognition
+
+↓
+
+Definition
+
+↓
+
+Evidence
+
+↓
+
+Correspondence
+
+↓
+
+Reasoning
+
+↓
+
+Responsibility
+
+↓
+
+Generator
