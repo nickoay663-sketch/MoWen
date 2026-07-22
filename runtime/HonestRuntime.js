@@ -14,21 +14,35 @@ class HonestRuntime {
 
     run(){
 
+        const recognition = new RecognitionEngine(this.text).run();
+
+        const definition = new DefinitionEngine(this.text).run();
+
+        const evidence = new EvidenceEngine(this.text).run();
+
+        const correspondence = new CorrespondenceEngine(this.text).run();
+
+        const reasoning = new ReasoningEngine(this.text).run();
+
+        const responsibility = new ResponsibilityEngine(this.text).run();
+
+        const generator = new GeneratorEngine(this.text).run();
+
         return{
 
-            recognition: new RecognitionEngine(this.text).run(),
+            recognition,
 
-            definition: new DefinitionEngine(this.text).run(),
+            definition,
 
-            evidence: new EvidenceEngine(this.text).run(),
+            evidence,
 
-            correspondence: new CorrespondenceEngine(this.text).run(),
+            correspondence,
 
-            reasoning: new ReasoningEngine(this.text).run(),
+            reasoning,
 
-            responsibility: new ResponsibilityEngine(this.text).run(),
+            responsibility,
 
-            generator: new GeneratorEngine(this.text).run()
+            generator
 
         };
 
