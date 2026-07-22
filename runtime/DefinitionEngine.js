@@ -1,3 +1,5 @@
+import Definitions from "../definitions/index.js";
+
 class DefinitionEngine {
 
     constructor(text){
@@ -8,21 +10,25 @@ class DefinitionEngine {
 
         const result = {
 
-            originalText: this.text,
+            originalText:this.text,
 
-            concepts: [],
+            concepts:[],
 
-            definitions: []
+            definitions:[]
 
         };
 
-        if(this.text.includes("老师")){
+        Object.keys(Definitions).forEach(concept=>{
 
-            result.concepts.push("老师");
+            if(this.text.includes(concept)){
 
-            result.definitions.push("Teacher.md");
+                result.concepts.push(concept);
 
-        }
+                result.definitions.push(Definitions[concept]);
+
+            }
+
+        });
 
         return result;
 
