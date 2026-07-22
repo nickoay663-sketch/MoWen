@@ -7,10 +7,21 @@ class RecognitionEngine {
     run() {
 
         return {
+
+            originalText: this.text,
+
             concepts: [],
+
             objects: [],
+
             definitions: [],
-            evidences: []
+
+            evidences: [],
+
+            reasoning: [],
+
+            conclusions: []
+
         };
 
     }
