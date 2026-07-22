@@ -10,9 +10,9 @@ class GeneratorEngine {
 
             originalText: this.text,
 
-            generatedText: "",
+            generatedText: this.text,
 
-            status: "waiting"
+            status: "generated"
 
         };
 
