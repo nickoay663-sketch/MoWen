@@ -1,4 +1,6 @@
-// MoWen Honest Runtime v0.1
+/*
+MoWen Honest Runtime v1.0
+*/
 
 class HonestRuntime {
 
@@ -10,13 +12,21 @@ class HonestRuntime {
 
             status: "initialized",
 
-            concept: [],
+            originalText: this.text,
+
+            concepts: [],
+
+            objects: [],
 
             definitions: [],
 
             evidence: [],
 
             correspondence: [],
+
+            reasoning: [],
+
+            expression: [],
 
             responsibility: [],
 
@@ -26,122 +36,72 @@ class HonestRuntime {
 
     }
 
-
     run() {
 
         this.result.status = "running";
 
-
         this.identify();
-
 
         this.define();
 
-
         this.collectEvidence();
-
 
         this.checkCorrespondence();
 
+        this.reason();
 
         this.checkResponsibility();
 
-
         this.generate();
 
-
         this.result.status = "completed";
-
 
         return this.result;
 
     }
 
-
-
-    // 识别概念
-
     identify() {
 
-        this.result.concept.push({
-
-            text: this.text,
-
-            status: "identified"
-
-        });
+        // Recognition Engine
 
     }
-
-
-
-    // 定义概念
 
     define() {
 
-        this.result.definitions.push({
-
-            status: "definition required"
-
-        });
+        // Definition Engine
 
     }
-
-
-
-    // 收集证词
 
     collectEvidence() {
 
-        this.result.evidence.push({
-
-            status: "evidence required"
-
-        });
+        // Evidence Engine
 
     }
-
-
-
-    // 检查对应
 
     checkCorrespondence() {
 
-        this.result.correspondence.push({
-
-            status: "checking correspondence"
-
-        });
+        // Correspondence Engine
 
     }
 
+    reason() {
 
+        // Reasoning Engine
 
-    // 检查承担
+    }
 
     checkResponsibility() {
 
-        this.result.responsibility.push({
-
-            status: "checking responsibility"
-
-        });
+        // Responsibility Engine
 
     }
 
-
-
-    // 生成新文本
-
     generate() {
 
-        this.result.generatedText =
-
-            "经过诚实运行后的新文本";
+        // Generator Engine
 
     }
 
 }
-
 
 export default HonestRuntime;
