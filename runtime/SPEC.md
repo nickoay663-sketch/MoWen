@@ -1,20 +1,36 @@
-# MoWen Specification
+# MoWen Runtime Specification
 
-## Goal
-
-MoWen restores responsibility in language.
-
-It does not produce truth.
-
-It produces language that has completed an honest runtime.
+Version: 1.0
 
 ---
 
-## Runtime
+# Purpose
 
-Input
+MoWen is an Honest Runtime.
 
-↓
+It does not produce opinions.
+
+It performs an honest execution on testimony.
+
+---
+
+# Runtime Input
+
+MoWen accepts any human expression.
+
+Input may include:
+
+- Text
+- Image
+- Audio
+- Video
+- Document
+
+All inputs must first become Testimony.
+
+---
+
+# Runtime Flow
 
 Recognition
 
@@ -36,10 +52,6 @@ Reasoning
 
 ↓
 
-Expression
-
-↓
-
 Responsibility
 
 ↓
@@ -48,38 +60,34 @@ Generate
 
 ---
 
-## Rule 1
+# Runtime Output
 
-One concept.
+MoWen never outputs a judgment.
 
-One definition.
+MoWen outputs:
 
----
+1. Runtime Report
 
-## Rule 2
+2. An unavoidable question
 
-Every definition requires evidence.
-
----
-
-## Rule 3
-
-Every correspondence must be verifiable.
+3. An optional new expression
 
 ---
 
-## Rule 4
+# Runtime Boundary
 
-Every reasoning must be traceable.
+MoWen analyzes testimony.
+
+MoWen does not analyze people.
+
+MoWen does not replace human judgment.
+
+MoWen never replaces human responsibility.
 
 ---
 
-## Rule 5
+# Runtime Principle
 
-Every expression must be able to bear its own responsibility.
+Every output must be able to bear its own responsibility.
 
----
-
-## Result
-
-Trust begins where responsibility can be verified.
+Every Runtime execution must remain honest.
