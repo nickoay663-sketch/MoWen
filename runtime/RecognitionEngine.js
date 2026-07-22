@@ -1,3 +1,5 @@
+import Dictionary from "./Dictionary.js";
+
 class RecognitionEngine {
 
     constructor(text){
@@ -7,41 +9,33 @@ class RecognitionEngine {
     run(){
 
         const result = {
+
             originalText: this.text,
+
             objects: [],
+
             concepts: []
+
         };
 
-        const objectWords = [
-            "我",
-            "你",
-            "他",
-            "她",
-            "我们",
-            "他们"
-        ];
+        Dictionary.objects.forEach(word=>{
 
-        const conceptWords = [
-            "老师",
-            "医生",
-            "学生",
-            "父亲",
-            "母亲",
-            "国家",
-            "政府",
-            "法律"
-        ];
-
-        objectWords.forEach(word=>{
             if(this.text.includes(word)){
+
                 result.objects.push(word);
+
             }
+
         });
 
-        conceptWords.forEach(word=>{
+        Dictionary.concepts.forEach(word=>{
+
             if(this.text.includes(word)){
+
                 result.concepts.push(word);
+
             }
+
         });
 
         return result;
