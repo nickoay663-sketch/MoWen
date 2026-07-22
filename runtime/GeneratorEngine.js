@@ -1,12 +1,20 @@
 class GeneratorEngine {
 
-    constructor(text) {
+    constructor(text){
         this.text = text;
     }
 
-    run() {
+    run(){
 
-        return "";
+        return{
+
+            originalText: this.text,
+
+            generatedText: "",
+
+            status: "waiting"
+
+        };
 
     }
 
