@@ -1,12 +1,18 @@
 class CorrespondenceEngine {
 
-    constructor(text) {
+    constructor(text){
         this.text = text;
     }
 
-    run() {
+    run(){
 
-        return [];
+        return{
+
+            originalText: this.text,
+
+            correspondences:[]
+
+        };
 
     }
 
