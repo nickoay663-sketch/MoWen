@@ -18,21 +18,21 @@ class RecognitionEngine {
 
         };
 
-        Dictionary.objects.forEach(word=>{
+        Dictionary.objects.forEach(item=>{
 
-            if(this.text.includes(word)){
+            if(this.text.includes(item.word)){
 
-                result.objects.push(word);
+                result.objects.push(item);
 
             }
 
         });
 
-        Dictionary.concepts.forEach(word=>{
+        Dictionary.concepts.forEach(item=>{
 
-            if(this.text.includes(word)){
+            if(this.text.includes(item.word)){
 
-                result.concepts.push(word);
+                result.concepts.push(item);
 
             }
 
