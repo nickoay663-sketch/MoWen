@@ -1,12 +1,20 @@
 class DefinitionEngine {
 
-    constructor(text) {
+    constructor(text){
         this.text = text;
     }
 
-    run() {
+    run(){
 
-        return [];
+        return{
+
+            originalText: this.text,
+
+            concepts:[],
+
+            definitions:[]
+
+        };
 
     }
 
