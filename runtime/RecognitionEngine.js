@@ -1,24 +1,28 @@
 class RecognitionEngine {
 
-    constructor(text) {
+    constructor(text){
         this.text = text;
     }
 
-    run() {
+    run(){
 
-        return {
-
+        const result = {
             originalText: this.text,
-
-            concepts: [],
-
             objects: [],
-
+            concepts: [],
             definitions: [],
-
             evidences: []
-
         };
+
+        if(this.text.includes("我")){
+            result.objects.push("我");
+        }
+
+        if(this.text.includes("老师")){
+            result.concepts.push("老师");
+        }
+
+        return result;
 
     }
 
