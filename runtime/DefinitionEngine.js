@@ -6,15 +6,25 @@ class DefinitionEngine {
 
     run(){
 
-        return{
+        const result = {
 
             originalText: this.text,
 
-            concepts:[],
+            concepts: [],
 
-            definitions:[]
+            definitions: []
 
         };
+
+        if(this.text.includes("老师")){
+
+            result.concepts.push("老师");
+
+            result.definitions.push("Teacher.md");
+
+        }
+
+        return result;
 
     }
 
