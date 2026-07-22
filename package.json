@@ -1,0 +1,27 @@
+# MoWen Roadmap
+
+## v0.1 ✅ Foundation
+- Runtime architecture
+- Engine architecture
+- Dictionary
+- Definition System
+- Entry (run.js)
+
+## v0.2 🚧 Runtime
+- Recognition
+- Definition
+- Evidence
+- Correspondence
+- Reasoning
+- Responsibility
+- Generator
+
+## v0.3
+- Browser Runtime
+- UI Integration
+
+## v0.4
+- Honest Analysis
+
+## v1.0
+- First Public Release
