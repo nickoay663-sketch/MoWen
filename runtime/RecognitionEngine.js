@@ -16,11 +16,7 @@ class RecognitionEngine {
 
             definitions: [],
 
-            evidences: [],
-
-            reasoning: [],
-
-            conclusions: []
+            evidences: []
 
         };
 
