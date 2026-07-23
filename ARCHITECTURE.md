@@ -1,20 +1,19 @@
 # MoWen Architecture
 
-## Core
+## Vision
 
-MoWen restores responsibility in language.
+MoWen is an Honest Runtime.
 
-Responsibility restores honesty.
+It does not replace human judgment.
 
-Honesty restores trust.
-
-Trust is where civilization begins.
+It executes testimony through honest correspondence.
 
 ---
 
-## Runtime
+# Runtime Workflow
 
-Input
+```
+Testimony
 
 ↓
 
@@ -26,6 +25,10 @@ Definition
 
 ↓
 
+Search
+
+↓
+
 Evidence
 
 ↓
@@ -34,55 +37,119 @@ Correspondence
 
 ↓
 
+Reasoning
+
+↓
+
 Responsibility
 
 ↓
 
-Generate New Text
+Generator
+```
 
 ---
 
-## Modules
+# Runtime Modules
 
-definitions/
-Language definitions.
+## Recognition Engine
 
-evidence/
-Evidence collection and verification.
-
-protocol/
-Runtime protocols.
-
-runtime/
-Honest runtime engine.
-
-docs/
-System documents.
-
-tests/
-Runtime testing.
-
-ui/
-User interface.
+Recognizes testimony and extracts runtime objects.
 
 ---
 
-## Principle
+## Definition Engine
 
-One concept.
-
-One definition.
-
-One correspondence.
-
-One responsibility.
-
-One expression.
+Retrieves definitions required by Runtime.
 
 ---
 
-## Result
+## Search Engine
 
-The output is not an answer.
+Retrieves existing knowledge before Runtime analysis.
 
-It is language that has completed an honest runtime.
+Search may include:
+
+- Local Knowledge
+- Definition Library
+- Evidence Library
+- Laws
+- Scientific Papers
+- Historical Records
+- Dictionaries
+- Encyclopedias
+- Trusted Websites
+
+---
+
+## Evidence Engine
+
+Collects verifiable evidence.
+
+Evidence does not produce conclusions.
+
+---
+
+## Correspondence Engine
+
+Determines whether testimony corresponds to:
+
+- Definitions
+- Evidence
+- Existing knowledge
+
+Correspondence is the core of MoWen Runtime.
+
+---
+
+## Reasoning Engine
+
+Builds logical relationships from correspondence.
+
+---
+
+## Responsibility Engine
+
+Returns responsibility to the testimony provider.
+
+MoWen never assumes responsibility for testimony.
+
+---
+
+## Generator Engine
+
+Generates:
+
+- Runtime Report
+- Unavoidable Question
+- (Optional) New Testimony
+
+---
+
+# Runtime Principle
+
+MoWen never assumes.
+
+MoWen always searches.
+
+MoWen always corresponds.
+
+MoWen always reports.
+
+MoWen never replaces human responsibility.
+
+---
+
+# Runtime Result
+
+Every Runtime execution produces:
+
+- Recognition Report
+- Definition Report
+- Search Report
+- Evidence Report
+- Correspondence Report
+- Reasoning Report
+- Responsibility Report
+- Generated Question
+- (Optional) Generated New Testimony
