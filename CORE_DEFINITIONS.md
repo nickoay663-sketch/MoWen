@@ -6,30 +6,92 @@
 
 02 Definition
 
-03 Evidence
+03 Search
 
-04 Correspondence
+04 Evidence
 
-05 Reasoning
+05 Correspondence
 
-06 Responsibility
+06 Reasoning
+
+07 Responsibility
 
 ---
 
 ## Runtime Result
 
-07 Truth
+08 Truth
 
-08 Honesty
+09 Honesty
 
-09 Trust
+10 Trust
 
-10 Civilization
+11 Civilization
 
 ---
 
-Every Runtime concept is derived from these ten core definitions.
+## Runtime Principle
 
-No Runtime definition should exist independently.
+Every Runtime concept is derived from these Core Definitions.
 
-Every concept must eventually connect to one or more Core Definitions.
+No Runtime definition exists independently.
+
+Every Runtime process eventually returns to Correspondence.
+
+Every Runtime execution eventually returns Responsibility to the testimony provider.
+
+---
+
+## Runtime Relationship
+
+```
+Testimony
+
+↓
+
+Definition
+
+↓
+
+Search
+
+↓
+
+Evidence
+
+↓
+
+Correspondence
+
+↓
+
+Reasoning
+
+↓
+
+Responsibility
+
+↓
+
+Truth
+
+↓
+
+Honesty
+
+↓
+
+Trust
+
+↓
+
+Civilization
+```
+
+---
+
+## Architecture Rule
+
+Every future concept must connect to one or more Core Definitions.
+
+Core Definitions are the foundation of MoWen Runtime.
