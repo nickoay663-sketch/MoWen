@@ -1,5 +1,6 @@
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
+import SearchEngine from "./SearchEngine.js";
 import EvidenceEngine from "./EvidenceEngine.js";
 import CorrespondenceEngine from "./CorrespondenceEngine.js";
 import ReasoningEngine from "./ReasoningEngine.js";
@@ -8,15 +9,17 @@ import GeneratorEngine from "./GeneratorEngine.js";
 
 class HonestRuntime {
 
-    constructor(text){
+    constructor(text) {
         this.text = text;
     }
 
-    run(){
+    run() {
 
         const recognition = new RecognitionEngine(this.text).run();
 
         const definition = new DefinitionEngine(this.text).run();
+
+        const search = new SearchEngine(this.text).run();
 
         const evidence = new EvidenceEngine(this.text).run();
 
@@ -28,11 +31,13 @@ class HonestRuntime {
 
         const generator = new GeneratorEngine(this.text).run();
 
-        return{
+        return {
 
             recognition,
 
             definition,
+
+            search,
 
             evidence,
 
