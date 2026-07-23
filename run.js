@@ -1,6 +1,6 @@
 import HonestRuntime from "./runtime/HonestRuntime.js";
 
-const input = "我是老师。";
+const input = process.argv.slice(2).join(" ") || "我是老师。";
 
 const runtime = new HonestRuntime(input);
 
