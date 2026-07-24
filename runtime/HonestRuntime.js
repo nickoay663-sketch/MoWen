@@ -7,6 +7,7 @@ import ReasoningEngine from "./ReasoningEngine.js";
 import ResponsibilityEngine from "./ResponsibilityEngine.js";
 import GeneratorEngine from "./GeneratorEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
+import MoWenIdentity from "./MoWenIdentity.js";
 
 
 class HonestRuntime {
@@ -17,6 +18,10 @@ class HonestRuntime {
 
 
     run() {
+
+        const identity =
+            new MoWenIdentity().run();
+
 
         const recognition =
             new RecognitionEngine(this.text).run();
@@ -77,6 +82,8 @@ class HonestRuntime {
 
 
         return {
+
+            identity,
 
             recognition,
 
