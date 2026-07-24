@@ -1,16 +1,33 @@
 class EvidenceEngine {
 
-    constructor(text){
+    constructor(text) {
         this.text = text;
     }
 
-    run(){
+    run() {
 
-        return{
+        const statement = this.text.trim();
+
+        return {
 
             originalText: this.text,
 
-            evidences:[]
+            evidences: [
+
+                {
+                    statement,
+
+                    type: "claim",
+
+                    evidence: false,
+
+                    source: null,
+
+                    status: "Need Evidence"
+
+                }
+
+            ]
 
         };
 
