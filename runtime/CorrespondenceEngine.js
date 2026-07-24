@@ -3,16 +3,19 @@ import MoWenConfig from "./MoWenConfig.js";
 class CorrespondenceEngine {
 
     constructor(evidence) {
+
         this.evidence = evidence;
+
     }
 
     run() {
 
-        const statement = this.evidence.statement;
+        const testimony =
+            this.evidence.testimony;
 
         return {
 
-            statement,
+            testimony,
 
             correspondence: {
 
@@ -22,8 +25,14 @@ class CorrespondenceEngine {
 
                 definition: null,
 
+                evidence: null,
+
+                knowledge: null,
+
+                reasoning: null,
+
                 question:
-                    "该证词中的对象是否被明确定义？"
+                    "该证词是否与对象、定义、证据及已有知识保持对应？"
 
             },
 
