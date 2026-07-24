@@ -76,6 +76,54 @@ const Dictionary = {
             id: "concept.law",
             word: "法律",
             category: "rule"
+        },
+
+        {
+            id: "concept.freedom",
+            word: "自由",
+            category: "concept"
+        },
+
+        {
+            id: "concept.truth",
+            word: "真相",
+            category: "concept"
+        },
+
+        {
+            id: "concept.evidence",
+            word: "证据",
+            category: "concept"
+        },
+
+        {
+            id: "concept.testimony",
+            word: "证词",
+            category: "concept"
+        },
+
+        {
+            id: "concept.responsibility",
+            word: "责任",
+            category: "concept"
+        },
+
+        {
+            id: "concept.definition",
+            word: "定义",
+            category: "concept"
+        },
+
+        {
+            id: "concept.correspondence",
+            word: "对应",
+            category: "concept"
+        },
+
+        {
+            id: "concept.reasoning",
+            word: "推理",
+            category: "concept"
         }
 
     ]
