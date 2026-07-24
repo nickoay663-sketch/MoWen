@@ -2,9 +2,9 @@ import Dictionary from "./Dictionary.js";
 
 class RecognitionEngine {
 
-    constructor(text) {
+    constructor(testimony) {
 
-        this.text = text || "";
+        this.testimony = testimony || "";
 
     }
 
@@ -12,7 +12,7 @@ class RecognitionEngine {
 
         const result = {
 
-            originalText: this.text,
+            testimony: this.testimony,
 
             objects: [],
 
@@ -64,7 +64,7 @@ class RecognitionEngine {
 
     contains(word) {
 
-        return this.text.includes(word);
+        return this.testimony.includes(word);
 
     }
 
