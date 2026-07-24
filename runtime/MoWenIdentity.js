@@ -1,3 +1,6 @@
+import MoWenConfig from "./MoWenConfig.js";
+
+
 class MoWenIdentity {
 
     run() {
@@ -5,11 +8,11 @@ class MoWenIdentity {
         return {
 
             name:
-                "莫问",
+                MoWenConfig.name,
 
 
             principle:
-                "莫问只是诚实运行。",
+                MoWenConfig.principle,
 
 
             mission:
@@ -17,8 +20,7 @@ class MoWenIdentity {
 
 
             rule:
-
-                "不直接提供结论，而是提出无法回避的问题。",
+                MoWenConfig.rule,
 
 
             status:
