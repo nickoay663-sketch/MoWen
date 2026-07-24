@@ -21,7 +21,6 @@ class CorrespondenceEngine {
                 definition: null,
 
                 question:
-
                     "该证词中的对象是否被明确定义？"
 
             },
