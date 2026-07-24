@@ -1,3 +1,5 @@
+import MoWenConfig from "./MoWenConfig.js";
+
 class ReasoningEngine {
 
     constructor(correspondence) {
@@ -20,14 +22,14 @@ class ReasoningEngine {
                 conclusion: null,
 
                 question:
-
                     "这个结论是否由前面的证词推出？"
 
             },
 
             referenceQuestion: question,
 
-            status: "Need Reasoning"
+            status:
+                MoWenConfig.states.reasoning
 
         };
 
