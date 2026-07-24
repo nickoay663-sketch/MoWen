@@ -1,46 +1,34 @@
 import MoWenConfig from "./MoWenConfig.js";
 
-
 class EvidenceEngine {
 
-    constructor(text) {
-        this.text = text;
-    }
+    constructor(testimony) {
 
+        this.testimony = testimony || "";
+
+    }
 
     run() {
 
-        const statement =
-            this.text.trim();
-
+        const testimony = this.testimony.trim();
 
         return {
 
-            originalText:
-                this.text,
-
+            testimony: this.testimony,
 
             evidences: [
 
                 {
 
-                    statement,
+                    testimony,
 
+                    type: "claim",
 
-                    type:
-                        "claim",
+                    evidence: false,
 
+                    source: null,
 
-                    evidence:
-                        false,
-
-
-                    source:
-                        null,
-
-
-                    status:
-                        MoWenConfig.states.evidence
+                    status: MoWenConfig.states.evidence
 
                 }
 
@@ -51,6 +39,5 @@ class EvidenceEngine {
     }
 
 }
-
 
 export default EvidenceEngine;
