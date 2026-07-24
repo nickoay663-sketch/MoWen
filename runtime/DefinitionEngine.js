@@ -8,17 +8,23 @@ class DefinitionEngine {
 
     run(){
 
+        // 莫问原则：
+        // 没有定义，就没有推理。
+        // Definition 是整个 Runtime 的基础。
+
         const result = {
 
-            originalText:this.text,
+            originalText: this.text,
 
-            concepts:[],
+            principle: "没有定义，就没有推理。",
 
-            definitions:[]
+            concepts: [],
+
+            definitions: []
 
         };
 
-        Object.keys(Definitions).forEach(concept=>{
+        Object.keys(Definitions).forEach(concept => {
 
             if(this.text.includes(concept)){
 
