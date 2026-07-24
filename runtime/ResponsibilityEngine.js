@@ -1,3 +1,5 @@
+import MoWenConfig from "./MoWenConfig.js";
+
 class ResponsibilityEngine {
 
     constructor(reasoning) {
@@ -17,12 +19,12 @@ class ResponsibilityEngine {
                 responsibility: null,
 
                 question:
-
                     "谁提出这个结论？谁应当为这个结论负责？"
 
             },
 
-            status: "Need Responsibility"
+            status:
+                MoWenConfig.states.responsibility
 
         };
 
