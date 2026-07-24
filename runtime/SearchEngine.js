@@ -1,11 +1,10 @@
 class SearchEngine {
 
-    constructor(text) {
+    constructor(testimony) {
 
-        this.text = text || "";
+        this.testimony = testimony || "";
 
     }
-
 
     run() {
 
@@ -15,10 +14,9 @@ class SearchEngine {
 
         const objects = this.detectObjects(keywords);
 
-
         return {
 
-            originalText: this.text,
+            testimony: this.testimony,
 
             keywords,
 
@@ -30,17 +28,15 @@ class SearchEngine {
 
             status: "completed",
 
-            version: "0.2"
+            version: "1.0"
 
         };
 
     }
 
-
-
     tokenize() {
 
-        return this.text
+        return this.testimony
 
             .replace(/[。，！？,.!?；;：:"“”‘’（）()【】\[\]\s]/g, "")
 
@@ -50,12 +46,9 @@ class SearchEngine {
 
     }
 
-
-
     extractKeywords(tokens) {
 
         const frequency = {};
-
 
         tokens.forEach(word => {
 
@@ -66,7 +59,6 @@ class SearchEngine {
             }
 
         });
-
 
         return Object.entries(frequency)
 
@@ -82,47 +74,28 @@ class SearchEngine {
 
     }
 
-
-
     detectObjects(keywords) {
-
 
         const possibleObjects = [
 
             "人民",
-
             "国家",
-
             "政府",
-
             "党",
-
             "自由",
-
             "民主",
-
             "文明",
-
             "战争",
-
             "和平",
-
             "责任",
-
             "权利",
-
             "法律",
-
             "历史",
-
             "事实",
-
             "真相",
-
             "利益"
 
         ];
-
 
         return keywords
 
@@ -132,50 +105,31 @@ class SearchEngine {
 
     }
 
-
-
     isStopWord(word) {
-
 
         const stopWords = [
 
             "的",
-
             "了",
-
             "是",
-
             "在",
-
             "和",
-
             "与",
-
             "我",
-
             "你",
-
             "他",
-
             "们",
-
             "这",
-
             "那",
-
             "一个",
-
             "我们"
 
         ];
-
 
         return stopWords.includes(word);
 
     }
 
-
 }
-
 
 export default SearchEngine;
