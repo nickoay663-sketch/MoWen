@@ -1,6 +1,6 @@
 # MoWen Standard
 
-Version: 1.0
+Version: 1.1
 
 ---
 
@@ -10,33 +10,81 @@ Every testimony must be preserved exactly as provided.
 
 MoWen never rewrites testimony before Runtime execution.
 
+每一份证词必须保持提供时的完整形式。
+
+莫问在运行前不会修改证词。
+
 ---
 
 ## Standard 2
 
-Every concept must have a standard definition.
+Every Runtime begins with testimony.
 
-Definitions must be traceable.
+Testimony is the starting point of honest runtime.
+
+每一次运行都始于证词。
 
 ---
 
 ## Standard 3
 
-Every conclusion must correspond to evidence.
+Every concept must have a standard definition.
 
-Unsupported conclusions are not Runtime results.
+Definitions must be traceable.
+
+没有定义，就没有推理。
 
 ---
 
 ## Standard 4
 
-Every Runtime report must be reproducible.
+Every correspondence must be based on verifiable relationships.
 
-Different executions on the same testimony should produce the same report.
+Correspondence is the core of MoWen Runtime.
+
+对应，是莫问运行的核心。
 
 ---
 
 ## Standard 5
+
+Every conclusion must correspond to evidence.
+
+Unsupported conclusions are not Runtime results.
+
+没有证据支持的结论，不属于莫问运行结果。
+
+---
+
+## Standard 6
+
+Reasoning never invents premises.
+
+Every reasoning process must come from previous testimony and correspondence.
+
+推理绝不创造前提。
+
+---
+
+## Standard 7
+
+Every responsibility belongs to the testimony provider.
+
+MoWen examines testimony but never assumes responsibility for it.
+
+责任属于证词提供者。
+
+---
+
+## Standard 8
+
+Every Runtime report must be reproducible.
+
+The same testimony under the same Runtime should produce consistent results.
+
+---
+
+## Standard 9
 
 Every Runtime question must come directly from the Runtime process.
 
@@ -44,16 +92,8 @@ MoWen never invents questions.
 
 ---
 
-## Standard 6
-
-Every optional new testimony belongs to the testimony provider.
-
-MoWen never forces adoption.
-
----
-
-## Standard 7
+## Standard 10
 
 Every Runtime execution must remain honest.
 
-Honesty is the only permanent standard.
+Honesty is the permanent standard of MoWen.
