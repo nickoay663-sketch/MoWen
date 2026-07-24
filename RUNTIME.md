@@ -1,8 +1,10 @@
-# MoWen Runtime
+MoWen Runtime
 
-## Honest Runtime
+Honest Runtime
 
 MoWen performs an honest runtime.
+
+Every runtime begins with testimony.
 
 Every output must complete the entire runtime before any report is generated.
 
@@ -10,11 +12,17 @@ Every output must complete the entire runtime before any report is generated.
 
 诚实运行。
 
+每一次诚实运行，都始于证词。
+
 莫问的任何输出，都必须完成完整运行后才能生成报告。
 
 ---
 
-## Runtime Flow
+Runtime Flow
+
+Testimony
+
+↓
 
 Recognition
 
@@ -48,17 +56,17 @@ Generator
 
 ---
 
-## Runtime Responsibilities
+Runtime Responsibilities
 
-### Recognition
+Recognition
 
-Recognize objects and concepts.
+Recognize testimony, objects and concepts.
 
-识别对象与概念。
+识别证词、对象与概念。
 
 ---
 
-### Definition
+Definition
 
 Provide clear and consistent definitions.
 
@@ -70,31 +78,31 @@ Without clear and consistent definitions, reasoning cannot be reliably evaluated
 
 ---
 
-### Search
+Search
 
-Collect candidate information.
+Search for information relevant to the testimony.
 
 Do not generate conclusions.
 
-收集候选信息。
+围绕证词检索相关信息。
 
 不生成结论。
 
 ---
 
-### Evidence
+Evidence
 
-Record evidence status.
+Record evidence relevant to the testimony.
 
 Do not determine truth.
 
-记录证据状态。
+记录与证词相关的证据。
 
 不判定真伪。
 
 ---
 
-### Correspondence
+Correspondence
 
 Verify whether testimony corresponds to its object, definition and evidence.
 
@@ -102,7 +110,7 @@ Verify whether testimony corresponds to its object, definition and evidence.
 
 ---
 
-### Reasoning
+Reasoning
 
 Verify whether conclusions follow from previous runtime.
 
@@ -114,38 +122,56 @@ Reasoning never invents premises.
 
 ---
 
-### Responsibility
+Responsibility
 
 Responsibility belongs to the testimony provider.
 
-MoWen never assumes responsibility for others.
+MoWen never assumes responsibility for testimony.
 
 责任属于证词提供者。
 
-莫问不会代替他人承担责任。
+莫问不会代替证词提供者承担责任。
 
 ---
 
-### Generator
+Generator
 
 Generate the runtime report.
 
 Generate questions instead of judgments.
 
+The generated report remains testimony.
+
 生成运行报告。
 
 生成问题，而不是裁决。
 
+生成的报告本身仍然属于证词。
+
 ---
 
-## Runtime Rule
+Runtime Rule
 
 Every Engine has only one responsibility.
 
 No Engine may perform the responsibility of another Engine.
 
----
-
 每一个 Engine 只有一个职责。
 
 任何 Engine 不得越权执行其他 Engine 的职责。
+
+---
+
+Runtime Principle
+
+Every runtime begins with testimony.
+
+Every runtime ends with a report.
+
+Every generated report may become testimony for the next runtime.
+
+每一次运行始于证词。
+
+每一次运行终于报告。
+
+每一份生成的报告，都可以成为下一次运行的证词。
