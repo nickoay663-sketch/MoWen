@@ -1,16 +1,32 @@
 class CorrespondenceEngine {
 
-    constructor(text){
-        this.text = text;
+    constructor(evidence) {
+        this.evidence = evidence;
     }
 
-    run(){
+    run() {
 
-        return{
+        const statement = this.evidence.statement;
 
-            originalText: this.text,
+        return {
 
-            correspondences:[]
+            statement,
+
+            correspondence: {
+
+                matched: false,
+
+                object: null,
+
+                definition: null,
+
+                question:
+
+                    "该证词中的对象是否被明确定义？"
+
+            },
+
+            status: "Need Correspondence"
 
         };
 
