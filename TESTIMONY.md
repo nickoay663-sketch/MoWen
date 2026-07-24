@@ -2,87 +2,107 @@ Testimony
 
 Definition
 
-A testimony is any expression that presents a claim about an object and can therefore be examined through honest runtime, regardless of its form or medium.
+A testimony is any expression that presents one or more claims about an object and can therefore be examined through honest runtime, regardless of its form or medium.
 
-证词，是任何对对象提出主张，因此能够接受诚实运行检验的表达，无论其表现形式或传播媒介为何。
+证词，是任何对对象提出一个或多个关于对象的主张，因此能够接受诚实运行检验的表达，无论其表现形式或传播媒介为何。
+
+Every input entering MoWen Runtime is treated as testimony.
+
+任何进入莫问运行的内容，都作为证词处理。
+
+---
 
 Forms of Testimony
 
 A testimony may exist as:
 
-Text
-
-Image
-
-Audio
-
-Video
-
-Speech
-
-Document
-
-Contract
-
-News Report
-
-Academic Paper
-
-AI-generated Content
-
-Any other medium capable of presenting a claim
+- Text
+- Image
+- Audio
+- Video
+- Speech
+- Document
+- Contract
+- News Report
+- Academic Paper
+- AI-generated Content
+- Any other medium capable of presenting one or more claims
 
 证词可以表现为：
 
-文字
+- 文字
+- 图片
+- 音频
+- 视频
+- 演讲
+- 文档
+- 合同
+- 新闻报道
+- 学术论文
+- AI 生成内容
+- 任何能够表达一个或多个主张的媒介
 
-图片
-
-音频
-
-视频
-
-演讲
-
-文档
-
-合同
-
-新闻报道
-
-学术论文
-
-AI 生成内容
-
-任何能够表达主张的媒介
+---
 
 Why Testimony
 
-MoWen processes testimony before conclusions.
+MoWen does not process media.
+
+MoWen processes testimony.
+
+莫问处理的不是媒介。
+
+莫问处理的是证词。
 
 Every conclusion is based on one or more testimonies.
 
 Therefore, every conclusion can be traced back to testimony.
 
-莫问首先处理证词，而不是结论。
-
 任何结论都建立在一个或多个证词之上。
 
 因此，任何结论都可以追溯到证词。
+
+---
 
 Honest Runtime
 
 Every testimony enters the same runtime.
 
-Testimony ↓ Recognition ↓ Definition ↓ Search ↓ Evidence ↓ Correspondence ↓ Reasoning ↓ Responsibility ↓ Conclusion 
+Testimony
+    ↓
+Recognition
+    ↓
+Definition
+    ↓
+Search
+    ↓
+Evidence
+    ↓
+Correspondence
+    ↓
+Reasoning
+    ↓
+Responsibility
+    ↓
+Conclusion
 
 A conclusion is not the starting point.
 
 A conclusion is the result of honest runtime.
 
+Every honest runtime begins with testimony.
+
+Every trustworthy conclusion begins with testimony.
+
 结论不是起点。
 
 结论是诚实运行后的结果。
+
+每一次诚实运行，都始于证词。
+
+每一个值得信赖的结论，都始于证词。
+
+---
 
 Responsibility
 
@@ -102,6 +122,8 @@ MoWen examines testimony through honest correspondence.
 
 莫问通过诚实对应检验证词。
 
+---
+
 Principle
 
 Without testimony, there is no honest runtime.
@@ -111,4 +133,3 @@ Without honest runtime, there is no trustworthy conclusion.
 没有证词，就没有诚实运行。
 
 没有诚实运行，就没有值得信赖的结论。
-
