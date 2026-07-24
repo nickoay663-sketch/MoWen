@@ -1,50 +1,95 @@
 # MoWen Core Definitions
 
+Version: 1.2
+
+---
+
+# Layer 1
+
 ## Runtime Foundation
 
-01 Testimony
+These concepts define the operation of Honest Runtime.
 
-02 Definition
+01. Testimony
 
-03 Search
+The starting point of every Runtime.
 
-04 Evidence
+02. Definition
 
-05 Correspondence
+The foundation of understanding.
 
-06 Reasoning
+Without definition, there is no reasoning.
 
-07 Responsibility
+03. Search
+
+The process of retrieving relevant knowledge.
+
+04. Evidence
+
+The basis for verification.
+
+05. Correspondence
+
+The core process of checking relationships.
+
+06. Reasoning
+
+Building conclusions from valid correspondence.
+
+07. Responsibility
+
+Returning responsibility to the testimony provider.
 
 ---
 
-## Runtime Result
+# Layer 2
 
-08 Truth
+## Runtime Results
 
-09 Honesty
+These concepts describe the possible outcomes of Runtime.
 
-10 Trust
+08. Truth
 
-11 Civilization
+A result supported by honest correspondence.
+
+09. Honesty
+
+The permanent standard of Runtime.
+
+10. Trust
+
+A result of consistent honest execution.
 
 ---
 
-## Runtime Principle
+# Layer 3
 
-Every Runtime concept is derived from these Core Definitions.
+## Civilization Concepts
+
+These concepts represent higher-level human applications.
+
+11. Civilization
+
+A system built on honesty, responsibility, and trust.
+
+---
+
+# Runtime Principle
+
+Every Runtime concept must connect to Core Definitions.
 
 No Runtime definition exists independently.
 
-Every Runtime process eventually returns to Correspondence.
+Every Runtime process begins with testimony.
 
-Every Runtime execution eventually returns Responsibility to the testimony provider.
+Every Runtime process returns through correspondence.
+
+Every Runtime execution returns responsibility to the testimony provider.
 
 ---
 
-## Runtime Relationship
+# Runtime Relationship
 
-```
 Testimony
 
 ↓
@@ -86,11 +131,11 @@ Trust
 ↓
 
 Civilization
-```
+
 
 ---
 
-## Architecture Rule
+# Architecture Rule
 
 Every future concept must connect to one or more Core Definitions.
 
