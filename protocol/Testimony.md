@@ -1,29 +1,92 @@
-# Testimony
+# Testimony Protocol
 
-## Original Statement
+Version: 1.1
 
-The original statement.
+---
 
-## Object
+## Purpose
 
-Who or what is the statement about?
+This protocol defines how testimony enters MoWen Honest Runtime.
 
-## Concept
+Every Runtime begins with testimony.
 
-Which concepts are used?
+---
 
-## Evidence
+## Input
 
-What evidence supports the statement?
+A testimony may originate from:
 
-## Correspondence
+- Text
+- Image
+- Audio
+- Video
+- Speech
+- Document
+- Contract
+- News Report
+- Academic Paper
+- AI-generated Content
 
-Does the evidence correspond to the concepts?
+All inputs are converted into testimony before Runtime begins.
 
-## Responsibility
+---
 
-Can the statement bear its own responsibility?
+## Runtime Process
 
-## Honest Result
+Every testimony enters the same Runtime.
 
-Pass / Question / Fail
+Testimony
+
+↓
+
+Recognition
+
+↓
+
+Definition
+
+↓
+
+Search
+
+↓
+
+Evidence
+
+↓
+
+Correspondence
+
+↓
+
+Reasoning
+
+↓
+
+Responsibility
+
+↓
+
+Generator
+
+---
+
+## Runtime Output
+
+Every Runtime produces:
+
+- Runtime Report
+- Runtime Questions
+- (Optional) New Testimony
+
+Generated reports may become testimony for the next Runtime.
+
+---
+
+## Principle
+
+One Runtime.
+
+One Testimony.
+
+One Responsibility.
