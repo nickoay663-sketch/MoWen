@@ -6,4 +6,6 @@ const runtime = new HonestRuntime(input);
 
 const result = runtime.run();
 
-console.log(result);
+console.log(
+    JSON.stringify(result, null, 4)
+);
