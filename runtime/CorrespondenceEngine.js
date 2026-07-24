@@ -1,3 +1,5 @@
+import MoWenConfig from "./MoWenConfig.js";
+
 class CorrespondenceEngine {
 
     constructor(evidence) {
@@ -25,7 +27,8 @@ class CorrespondenceEngine {
 
             },
 
-            status: "Need Correspondence"
+            status:
+                MoWenConfig.states.correspondence
 
         };
 
