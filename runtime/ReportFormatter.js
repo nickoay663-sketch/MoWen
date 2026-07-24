@@ -7,20 +7,52 @@ class ReportFormatter {
 
     run() {
 
+        const evidence =
+            this.result.evidence;
+
+
+        const correspondence =
+            this.result.correspondence;
+
+
+        const reasoning =
+            this.result.reasoning;
+
+
+        const responsibility =
+            this.result.responsibility;
+
+
+        const selfCheck =
+            this.result.selfCheck;
+
+
         return {
 
-            title: "莫问 · 诚实检查报告",
+            title:
+                "莫问 · 诚实检查报告",
+
 
             originalText:
-                this.result.evidence?.originalText || null,
+                evidence?.originalText || null,
 
 
-            questions:
-                this.result.generator?.report?.questions || [],
+            evidence:
+                evidence?.evidences || [],
 
 
-            selfCheck:
-                this.result.selfCheck || null,
+            questions: [
+
+                correspondence?.correspondence?.question,
+
+                reasoning?.reasoning?.question,
+
+                responsibility?.responsibility?.question
+
+            ],
+
+
+            selfCheck,
 
 
             status:
