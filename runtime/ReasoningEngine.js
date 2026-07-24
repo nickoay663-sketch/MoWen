@@ -1,16 +1,33 @@
 class ReasoningEngine {
 
-    constructor(text){
-        this.text = text;
+    constructor(correspondence) {
+        this.correspondence = correspondence;
     }
 
-    run(){
+    run() {
 
-        return{
+        const question =
+            this.correspondence.correspondence.question;
 
-            originalText: this.text,
+        return {
 
-            reasoning:[]
+            reasoning: {
+
+                valid: false,
+
+                premise: null,
+
+                conclusion: null,
+
+                question:
+
+                    "这个结论是否由前面的证词推出？"
+
+            },
+
+            referenceQuestion: question,
+
+            status: "Need Reasoning"
 
         };
 
