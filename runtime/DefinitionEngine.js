@@ -2,8 +2,10 @@ import Definitions from "../definitions/index.js";
 
 class DefinitionEngine {
 
-    constructor(text) {
-        this.text = text || "";
+    constructor(testimony) {
+
+        this.testimony = testimony || "";
+
     }
 
     run() {
@@ -13,7 +15,7 @@ class DefinitionEngine {
 
         const result = {
 
-            originalText: this.text,
+            testimony: this.testimony,
 
             principle: "没有定义，就没有推理。",
 
@@ -29,7 +31,7 @@ class DefinitionEngine {
 
         Object.keys(Definitions).forEach(concept => {
 
-            if (this.containsConcept(this.text, concept)) {
+            if (this.containsConcept(this.testimony, concept)) {
 
                 result.concepts.push(concept);
 
@@ -46,7 +48,7 @@ class DefinitionEngine {
         } else {
 
             result.question =
-                "是否存在尚未定义的对象？";
+                "是否存在尚未定义的对象或概念？";
 
         }
 
@@ -54,9 +56,9 @@ class DefinitionEngine {
 
     }
 
-    containsConcept(text, concept) {
+    containsConcept(testimony, concept) {
 
-        return text.includes(concept);
+        return testimony.includes(concept);
 
     }
 
