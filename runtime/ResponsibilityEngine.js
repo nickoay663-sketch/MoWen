@@ -3,14 +3,23 @@ import MoWenConfig from "./MoWenConfig.js";
 class ResponsibilityEngine {
 
     constructor(reasoning) {
+
         this.reasoning = reasoning;
+
     }
 
     run() {
 
+        const testimony =
+            this.reasoning.testimony;
+
         return {
 
+            testimony,
+
             responsibility: {
+
+                provider: null,
 
                 subject: null,
 
@@ -19,7 +28,7 @@ class ResponsibilityEngine {
                 responsibility: null,
 
                 question:
-                    "谁提出这个结论？谁应当为这个结论负责？"
+                    "谁提供了这份证词？谁应当为这份证词及其结论承担责任？"
 
             },
 
