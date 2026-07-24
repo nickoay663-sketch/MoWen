@@ -1,18 +1,35 @@
 class GeneratorEngine {
 
-    constructor(text){
-        this.text = text;
+    constructor(data) {
+        this.data = data;
     }
 
-    run(){
+    run() {
 
-        return{
+        return {
 
-            originalText: this.text,
+            report: {
 
-            generatedText: this.text,
+                originalText:
+                    this.data.evidence?.originalText || null,
 
-            status: "generated"
+                questions: [
+
+                    this.data.correspondence?.correspondence?.question,
+
+                    this.data.reasoning?.reasoning?.question,
+
+                    this.data.responsibility?.responsibility?.question
+
+                ],
+
+                conclusion:
+
+                    "莫问没有直接给出结论，而是提出需要验证的问题。"
+
+            },
+
+            status: "Generated"
 
         };
 
