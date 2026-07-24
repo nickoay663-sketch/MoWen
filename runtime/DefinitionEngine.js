@@ -2,15 +2,14 @@ import Definitions from "../definitions/index.js";
 
 class DefinitionEngine {
 
-    constructor(text){
-        this.text = text;
+    constructor(text) {
+        this.text = text || "";
     }
 
-    run(){
+    run() {
 
         // 莫问原则：
         // 没有定义，就没有推理。
-        // Definition 是整个 Runtime 的基础。
 
         const result = {
 
@@ -20,13 +19,17 @@ class DefinitionEngine {
 
             concepts: [],
 
-            definitions: []
+            definitions: [],
+
+            matched: false,
+
+            question: null
 
         };
 
         Object.keys(Definitions).forEach(concept => {
 
-            if(this.text.includes(concept)){
+            if (this.containsConcept(this.text, concept)) {
 
                 result.concepts.push(concept);
 
@@ -36,7 +39,24 @@ class DefinitionEngine {
 
         });
 
+        if (result.concepts.length > 0) {
+
+            result.matched = true;
+
+        } else {
+
+            result.question =
+                "是否存在尚未定义的对象？";
+
+        }
+
         return result;
+
+    }
+
+    containsConcept(text, concept) {
+
+        return text.includes(concept);
 
     }
 
