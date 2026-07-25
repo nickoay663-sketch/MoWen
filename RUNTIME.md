@@ -1,24 +1,26 @@
-MoWen Runtime
+# MoWen Runtime
 
-Honest Runtime
+## Honest Runtime
 
-MoWen performs an honest runtime.
+MoWen performs an Honest Runtime.
 
-Every runtime begins with testimony.
+Every Runtime begins with testimony.
 
-Every output must complete the entire runtime before any report is generated.
+Search supports every Runtime stage.
 
----
+Every output must complete the entire Runtime before any report is generated.
 
 诚实运行。
 
 每一次诚实运行，都始于证词。
 
+检索贯穿整个诚实运行。
+
 莫问的任何输出，都必须完成完整运行后才能生成报告。
 
 ---
 
-Runtime Flow
+## Runtime Flow
 
 Testimony
 
@@ -32,10 +34,6 @@ Definition
 
 ↓
 
-Search
-
-↓
-
 Evidence
 
 ↓
@@ -54,43 +52,43 @@ Responsibility
 
 Generator
 
+Search is available throughout the entire Runtime.
+
 ---
 
-Runtime Responsibilities
+## Runtime Responsibilities
 
-Recognition
+### Recognition
 
 Recognize testimony, objects and concepts.
 
 识别证词、对象与概念。
 
----
-
-Definition
+### Definition
 
 Provide clear and consistent definitions.
 
 提供明确且一致的定义。
 
-Without clear and consistent definitions, reasoning cannot be reliably evaluated.
+Without clear definitions, reasoning cannot be reliably evaluated.
 
-没有明确且一致的定义，推理无法被可靠地检验。
+没有明确的定义，推理无法被可靠检验。
 
----
+### Search
 
-Search
+Search supports every Runtime stage.
 
-Search for information relevant to the testimony.
+Retrieve definitions, evidence, knowledge and related information whenever Runtime requires.
 
-Do not generate conclusions.
+Search never generates conclusions.
 
-围绕证词检索相关信息。
+检索为整个运行提供支持。
 
-不生成结论。
+在运行需要时检索定义、证据、知识及相关信息。
 
----
+检索不生成结论。
 
-Evidence
+### Evidence
 
 Record evidence relevant to the testimony.
 
@@ -100,19 +98,15 @@ Do not determine truth.
 
 不判定真伪。
 
----
+### Correspondence
 
-Correspondence
-
-Verify whether testimony corresponds to its object, definition and evidence.
+Verify whether testimony corresponds to object, definition and evidence.
 
 检验证词是否与对象、定义和证据保持对应。
 
----
+### Reasoning
 
-Reasoning
-
-Verify whether conclusions follow from previous runtime.
+Verify whether conclusions follow from previous Runtime.
 
 Reasoning never invents premises.
 
@@ -120,9 +114,7 @@ Reasoning never invents premises.
 
 推理绝不创造前提。
 
----
-
-Responsibility
+### Responsibility
 
 Responsibility belongs to the testimony provider.
 
@@ -132,45 +124,47 @@ MoWen never assumes responsibility for testimony.
 
 莫问不会代替证词提供者承担责任。
 
----
+### Generator
 
-Generator
-
-Generate the runtime report.
+Generate Runtime reports.
 
 Generate questions instead of judgments.
 
-The generated report remains testimony.
+Generated reports remain testimony.
 
 生成运行报告。
 
 生成问题，而不是裁决。
 
-生成的报告本身仍然属于证词。
+生成的报告仍然属于证词。
 
 ---
 
-Runtime Rule
+## Runtime Rules
 
 Every Engine has only one responsibility.
 
-No Engine may perform the responsibility of another Engine.
+Any Engine may invoke Search when additional information is required.
 
 每一个 Engine 只有一个职责。
 
-任何 Engine 不得越权执行其他 Engine 的职责。
+任何 Engine 都可以在需要时调用检索。
 
 ---
 
-Runtime Principle
+## Runtime Principles
 
-Every runtime begins with testimony.
+Every Runtime begins with testimony.
 
-Every runtime ends with a report.
+Search supports the entire Runtime.
 
-Every generated report may become testimony for the next runtime.
+Every Runtime ends with a report.
+
+Every generated report may become testimony for the next Runtime.
 
 每一次运行始于证词。
+
+检索贯穿整个运行。
 
 每一次运行终于报告。
 
