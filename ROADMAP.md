@@ -1,25 +1,29 @@
-# MoWen Roadmap
+# Roadmap
 
-## Vision
+**MoWen evolves through continuous Honest Runtime.**
 
-Build MoWen as an Honest Runtime system.
-
-MoWen does not replace human judgment.
-
-MoWen examines testimony through honest correspondence.
+**莫问，通过持续的诚实运行不断演进。**
 
 ---
 
-# Version History
+## Vision
 
-## MoWen v1.0
+Build MoWen as an Expression Quality Control System.
 
-### Completed
+MoWen does not replace human judgment.
+
+MoWen examines whether expression can bear responsibility.
+
+---
+
+## v1.0
+
+Completed.
 
 - Honest Runtime Architecture
-- Runtime Interface v1.0
-- Testimony-based workflow
-- Eight Runtime Engines
+- Testimony-based Workflow
+- Runtime Flow
+- Core Documentation
 
 Runtime Flow:
 
@@ -57,52 +61,21 @@ Responsibility
 
 Generator
 
-
-### Core Documents
-
-Completed:
-
-- README.md
-- ARCHITECTURE.md
-- RUNTIME.md
-- TESTIMONY.md
-- CORRESPONDENCE.md
-- PRINCIPLES.md
-- SYMBOL.md
-- MILESTONE_v1.0.md
-
-
 ---
 
-# MoWen v1.1
+## v1.1
 
-## Goal
+Goal:
 
-Transform Honest Runtime from architecture into analytical capability.
+Transform Runtime from architecture into analytical capability.
 
----
+Focus:
 
-## Development Priorities
+### Definition
 
-### 1. Definition Library
+Build concept definitions.
 
-Expand concept definitions.
-
-Examples:
-
-- Testimony
-- Evidence
-- Truth
-- Responsibility
-- Civilization
-- Freedom
-- Law
-- Democracy
-
-
----
-
-### 2. Recognition System
+### Recognition
 
 Improve recognition of:
 
@@ -110,44 +83,33 @@ Improve recognition of:
 - Concepts
 - Relationships
 
-
----
-
-### 3. Correspondence Rules
+### Correspondence
 
 Build verification relationships:
 
 - Testimony ↔ Object
 - Testimony ↔ Definition
 - Testimony ↔ Evidence
-- Testimony ↔ Knowledge
 
-
----
-
-### 4. Evidence System
+### Evidence
 
 Improve:
 
 - Evidence storage
 - Evidence verification
-- Evidence relationship
+- Evidence relationships
 
+### Search
 
----
+Expand:
 
-### 5. Search Capability
-
-Expand information retrieval:
-
-- Definition Library
-- Evidence Library
-- Knowledge Sources
-
+- Definition sources
+- Evidence sources
+- Knowledge retrieval
 
 ---
 
-# Development Principle
+## Principle
 
 Architecture first.
 
