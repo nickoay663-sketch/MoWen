@@ -1,6 +1,6 @@
-# Definition Search
+# MoWen Definition Search
 
-Version: 1.0
+Version: 1.1
 
 ---
 
@@ -12,25 +12,45 @@ MoWen does not assume a single definition.
 
 ---
 
-## Runtime Principle
+## Definition Categories
 
-Without definition, there is no reasoning.
+Definition Search may retrieve:
 
-When multiple definitions exist, every definition shall be displayed before Runtime continues.
+### Standard Definition
+
+Dictionary
+
+Encyclopedia
 
 ---
 
-## Search Sources
+### Professional Definition
 
-Definition Search may retrieve definitions from:
+Law
 
-- Dictionary
-- Encyclopedia
-- Law
-- Academic Literature
-- International Standards
-- Professional Standards
-- Knowledge Base
+Science
+
+Education
+
+Industry Standards
+
+International Standards
+
+---
+
+### User Definition
+
+Definitions provided by the testimony provider.
+
+User definitions remain testimony.
+
+---
+
+### Runtime Definition
+
+Definitions established by MoWen Runtime.
+
+Runtime definitions are used only inside MoWen Runtime.
 
 ---
 
@@ -40,44 +60,28 @@ For every concept, Definition Search returns:
 
 - Concept
 - Number of definitions found
+- Definition Category
 - Definition
 - Source
-- Status
 
 ---
 
-## Example
+## Runtime Principle
 
-Concept:
+MoWen never chooses definitions.
 
-Civilization
+MoWen displays available definitions.
 
-Definitions Found:
+Correspondence begins after definitions become available.
 
-4
-
-Definition 1
-
-Dictionary
-
-Definition 2
-
-Law
-
-Definition 3
-
-Academic
-
-Definition 4
-
-International Standard
+User definitions are never replaced.
 
 ---
 
-## Principle
+## Responsibility
 
-MoWen does not choose definitions.
+Every definition belongs to its source.
 
-MoWen displays definitions.
+MoWen records definitions.
 
-Correspondence begins after definitions are available.
+MoWen does not alter definitions.
