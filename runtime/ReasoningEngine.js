@@ -1,42 +1,27 @@
-import MoWenConfig from "./MoWenConfig.js";
-
 class ReasoningEngine {
 
-    constructor(correspondence) {
-
-        this.correspondence = correspondence;
-
+    constructor(text) {
+        this.text = text;
     }
 
     run() {
 
-        const testimony =
-            this.correspondence.testimony;
-
-        const referenceQuestion =
-            this.correspondence.correspondence.question;
+        const valid =
+            this.text.includes("因为")
+            || this.text.includes("所以")
+            || this.text.includes("因此");
 
         return {
 
-            testimony,
+            originalText: this.text,
 
-            reasoning: {
-
-                valid: false,
-
-                premises: [],
-
-                conclusion: null,
-
-                question:
-                    "该结论是否能够由前面的证词、定义、证据及对应关系推出？"
-
-            },
-
-            referenceQuestion,
-
-            status:
-                MoWenConfig.states.reasoning
+            reasonings: [
+                {
+                    statement: this.text,
+                    valid,
+                    message: valid ? "发现推理结构" : "等待推理"
+                }
+            ]
 
         };
 

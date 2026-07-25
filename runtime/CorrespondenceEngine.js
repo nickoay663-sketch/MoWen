@@ -1,43 +1,27 @@
-import MoWenConfig from "./MoWenConfig.js";
-
 class CorrespondenceEngine {
 
-    constructor(evidence) {
-
-        this.evidence = evidence;
-
+    constructor(text) {
+        this.text = text;
     }
 
     run() {
 
-        const testimony =
-            this.evidence.testimony;
+        const matched =
+            this.text.includes("是")
+            || this.text.includes("有")
+            || this.text.includes("属于");
 
         return {
 
-            testimony,
+            originalText: this.text,
 
-            correspondence: {
-
-                matched: false,
-
-                object: null,
-
-                definition: null,
-
-                evidence: null,
-
-                knowledge: null,
-
-                reasoning: null,
-
-                question:
-                    "该证词是否与对象、定义、证据及已有知识保持对应？"
-
-            },
-
-            status:
-                MoWenConfig.states.correspondence
+            correspondences: [
+                {
+                    statement: this.text,
+                    matched,
+                    message: matched ? "发现对应关系" : "等待对象对应"
+                }
+            ]
 
         };
 

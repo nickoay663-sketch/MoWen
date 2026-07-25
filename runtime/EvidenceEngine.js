@@ -1,37 +1,27 @@
-import MoWenConfig from "./MoWenConfig.js";
-
 class EvidenceEngine {
 
-    constructor(testimony) {
-
-        this.testimony = testimony || "";
-
+    constructor(text) {
+        this.text = text;
     }
 
     run() {
 
-        const testimony = this.testimony.trim();
+        const provided = this.text.includes("因为")
+            || this.text.includes("根据")
+            || this.text.includes("证据")
+            || this.text.includes("数据显示");
 
         return {
 
-            testimony: this.testimony,
+            originalText: this.text,
 
             evidences: [
-
                 {
-
-                    testimony,
-
+                    statement: this.text,
                     type: "claim",
-
-                    evidence: false,
-
-                    source: null,
-
-                    status: MoWenConfig.states.evidence
-
+                    provided,
+                    message: provided ? "已发现证据线索" : "未提供证据"
                 }
-
             ]
 
         };

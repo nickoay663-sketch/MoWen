@@ -1,39 +1,22 @@
-import MoWenConfig from "./MoWenConfig.js";
-
 class ResponsibilityEngine {
 
-    constructor(reasoning) {
-
-        this.reasoning = reasoning;
-
+    constructor(text) {
+        this.text = text;
     }
 
     run() {
 
-        const testimony =
-            this.reasoning.testimony;
-
         return {
 
-            testimony,
+            originalText: this.text,
 
-            responsibility: {
-
-                provider: null,
-
-                subject: null,
-
-                authority: null,
-
-                responsibility: null,
-
-                question:
-                    "谁提供了这份证词？谁应当为这份证词及其结论承担责任？"
-
-            },
-
-            status:
-                MoWenConfig.states.responsibility
+            responsibilities: [
+                {
+                    statement: this.text,
+                    accountable: false,
+                    message: "等待责任判断"
+                }
+            ]
 
         };
 
