@@ -2,22 +2,19 @@
 
 ## Current Version
 
-v1.0 Honest Runtime
+**v1.1 Runtime Architecture**
 
 ---
 
 ## Completed
 
-### v1.0 Honest Runtime
+### Runtime
 
-Completed:
+- Honest Runtime
+- Runtime Flow
+- Runtime Report
 
-- Repository structure
-- Runtime architecture
-- Runtime Interface v1.0
-- Testimony-based workflow
-
-Runtime Engines:
+### Runtime Engines
 
 - Recognition Engine
 - Definition Engine
@@ -28,38 +25,36 @@ Runtime Engines:
 - Responsibility Engine
 - Generator Engine
 
-Core Documents:
+### Runtime Architecture
+
+- Runtime Search Capability
+- Runtime Search Architecture
+- Definition Search
+- User Definition
+- Recognition Specification
+- Responsibility Specification
+- Generator Specification
+
+### Runtime Documents
 
 - ARCHITECTURE.md
 - RUNTIME.md
-- TESTIMONY.md
-- CORRESPONDENCE.md
-- PRINCIPLES.md
-- SYMBOL.md
-- MILESTONE_v1.0.md
+- SEARCH.md
+- STANDARD.md
+- CORE_DEFINITIONS.md
+- RECOGNITION.md
+- RESPONSIBILITY.md
+- GENERATOR.md
 
 ---
 
 ## Next Version
 
-v1.1 Capability Development
+### v1.2 Runtime Knowledge
 
-Goals:
-
-- Expand Definition Library
-- Improve Recognition System
-- Build Correspondence Rules
-- Improve Evidence System
-- Enhance Search Capability
-
----
-
-## Principle
-
-Architecture first.
-
-Capability second.
-
-Honesty before conclusion.
-
-Questions before answers.
+- Search Service
+- Definition Library
+- Evidence Library
+- Knowledge Library
+- Correspondence Rules
+- Runtime API
