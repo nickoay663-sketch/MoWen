@@ -12,7 +12,23 @@ import MoWenIdentity from "./MoWenIdentity.js";
 class HonestRuntime {
 
     constructor(text) {
-        this.text = text;
+        this.text = text || "";
+    }
+
+    stop(identity, data) {
+
+        return {
+
+            identity,
+
+            ...data,
+
+            generator: new GeneratorEngine(data).run(),
+
+            selfCheck: null
+
+        };
+
     }
 
     run() {
@@ -23,9 +39,25 @@ class HonestRuntime {
         const recognition =
             new RecognitionEngine(this.text).run();
 
-        // 修复：DefinitionEngine 接收原始文本
+        if (!recognition.matched) {
+
+            return this.stop(identity, {
+                recognition
+            });
+
+        }
+
         const definition =
             new DefinitionEngine(this.text).run();
+
+        if (!definition.matched) {
+
+            return this.stop(identity, {
+                recognition,
+                definition
+            });
+
+        }
 
         const search =
             new SearchEngine(this.text).run();
@@ -50,20 +82,32 @@ class HonestRuntime {
 
         const generator =
             new GeneratorEngine({
+
                 recognition,
+
                 definition,
+
                 search,
+
                 evidence,
+
                 correspondence,
+
                 reasoning,
+
                 responsibility
+
             }).run();
 
         const selfCheck =
             new SelfCheckEngine({
+
                 evidence,
+
                 correspondence,
+
                 reasoning
+
             }).run();
 
         return {
