@@ -9,11 +9,15 @@ import GeneratorEngine from "./GeneratorEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 
+
 class HonestRuntime {
 
     constructor(text) {
+
         this.text = text || "";
+
     }
+
 
     stop(identity, data) {
 
@@ -31,13 +35,16 @@ class HonestRuntime {
 
     }
 
+
     run() {
 
         const identity =
             new MoWenIdentity().run();
 
+
         const recognition =
             new RecognitionEngine(this.text).run();
+
 
         if (!recognition.matched) {
 
@@ -47,8 +54,10 @@ class HonestRuntime {
 
         }
 
+
         const definition =
             new DefinitionEngine(this.text).run();
+
 
         if (!definition.matched) {
 
@@ -59,26 +68,32 @@ class HonestRuntime {
 
         }
 
+
         const search =
             new SearchEngine(this.text).run();
+
 
         const evidence =
             new EvidenceEngine(this.text).run();
 
+
         const correspondence =
             new CorrespondenceEngine(
-                evidence.evidences[0]
+                this.text
             ).run();
+
 
         const reasoning =
             new ReasoningEngine(
-                correspondence
+                this.text
             ).run();
+
 
         const responsibility =
             new ResponsibilityEngine(
-                reasoning
+                this.text
             ).run();
+
 
         const generator =
             new GeneratorEngine({
@@ -99,6 +114,7 @@ class HonestRuntime {
 
             }).run();
 
+
         const selfCheck =
             new SelfCheckEngine({
 
@@ -109,6 +125,7 @@ class HonestRuntime {
                 reasoning
 
             }).run();
+
 
         return {
 
@@ -137,5 +154,6 @@ class HonestRuntime {
     }
 
 }
+
 
 export default HonestRuntime;
