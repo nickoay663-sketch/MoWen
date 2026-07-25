@@ -1,14 +1,12 @@
-MoWen Architecture
+# MoWen Architecture
 
-Vision
+## Vision
 
 MoWen is an Honest Runtime.
 
 It does not replace human judgment.
 
 It executes testimony through honest correspondence.
-
----
 
 莫问是一个诚实运行系统。
 
@@ -18,7 +16,7 @@ It executes testimony through honest correspondence.
 
 ---
 
-Runtime Workflow
+## Runtime Workflow
 
 Testimony
 
@@ -29,10 +27,6 @@ Recognition
 ↓
 
 Definition
-
-↓
-
-Search
 
 ↓
 
@@ -54,11 +48,13 @@ Responsibility
 
 Generator
 
+**Search is available throughout the entire Runtime.**
+
 ---
 
-Runtime Modules
+## Runtime Modules
 
-Recognition Engine
+### Recognition Engine
 
 Recognizes testimony, runtime objects and concepts.
 
@@ -66,35 +62,49 @@ Recognizes testimony, runtime objects and concepts.
 
 ---
 
-Definition Engine
+### Definition Engine
 
-Retrieves definitions required by runtime.
+Retrieves definitions required by Runtime.
 
 提供运行所需的定义。
 
 ---
 
-Search Engine
+### Search Engine
 
-Retrieves information relevant to the testimony before runtime analysis.
+Search provides Runtime-wide search capability.
 
-Search may include:
+Every Runtime Engine may invoke Search whenever additional information is required.
 
-- Local Knowledge
-- Definition Library
-- Evidence Library
+Search may retrieve:
+
+- Objects
+- Definitions
+- Evidence
+- Knowledge
 - Laws
 - Scientific Papers
 - Historical Records
 - Dictionaries
 - Encyclopedias
 - Trusted Websites
+- Previous Runtime Reports
 
-围绕证词检索运行所需的信息。
+Search never produces conclusions.
+
+Search only provides information required for Honest Runtime.
+
+检索为整个运行提供支持。
+
+任何 Engine 都可以在需要时调用检索。
+
+检索不生成结论。
+
+检索只提供诚实运行所需的信息。
 
 ---
 
-Evidence Engine
+### Evidence Engine
 
 Collects verifiable evidence relevant to the testimony.
 
@@ -106,7 +116,7 @@ Evidence does not produce conclusions.
 
 ---
 
-Correspondence Engine
+### Correspondence Engine
 
 Determines whether testimony corresponds to:
 
@@ -122,7 +132,7 @@ Correspondence is the core of MoWen Runtime.
 
 ---
 
-Reasoning Engine
+### Reasoning Engine
 
 Builds logical relationships from correspondence.
 
@@ -134,7 +144,7 @@ Reasoning never invents premises.
 
 ---
 
-Responsibility Engine
+### Responsibility Engine
 
 Returns responsibility to the testimony provider.
 
@@ -146,7 +156,7 @@ MoWen never assumes responsibility for testimony.
 
 ---
 
-Generator Engine
+### Generator Engine
 
 Generates:
 
@@ -154,7 +164,7 @@ Generates:
 - Unavoidable Question
 - (Optional) New Testimony
 
-Generated reports may become testimony for the next runtime.
+Generated reports may become testimony for the next Runtime.
 
 生成：
 
@@ -166,13 +176,13 @@ Generated reports may become testimony for the next runtime.
 
 ---
 
-Runtime Principles
+## Runtime Principles
 
 MoWen never assumes.
 
 MoWen always begins with testimony.
 
-MoWen always searches.
+MoWen always searches when Runtime requires.
 
 MoWen always corresponds.
 
@@ -180,13 +190,11 @@ MoWen always reports.
 
 MoWen never replaces human responsibility.
 
----
-
 莫问绝不假定。
 
 莫问始于证词。
 
-莫问始终检索。
+莫问在整个运行过程中持续检索。
 
 莫问始终对应。
 
@@ -196,9 +204,9 @@ MoWen never replaces human responsibility.
 
 ---
 
-Runtime Result
+## Runtime Result
 
-Every runtime produces:
+Every Runtime produces:
 
 - Recognition Report
 - Definition Report
