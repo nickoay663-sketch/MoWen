@@ -1,36 +1,52 @@
 Runtime
 
-MoWen runs honestly.
+MoWen uses one Honest Runtime System.
 
-莫问只是诚实运行。
-
----
-
-Principle
-
-Every Runtime begins with Testimony.
-
-Every Runtime follows Responsibility.
-
-Every Runtime ends with New Testimony.
-
-Search supports every Runtime.
-
-Reconstruction belongs to every Runtime.
+莫问使用同一套诚实运行系统。
 
 ---
 
-Runtime
+Entry Principle
+
+Every expression enters MoWen through Definition.
+
+Without Definition, Runtime cannot begin.
+
+---
+
+Expression and Testimony
+
+Expression is the object entering MoWen.
+
+Testimony is an expression that has passed Definition and can enter Honest Runtime.
+
+---
+
+Honest Runtime System
+
+MoWen uses one Honest Runtime System for every expression.
+
+MoWen itself also becomes an expression and enters the same Honest Runtime System.
+
+An Honest Runtime is one complete execution of the Honest Runtime System.
+
+---
+
+Runtime Flow
+
+Expression
+
+↓
+
+Definition
+
+↓
 
 Testimony
 
 ↓
 
 Recognition
-
-↓
-
-Definition
 
 ↓
 
@@ -50,7 +66,7 @@ Reasoning
 
 ↓
 
-Responsibility
+Expression Responsibility
 
 ↓
 
@@ -60,108 +76,148 @@ Generator
 
 New Testimony
 
-↓
-
-Next Runtime
-
 ---
 
-Engine Rules
+Runtime Principles
+
+Every expression requires Definition before Runtime.
+
+Every Testimony follows the same Honest Runtime.
+
+Search supports the entire Runtime.
 
 Each Engine has only one responsibility.
 
-Every Engine may invoke Search.
-
-Every Engine must complete its own responsibility before Runtime continues.
-
-No Definition.
-
-No Reasoning.
-
-No Evidence.
-
-No Correspondence.
-
-No Responsibility.
-
-No Runtime.
+Every Runtime produces New Testimony.
 
 ---
 
-Reconstruction
+Engine Principle
 
-Generator produces New Testimony.
+Each Engine completes only its own responsibility.
 
-New Testimony becomes the beginning of the next Runtime.
+Each Engine may invoke Search when required.
 
-Runtime continues until no further reconstruction is required.
-
----
-
-Self Reconstruction
-
-MoWen does not examine only the world.
-
-MoWen also examines itself.
-
-Every document.
-
-Every Engine.
-
-Every Runtime.
-
-Every expression.
-
-All follow the same Honest Runtime.
+No Engine replaces another Engine.
 
 ---
 
-Reliability
+Runtime Result
 
-MoWen is not reliable because it never deviates.
+MoWen does not replace human judgment.
 
-MoWen is reliable because it continuously reconstructs itself and returns to Honest Runtime.
+MoWen examines Expression Responsibility.
+
+Generator produces Runtime Report and New Testimony.
 
 ---
 
-诚实运行
+运行
 
-莫问只是诚实运行。
+莫问使用同一套诚实运行系统。
 
-每一次运行，都始于证词。
+---
+
+进入原则
+
+每一个表达，进入莫问前，必须经过定义。
+
+没有定义，运行无法开始。
+
+---
+
+表达与证词
+
+表达，是进入莫问的对象。
+
+证词，是经过定义后，可以进入诚实运行的表达。
+
+---
+
+诚实运行系统
+
+莫问对所有表达使用同一套诚实运行系统。
+
+莫问自身也作为表达，进入同一套诚实运行系统。
+
+一次诚实运行，是诚实运行系统的一次完整运行。
+
+---
+
+运行流程
+
+表达
+
+↓
+
+定义
+
+↓
+
+证词
+
+↓
+
+识别
+
+↓
+
+检索
+
+↓
+
+证据
+
+↓
+
+对应
+
+↓
+
+推理
+
+↓
+
+表达责任
+
+↓
+
+生成
+
+↓
+
+新的证词
+
+---
+
+运行原则
+
+每一个表达，必须先定义，再运行。
+
+每一个证词，接受同一套诚实运行。
 
 检索贯穿整个运行。
 
-每一个模块，只承担自己的职责。
+每一个模块，只承担一个职责。
 
-生成的新证词，可以再次进入运行。
-
-直到表达无需继续重构。
+每一次运行，产生新的证词。
 
 ---
 
-自我重构
+模块原则
 
-莫问不仅运行世界。
+每一个模块，只完成自己的职责。
 
-莫问也运行自己。
+每一个模块，可以在需要时调用检索。
 
-每一个模块。
-
-每一份文档。
-
-每一次表达。
-
-都必须接受莫问运行。
+任何模块，不替代其他模块。
 
 ---
 
-可靠
+运行结果
 
-莫问并非因为永不偏离而可靠。
+莫问不代替人的判断。
 
-莫问之所以可靠，
+莫问检查表达责任。
 
-是因为能够不断重构自己，
-
-回到诚实运行。
+生成运行报告和新的证词。
