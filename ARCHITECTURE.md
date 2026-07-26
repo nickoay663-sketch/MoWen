@@ -1,28 +1,42 @@
-# MoWen Architecture
+# Architecture
 
-## Vision
+**MoWen Architecture**
 
-MoWen is an Honest Runtime.
-
-It does not replace human judgment.
-
-It executes testimony through honest correspondence.
-
-莫问是一个诚实运行系统。
-
-它不代替人的判断。
-
-它通过诚实对应运行证词。
+**莫问架构**
 
 ---
 
-## Runtime Workflow
+## Overview
 
-Testimony
+MoWen is an Expression Quality Control System.
 
-↓
+MoWen uses one Honest Runtime System for every expression.
 
-Recognition
+莫问是表达质量控制系统。
+
+莫问对所有表达使用同一套诚实运行系统。
+
+---
+
+## Architecture Principle
+
+Every expression enters MoWen through Definition.
+
+After Definition, expression becomes Testimony.
+
+Testimony enters Honest Runtime System.
+
+每一个表达，进入莫问前，必须经过定义。
+
+经过定义后的表达，成为证词。
+
+证词进入诚实运行系统。
+
+---
+
+## System Architecture
+
+Expression
 
 ↓
 
@@ -30,192 +44,138 @@ Definition
 
 ↓
 
-Evidence
+Testimony
 
 ↓
 
-Correspondence
-
-↓
-
-Reasoning
-
-↓
-
-Responsibility
-
-↓
-
-Generator
-
-**Search is available throughout the entire Runtime.**
+Honest Runtime System
 
 ---
 
-## Runtime Modules
+## Honest Runtime System
+
+Honest Runtime System contains Runtime Engines.
+
+诚实运行系统包含运行模块。
+
+---
+
+## Runtime Engines
 
 ### Recognition Engine
 
-Recognizes testimony, runtime objects and concepts.
+Recognizes testimony, objects and concepts.
 
-识别证词、运行对象与概念。
+识别证词、对象与概念。
 
 ---
 
 ### Definition Engine
 
-Retrieves definitions required by Runtime.
+Provides clear and consistent definitions.
 
-提供运行所需的定义。
+提供明确且一致的定义。
 
 ---
 
 ### Search Engine
 
-Search provides Runtime-wide search capability.
+Provides information support throughout Runtime.
 
-Every Runtime Engine may invoke Search whenever additional information is required.
-
-Search may retrieve:
-
-- Objects
-- Definitions
-- Evidence
-- Knowledge
-- Laws
-- Scientific Papers
-- Historical Records
-- Dictionaries
-- Encyclopedias
-- Trusted Websites
-- Previous Runtime Reports
-
-Search never produces conclusions.
-
-Search only provides information required for Honest Runtime.
-
-检索为整个运行提供支持。
-
-任何 Engine 都可以在需要时调用检索。
-
-检索不生成结论。
-
-检索只提供诚实运行所需的信息。
+检索为整个运行提供信息支持。
 
 ---
 
 ### Evidence Engine
 
-Collects verifiable evidence relevant to the testimony.
+Records evidence related to testimony.
 
-Evidence does not produce conclusions.
-
-收集与证词相关的可验证证据。
-
-证据不生成结论。
+记录与证词相关的证据。
 
 ---
 
 ### Correspondence Engine
 
-Determines whether testimony corresponds to:
+Checks correspondence between testimony, definition, object and evidence.
 
-- Definitions
-- Evidence
-- Existing Knowledge
-
-Correspondence is the core of MoWen Runtime.
-
-检验证词是否与定义、证据及已有知识保持对应。
-
-对应，是莫问运行的核心。
+检验证词、定义、对象和证据之间的对应。
 
 ---
 
 ### Reasoning Engine
 
-Builds logical relationships from correspondence.
+Checks whether conclusions follow from previous Runtime.
 
-Reasoning never invents premises.
-
-根据对应关系建立逻辑。
-
-推理绝不创造前提。
+检验结论是否能够由前面的运行推出。
 
 ---
 
 ### Responsibility Engine
 
-Returns responsibility to the testimony provider.
+Checks Expression Responsibility.
 
-MoWen never assumes responsibility for testimony.
-
-将责任归还给证词提供者。
-
-莫问不会替证词承担责任。
+检查表达责任。
 
 ---
 
 ### Generator Engine
 
-Generates:
+Generates Runtime Report and New Testimony.
 
-- Runtime Report
-- Unavoidable Question
-- (Optional) New Testimony
-
-Generated reports may become testimony for the next Runtime.
-
-生成：
-
-- 运行报告
-- 不可回避的问题
-- （可选）新的证词
-
-生成的报告可以成为下一次运行的证词。
-
----
-
-## Runtime Principles
-
-MoWen never assumes.
-
-MoWen always begins with testimony.
-
-MoWen always searches when Runtime requires.
-
-MoWen always corresponds.
-
-MoWen always reports.
-
-MoWen never replaces human responsibility.
-
-莫问绝不假定。
-
-莫问始于证词。
-
-莫问在整个运行过程中持续检索。
-
-莫问始终对应。
-
-莫问始终报告。
-
-莫问绝不代替人的责任。
+生成运行报告和新的证词。
 
 ---
 
 ## Runtime Result
 
-Every Runtime produces:
+Honest Runtime System produces Runtime Report.
 
-- Recognition Report
-- Definition Report
-- Search Report
-- Evidence Report
-- Correspondence Report
-- Reasoning Report
-- Responsibility Report
-- Generated Question
-- (Optional) Generated New Testimony
+Runtime Report can become New Testimony.
 
-每一次运行都会生成对应的运行报告，并可以产生新的证词，进入下一次诚实运行。
+诚实运行系统生成运行报告。
+
+运行报告可以成为新的证词。
+
+---
+
+## Architecture Rules
+
+Each Engine has only one responsibility.
+
+Each Engine may invoke Search when required.
+
+No Engine replaces another Engine.
+
+每一个模块只有一个职责。
+
+任何模块可以在需要时调用检索。
+
+任何模块不替代其他模块。
+
+---
+
+## Self Application
+
+MoWen architecture itself follows the same Honest Runtime System.
+
+MoWen documents, modules and expressions can all enter the same Runtime.
+
+莫问架构自身也遵循同一套诚实运行系统。
+
+莫问的文档、模块和表达，都可以进入同一套运行。
+
+---
+
+## Core Principle
+
+One concept.
+
+One official term.
+
+One definition.
+
+一个概念。
+
+一个正式术语。
+
+一个正式定义。
