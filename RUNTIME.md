@@ -1,26 +1,26 @@
-# MoWen Runtime
+Runtime
 
-## Honest Runtime
+MoWen runs honestly.
 
-MoWen performs an Honest Runtime.
-
-Every Runtime begins with testimony.
-
-Search supports every Runtime stage.
-
-Every output must complete the entire Runtime before any report is generated.
-
-诚实运行。
-
-每一次诚实运行，都始于证词。
-
-检索贯穿整个诚实运行。
-
-莫问的任何输出，都必须完成完整运行后才能生成报告。
+莫问只是诚实运行。
 
 ---
 
-## Runtime Flow
+Principle
+
+Every Runtime begins with Testimony.
+
+Every Runtime follows Responsibility.
+
+Every Runtime ends with New Testimony.
+
+Search supports every Runtime.
+
+Reconstruction belongs to every Runtime.
+
+---
+
+Runtime
 
 Testimony
 
@@ -31,6 +31,10 @@ Recognition
 ↓
 
 Definition
+
+↓
+
+Search
 
 ↓
 
@@ -52,120 +56,112 @@ Responsibility
 
 Generator
 
-Search is available throughout the entire Runtime.
+↓
+
+New Testimony
+
+↓
+
+Next Runtime
 
 ---
 
-## Runtime Responsibilities
+Engine Rules
 
-### Recognition
+Each Engine has only one responsibility.
 
-Recognize testimony, objects and concepts.
+Every Engine may invoke Search.
 
-识别证词、对象与概念。
+Every Engine must complete its own responsibility before Runtime continues.
 
-### Definition
+No Definition.
 
-Provide clear and consistent definitions.
+No Reasoning.
 
-提供明确且一致的定义。
+No Evidence.
 
-Without clear definitions, reasoning cannot be reliably evaluated.
+No Correspondence.
 
-没有明确的定义，推理无法被可靠检验。
+No Responsibility.
 
-### Search
-
-Search supports every Runtime stage.
-
-Retrieve definitions, evidence, knowledge and related information whenever Runtime requires.
-
-Search never generates conclusions.
-
-检索为整个运行提供支持。
-
-在运行需要时检索定义、证据、知识及相关信息。
-
-检索不生成结论。
-
-### Evidence
-
-Record evidence relevant to the testimony.
-
-Do not determine truth.
-
-记录与证词相关的证据。
-
-不判定真伪。
-
-### Correspondence
-
-Verify whether testimony corresponds to object, definition and evidence.
-
-检验证词是否与对象、定义和证据保持对应。
-
-### Reasoning
-
-Verify whether conclusions follow from previous Runtime.
-
-Reasoning never invents premises.
-
-检验结论是否能够由前面的运行推出。
-
-推理绝不创造前提。
-
-### Responsibility
-
-Responsibility belongs to the testimony provider.
-
-MoWen never assumes responsibility for testimony.
-
-责任属于证词提供者。
-
-莫问不会代替证词提供者承担责任。
-
-### Generator
-
-Generate Runtime reports.
-
-Generate questions instead of judgments.
-
-Generated reports remain testimony.
-
-生成运行报告。
-
-生成问题，而不是裁决。
-
-生成的报告仍然属于证词。
+No Runtime.
 
 ---
 
-## Runtime Rules
+Reconstruction
 
-Every Engine has only one responsibility.
+Generator produces New Testimony.
 
-Any Engine may invoke Search when additional information is required.
+New Testimony becomes the beginning of the next Runtime.
 
-每一个 Engine 只有一个职责。
-
-任何 Engine 都可以在需要时调用检索。
+Runtime continues until no further reconstruction is required.
 
 ---
 
-## Runtime Principles
+Self Reconstruction
 
-Every Runtime begins with testimony.
+MoWen does not examine only the world.
 
-Search supports the entire Runtime.
+MoWen also examines itself.
 
-Every Runtime ends with a report.
+Every document.
 
-Every generated report may become testimony for the next Runtime.
+Every Engine.
 
-每一次运行始于证词。
+Every Runtime.
+
+Every expression.
+
+All follow the same Honest Runtime.
+
+---
+
+Reliability
+
+MoWen is not reliable because it never deviates.
+
+MoWen is reliable because it continuously reconstructs itself and returns to Honest Runtime.
+
+---
+
+诚实运行
+
+莫问只是诚实运行。
+
+每一次运行，都始于证词。
 
 检索贯穿整个运行。
 
-每一次运行终于报告。
+每一个模块，只承担自己的职责。
 
-每一份生成的报告，都可以成为下一次运行的证词。
+生成的新证词，可以再次进入运行。
+
+直到表达无需继续重构。
+
+---
+
+自我重构
+
+莫问不仅运行世界。
+
+莫问也运行自己。
+
+每一个模块。
+
+每一份文档。
+
+每一次表达。
+
+都必须接受莫问运行。
+
+---
+
+可靠
+
+莫问并非因为永不偏离而可靠。
+
+莫问之所以可靠，
+
+是因为能够不断重构自己，
+
+回到诚实运行。
