@@ -1,73 +1,47 @@
 class ResponsibilityEngine {
 
-    constructor(text) {
+    constructor(testimony) {
 
-        this.text = text || "";
+        this.testimony = testimony || "";
 
     }
 
     run() {
 
-        const responsibilityMarkers = [
-
-            "我",
-            "我们",
-            "作者",
-            "机构",
-            "政府",
-            "组织",
-            "研究者",
-            "来源"
-
-        ];
-
-        const matchedSubjects =
-            responsibilityMarkers.filter(
-
-                marker => this.text.includes(marker)
-
-            );
-
-
-        const accountable =
-            matchedSubjects.length > 0;
-
-
         return {
 
-            testimony: this.text,
+            testimony: this.testimony,
 
-            responsibilities: [
+            principle:
+                "莫问只建立责任关系，不提前裁决责任。",
 
-                {
-
-                    statement: this.text,
-
-                    accountable,
-
-                    subjects: matchedSubjects,
-
-                    status:
-
-                        accountable
-                            ? "identified"
-                            : "missing",
-
-                    message:
-
-                        accountable
-                            ? "发现责任主体"
-                            : "等待责任判断"
-
-                }
-
-            ],
+            responsibilities: this.collectResponsibilities(),
 
             status: "completed",
 
-            version: "2.0"
+            version: "2.1"
 
         };
+
+    }
+
+    collectResponsibilities() {
+
+        return [
+
+            {
+
+                testimony: this.testimony,
+
+                subject: null,
+
+                conclusion: null,
+
+                state: "pending"
+
+            }
+
+        ];
 
     }
 
