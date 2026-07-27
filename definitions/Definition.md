@@ -1,6 +1,14 @@
-# Definition
+Definition
 
-## Definition
+Version
+
+1.1
+
+Concept
+
+Definition
+
+Meaning
 
 A definition specifies the meaning and scope of an object or concept.
 
@@ -10,17 +18,13 @@ A definition does not determine truth.
 
 A definition provides the basis for verification.
 
----
-
-## Runtime Meaning
+Runtime Meaning
 
 MoWen requires definitions before reasoning.
 
-Definitions establish the objects and concepts used during runtime.
+Definitions establish the meaning of objects and concepts used during Runtime.
 
----
-
-## Requirements
+Required Conditions
 
 A definition should be:
 
@@ -33,17 +37,25 @@ Without a definition,
 
 reasoning cannot proceed honestly.
 
----
-
-## Responsibility
+Responsibility
 
 The provider of a definition bears responsibility for its content.
 
-MoWen bears responsibility only for applying definitions consistently during runtime.
+MoWen bears responsibility only for applying definitions consistently during Runtime.
 
----
+Runtime Principle
 
-## Related Concepts
+Without definition,
+
+there is no reasoning.
+
+Definitions guide verification.
+
+Definitions do not replace evidence.
+
+Related Concepts
+
+Object
 
 Testimony
 
@@ -55,13 +67,23 @@ Reasoning
 
 Truth
 
+Responsibility
+
 Civilization
 
----
+----------------------------------------
 
-# 定义
+定义
 
-## 定义
+版本
+
+1.1
+
+概念
+
+定义
+
+释义
 
 定义，是对对象或概念含义与适用范围的明确说明。
 
@@ -69,21 +91,17 @@ Civilization
 
 证词就无法被一致理解。
 
-定义并不决定真相。
+定义并不决定真理。
 
 定义为验证提供基础。
 
----
-
-## 运行意义
+运行意义
 
 莫问在推理之前必须先获得定义。
 
 定义用于确定运行过程中涉及的对象与概念。
 
----
-
-## 要求
+所需条件
 
 定义应当具备：
 
@@ -96,17 +114,25 @@ Civilization
 
 推理就不能诚实地继续。
 
----
-
-## 责任
+责任
 
 定义的提供者，对定义内容负责。
 
 莫问只对运行过程中一致地使用定义负责。
 
----
+运行原则
 
-## 相关概念
+没有定义，
+
+就没有推理。
+
+定义指导验证。
+
+定义不能代替证据。
+
+相关概念
+
+对象
 
 证词
 
@@ -116,6 +142,8 @@ Civilization
 
 推理
 
-真相
+真理
+
+责任
 
 文明
