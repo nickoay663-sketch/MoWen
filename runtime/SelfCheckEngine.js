@@ -10,26 +10,34 @@ class SelfCheckEngine {
 
         const checks = {
 
-            recognition: !!this.runtime.recognition,
+            recognition:
+                !!this.runtime.recognition,
 
-            definition: !!this.runtime.definition,
+            definition:
+                !!this.runtime.definition,
 
-            evidence: !!this.runtime.evidence,
+            search:
+                !!this.runtime.search,
 
-            correspondence: !!this.runtime.correspondence,
+            evidence:
+                !!this.runtime.evidence,
 
-            reasoning: !!this.runtime.reasoning,
+            correspondence:
+                !!this.runtime.correspondence,
 
-            responsibility: !!this.runtime.responsibility,
+            reasoning:
+                !!this.runtime.reasoning,
 
-            reconstruction: !!this.runtime.reconstruction
+            responsibility:
+                !!this.runtime.responsibility,
+
+            reconstruction:
+                !!this.runtime.reconstruction
 
         };
 
         const passed =
-
             Object.values(checks)
-
                 .every(Boolean);
 
         return {
@@ -41,13 +49,11 @@ class SelfCheckEngine {
             passed,
 
             status:
-
                 passed
                     ? "self-check-passed"
                     : "self-check-warning",
 
             summary:
-
                 passed
                     ? "Runtime Self Check Passed."
                     : "Runtime Self Check Warning."
