@@ -1,6 +1,14 @@
-# Civilization
+Civilization
 
-## Definition
+Version
+
+1.1
+
+Concept
+
+Civilization
+
+Definition
 
 Civilization is a state in which expression, behavior, and institutions are able to bear responsibility.
 
@@ -8,17 +16,13 @@ Civilization is not determined by wealth, technology, or power alone.
 
 Civilization requires honesty, responsibility, and verifiable correspondence.
 
----
+Runtime Meaning
 
-## Runtime Meaning
+MoWen does not determine whether civilization exists.
 
-MoWen does not determine whether a civilization exists.
+MoWen examines whether testimony, evidence, correspondence, and reasoning are able to bear responsibility.
 
-MoWen examines whether testimony, evidence, and reasoning can bear responsibility.
-
----
-
-## Requirements
+Required Conditions
 
 Civilization requires:
 
@@ -28,39 +32,53 @@ Civilization requires:
 - Correspondence
 - Responsible reasoning
 
-If these requirements cannot be satisfied,
+If these conditions cannot be satisfied,
 
 civilization cannot be established through testimony alone.
 
----
-
-## Responsibility
+Responsibility
 
 Every participant bears responsibility for their own testimony.
 
 MoWen bears responsibility only for honest runtime.
 
----
+Runtime Principle
 
-## Related Concepts
+Civilization is demonstrated through responsibility.
+
+Responsibility requires verification.
+
+Verification requires honesty.
+
+Related Concepts
 
 Testimony
 
-Evidence
-
 Definition
 
+Evidence
+
 Correspondence
+
+Reasoning
 
 Responsibility
 
 Truth
 
----
+----------------------------------------
 
-# 文明
+文明
 
-## 定义
+版本
+
+1.1
+
+概念
+
+文明
+
+定义
 
 文明，是一种表达、行为与制度能够承担责任的状态。
 
@@ -68,17 +86,13 @@ Truth
 
 文明需要诚实、责任，以及能够被验证的对应关系。
 
----
+运行意义
 
-## 运行意义
+莫问并不判断文明是否存在。
 
-莫问并不判断是否存在文明。
+莫问检验证词、证据、对应与推理是否能够承担责任。
 
-莫问检验证词、证据与推理是否能够承担责任。
-
----
-
-## 要求
+所需条件
 
 文明需要：
 
@@ -92,26 +106,32 @@ Truth
 
 仅凭证词不能建立文明。
 
----
+责任
 
-## 责任
-
-每一个参与者，对自己的证词负责。
+每一个参与者，都对自己的证词负责。
 
 莫问只对诚实运行负责。
 
----
+运行原则
 
-## 相关概念
+文明体现于责任。
+
+责任依赖验证。
+
+验证建立于诚实。
+
+相关概念
 
 证词
 
-证据
-
 定义
+
+证据
 
 对应
 
+推理
+
 责任
 
-真相
+真理
