@@ -1,27 +1,62 @@
 class CorrespondenceEngine {
 
     constructor(text) {
-        this.text = text;
+
+        this.text = text || "";
+
     }
 
     run() {
 
-        const matched =
-            this.text.includes("是")
-            || this.text.includes("有")
-            || this.text.includes("属于");
+        const rules = [
+
+            "是",
+            "有",
+            "属于",
+            "对应",
+            "定义为"
+
+        ];
+
+        const matchedRules = rules.filter(
+
+            rule => this.text.includes(rule)
+
+        );
 
         return {
 
-            originalText: this.text,
+            testimony: this.text,
 
             correspondences: [
+
                 {
+
                     statement: this.text,
-                    matched,
-                    message: matched ? "发现对应关系" : "等待对象对应"
+
+                    matched: matchedRules.length > 0,
+
+                    rules: matchedRules,
+
+                    strength:
+
+                        matchedRules.length > 0
+                            ? "candidate"
+                            : "missing",
+
+                    message:
+
+                        matchedRules.length > 0
+                            ? "发现对应关系"
+                            : "等待对象对应"
+
                 }
-            ]
+
+            ],
+
+            status: "completed",
+
+            version: "2.0"
 
         };
 
