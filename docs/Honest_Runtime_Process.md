@@ -1,6 +1,30 @@
 # Honest Runtime Process
 
-## Step 1
+Step 1
+
+Expression
+
+Receive an expression.
+
+↓
+
+Step 2
+
+Definition
+
+Define every object and concept.
+
+↓
+
+Step 3
+
+Testimony
+
+The defined expression becomes testimony.
+
+↓
+
+Step 4
 
 Recognition
 
@@ -8,31 +32,31 @@ Identify objects and concepts.
 
 ↓
 
-## Step 2
+Step 5
 
-Definition
+Search
 
-Load the definitions of every concept.
+Retrieve supporting information.
 
 ↓
 
-## Step 3
+Step 6
 
 Evidence
 
-Identify the evidence required by every statement.
+Identify evidence related to the testimony.
 
 ↓
 
-## Step 4
+Step 7
 
 Correspondence
 
-Verify whether evidence corresponds to definitions.
+Verify whether testimony corresponds with objects, definitions and evidence.
 
 ↓
 
-## Step 5
+Step 8
 
 Reasoning
 
@@ -40,16 +64,16 @@ Build the reasoning chain.
 
 ↓
 
-## Step 6
+Step 9
 
 Responsibility
 
-Determine whether the statement can bear its own responsibility.
+Determine whether the expression can bear its own responsibility.
 
 ↓
 
-## Step 7
+Step 10
 
-Generate
+Reconstruction
 
-Generate an honest expression.
+Reconstruct the expression into one that can better bear responsibility.
