@@ -1,4 +1,3 @@
-
 import MoWenConfig from "./MoWenConfig.js";
 
 class ReconstructionEngine {
@@ -13,18 +12,19 @@ class ReconstructionEngine {
 
         const questions = [
 
-            this.data.correspondence?.correspondence?.question,
+            this.data.correspondence?.correspondences?.[0]?.message,
 
-            this.data.reasoning?.reasoning?.question,
+            this.data.reasoning?.reasonings?.[0]?.message,
 
-            this.data.responsibility?.responsibility?.question
+            this.data.responsibility?.responsibilities?.[0]?.message
 
         ].filter(Boolean);
+
 
         const report = {
 
             testimony:
-                this.data.evidence?.testimony || null,
+                this.data.evidence?.originalText || null,
 
             questions,
 
@@ -33,8 +33,6 @@ class ReconstructionEngine {
 
         };
 
-
-        // Honest Stop
 
         if (this.data.recognition?.matched === false) {
 
