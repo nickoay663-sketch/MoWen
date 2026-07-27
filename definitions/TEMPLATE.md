@@ -1,25 +1,117 @@
-# Concept Name
+MoWen Definition Template
 
-## Concept
+Version
+
+1.1
+
+Concept
 
 Concept Name
 
-## Definition
+Definition
 
-Write a precise definition.
+Write one clear and objective definition.
 
-## Object
+Definition Source
 
-What object does this concept describe?
+Specify the source of this definition.
 
-## Evidence
+Scope
 
-What evidence can support this concept?
+Define where this concept applies.
 
-## Correspondence
+Object
 
-How does the evidence correspond to the definition?
+What object, person, event, organization, or concept does this definition describe?
 
-## Responsibility
+Runtime Meaning
+
+Explain how this concept is used during MoWen Runtime.
+
+Evidence
+
+What evidence can support or examine this concept?
+
+Correspondence
+
+How does Runtime verify the relationship between:
+
+Testimony
+
+Definition
+
+Evidence
+
+Responsibility
 
 What responsibility follows from using this concept?
+
+Runtime Principle
+
+What principle does this concept follow during Runtime?
+
+Related Concepts
+
+List related MoWen concepts.
+
+
+----------------------------------------
+
+
+莫问定义模板
+
+版本
+
+1.1
+
+概念
+
+概念名称
+
+定义
+
+填写一个清晰、客观的定义。
+
+定义来源
+
+说明该定义来自哪里。
+
+范围
+
+说明该概念适用的边界。
+
+对象
+
+该定义描述什么对象、人、事件、组织或概念？
+
+运行意义
+
+说明该概念在莫问 Runtime 中如何使用。
+
+证据
+
+什么证据可以支持或检验该概念？
+
+对应
+
+莫问如何验证：
+
+证词
+
+定义
+
+证据
+
+之间的关系？
+
+责任
+
+使用该概念后产生什么责任？
+
+运行原则
+
+该概念在运行中遵循什么原则？
+
+相关概念
+
+列出相关莫问概念。
