@@ -23,6 +23,10 @@ class ReportFormatter {
             this.result.responsibility;
 
 
+        const reconstruction =
+            this.result.reconstruction;
+
+
         const selfCheck =
             this.result.selfCheck;
 
@@ -50,6 +54,9 @@ class ReportFormatter {
                 responsibility?.responsibility?.question
 
             ],
+
+
+            reconstruction,
 
 
             selfCheck,
