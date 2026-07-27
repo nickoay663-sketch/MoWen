@@ -5,7 +5,7 @@ import EvidenceEngine from "./EvidenceEngine.js";
 import CorrespondenceEngine from "./CorrespondenceEngine.js";
 import ReasoningEngine from "./ReasoningEngine.js";
 import ResponsibilityEngine from "./ResponsibilityEngine.js";
-import GeneratorEngine from "./GeneratorEngine.js";
+import ReconstructionEngine from "./ReconstructionEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 
@@ -27,7 +27,8 @@ class HonestRuntime {
 
             ...data,
 
-            generator: new GeneratorEngine(data).run(),
+            reconstruction:
+                new ReconstructionEngine(data).run(),
 
             selfCheck: null
 
@@ -95,8 +96,8 @@ class HonestRuntime {
             ).run();
 
 
-        const generator =
-            new GeneratorEngine({
+        const reconstruction =
+            new ReconstructionEngine({
 
                 recognition,
 
@@ -145,7 +146,7 @@ class HonestRuntime {
 
             responsibility,
 
-            generator,
+            reconstruction,
 
             selfCheck
 
