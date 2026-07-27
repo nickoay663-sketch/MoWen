@@ -44,7 +44,7 @@ class SearchEngine {
 
         return this.testimony
 
-            .replace(/[。，！？,.!?；;：:"“”‘’（）()【】\s]/g, "")
+            .replace(/[。，！？,.!?；;：:"“”‘’（）()\s]/g, "")
 
             .split("")
 
@@ -147,4 +147,10 @@ class SearchEngine {
 
         ];
 
-        return stopWords.includes
+        return stopWords.includes(word);
+
+    }
+
+}
+
+export default SearchEngine;
