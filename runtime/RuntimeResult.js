@@ -14,7 +14,7 @@ class RuntimeResult {
 
         this.responsibility = null;
 
-        this.generator = null;
+        this.reconstruction = null;
 
     }
 
