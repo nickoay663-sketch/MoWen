@@ -1,20 +1,52 @@
 const Definitions = {
 
-    "老师":"Teacher.md",
+    "老师": {
 
-    "医生":"Doctor.md",
+        file: "Teacher.md"
 
-    "学生":"Student.md",
+    },
 
-    "父亲":"Father.md",
+    "医生": {
 
-    "母亲":"Mother.md",
+        file: "Doctor.md"
 
-    "国家":"Country.md",
+    },
 
-    "政府":"Government.md",
+    "学生": {
 
-    "法律":"Law.md"
+        file: "Student.md"
+
+    },
+
+    "父亲": {
+
+        file: "Father.md"
+
+    },
+
+    "母亲": {
+
+        file: "Mother.md"
+
+    },
+
+    "国家": {
+
+        file: "Country.md"
+
+    },
+
+    "政府": {
+
+        file: "Government.md"
+
+    },
+
+    "法律": {
+
+        file: "Law.md"
+
+    }
 
 };
 
