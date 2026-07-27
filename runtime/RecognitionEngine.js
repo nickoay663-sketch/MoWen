@@ -10,95 +10,57 @@ class RecognitionEngine {
 
     run() {
 
-        const result = {
+        const objects = this.findObjects();
+
+        const concepts = this.findConcepts();
+
+        return {
 
             testimony: this.testimony,
 
-            objects: [],
+            principle: "莫问只识别，不猜测。",
 
-            concepts: [],
+            objects,
 
-            unknown: [],
+            concepts,
 
-            matched: false,
+            matched:
+                objects.length > 0 ||
+                concepts.length > 0,
 
-            question: null
+            question:
+                objects.length > 0 ||
+                concepts.length > 0
+                    ? null
+                    : "该证词中是否存在尚未定义的对象或概念？"
 
         };
 
-        Dictionary.objects.forEach(item => {
+    }
 
-            if (this.contains(item.word)) {
+    findObjects() {
 
-                result.objects.push(item);
+        return Dictionary.objects.filter(
 
-            }
+            item => this.contains(item.word)
 
-        });
+        );
 
-        Dictionary.concepts.forEach(item => {
+    }
 
-            if (this.contains(item.word)) {
+    findConcepts() {
 
-                result.concepts.push(item);
+        return Dictionary.concepts.filter(
 
-            }
+            item => this.contains(item.word)
 
-        });
-
-        result.unknown =
-            this.findUnknownObjects(
-                result.objects,
-                result.concepts
-            );
-
-        if (
-            result.objects.length > 0 ||
-            result.concepts.length > 0
-        ) {
-
-            result.matched = true;
-
-        } else {
-
-            result.question =
-                "是否存在尚未识别的对象或概念？";
-
-        }
-
-        return result;
+        );
 
     }
 
     contains(word) {
 
         return this.testimony.includes(word);
-
-    }
-
-    findUnknownObjects(objects, concepts) {
-
-        const recognized = [
-
-            ...objects.map(i => i.word),
-
-            ...concepts.map(i => i.word)
-
-        ];
-
-        return this.testimony
-
-            .replace(/[。，！？,.!?；：\s]/g, "")
-
-            .split("")
-
-            .filter(Boolean)
-
-            .filter(word =>
-
-                !recognized.includes(word)
-
-            );
 
     }
 
