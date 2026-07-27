@@ -1,5 +1,25 @@
 const Dictionary = {
 
+    version: "2.0",
+
+    categories: [
+
+        "person",
+
+        "profession",
+
+        "identity",
+
+        "family",
+
+        "organization",
+
+        "rule",
+
+        "concept"
+
+    ],
+
     objects: [
 
         {
