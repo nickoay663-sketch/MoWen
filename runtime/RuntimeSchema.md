@@ -1,54 +1,47 @@
 # MoWen Runtime Schema
 
-## Input
-
-Language
+Input
 
 ↓
 
-## Recognition
+Recognition
 
-- Concepts
-- Objects
+Concepts
 
-↓
-
-## Definition
-
-- Definitions
+Objects
 
 ↓
 
-## Evidence
+Definition
 
-- Evidence
-
-↓
-
-## Correspondence
-
-- Correspondence
+Definitions
 
 ↓
 
-## Reasoning
+Evidence
 
-- Reasoning
-
-↓
-
-## Expression
-
-- Expression
+Evidence
 
 ↓
 
-## Responsibility
+Correspondence
 
-- Responsibility
+Correspondence
 
 ↓
 
-## Generate
+Reasoning
 
-New expression
+Reasoning
+
+↓
+
+Expression Responsibility
+
+Responsibility
+
+↓
+
+Reconstruction
+
+Reconstructed Expression
