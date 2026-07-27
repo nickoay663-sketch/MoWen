@@ -1,10 +1,8 @@
 # Roadmap
 
-**MoWen evolves through continuous Honest Runtime.**
+MoWen evolves through continuous Honest Runtime.
 
-**莫问，通过持续的诚实运行不断演进。**
-
----
+莫问，通过持续的诚实运行不断演进。
 
 ## Vision
 
@@ -14,16 +12,17 @@ MoWen does not replace human judgment.
 
 MoWen examines whether expression can bear responsibility.
 
----
-
 ## v1.0
 
 Completed.
 
-- Honest Runtime Architecture
-- Testimony-based Workflow
-- Runtime Flow
-- Core Documentation
+Honest Runtime Architecture
+
+Testimony-based Workflow
+
+Runtime Flow
+
+Core Documentation
 
 Runtime Flow:
 
@@ -59,9 +58,7 @@ Responsibility
 
 ↓
 
-Generator
-
----
+Reconstruction
 
 ## v1.1
 
@@ -79,35 +76,41 @@ Build concept definitions.
 
 Improve recognition of:
 
-- Objects
-- Concepts
-- Relationships
+Objects
+
+Concepts
+
+Relationships
 
 ### Correspondence
 
 Build verification relationships:
 
-- Testimony ↔ Object
-- Testimony ↔ Definition
-- Testimony ↔ Evidence
+Testimony ↔ Object
+
+Testimony ↔ Definition
+
+Testimony ↔ Evidence
 
 ### Evidence
 
 Improve:
 
-- Evidence storage
-- Evidence verification
-- Evidence relationships
+Evidence storage
+
+Evidence verification
+
+Evidence relationships
 
 ### Search
 
 Expand:
 
-- Definition sources
-- Evidence sources
-- Knowledge retrieval
+Definition sources
 
----
+Evidence sources
+
+Knowledge retrieval
 
 ## Principle
 
