@@ -25,7 +25,19 @@ class HonestRuntime {
             new ReconstructionEngine(data).run();
 
 
+        const selfCheck =
+            new SelfCheckEngine({
+
+                ...data,
+
+                reconstruction
+
+            }).run();
+
+
         return {
+
+            runtimeVersion: "2.0",
 
             identity,
 
@@ -33,8 +45,7 @@ class HonestRuntime {
 
             reconstruction,
 
-            selfCheck:
-                new SelfCheckEngine(data).run()
+            selfCheck
 
         };
 
@@ -54,7 +65,9 @@ class HonestRuntime {
         if (!recognition.matched) {
 
             return this.stop(identity, {
+
                 recognition
+
             });
 
         }
@@ -67,8 +80,11 @@ class HonestRuntime {
         if (!definition.matched) {
 
             return this.stop(identity, {
+
                 recognition,
+
                 definition
+
             });
 
         }
@@ -117,16 +133,28 @@ class HonestRuntime {
         const selfCheck =
             new SelfCheckEngine({
 
+                recognition,
+
+                definition,
+
+                search,
+
                 evidence,
 
                 correspondence,
 
-                reasoning
+                reasoning,
+
+                responsibility,
+
+                reconstruction
 
             }).run();
 
 
         return {
+
+            runtimeVersion:"2.0",
 
             identity,
 
