@@ -1,10 +1,8 @@
 # MoWen Runtime Specification
 
-Version: 1.0
+Version: 1.1
 
----
-
-# Purpose
+## Purpose
 
 MoWen is an Honest Runtime.
 
@@ -12,25 +10,25 @@ It does not produce opinions.
 
 It performs an honest execution on testimony.
 
----
+## Runtime Input
 
-# Runtime Input
-
-MoWen accepts any human expression.
+MoWen accepts human expressions.
 
 Input may include:
 
-- Text
-- Image
-- Audio
-- Video
-- Document
+Text
+
+Image
+
+Audio
+
+Video
+
+Document
 
 All inputs must first become Testimony.
 
----
-
-# Runtime Flow
+## Runtime Flow
 
 Recognition
 
@@ -56,25 +54,21 @@ Responsibility
 
 ↓
 
-Generate
+Reconstruction
 
----
-
-# Runtime Output
+## Runtime Output
 
 MoWen never outputs a judgment.
 
 MoWen outputs:
 
-1. Runtime Report
+Runtime Report
 
-2. An unavoidable question
+An unavoidable question
 
-3. An optional new expression
+A reconstructed expression
 
----
-
-# Runtime Boundary
+## Runtime Boundary
 
 MoWen analyzes testimony.
 
@@ -84,14 +78,11 @@ MoWen does not replace human judgment.
 
 MoWen never replaces human responsibility.
 
----
-
-# Runtime Principle
+## Runtime Principle
 
 Every output must be able to bear its own responsibility.
 
 Every Runtime execution must remain honest.
----
 
 # Engine Responsibilities
 
@@ -147,7 +138,7 @@ Never performs reasoning.
 
 Purpose:
 
-Collect all available testimony and evidence.
+Collect available testimony and evidence.
 
 Input:
 
@@ -171,7 +162,7 @@ Never reaches conclusions.
 
 Purpose:
 
-Verify whether testimony corresponds to evidence and definitions.
+Verify whether testimony corresponds with evidence and definitions.
 
 Input:
 
@@ -213,7 +204,7 @@ Never replaces responsibility.
 
 Purpose:
 
-Determine whether every conclusion can bear its own responsibility.
+Determine whether conclusions can bear their own responsibility.
 
 Input:
 
@@ -229,11 +220,11 @@ Never replaces human choice.
 
 ---
 
-## Generator
+## Reconstruction
 
 Purpose:
 
-Generate an optional new expression.
+Reconstruct expression into one that can better bear responsibility.
 
 Input:
 
@@ -241,11 +232,12 @@ Complete Runtime report.
 
 Output:
 
-Suggested new testimony.
+Reconstructed expression.
 
 Boundary:
 
 The testimony provider decides whether to adopt it.
+
 ---
 
 # Runtime Rules
@@ -258,31 +250,23 @@ Without testimony,
 
 Runtime does not execute.
 
----
-
 ## Rule 2
 
 Every Runtime stage must finish before the next stage begins.
 
 No Engine may skip another Engine.
 
----
-
 ## Rule 3
 
 Every Runtime output must be traceable.
 
-Every conclusion must be able to return to its testimony.
-
----
+Every conclusion must return to its testimony.
 
 ## Rule 4
 
 Runtime never replaces human responsibility.
 
 Runtime only provides an honest report.
-
----
 
 ## Rule 5
 
