@@ -1,6 +1,10 @@
-# Object
+Object
 
-## Definition
+Version
+
+1.1
+
+Definition
 
 An object is anything that can be identified, referred to, or examined in testimony.
 
@@ -8,19 +12,15 @@ An object may be a person, thing, organization, event, place, or concept.
 
 Objects are the starting point of Runtime recognition.
 
----
+Runtime Meaning
 
-## Runtime Meaning
-
-MoWen first identifies objects before interpreting testimony.
+MoWen identifies objects before interpreting testimony.
 
 Without identifiable objects,
 
-runtime cannot continue reliably.
+Runtime cannot continue reliably.
 
----
-
-## Requirements
+Requirements
 
 An object should be:
 
@@ -30,17 +30,21 @@ An object should be:
 
 Objects should not be confused with conclusions.
 
----
-
-## Responsibility
+Responsibility
 
 The testimony provider bears responsibility for referring to the object correctly.
 
 MoWen bears responsibility only for recognizing objects consistently.
 
----
+Runtime Principle
 
-## Related Concepts
+Object recognition is not interpretation.
+
+Recognition determines what is referred to.
+
+Interpretation begins only after recognition.
+
+Related Concepts
 
 Definition
 
@@ -50,11 +54,15 @@ Recognition
 
 Correspondence
 
----
+----------------------------------------
 
-# 对象
+对象
 
-## 定义
+版本
+
+1.1
+
+定义
 
 对象，是证词中能够被识别、指称或检验的事物。
 
@@ -62,9 +70,7 @@ Correspondence
 
 对象是莫问运行识别阶段的起点。
 
----
-
-## 运行意义
+运行意义
 
 莫问首先识别对象，再解释证词。
 
@@ -72,9 +78,7 @@ Correspondence
 
 运行就不能可靠地继续。
 
----
-
-## 要求
+要求
 
 对象应当具备：
 
@@ -84,17 +88,19 @@ Correspondence
 
 对象不能与结论混淆。
 
----
+责任
 
-## 责任
-
-证词提供者，应当正确指称对象。
+证词提供者应当正确指称对象。
 
 莫问只对一致地识别对象负责。
 
----
+运行原则
 
-## 相关概念
+对象识别不是解释。
+
+先识别对象，再进入解释。
+
+相关概念
 
 定义
 
