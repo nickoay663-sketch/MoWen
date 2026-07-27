@@ -14,13 +14,19 @@ class SearchEngine {
 
         const objects = this.detectObjects(keywords);
 
+        const concepts = this.detectConcepts(keywords);
+
         return {
 
             testimony: this.testimony,
 
+            tokens,
+
             keywords,
 
             objects,
+
+            concepts,
 
             sources: [],
 
@@ -28,7 +34,7 @@ class SearchEngine {
 
             status: "completed",
 
-            version: "1.0"
+            version: "2.0"
 
         };
 
@@ -38,7 +44,7 @@ class SearchEngine {
 
         return this.testimony
 
-            .replace(/[。，！？,.!?；;：:"“”‘’（）()【】\[\]\s]/g, "")
+            .replace(/[。，！？,.!?；;：:"“”‘’（）()【】\s]/g, "")
 
             .split("")
 
@@ -76,12 +82,28 @@ class SearchEngine {
 
     detectObjects(keywords) {
 
-        const possibleObjects = [
+        const objectLibrary = [
 
             "人民",
             "国家",
             "政府",
             "党",
+            "历史"
+
+        ];
+
+        return keywords
+
+            .filter(item => objectLibrary.includes(item.word))
+
+            .map(item => item.word);
+
+    }
+
+    detectConcepts(keywords) {
+
+        const conceptLibrary = [
+
             "自由",
             "民主",
             "文明",
@@ -90,7 +112,6 @@ class SearchEngine {
             "责任",
             "权利",
             "法律",
-            "历史",
             "事实",
             "真相",
             "利益"
@@ -99,7 +120,7 @@ class SearchEngine {
 
         return keywords
 
-            .filter(item => possibleObjects.includes(item.word))
+            .filter(item => conceptLibrary.includes(item.word))
 
             .map(item => item.word);
 
@@ -126,10 +147,4 @@ class SearchEngine {
 
         ];
 
-        return stopWords.includes(word);
-
-    }
-
-}
-
-export default SearchEngine;
+        return stopWords.includes
