@@ -1,7 +1,9 @@
 class ReportFormatter {
 
     constructor(result) {
+
         this.result = result;
+
     }
 
 
@@ -34,26 +36,57 @@ class ReportFormatter {
         return {
 
             title:
+
                 "莫问 · 诚实检查报告",
 
 
-            originalText:
-                evidence?.originalText || null,
+            testimony:
+
+                evidence?.testimony ||
+                evidence?.originalText ||
+                null,
 
 
             evidence:
+
                 evidence?.evidences || [],
+
+
+            correspondence:
+
+                correspondence?.correspondences || [],
+
+
+            reasoning:
+
+                reasoning?.reasonings || [],
+
+
+            responsibility:
+
+                responsibility?.responsibilities || [],
 
 
             questions: [
 
-                correspondence?.correspondence?.question,
+                correspondence
+                    ?.correspondences
+                    ?.[0]
+                    ?.message,
 
-                reasoning?.reasoning?.question,
 
-                responsibility?.responsibility?.question
+                reasoning
+                    ?.reasonings
+                    ?.[0]
+                    ?.message,
 
-            ],
+
+                responsibility
+                    ?.responsibilities
+                    ?.[0]
+                    ?.message
+
+            ].filter(Boolean),
 
 
             reconstruction,
@@ -63,7 +96,13 @@ class ReportFormatter {
 
 
             status:
-                "completed"
+
+                "completed",
+
+
+            version:
+
+                "2.0"
 
         };
 
