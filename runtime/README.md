@@ -2,7 +2,7 @@
 
 MoWen Runtime is the execution engine of MoWen.
 
-Runtime Flow
+## Runtime Flow
 
 Recognition
 
@@ -28,7 +28,7 @@ Responsibility
 
 ↓
 
-Generator
+Reconstruction
 
 The Runtime does not generate opinions.
 
