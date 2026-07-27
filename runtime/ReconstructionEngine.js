@@ -1,6 +1,7 @@
+
 import MoWenConfig from "./MoWenConfig.js";
 
-class GeneratorEngine {
+class ReconstructionEngine {
 
     constructor(data) {
 
@@ -28,9 +29,10 @@ class GeneratorEngine {
             questions,
 
             summary:
-                "莫问没有直接给出结论，而是生成需要继续验证的问题。"
+                "莫问没有直接给出结论，而是重构表达，使表达能够继续承担验证责任。"
 
         };
+
 
         // Honest Stop
 
@@ -58,12 +60,13 @@ class GeneratorEngine {
 
         }
 
+
         return {
 
             report,
 
             status:
-                MoWenConfig.states.generator
+                MoWenConfig.states.reconstruction
 
         };
 
@@ -71,4 +74,4 @@ class GeneratorEngine {
 
 }
 
-export default GeneratorEngine;
+export default ReconstructionEngine;
