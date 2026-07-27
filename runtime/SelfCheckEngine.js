@@ -8,7 +8,6 @@ class SelfCheckEngine {
 
     }
 
-
     run() {
 
         const checks = {
@@ -21,26 +20,29 @@ class SelfCheckEngine {
 
         };
 
-
         const passed =
             checks.evidence &&
             checks.correspondence &&
             checks.reasoning;
 
-
         return {
+
+            version: "2.0",
 
             checks,
 
             status: passed
                 ? "self-check-passed"
-                : "self-check-warning"
+                : "self-check-warning",
+
+            summary: passed
+                ? "Self Check Passed."
+                : "Self Check Warning."
 
         };
 
     }
 
 }
-
 
 export default SelfCheckEngine;
