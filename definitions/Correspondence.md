@@ -1,20 +1,26 @@
-# Correspondence
+Correspondence
 
-## Definition
+Version
 
-Correspondence is the relationship between testimony, definition and evidence.
+1.1
+
+Concept
+
+Correspondence
+
+Definition
+
+Correspondence is the relationship between testimony, definition, and evidence.
 
 Correspondence is not belief.
 
 Correspondence is not opinion.
 
-Correspondence is verification.
+Correspondence is established through verification.
 
----
+Runtime Meaning
 
-## Runtime Meaning
-
-Correspondence compares:
+Runtime compares:
 
 - Testimony
 - Definition
@@ -22,9 +28,7 @@ Correspondence compares:
 
 Runtime determines whether they correspond.
 
----
-
-## Requirements
+Required Conditions
 
 Correspondence requires:
 
@@ -32,33 +36,118 @@ Correspondence requires:
 - Definition
 - Evidence
 
-If any element is missing,
+If any required element is missing,
 
 Correspondence cannot be completed.
 
----
+Runtime Result
 
-## Runtime Result
-
-Correspondence may produce:
+Runtime may report:
 
 - Corresponding
 - Not Corresponding
 - Insufficient Evidence
 
----
+Responsibility
 
-## Responsibility
+Correspondence reports verification results only.
 
-Correspondence reports only the verification result.
+It does not produce judgments or conclusions.
 
-It never produces judgment.
+Runtime Principle
 
----
+Correspondence is not interpretation.
 
-## Related Concepts
+Correspondence is the result of verification.
 
-- Testimony
-- Evidence
-- Definition
-- Reasoning
+Verification precedes reasoning.
+
+Related Concepts
+
+Testimony
+
+Definition
+
+Evidence
+
+Reasoning
+
+Truth
+
+----------------------------------------
+
+对应
+
+版本
+
+1.1
+
+概念
+
+对应
+
+定义
+
+对应，是证词、定义与证据之间的关系。
+
+对应不是信念。
+
+对应不是观点。
+
+对应通过验证建立。
+
+运行意义
+
+莫问比较：
+
+- 证词
+- 定义
+- 证据
+
+并判断它们是否相互对应。
+
+所需条件
+
+对应必须具备：
+
+- 证词
+- 定义
+- 证据
+
+任何一个要素缺失，
+
+对应都不能完成。
+
+运行结果
+
+莫问可能输出：
+
+- 已对应
+- 未对应
+- 证据不足
+
+责任
+
+对应只报告验证结果。
+
+对应不产生判断，也不产生结论。
+
+运行原则
+
+对应不是解释。
+
+对应是验证的结果。
+
+验证先于推理。
+
+相关概念
+
+证词
+
+定义
+
+证据
+
+推理
+
+真理
