@@ -1,64 +1,49 @@
 class CorrespondenceEngine {
 
-    constructor(text) {
+    constructor(testimony) {
 
-        this.text = text || "";
+        this.testimony = testimony || "";
 
     }
 
     run() {
 
-        const rules = [
-
-            "是",
-            "有",
-            "属于",
-            "对应",
-            "定义为"
-
-        ];
-
-        const matchedRules = rules.filter(
-
-            rule => this.text.includes(rule)
-
-        );
-
         return {
 
-            testimony: this.text,
+            testimony: this.testimony,
 
-            correspondences: [
+            principle:
+                "莫问只建立对应，不裁决对应。",
 
-                {
-
-                    statement: this.text,
-
-                    matched: matchedRules.length > 0,
-
-                    rules: matchedRules,
-
-                    strength:
-
-                        matchedRules.length > 0
-                            ? "candidate"
-                            : "missing",
-
-                    message:
-
-                        matchedRules.length > 0
-                            ? "发现对应关系"
-                            : "等待对象对应"
-
-                }
-
-            ],
+            correspondences: this.collectCorrespondence(),
 
             status: "completed",
 
-            version: "2.0"
+            version: "2.1"
 
         };
+
+    }
+
+    collectCorrespondence() {
+
+        return [
+
+            {
+
+                testimony: this.testimony,
+
+                object: null,
+
+                definition: null,
+
+                evidence: null,
+
+                state: "pending"
+
+            }
+
+        ];
 
     }
 
