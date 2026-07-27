@@ -1,80 +1,101 @@
 # Version
 
-**MoWen Version History.**
+MoWen Version History.
 
-**莫问版本记录。**
-
----
+莫问版本记录。
 
 ## Current Version
 
-# v1.1
+v1.2
 
-Runtime Architecture
+## Runtime Architecture
 
----
+Completed
 
-## Completed
+Honest Runtime
 
-### Honest Runtime
+Runtime Flow
 
-- Runtime Flow
-- Runtime Report
-- Runtime Engines
+Runtime Report
+
+Runtime Engines
 
 Engines:
 
-- Recognition Engine
-- Definition Engine
-- Search Engine
-- Evidence Engine
-- Correspondence Engine
-- Reasoning Engine
-- Responsibility Engine
-- Generator Engine
+Recognition Engine
 
----
+Definition Engine
+
+Search Engine
+
+Evidence Engine
+
+Correspondence Engine
+
+Reasoning Engine
+
+Responsibility Engine
+
+Reconstruction Engine
 
 ## Runtime Capability
 
 Completed:
 
-- Runtime Architecture
-- Runtime Search Capability
-- Definition Search
-- User Definition
-- Recognition Specification
-- Responsibility Specification
-- Generator Specification
+Runtime Architecture
 
----
+Runtime Search Capability
+
+Definition Search
+
+User Definition
+
+Recognition Specification
+
+Responsibility Specification
+
+Reconstruction Specification
 
 ## Documents
 
 Completed:
 
-- ARCHITECTURE.md
-- RUNTIME.md
-- SEARCH.md
-- STANDARD.md
-- CORE_DEFINITIONS.md
-- RECOGNITION.md
-- RESPONSIBILITY.md
-- GENERATOR.md
+ARCHITECTURE.md
 
----
+RUNTIME.md
+
+SPEC.md
+
+RuntimeSchema.md
+
+SEARCH.md
+
+STANDARD.md
+
+CORE_DEFINITIONS.md
+
+RECOGNITION.md
+
+RESPONSIBILITY.md
+
+RECONSTRUCTION.md
 
 ## Next Version
 
-# v1.2
+v1.3
 
-Runtime Knowledge
+## Runtime Knowledge
 
 Focus:
 
-- Search Service
-- Definition Library
-- Evidence Library
-- Knowledge Library
-- Correspondence Rules
-- Runtime API
+Search Service
+
+Definition Library
+
+Evidence Library
+
+Knowledge Library
+
+Correspondence Rules
+
+Runtime API
