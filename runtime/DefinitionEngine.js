@@ -10,9 +10,6 @@ class DefinitionEngine {
 
     run() {
 
-        // 莫问原则：
-        // 没有定义，就没有推理。
-
         const result = {
 
             testimony: this.testimony,
@@ -23,6 +20,8 @@ class DefinitionEngine {
 
             definitions: [],
 
+            undefinedConcepts: [],
+
             matched: false,
 
             question: null
@@ -31,15 +30,24 @@ class DefinitionEngine {
 
         Object.keys(Definitions).forEach(concept => {
 
-            if (this.containsConcept(this.testimony, concept)) {
+            if (this.containsConcept(concept)) {
 
                 result.concepts.push(concept);
 
-                result.definitions.push(Definitions[concept]);
+                result.definitions.push({
+
+                    concept,
+
+                    definition: Definitions[concept]
+
+                });
 
             }
 
         });
+
+        result.undefinedConcepts =
+            this.findUndefinedConcepts(result.concepts);
 
         if (result.concepts.length > 0) {
 
@@ -56,9 +64,19 @@ class DefinitionEngine {
 
     }
 
-    containsConcept(testimony, concept) {
+    containsConcept(concept) {
 
-        return testimony.includes(concept);
+        return this.testimony.includes(concept);
+
+    }
+
+    findUndefinedConcepts(concepts) {
+
+        return concepts.filter(
+
+            concept => !Definitions[concept]
+
+        );
 
     }
 
