@@ -1,16 +1,12 @@
 # Testimony Protocol
 
-Version: 1.1
-
----
+Version: 1.2
 
 ## Purpose
 
 This protocol defines how testimony enters MoWen Honest Runtime.
 
 Every Runtime begins with testimony.
-
----
 
 ## Input
 
@@ -28,8 +24,6 @@ A testimony may originate from:
 - AI-generated Content
 
 All inputs are converted into testimony before Runtime begins.
-
----
 
 ## Runtime Process
 
@@ -67,9 +61,7 @@ Responsibility
 
 ↓
 
-Generator
-
----
+Reconstruction
 
 ## Runtime Output
 
@@ -77,11 +69,9 @@ Every Runtime produces:
 
 - Runtime Report
 - Runtime Questions
-- (Optional) New Testimony
+- Reconstructed Expression
 
-Generated reports may become testimony for the next Runtime.
-
----
+Reconstructed expressions may become testimony for the next Runtime.
 
 ## Principle
 
