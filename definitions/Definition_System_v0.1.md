@@ -1,16 +1,157 @@
-# Definition System v0.1
+Definition System
 
-## 核心
+Version
+
+1.0
+
+Purpose
+
+Any language-based Runtime must first confirm concepts.
+
+Without definition,
+
+expression cannot establish clear responsibility.
+
+Core Principle
+
+MoWen begins with definitions.
+
+MoWen does not assume the meaning of a concept.
+
+MoWen examines the relationship between:
+
+Definition
+
+↓
+
+Correspondence
+
+↓
+
+Responsibility
+
+Definition Structure
+
+A concept definition contains:
+
+- Name
+- Definition Source
+- Definition Content
+- Scope of Use
+- Internal Meaning
+- External Boundary
+- Possible Responsibility
+
+Definition Sources
+
+A definition may come from:
+
+- Dictionary definition
+- Legal definition
+- Philosophical definition
+- Historical definition
+- Sociological definition
+- User-defined meaning
+
+Runtime Principle
+
+The same word may have different definitions.
+
+Different definitions may produce different responsibilities.
+
+Therefore:
+
+MoWen does not automatically select a definition.
+
+MoWen presents:
+
+Definition
+
+↓
+
+Correspondence
+
+↓
+
+Responsibility
+
+Example
+
+Concept:
+
+Civilization
+
+Possible Definitions:
+
+Dictionary definition
+
+↓
+
+Legal definition
+
+↓
+
+Philosophical definition
+
+↓
+
+Historical definition
+
+↓
+
+Sociological definition
+
+↓
+
+User-defined definition
+
+After the user selects a definition:
+
+MoWen reruns the responsibility relationship.
+
+Principle
+
+Definition is a boundary.
+
+Boundary determines the range that language can honestly bear.
+
+----------------------------------------
+
+定义系统
+
+版本
+
+1.0
+
+目的
 
 任何语言运行，
+
 必须先确认概念。
 
 没有定义，
-就没有清晰的承担。
 
----
+表达就无法建立清晰责任。
 
-## 定义结构
+核心原则
+
+莫问从定义开始运行。
+
+莫问不预设概念含义。
+
+莫问检验：
+
+定义
+
+↓
+
+对应
+
+↓
+
+责任
+
+定义结构
 
 一个概念包含：
 
@@ -20,13 +161,11 @@
 - 使用范围
 - 内涵
 - 外延
-- 可能承担
+- 可能承担的责任
 
----
+定义来源
 
-## 定义来源
-
-支持：
+定义可以来自：
 
 - 词典定义
 - 法律定义
@@ -35,35 +174,41 @@
 - 社会学定义
 - 用户自定义
 
----
-
-## 运行原则
+运行原则
 
 同一个词，
+
 可能存在不同定义。
 
 不同定义，
+
 可能产生不同承担。
 
 因此：
 
-MoWen 不默认选择定义。
+莫问不默认选择定义。
 
-而展示：
+莫问展示：
 
-定义 → 对应 → 承担
+定义
+
+↓
+
+对应
+
+↓
+
+承担
 
 的关系。
 
----
-
-## 示例
+示例
 
 概念：
 
 文明
 
-定义：
+可能定义：
 
 词典定义
 
@@ -87,15 +232,12 @@ MoWen 不默认选择定义。
 
 用户自定义
 
-
 用户选择后：
 
-重新运行承担关系。
+莫问重新运行承担关系。
 
----
-
-## 原则
+原则
 
 定义是边界。
 
-边界决定语言能够承担的范围。
+边界决定语言能够诚实承担的范围。
