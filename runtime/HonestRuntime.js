@@ -21,16 +21,20 @@ class HonestRuntime {
 
     stop(identity, data) {
 
+        const reconstruction =
+            new ReconstructionEngine(data).run();
+
+
         return {
 
             identity,
 
             ...data,
 
-            reconstruction:
-                new ReconstructionEngine(data).run(),
+            reconstruction,
 
-            selfCheck: null
+            selfCheck:
+                new SelfCheckEngine(data).run()
 
         };
 
@@ -79,21 +83,15 @@ class HonestRuntime {
 
 
         const correspondence =
-            new CorrespondenceEngine(
-                this.text
-            ).run();
+            new CorrespondenceEngine(this.text).run();
 
 
         const reasoning =
-            new ReasoningEngine(
-                this.text
-            ).run();
+            new ReasoningEngine(this.text).run();
 
 
         const responsibility =
-            new ResponsibilityEngine(
-                this.text
-            ).run();
+            new ResponsibilityEngine(this.text).run();
 
 
         const reconstruction =
