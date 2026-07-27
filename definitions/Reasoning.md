@@ -1,8 +1,16 @@
-# Reasoning
+Reasoning
 
-## Definition
+Version
 
-Reasoning is the process of deriving conclusions from testimony, definitions, evidence, and correspondence.
+1.1
+
+Concept
+
+Reasoning
+
+Definition
+
+Reasoning is the process of deriving conclusions from testimony, definition, evidence, and correspondence.
 
 Reasoning is valid only when every step can be examined.
 
@@ -10,17 +18,13 @@ Reasoning is not belief.
 
 Reasoning is not authority.
 
----
-
-## Runtime Meaning
+Runtime Meaning
 
 MoWen never skips reasoning.
 
-Every conclusion must be supported by traceable reasoning.
+Every conclusion must be supported by a traceable reasoning process.
 
----
-
-## Requirements
+Required Conditions
 
 Reasoning requires:
 
@@ -33,17 +37,21 @@ If any prerequisite is missing,
 
 reasoning cannot be completed.
 
----
-
-## Responsibility
+Responsibility
 
 The testimony provider bears responsibility for the conclusion.
 
 MoWen bears responsibility only for executing the reasoning process honestly.
 
----
+Runtime Principle
 
-## Related Concepts
+Reasoning follows correspondence.
+
+Reasoning never replaces evidence.
+
+Every reasoning step should be traceable and reviewable.
+
+Related Concepts
 
 Testimony
 
@@ -57,11 +65,19 @@ Responsibility
 
 Truth
 
----
+----------------------------------------
 
-# 推理
+推理
 
-## 定义
+版本
+
+1.1
+
+概念
+
+推理
+
+定义
 
 推理，是依据证词、定义、证据与对应关系得出结论的过程。
 
@@ -71,40 +87,40 @@ Truth
 
 推理不是权威。
 
----
-
-## 运行意义
+运行意义
 
 莫问不会跳过推理。
 
 每一个结论，都必须具有可以追溯的推理过程。
 
----
-
-## 要求
+所需条件
 
 推理需要：
 
 - 证词
 - 定义
 - 证据
-- 对应关系
+- 对应
 
 如果缺少任何前提，
 
 推理就不能完成。
 
----
-
-## 责任
+责任
 
 结论的责任属于证词提供者。
 
 莫问只对诚实执行推理过程负责。
 
----
+运行原则
 
-## 相关概念
+推理建立在对应之后。
+
+推理不能代替证据。
+
+每一步推理都应当可以追溯、可以复核。
+
+相关概念
 
 证词
 
@@ -116,4 +132,4 @@ Truth
 
 责任
 
-真相
+真理
