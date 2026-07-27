@@ -1,10 +1,8 @@
 class SelfCheckEngine {
 
-    constructor({ evidence, correspondence, reasoning }) {
+    constructor(runtime) {
 
-        this.evidence = evidence;
-        this.correspondence = correspondence;
-        this.reasoning = reasoning;
+        this.runtime = runtime || {};
 
     }
 
@@ -12,32 +10,47 @@ class SelfCheckEngine {
 
         const checks = {
 
-            evidence: !!this.evidence,
+            recognition: !!this.runtime.recognition,
 
-            correspondence: !!this.correspondence,
+            definition: !!this.runtime.definition,
 
-            reasoning: !!this.reasoning
+            evidence: !!this.runtime.evidence,
+
+            correspondence: !!this.runtime.correspondence,
+
+            reasoning: !!this.runtime.reasoning,
+
+            responsibility: !!this.runtime.responsibility,
+
+            reconstruction: !!this.runtime.reconstruction
 
         };
 
         const passed =
-            checks.evidence &&
-            checks.correspondence &&
-            checks.reasoning;
+
+            Object.values(checks)
+
+                .every(Boolean);
 
         return {
 
-            version: "2.0",
+            version: "2.1",
 
             checks,
 
-            status: passed
-                ? "self-check-passed"
-                : "self-check-warning",
+            passed,
 
-            summary: passed
-                ? "Self Check Passed."
-                : "Self Check Warning."
+            status:
+
+                passed
+                    ? "self-check-passed"
+                    : "self-check-warning",
+
+            summary:
+
+                passed
+                    ? "Runtime Self Check Passed."
+                    : "Runtime Self Check Warning."
 
         };
 
