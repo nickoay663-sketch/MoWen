@@ -1,3 +1,4 @@
+import MoWenConfig from "./MoWenConfig.js";
 import Definitions from "../definitions/index.js";
 
 class DefinitionEngine {
@@ -14,7 +15,8 @@ class DefinitionEngine {
 
             testimony: this.testimony,
 
-            principle: "没有定义，就没有推理。",
+            principle:
+                MoWenConfig.principles.definition,
 
             concepts: [],
 
@@ -70,6 +72,10 @@ class DefinitionEngine {
 
     }
 
+    // TODO:
+    // 当 RecognitionEngine 返回完整概念列表后，
+    // 在这里比较“识别到的概念”与 Definitions，
+    // 找出真正尚未定义的概念。
     findUndefinedConcepts(concepts) {
 
         return concepts.filter(
