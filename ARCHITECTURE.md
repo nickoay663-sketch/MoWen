@@ -116,23 +116,23 @@ Checks expression responsibility.
 
 ---
 
-Generator Engine
+Reconstruction Engine
 
-Generates Runtime Report and New Testimony.
+Reconstructs the expression into one that can better bear responsibility.
 
-生成运行报告和新的证词。
+将表达重构为更能够承担责任的表达。
 
 ---
 
 Runtime Result
 
-Honest Runtime produces a Runtime Report.
+Honest Runtime produces a reconstructed expression.
 
-The Runtime Report may become new testimony.
+The reconstructed expression may become new testimony.
 
-诚实运行生成运行报告。
+诚实运行生成重构后的表达。
 
-运行报告可以作为新的证词进入下一次诚实运行。
+重构后的表达可以作为新的证词进入下一次诚实运行。
 
 ---
 
