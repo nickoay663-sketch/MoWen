@@ -33,8 +33,8 @@ const MoWenConfig = {
         responsibility:
             "Need Responsibility",
 
-        generated:
-            "Generated"
+        reconstruction:
+            "Reconstructed"
 
     }
 
