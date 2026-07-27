@@ -18,6 +18,8 @@ class RecognitionEngine {
 
             concepts: [],
 
+            unknown: [],
+
             matched: false,
 
             question: null
@@ -44,6 +46,12 @@ class RecognitionEngine {
 
         });
 
+        result.unknown =
+            this.findUnknownObjects(
+                result.objects,
+                result.concepts
+            );
+
         if (
             result.objects.length > 0 ||
             result.concepts.length > 0
@@ -65,6 +73,32 @@ class RecognitionEngine {
     contains(word) {
 
         return this.testimony.includes(word);
+
+    }
+
+    findUnknownObjects(objects, concepts) {
+
+        const recognized = [
+
+            ...objects.map(i => i.word),
+
+            ...concepts.map(i => i.word)
+
+        ];
+
+        return this.testimony
+
+            .replace(/[。，！？,.!?；：\s]/g, "")
+
+            .split("")
+
+            .filter(Boolean)
+
+            .filter(word =>
+
+                !recognized.includes(word)
+
+            );
 
     }
 
