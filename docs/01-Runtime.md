@@ -14,15 +14,19 @@ Runtime only executes verified principles honestly.
 
 ## Runtime Flow
 
-Input
-
-↓
-
-Recognition
+Expression
 
 ↓
 
 Definition
+
+↓
+
+Testimony
+
+↓
+
+Recognition
 
 ↓
 
@@ -46,7 +50,7 @@ Responsibility
 
 ↓
 
-Output
+Reconstruction
 
 ---
 
