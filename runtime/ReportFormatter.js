@@ -2,7 +2,7 @@ class ReportFormatter {
 
     constructor(result) {
 
-        this.result = result;
+        this.result = result || {};
 
     }
 
@@ -43,7 +43,9 @@ class ReportFormatter {
             testimony:
 
                 evidence?.testimony ||
+
                 evidence?.originalText ||
+
                 null,
 
 
@@ -95,6 +97,15 @@ class ReportFormatter {
             selfCheck,
 
 
+            runtimeStatus:
+
+                selfCheck?.passed
+
+                    ? "self-check-passed"
+
+                    : "self-check-warning",
+
+
             status:
 
                 "completed",
@@ -102,7 +113,7 @@ class ReportFormatter {
 
             version:
 
-                "2.0"
+                "2.1"
 
         };
 
