@@ -1,19 +1,22 @@
-MoWen Architecture Layer v1.0
+MoWen Architecture Layer v1.1
 
-一、架构定义
+莫问系统分层架构
+
+---
+
+一、架构原则
 
 莫问不是由功能堆积形成的程序。
 
-莫问是由四个层次构成的完整系统：
+莫问是由价值、运行、现象、实现四个层次构成的完整系统。
 
-1. Value Layer（价值层）
-2. Runtime Layer（运行层）
-3. Phenomenon Layer（现象层）
-4. Implementation Layer（实现层）
-
-四个层次分别承担不同责任。
+不同层次承担不同责任。
 
 任何层次不得越权。
+
+重构不是推翻过去。
+
+重构是在保持核心原则不变的基础上，重新组织结构，使责任更加清晰。
 
 ---
 
@@ -23,7 +26,7 @@ Layer 1：Value Layer（价值层）
 
 诚实不是莫问的功能。
 
-诚实不是莫问的规则。
+诚实不是莫问附加的规则。
 
 诚实是莫问存在的方式。
 
@@ -33,7 +36,7 @@ Layer 1：Value Layer（价值层）
 
 因此：
 
-所有识别、定义、检索、对应、证据、推理、责任检查和重构，都必须服从诚实。
+所有识别、定义、检索、证据、对应、推理、责任检查和重构，都必须服从诚实。
 
 ---
 
@@ -43,71 +46,79 @@ Layer 2：Runtime Layer（运行层）
 
 将输入表达转化为可检验、可修正、可重构的证词链。
 
-运行流程
+Runtime Flow
 
 Waiting
-等待输入
 
 ↓
 
 Recognition
+
 识别证词、对象、关系
 
 ↓
 
 Definition
+
 建立概念定义
 
 ↓
 
-Search
-发现缺失时检索补全
-
-↓
-
 Correspondence
-检查表达与对象是否对应
+
+检查表达与对象、定义之间的对应
 
 ↓
 
 Evidence
+
 检查证据支持
 
 ↓
 
 Reasoning
-检查推理链是否成立
+
+检查推理链
 
 ↓
 
 Responsibility
-检查表达是否能够承担责任
+
+检查责任承担
 
 ↓
 
 Reconstruction
-重构为更能承担责任的表达
+
+重构表达
 
 ↓
 
 Waiting
+
 等待新的证词
 
-运行原则
+---
 
-缺失，不立即结束。
+Search Service
 
-缺失，首先检索。
+检索不是 Runtime 流程中的一个固定步骤。
 
-检索仍无法补全：
+检索是 Runtime 的统一能力。
 
-进入 Honest Stop。
+所有 Runtime Engine 在需要信息时，都可以调用 Search Service。
 
-Honest Stop 不是否定表达者。
+Search Service 支持：
 
-而是指出：
+- Recognition
+- Definition
+- Evidence
+- Correspondence
+- Reasoning
+- Responsibility
+- Reconstruction
 
-当前表达无法继续承担其结论所需要的责任。
+检索贯穿整个运行过程。
 
 ---
 
@@ -120,12 +131,14 @@ Layer 3：Phenomenon Layer（现象层）
 - 对应性
 - 可追溯性
 - 可修正性
-- 过滤不能成立的表达
-- 保留能够承担责任的表达
 
 这些不是莫问的根。
 
 这些是诚实运行后的结果。
+
+莫问不制造结论。
+
+莫问帮助表达承担责任。
 
 ---
 
@@ -133,16 +146,7 @@ Layer 4：Implementation Layer（实现层）
 
 目的
 
-将莫问架构转化为可运行程序。
-
-包括：
-
-- JavaScript
-- Node.js
-- Engine 模块
-- GitHub 项目结构
-- UI
-- API
+将莫问架构转化为可运行系统。
 
 实现层服从运行层。
 
@@ -152,17 +156,62 @@ Layer 4：Implementation Layer（实现层）
 
 ---
 
+Implementation Structure
+
+Engine Layer
+
+负责实现 Runtime 的具体检验能力。
+
+包括：
+
+- Recognition Engine
+- Definition Engine
+- Evidence Engine
+- Correspondence Engine
+- Reasoning Engine
+- Responsibility Engine
+- Reconstruction Engine
+
+Service Layer
+
+提供 Runtime 所需的统一服务。
+
+包括：
+
+- Search Service
+
+Knowledge Layer
+
+提供 Runtime 所需知识结构。
+
+包括：
+
+- Definition Library
+- Evidence Library
+- Knowledge Library
+- Correspondence Rules
+
+Interface Layer
+
+负责人与莫问之间的交互。
+
+包括：
+
+- UI
+- API
+- Language Interface
+
+---
+
 架构自检原则
 
 任何新增功能进入莫问之前，必须回答：
 
-1. 是否符合诚实？
-
-2. 属于哪个运行步骤？
-
-3. 产生什么运行结果？
-
-4. 如何实现？
+1. 是否符合诚实原则？
+2. 属于哪个层？
+3. 承担什么责任？
+4. 如何被 Runtime 检验？
+5. 如何实现？
 
 无法回答者，不进入莫问。
 
@@ -170,20 +219,36 @@ Layer 4：Implementation Layer（实现层）
 
 最终架构
 
-                 诚实
-                   │
-                   ▼
-          Runtime 诚实运行
-                   │
-        ┌──────────┴──────────┐
-        ▼                     ▼
- Phenomenon              Reconstruction
- 运行表现                责任承担
-        │                     │
-        └──────────┬──────────┘
-                   ▼
-          Implementation
-              实现
+Value Layer
+（价值层）
+↓
+
+Runtime Layer
+（运行层）
+↓
+
+Phenomenon Layer
+（现象层）
+↓
+
+Implementation Layer
+（实现层）
+
+Implementation Layer 内部：
+
+Engine
+
+↓
+
+Service
+
+↓
+
+Knowledge
+
+↓
+
+Interface
 
 ---
 
