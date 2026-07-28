@@ -37,7 +37,7 @@ class HonestRuntime {
 
         return {
 
-            runtimeVersion: "2.0",
+            runtimeVersion: "2.1",
 
             identity,
 
@@ -94,12 +94,12 @@ class HonestRuntime {
             new SearchEngine(this.text).run();
 
 
-        const evidence =
-            new EvidenceEngine(this.text).run();
-
-
         const correspondence =
             new CorrespondenceEngine(this.text).run();
+
+
+        const evidence =
+            new EvidenceEngine(this.text).run();
 
 
         const reasoning =
@@ -119,9 +119,9 @@ class HonestRuntime {
 
                 search,
 
-                evidence,
-
                 correspondence,
+
+                evidence,
 
                 reasoning,
 
@@ -139,9 +139,9 @@ class HonestRuntime {
 
                 search,
 
-                evidence,
-
                 correspondence,
+
+                evidence,
 
                 reasoning,
 
@@ -154,7 +154,7 @@ class HonestRuntime {
 
         return {
 
-            runtimeVersion:"2.0",
+            runtimeVersion:"2.1",
 
             identity,
 
@@ -164,9 +164,9 @@ class HonestRuntime {
 
             search,
 
-            evidence,
-
             correspondence,
+
+            evidence,
 
             reasoning,
 
