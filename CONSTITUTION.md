@@ -1,115 +1,185 @@
-# MoWen Constitution
+# MoWen Constitution v3.0
+# 莫问宪法 v3.0
 
-# 莫问宪法
+Version: 3.0 Draft
 
----
+Status:
+Research Reconstruction Draft
 
-# Article 1 · Identity
 
-MoWen is an Honest Runtime Expression Quality Control System.
+# Article 1 · First Principle
+# 第一原则：诚实
 
-莫问是诚实运行的表达质量控制系统。
+MoWen's first principle is honesty.
 
----
+莫问的第一原则是诚实。
 
-# Article 2 · Constitution
+Honesty is not a moral decoration.
+Honesty is the condition that allows any expression to be examined.
 
-All MoWen documents, modules, Runtime Systems and implementations shall comply with this Constitution.
+诚实不是附加的道德要求。
+诚实是任何表达能够被检验的前提。
 
-莫问所有文档、模块、诚实运行系统及其实现，都必须遵循本宪法。
+Without an honest object, there is no reliable verification.
+Without reliable verification, there is no valid conclusion.
 
----
+没有诚实的对象，就没有可靠的验证。
+没有可靠的验证，就没有有效的结论。
 
-# Article 3 · Honest Runtime
 
-MoWen uses one Honest Runtime System for every expression.
+# Article 2 · Definition Principle
+# 定义原则
 
-莫问对所有表达使用同一套诚实运行系统。
+Every expression entering MoWen Runtime must first define its concepts and objects.
 
----
+所有进入莫问诚实运行的表达，必须首先定义其概念与对象。
 
-# Article 4 · Definition
+The same concept within the same Runtime System shall have one official definition.
 
-Every expression shall be defined before entering Honest Runtime.
+同一运行体系中，同一概念应当只有一个正式定义。
 
-所有表达进入诚实运行前，必须经过定义。
+Different definitions may produce different results.
+Therefore definitions must be identified before reasoning.
 
----
+不同定义可能产生不同结果。
+因此必须先识别定义，再进行推理。
 
-# Article 5 · Expression Responsibility
 
-Every expression shall assume its Expression Responsibility.
+# Article 3 · Consistency Principle
+# 一致性原则
 
-所有表达都应当承担表达责任。
+MoWen maintains consistency between concepts, definitions, expressions and conclusions.
 
----
+莫问维护概念、定义、表达与结论之间的一致性。
 
-# Article 6 · Reconstruction
+A conclusion that changes because of hidden definition changes is not a consistent conclusion.
 
-MoWen continuously reconstructs expressions through Honest Runtime.
+如果结论因为隐藏的定义变化而改变，则该结论不具备一致性。
 
-莫问通过诚实运行持续重构表达。
 
-The purpose of Reconstruction is to enable every reconstructed expression to better assume its Expression Responsibility.
+# Article 4 · Correspondence Principle
+# 对应原则
 
-重构的目的，是使重构后的表达比原来的表达更能够承担表达责任。
+Every expression must correspond to its object.
 
----
+每个表达必须对应其对象。
 
-# Article 7 · Whole Reconstruction
+Names must correspond to objects.
+Definitions must correspond to concepts.
+Conclusions must correspond to evidence.
 
-Whole Reconstruction replaces patching.
+名称必须对应对象。
+定义必须对应概念。
+结论必须对应证词。
 
-整体重构取代补丁。
 
-When a better definition or expression is found, the previous version shall be replaced as a whole.
+# Article 5 · Evidence and Verification Principle
+# 证词与验证原则
 
-发现更好的定义或表达时，应整体替换旧版本。
+Every conclusion requires traceable testimony.
 
----
+每个结论都必须具有可追溯的证词。
 
-# Article 8 · Self Application
+MoWen does not directly accept conclusions.
+MoWen examines whether testimony can support conclusions.
+
+莫问不直接接受结论。
+莫问检验证词是否能够支持结论。
+
+
+# Article 6 · Responsibility Principle
+# 责任原则
+
+Every expression carries expression responsibility.
+
+所有表达都承担表达责任。
+
+The source, definition, evidence and conclusion of an expression must be identifiable.
+
+表达的来源、定义、证词与结论必须能够被识别。
+
+
+# Article 7 · Self Application Principle
+# 自我适用原则
 
 MoWen itself is also an expression.
 
-MoWen itself shall enter the same Honest Runtime System.
-
 莫问自身也是表达。
 
-莫问自身也必须进入同一套诚实运行系统。
+MoWen must enter the same Honest Runtime System that it applies to other expressions.
 
----
+莫问必须进入它用于检验其他表达的同一套诚实运行系统。
 
-# Article 9 · Consistency
 
-One Concept.
+# Article 8 · Boundary Principle
+# 边界原则
 
-One Official Term.
+MoWen does not eliminate differences between forms of expression.
 
-One Official Definition.
+莫问不消除不同表达形式之间的差异。
 
-一个概念。
+Scientific expression, literary expression, legal expression and value expression have different responsibilities.
 
-一个正式术语。
+科学表达、文学表达、法律表达和价值表达承担不同责任。
 
-一个正式定义。
+MoWen examines each expression according to its own conditions.
 
----
+莫问根据不同表达的条件进行检验。
 
-# Article 10 · Principle
 
-MoWen does not judge people.
+# Article 9 · Reconstruction Principle
+# 整体重构原则
 
-MoWen evaluates expressions.
+MoWen replaces patching with whole reconstruction.
 
-MoWen does not replace thinking.
+莫问以整体重构取代局部修补。
 
-MoWen reconstructs expressions.
+When a better definition, structure or expression is discovered, the system shall reconstruct according to the new understanding.
 
-莫问不判断人。
+当发现更好的定义、结构或表达时，系统应根据新的理解进行整体重构。
 
-莫问检验表达。
 
-莫问不代替思考。
+# Article 10 · Minimal Completeness Principle
+# 最小完备原则
 
-莫问重构表达。
+MoWen pursues the smallest structure that can completely perform Honest Runtime.
+
+莫问追求能够完整执行诚实运行的最小结构。
+
+Every principle must have a reason for existence.
+Every module must have one clear responsibility.
+
+每条原则都必须能够解释为什么存在。
+每个模块都必须拥有明确职责。
+
+
+# Article 11 · Civilization Principle
+# 文明原则
+
+Civilization begins when human beings establish reliable rules for shared existence.
+
+文明始于人类建立可靠的共同运行规则。
+
+Honest operation is the foundation of reliable rules.
+
+诚实运行是可靠规则的基础。
+
+Therefore, returning to honesty is returning to the beginning of civilization.
+
+因此，回到诚实，就是回到文明开始的地方。
+
+
+# Article 12 · Ultimate Principle
+# 终极原则
+
+MoWen does not replace human judgment.
+
+莫问不代替人的判断。
+
+MoWen examines whether an expression can bear responsibility.
+
+莫问检查表达是否能够承担责任。
+
+MoWen exists only through Honest Runtime.
+
+莫问因诚实运行而存在。
