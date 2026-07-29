@@ -1,93 +1,138 @@
 const MoWenConfig = {
 
-    version: "2.1",
+
+    version: "2.2",
+
 
     name: "MoWen",
 
+
     identity: "Honest Runtime",
+
 
     motto: "诚实运行",
 
+
     mission:
 
-        "识别证词、建立定义、收集证据、验证对应、建立推理、确认责任、诚实重构表达。",
+        "识别表达、建立定义、验证证据、检查对应、分析推理、建立责任关系、重构可承担表达。",
+
+
 
     principles: {
+
 
         testimony:
 
             "没有证词，就没有运行。",
 
+
         definition:
 
-            "没有定义，就没有推理。",
+            "没有定义，就无法理解。",
+
 
         evidence:
 
-            "没有证据，就不能验证。",
+            "没有证据，就无法验证。",
+
 
         correspondence:
 
-            "没有对应，就不能判断。",
+            "没有对应，就无法继续验证。",
+
 
         reasoning:
 
-            "没有推理，就没有结论。",
+            "没有有效推理，就不能支持表达范围。",
+
 
         responsibility:
 
-            "没有责任，就没有文明。",
+            "没有责任关系，表达无法承担。",
+
 
         reconstruction:
 
-            "不能承担的表达，应当重构。",
+            "不能承担的表达，应当被重构。",
+
 
         honesty:
 
-            "莫问始终诚实运行。"
+            "莫问始终保持诚实运行。",
+
+
+        language:
+
+            "语言是入口，表达责任是运行对象。"
 
     },
 
+
+
     states: {
+
 
         recognition:
 
             "Need Recognition",
 
+
         definition:
 
             "Need Definition",
+
 
         search:
 
             "Need Search",
 
+
         evidence:
 
             "Need Evidence",
+
 
         correspondence:
 
             "Need Correspondence",
 
+
         reasoning:
 
             "Need Reasoning",
+
 
         responsibility:
 
             "Need Responsibility",
 
+
         reconstruction:
 
-            "Reconstructed",
+            "Need Reconstruction",
 
-        completed:
 
-            "Completed"
+        verification:
+
+            "Need Verification",
+
+
+        selfCheckPassed:
+
+            "Self Check Passed",
+
+
+        selfCheckWarning:
+
+            "Self Check Warning"
+
 
     }
 
+
 };
+
+
 
 export default MoWenConfig;
