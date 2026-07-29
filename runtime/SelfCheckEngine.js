@@ -8,6 +8,7 @@ class SelfCheckEngine {
     }
 
 
+
     run() {
 
 
@@ -19,40 +20,52 @@ class SelfCheckEngine {
                 !!this.runtime.semanticObject,
 
 
+
             recognition:
 
-                !!this.runtime.semanticObject?.recognition,
+                !!this.runtime.recognition,
+
 
 
             definition:
 
-                !!this.runtime.semanticObject?.definition,
+                !!this.runtime.definition,
+
+
+
+            search:
+
+                !!this.runtime.search,
+
 
 
             evidence:
 
-                !!this.runtime.semanticObject?.evidence,
+                !!this.runtime.evidence,
+
 
 
             correspondence:
 
-                !!this.runtime.semanticObject?.correspondence,
+                !!this.runtime.correspondence,
+
 
 
             reasoning:
 
-                !!this.runtime.semanticObject?.reasoning,
+                !!this.runtime.reasoning,
+
 
 
             responsibility:
 
-                !!this.runtime.semanticObject?.responsibility,
+                !!this.runtime.responsibility,
+
 
 
             reconstruction:
 
                 !!this.runtime.reconstruction
-
 
         };
 
@@ -71,13 +84,13 @@ class SelfCheckEngine {
 
             version:
 
-                "2.2",
+                "2.3",
 
 
 
             principle:
 
-                "莫问首先检查自身运行是否诚实。",
+                "莫问检查自身运行，不判断表达结果。",
 
 
 
@@ -111,7 +124,7 @@ class SelfCheckEngine {
 
                         "Runtime 是否缺少必要运行环节？",
 
-                        "输出是否超过已有依据？"
+                        "输出是否超过已有证词、定义和证据范围？"
 
                     ],
 
