@@ -1,3 +1,4 @@
+import LanguageDetector from "./LanguageDetector.js";
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
 import SearchEngine from "./SearchEngine.js";
@@ -9,9 +10,7 @@ import ReconstructionEngine from "./ReconstructionEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 
-
 class HonestRuntime {
-
 
     constructor(expression) {
 
@@ -19,66 +18,44 @@ class HonestRuntime {
 
     }
 
-
-
     run() {
-
 
         const identity =
             new MoWenIdentity().run();
 
-
+        const language =
+            new LanguageDetector(this.expression).run();
 
         const recognition =
             new RecognitionEngine(this.expression).run();
 
-
-
         const semanticObject = {
 
-
             originalContent:
-
                 this.expression,
 
-
             language:
-
-                recognition.language || null,
-
+                language.language,
 
             expressionType:
-
                 recognition.expressionType || null,
 
-
             objects:
-
                 recognition.objects || [],
 
-
             concepts:
-
                 recognition.concepts || []
 
         };
 
-
-
         const definition =
             new DefinitionEngine(semanticObject).run();
-
-
 
         const search =
             new SearchEngine(semanticObject).run();
 
-
-
         const evidence =
             new EvidenceEngine(semanticObject).run();
-
-
 
         const correspondence =
             new CorrespondenceEngine({
@@ -93,8 +70,6 @@ class HonestRuntime {
 
             }).run();
 
-
-
         const reasoning =
             new ReasoningEngine({
 
@@ -104,8 +79,6 @@ class HonestRuntime {
 
             }).run();
 
-
-
         const responsibility =
             new ResponsibilityEngine({
 
@@ -114,8 +87,6 @@ class HonestRuntime {
                 reasoning
 
             }).run();
-
-
 
         const reconstruction =
             new ReconstructionEngine({
@@ -133,8 +104,6 @@ class HonestRuntime {
                 responsibility
 
             }).run();
-
-
 
         const selfCheck =
             new SelfCheckEngine({
@@ -157,56 +126,38 @@ class HonestRuntime {
 
             }).run();
 
-
-
         return {
 
-
-            runtimeVersion:
-
-                "2.3",
-
+            runtimeVersion: "2.4",
 
             identity,
 
+            language,
 
             semanticObject,
 
-
             recognition,
-
 
             definition,
 
-
             search,
-
 
             evidence,
 
-
             correspondence,
-
 
             reasoning,
 
-
             responsibility,
-
 
             reconstruction,
 
-
             selfCheck
-
 
         };
 
-
     }
 
-
 }
-
 
 export default HonestRuntime;
