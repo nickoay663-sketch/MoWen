@@ -1,50 +1,118 @@
 class EvidenceEngine {
 
-    constructor(testimony) {
 
-        this.testimony = testimony || "";
+    constructor(semanticObject) {
+
+        this.semanticObject = semanticObject || {};
 
     }
+
 
     run() {
 
+
         return {
 
-            testimony: this.testimony,
+
+            semanticObject:
+
+                this.semanticObject,
+
 
             principle:
-                "莫问只收集证据，不判断证据。",
 
-            evidences: this.collectEvidence(),
+                "莫问只收集和记录证据，不判断证据。",
 
-            status: "completed",
 
-            version: "2.1"
+
+            evidences:
+
+                this.collectEvidence(),
+
+
+
+            status:
+
+                "need-evidence-verification",
+
+
+
+            version:
+
+                "2.2"
 
         };
 
+
     }
 
+
+
     collectEvidence() {
+
 
         return [
 
             {
 
-                statement: this.testimony,
 
-                provided: false,
+                statement:
 
-                source: null,
+                    this.semanticObject.originalContent || "",
 
-                type: "unknown"
+
+
+                object:
+
+                    this.semanticObject.objects || [],
+
+
+
+                language:
+
+                    this.semanticObject.language || null,
+
+
+
+                source:
+
+                    null,
+
+
+
+                time:
+
+                    null,
+
+
+
+                location:
+
+                    null,
+
+
+
+                type:
+
+                    "unknown",
+
+
+
+                verifiable:
+
+                    false
+
+
 
             }
 
         ];
 
+
     }
 
+
 }
+
 
 export default EvidenceEngine;
