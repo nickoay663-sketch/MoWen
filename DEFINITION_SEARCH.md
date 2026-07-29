@@ -1,87 +1,199 @@
 # MoWen Definition Search
 
-Version: 1.1
+Version: 1.2
 
----
+# 莫问定义检索系统 v1.2
+
 
 ## Purpose
 
-Definition Search retrieves all available definitions related to a Runtime concept.
+Definition Search provides available definitions for Runtime concepts.
 
-MoWen does not assume a single definition.
+定义检索为 Runtime 概念提供可用定义。
+
+
+MoWen does not select the final definition.
+
+MoWen does not replace existing definitions.
+
+莫问不选择唯一最终定义。
+
+莫问不替换已有定义。
+
 
 ---
 
-## Definition Categories
+# Core Principle
+
+
+Definition comes before reasoning.
+
+
+没有定义，就没有推理。
+
+
+Definition Search only provides definition resources.
+
+定义检索只提供定义资源。
+
+
+Correspondence determines whether definitions match expressions.
+
+对应关系决定定义是否匹配表达。
+
+
+---
+
+# Position
+
+
+Semantic Object
+
+↓
+
+Concept Recognition
+
+↓
+
+Definition Search
+
+↓
+
+Definition Objects
+
+↓
+
+Definition Engine
+
+↓
+
+Correspondence
+
+
+---
+
+# Definition Categories
+
 
 Definition Search may retrieve:
 
-### Standard Definition
 
-Dictionary
+## Standard Definition
 
-Encyclopedia
+Official or recognized definitions.
 
----
 
-### Professional Definition
+标准定义。
 
-Law
-
-Science
-
-Education
-
-Industry Standards
-
-International Standards
 
 ---
 
-### User Definition
+## Dictionary Definition
 
-Definitions provided by the testimony provider.
+General language definitions.
+
+
+词典定义。
+
+
+---
+
+## Encyclopedia Definition
+
+General knowledge explanations.
+
+
+百科定义。
+
+
+---
+
+## Professional Definition
+
+Domain-specific definitions.
+
+
+专业定义。
+
+
+---
+
+## Law Definition
+
+Legal definitions from legal systems.
+
+
+法律定义。
+
+
+---
+
+## Science Definition
+
+Scientific definitions.
+
+
+科学定义。
+
+
+---
+
+## Industry Standard Definition
+
+Definitions from recognized standards.
+
+
+行业标准定义。
+
+
+---
+
+## User Definition
+
+
+Definitions provided by expression provider.
+
+
+用户定义。
+
 
 User definitions remain testimony.
 
----
+用户定义仍然属于证词。
 
-### Runtime Definition
-
-Definitions established by MoWen Runtime.
-
-Runtime definitions are used only inside MoWen Runtime.
 
 ---
 
-## Runtime Output
+## Runtime Definition
 
-For every concept, Definition Search returns:
 
-- Concept
-- Number of definitions found
-- Definition Category
-- Definition
-- Source
+Definitions created for internal Runtime operation.
 
----
 
-## Runtime Principle
+Runtime 内部运行定义。
 
-MoWen never chooses definitions.
 
-MoWen displays available definitions.
+Runtime definitions do not replace external definitions.
 
-Correspondence begins after definitions become available.
 
-User definitions are never replaced.
+Runtime 定义不替代外部定义。
+
 
 ---
 
-## Responsibility
+# Definition Object
 
-Every definition belongs to its source.
 
-MoWen records definitions.
+Each definition record contains:
 
-MoWen does not alter definitions.
+
+```json
+{
+ "concept":"",
+ "definition":"",
+ "category":"",
+ "language":"",
+ "source":"",
+ "version":"",
+ "responsibility":""
+}
