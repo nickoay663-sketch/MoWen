@@ -1,156 +1,93 @@
 class SearchEngine {
 
-    constructor(testimony) {
 
-        this.testimony = testimony || "";
+    constructor(semanticObject) {
+
+        this.semanticObject = semanticObject || {};
 
     }
+
 
     run() {
 
-        const tokens = this.tokenize();
-
-        const keywords = this.extractKeywords(tokens);
-
-        const objects = this.detectObjects(keywords);
-
-        const concepts = this.detectConcepts(keywords);
 
         return {
 
-            testimony: this.testimony,
 
-            tokens,
+            semanticObject:
 
-            keywords,
+                this.semanticObject,
 
-            objects,
 
-            concepts,
+            principle:
 
-            sources: [],
+                "Search 提供信息支持，不替代定义、证据和判断。",
 
-            results: [],
 
-            status: "completed",
+            query:
 
-            version: "2.0"
+                this.buildQuery(),
+
+
+            sources:
+
+                [],
+
+
+            results:
+
+                [],
+
+
+            status:
+
+                "need_search_verification",
+
+
+            version:
+
+                "2.2"
 
         };
 
-    }
-
-    tokenize() {
-
-        return this.testimony
-
-            .replace(/[。，！？,.!?；;：:"“”‘’（）()\s]/g, "")
-
-            .split("")
-
-            .filter(Boolean);
 
     }
 
-    extractKeywords(tokens) {
 
-        const frequency = {};
 
-        tokens.forEach(word => {
+    buildQuery() {
 
-            if (!this.isStopWord(word)) {
 
-                frequency[word] = (frequency[word] || 0) + 1;
+        return {
 
-            }
 
-        });
+            language:
 
-        return Object.entries(frequency)
+                this.semanticObject.language || null,
 
-            .sort((a, b) => b[1] - a[1])
 
-            .map(item => ({
+            expression:
 
-                word: item[0],
+                this.semanticObject.originalContent || "",
 
-                count: item[1]
 
-            }));
+            concepts:
 
-    }
+                this.semanticObject.concepts || [],
 
-    detectObjects(keywords) {
 
-        const objectLibrary = [
+            objects:
 
-            "人民",
-            "国家",
-            "政府",
-            "党",
-            "历史"
+                this.semanticObject.objects || []
 
-        ];
 
-        return keywords
+        };
 
-            .filter(item => objectLibrary.includes(item.word))
-
-            .map(item => item.word);
 
     }
 
-    detectConcepts(keywords) {
-
-        const conceptLibrary = [
-
-            "自由",
-            "民主",
-            "文明",
-            "战争",
-            "和平",
-            "责任",
-            "权利",
-            "法律",
-            "事实",
-            "真相",
-            "利益"
-
-        ];
-
-        return keywords
-
-            .filter(item => conceptLibrary.includes(item.word))
-
-            .map(item => item.word);
-
-    }
-
-    isStopWord(word) {
-
-        const stopWords = [
-
-            "的",
-            "了",
-            "是",
-            "在",
-            "和",
-            "与",
-            "我",
-            "你",
-            "他",
-            "们",
-            "这",
-            "那",
-            "一个",
-            "我们"
-
-        ];
-
-        return stopWords.includes(word);
-
-    }
 
 }
+
 
 export default SearchEngine;
