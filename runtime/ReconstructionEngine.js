@@ -2,21 +2,20 @@ import MoWenConfig from "./MoWenConfig.js";
 
 class ReconstructionEngine {
 
-    constructor(data) {
+    constructor(semanticObject) {
 
-        this.data = data || {};
+        this.semanticObject = semanticObject || {};
 
     }
+
 
     run() {
 
         return {
 
-            testimony:
+            semanticObject:
 
-                this.data.recognition?.testimony ||
-
-                null,
+                this.semanticObject,
 
             principle:
 
@@ -26,23 +25,49 @@ class ReconstructionEngine {
 
                 this.reconstruct(),
 
+            questions:
+
+                [
+                    "重构后的表达是否保留原始责任？",
+                    "重构后的表达是否超过已有依据？"
+                ],
+
             status:
 
-                MoWenConfig.states.reconstruction,
+                "need_reconstruction_verification",
 
-            version: "2.1"
+            version:
+
+                "2.2"
 
         };
 
     }
 
+
     reconstruct() {
 
         return {
 
-            expression:
+            originalExpression:
 
-                "该表达需要根据定义、证据、对应关系、推理及责任重新确认。",
+                this.semanticObject.originalContent || "",
+
+
+            reconstructedExpression:
+
+                "根据已有定义、证据、对应关系和推理结构重新表达。",
+
+
+            languageEnvironment:
+
+                this.semanticObject.languageEnvironment || null,
+
+
+            responsibility:
+
+                this.semanticObject.responsibility || null,
+
 
             state:
 
@@ -53,5 +78,6 @@ class ReconstructionEngine {
     }
 
 }
+
 
 export default ReconstructionEngine;
