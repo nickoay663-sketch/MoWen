@@ -1,20 +1,22 @@
-Runtime Interface v1.0
+# Runtime Interface v1.1
 
-莫问运行接口规范 v1.0
+# 莫问运行接口规范 v1.1
 
-Purpose
+
+## Purpose
 
 Runtime Interface defines the common interface shared by every Runtime in MoWen.
 
-Every Runtime shall follow the same interface specification.
+Every Runtime follows the same interface specification while maintaining different responsibilities.
 
-运行接口规范定义莫问所有运行系统共同遵循的接口。
+运行接口规范定义莫问所有 Runtime 共同遵循的接口。
 
-所有运行系统必须遵循同一套接口规范。
+所有 Runtime 遵循统一接口，同时保持各自责任。
+
 
 ---
 
-Principle
+## Principle
 
 Different Runtime.
 
@@ -24,6 +26,7 @@ Different Responsibilities.
 
 Same Constitution.
 
+
 不同运行系统。
 
 统一接口。
@@ -32,9 +35,10 @@ Same Constitution.
 
 同一宪法。
 
+
 ---
 
-Runtime Lifecycle
+## Runtime Lifecycle
 
 Receive
 
@@ -54,71 +58,86 @@ Generate Result
 
 Return
 
-所有运行系统必须遵循统一生命周期。
+
+所有运行系统遵循统一生命周期。
+
 
 ---
 
-Input
+## Input
 
-Every Runtime receives one Semantic Object.
+Every Runtime receives a Structured Expression Object created by Language Runtime.
 
-任何运行系统只能接收统一语义对象。
+自然语言通过 Language Runtime 进入莫问。
 
-Natural language shall not directly enter Runtime.
+Runtime 接收由语言运行系统建立的结构化表达对象。
 
-自然语言不得直接进入运行系统。
+
+Input Object includes:
+
+- Original Expression
+- Language Environment
+- Expression Structure
+- Semantic Information
+
+
+输入对象包含：
+
+- 原始表达
+- 语言证词环境
+- 表达结构
+- 语义信息
+
 
 ---
 
-Processing
+## Processing
 
-Runtime processes the Semantic Object according to its responsibility.
+Runtime processes the Structured Expression Object according to its responsibility.
 
 Each Runtime may use different methods.
 
-However, every Runtime shall remain consistent with the Constitution.
+However, every Runtime must remain consistent with MoWen Constitution.
 
-运行系统依据自身责任处理统一语义对象。
+
+运行系统依据自身责任处理结构化表达对象。
 
 不同运行系统可以采用不同方法。
 
-但都必须遵循《莫问宪法》。
+但必须遵循《莫问宪法》。
+
 
 ---
 
-Output
+## Output
 
 Every Runtime returns one Runtime Result.
 
 The Runtime Result shall include:
 
-Processed Semantic Object
+- Language Environment
+- Processed Expression Object
+- Runtime Status
+- Questions
+- Suggestions
+- Responsibility Information
 
-Runtime Status
-
-Questions
-
-Suggestions
-
-Responsibility Information
 
 每个运行系统必须输出统一运行结果。
 
 运行结果至少包含：
 
-处理后的语义对象
+- 语言运行环境
+- 处理后的表达对象
+- 运行状态
+- 问题
+- 建议
+- 责任信息
 
-运行状态
-
-问题
-
-建议
-
-责任信息
 
 ---
 
-Error Handling
+## Error Handling
 
 Runtime shall never fabricate results.
 
@@ -126,25 +145,31 @@ If execution cannot continue,
 
 Runtime shall stop and report the reason.
 
+
 运行系统不得编造结果。
 
-无法继续运行时，应停止运行并说明原因。
+无法继续运行时，
+
+必须停止并说明原因。
+
 
 ---
 
-Responsibility
+## Responsibility
 
 Every Runtime shall clearly define its responsibility.
 
 No Runtime may execute beyond its responsibility.
 
-每个运行系统必须明确自身责任。
+
+每个 Runtime 必须明确自身责任。
 
 不得越权运行。
 
+
 ---
 
-Goal
+## Goal
 
 One Interface.
 
@@ -154,9 +179,10 @@ One Constitution.
 
 One Honest Principle.
 
+
 统一接口。
 
-多个运行系统。
+多个 Runtime。
 
 同一部宪法。
 
