@@ -1,52 +1,71 @@
-Expression Engine v1.0
+# Expression Engine v1.1
 
-莫问表达引擎 v1.0
+# 莫问表达引擎 v1.1
 
-Purpose
 
-The Expression Engine is the entrance of MoWen.
+## Purpose
 
-Expression is the first object processed by MoWen.
+Expression Engine is the entrance layer of MoWen.
 
-Language is recognized first.
+Its responsibility is to transform input expression into a structured expression object before entering Honest Runtime.
 
-Expression is recognized second.
+表达引擎是莫问的入口层。
 
-Runtime is selected third.
+它负责将输入表达转化为结构化表达对象，然后进入诚实运行。
 
-表达引擎是莫问的入口。
 
-表达，是莫问首先处理的对象。
+---
 
-首先识别语言。
+# Core Principle
 
-其次识别表达。
+MoWen does not process language itself.
 
-最后选择对应运行系统。
+MoWen processes expressions inside their original language environment.
 
-Runtime Flow
+Language establishes testimony environment.
 
-Input
+Expression establishes responsibility object.
+
+
+莫问不处理语言本身。
+
+莫问处理处于原始语言环境中的表达。
+
+语言建立证词环境。
+
+表达建立责任对象。
+
+
+---
+
+# Runtime Flow
+
+
+Input Expression
 
 ↓
 
-Language Detection
+Language Runtime
 
 ↓
 
-Expression Recognition
+Expression Engine
 
 ↓
 
-Expression Classification
+Structured Expression Object
 
 ↓
 
-Runtime Routing
+Recognition
 
 ↓
 
-Selected Runtime
+Definition
+
+↓
+
+Object Resolution
 
 ↓
 
@@ -58,164 +77,94 @@ Reconstruction
 
 ↓
 
-Output
+Report
 
-Language Detection
 
-MoWen first determines which natural language the expression belongs to.
+输入表达
 
-Examples:
+↓
 
-Chinese
+语言运行系统
 
-English
+↓
 
-Spanish
+表达引擎
 
-Japanese
+↓
 
-French
+结构化表达对象
 
-German
+↓
 
-Arabic
+识别
 
-Russian
+↓
 
-Others
+定义
 
-语言识别只负责确认语言。
+↓
 
-语言不是最终运行对象。
+对象解析
 
-Expression Recognition
+↓
 
-MoWen recognizes whether the input is an expression.
+诚实运行
 
-Only expressions enter Runtime.
+↓
 
-只有表达进入运行系统。
+重构
 
-Expression Classification
+↓
 
-Expressions are classified before Runtime.
+报告
 
-Current categories include:
 
-Testimony
+---
 
-Lyric
+# Language Environment
 
-Poem
 
-Dialogue
+Language Runtime provides:
 
-Speech
+- Original language
+- Language environment
+- Expression context
 
-News
 
-Article
+语言运行系统提供：
 
-Law
+- 原始语言
+- 语言运行环境
+- 表达上下文
 
-Contract
 
-Scientific Paper
+Expression Engine preserves the original expression environment.
 
-Book
+表达引擎保持原始表达环境。
 
-Advertisement
 
-Others
+---
 
-不同表达承担不同责任。
+# Expression Object
 
-不同表达进入不同运行系统。
 
-Runtime Routing
+Each expression entering MoWen becomes a Structured Expression Object.
 
-After classification,
 
-MoWen selects the corresponding Runtime.
+每一个进入莫问的表达，都成为结构化表达对象。
+
 
 Example:
 
-Testimony
 
-↓
-
-Honest Runtime
-
-Lyric
-
-↓
-
-Lyric Runtime
-
-News
-
-↓
-
-News Runtime
-
-Law
-
-↓
-
-Law Runtime
-
-Scientific Paper
-
-↓
-
-Academic Runtime
-
-Unified Principle
-
-Different languages.
-
-Different expressions.
-
-Different Runtime.
-
-One Constitution.
-
-One Honest Principle.
-
-One Responsibility Principle.
-
-不同语言。
-
-不同表达。
-
-不同运行系统。
-
-同一部宪法。
-
-同一诚实原则。
-
-同一责任原则。
-
-Goal
-
-MoWen does not process language.
-
-MoWen processes expressions.
-
-Language is only the entrance.
-
-Expression is the runtime object.
-
-Runtime determines responsibility.
-
-莫问不是处理语言。
-
-莫问处理表达。
-
-语言只是入口。
-
-表达才是运行对象。
-
-运行决定责任。
-
-
+```json
+{
+ "content":"",
+ "language":"",
+ "environment":"",
+ "type":"",
+ "subject":"",
+ "object":"",
+ "concept":"",
+ "status":""
+}
