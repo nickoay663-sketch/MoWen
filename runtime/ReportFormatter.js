@@ -13,12 +13,14 @@ class ReportFormatter {
 
 
         const semanticObject =
+
             this.result.semanticObject || {};
 
 
 
         const selfCheck =
-            this.result.selfCheck;
+
+            this.result.selfCheck || {};
 
 
 
@@ -31,13 +33,19 @@ class ReportFormatter {
 
 
 
+            principle:
+
+                "莫问报告运行过程，不替代人的判断。",
+
+
+
             expression:
 
                 semanticObject.originalContent || null,
 
 
 
-            languageEnvironment:
+            language:
 
                 semanticObject.language || null,
 
@@ -47,27 +55,39 @@ class ReportFormatter {
 
 
 
-            evidence:
-
-                this.result.evidence || {},
+            verificationChain: {
 
 
+                recognition:
 
-            correspondence:
-
-                this.result.correspondence || {},
-
+                    this.result.recognition || {},
 
 
-            reasoning:
+                definition:
 
-                this.result.reasoning || {},
+                    this.result.definition || {},
 
 
+                evidence:
 
-            responsibility:
+                    this.result.evidence || {},
 
-                this.result.responsibility || {},
+
+                correspondence:
+
+                    this.result.correspondence || {},
+
+
+                reasoning:
+
+                    this.result.reasoning || {},
+
+
+                responsibility:
+
+                    this.result.responsibility || {}
+
+            },
 
 
 
@@ -89,23 +109,24 @@ class ReportFormatter {
 
             runtimeStatus:
 
-                selfCheck?.status || "unknown",
+                selfCheck.status || "unknown",
 
 
 
             status:
 
-                selfCheck?.passed
+                selfCheck.passed
 
-                    ? "verified-runtime"
+                    ? "self-check-passed"
 
-                    : "need-verification",
+                    : "self-check-warning",
 
 
 
             version:
 
-                "2.2"
+                "2.3"
+
 
         };
 
@@ -121,36 +142,36 @@ class ReportFormatter {
 
 
 
-        const correspondence =
-            this.result.correspondence;
+        const modules = [
+
+            this.result.correspondence,
+
+            this.result.reasoning,
+
+            this.result.responsibility,
+
+            this.result.reconstruction
+
+        ];
 
 
 
-        const reasoning =
-            this.result.reasoning;
+        modules.forEach(module => {
+
+
+            if (!module)
+
+                return;
 
 
 
-        const responsibility =
-            this.result.responsibility;
+            if (Array.isArray(module.questions))
+
+                questions.push(...module.questions);
 
 
 
-        if (correspondence?.question)
-
-            questions.push(correspondence.question);
-
-
-
-        if (reasoning?.questions)
-
-            questions.push(...reasoning.questions);
-
-
-
-        if (responsibility?.questions)
-
-            questions.push(...responsibility.questions);
+        });
 
 
 
@@ -161,7 +182,6 @@ class ReportFormatter {
 
 
 }
-
 
 
 export default ReportFormatter;
