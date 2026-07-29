@@ -1,20 +1,85 @@
-Testimony
+# Testimony v1.2
 
-Definition
+# 莫问证词协议 v1.2
 
-A testimony is any expression that presents one or more claims about an object and can therefore be examined through honest runtime, regardless of its form or medium.
 
-证词，是任何对对象提出一个或多个关于对象的主张，因此能够接受诚实运行检验的表达，无论其表现形式或传播媒介为何。
+## Definition
 
-Every input entering MoWen Runtime is treated as testimony.
 
-任何进入莫问运行的内容，都作为证词处理。
+Testimony is an expression that has passed clarification and enters Honest Runtime for verification.
+
+
+证词，是经过澄清并进入诚实运行接受检验的表达。
+
+
+Not every expression is immediately testimony.
+
+
+不是所有表达立即成为证词。
+
+
+Expression becomes testimony after:
+
+- Recognition
+- Definition
+- Semantic clarification
+
+
+表达经过：
+
+- 识别
+- 定义
+- 语义澄清
+
+后成为证词。
+
 
 ---
 
-Forms of Testimony
+# Expression and Testimony
 
-A testimony may exist as:
+
+Expression is the input object of MoWen.
+
+
+表达是进入莫问的输入对象。
+
+
+Testimony is an expression with identifiable responsibility that can be examined.
+
+
+证词是具有可识别责任，并可以被检验的表达。
+
+
+Relationship:
+
+
+Expression
+
+↓
+
+Recognition
+
+↓
+
+Definition
+
+↓
+
+Testimony
+
+↓
+
+Honest Runtime
+
+
+---
+
+# Forms of Testimony
+
+
+Testimony may exist in:
+
 
 - Text
 - Image
@@ -26,9 +91,11 @@ A testimony may exist as:
 - News Report
 - Academic Paper
 - AI-generated Content
-- Any other medium capable of presenting one or more claims
+- Other expressive forms
 
-证词可以表现为：
+
+证词可以存在于：
+
 
 - 文字
 - 图片
@@ -39,97 +106,151 @@ A testimony may exist as:
 - 合同
 - 新闻报道
 - 学术论文
-- AI 生成内容
-- 任何能够表达一个或多个主张的媒介
+- AI生成内容
+- 其他表达形式
+
 
 ---
 
-Why Testimony
+# Language Environment
 
-MoWen does not process media.
 
-MoWen processes testimony.
+Every testimony keeps its original language environment.
 
-莫问处理的不是媒介。
 
-莫问处理的是证词。
+每一份证词保留原始语言环境。
 
-Every conclusion is based on one or more testimonies.
 
-Therefore, every conclusion can be traced back to testimony.
+Language may change.
 
-任何结论都建立在一个或多个证词之上。
+Responsibility does not change.
 
-因此，任何结论都可以追溯到证词。
+
+语言可以变化。
+
+责任不会变化。
+
 
 ---
 
-Honest Runtime
+# Honest Runtime
 
-Every testimony enters the same runtime.
+
+Every testimony follows the same Honest Runtime.
+
 
 Testimony
-    ↓
+
+
+↓
+
 Recognition
-    ↓
+
+
+↓
+
 Definition
-    ↓
+
+
+↓
+
 Search
-    ↓
+
+
+↓
+
 Evidence
-    ↓
+
+
+↓
+
 Correspondence
-    ↓
+
+
+↓
+
 Reasoning
-    ↓
+
+
+↓
+
 Responsibility
-    ↓
-Conclusion
 
-A conclusion is not the starting point.
 
-A conclusion is the result of honest runtime.
+↓
 
-Every honest runtime begins with testimony.
+Reconstruction
 
-Every trustworthy conclusion begins with testimony.
 
-结论不是起点。
+↓
 
-结论是诚实运行后的结果。
+New Expression
 
-每一次诚实运行，都始于证词。
-
-每一个值得信赖的结论，都始于证词。
 
 ---
 
-Responsibility
+# Responsibility
+
 
 Every testimony belongs to its provider.
 
+
+每一份证词属于其提供者。
+
+
 MoWen does not create testimony.
+
+
+莫问不创造证词。
+
 
 MoWen does not assume responsibility for testimony.
 
-MoWen examines testimony through honest correspondence.
 
-每一份证词都属于其提供者。
+莫问不替证词承担责任。
 
-莫问不会创造证词。
 
-莫问不会替证词承担责任。
+MoWen only examines responsibility through honest runtime.
 
-莫问通过诚实对应检验证词。
+
+莫问只通过诚实运行检验证词责任。
+
 
 ---
 
-Principle
+# Principle
 
-Without testimony, there is no honest runtime.
 
-Without honest runtime, there is no trustworthy conclusion.
+Without testimony,
 
-没有证词，就没有诚实运行。
+there is no honest runtime.
 
-没有诚实运行，就没有值得信赖的结论。
+
+没有证词，
+
+就没有诚实运行。
+
+
+Without honest runtime,
+
+there is no responsible expression.
+
+
+没有诚实运行，
+
+就没有能够承担责任的表达。
+
+
+---
+
+# Core Rule
+
+
+MoWen analyzes testimony.
+
+MoWen does not judge people.
+
+
+莫问分析证词。
+
+莫问不判断人。
