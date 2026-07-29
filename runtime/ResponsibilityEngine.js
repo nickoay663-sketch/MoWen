@@ -1,29 +1,40 @@
 class ResponsibilityEngine {
 
-    constructor(testimony) {
+    constructor(semanticObject) {
 
-        this.testimony = testimony || "";
+        this.semanticObject = semanticObject || {};
 
     }
+
 
     run() {
 
         return {
 
-            testimony: this.testimony,
+            semanticObject: this.semanticObject,
 
             principle:
                 "莫问只建立责任关系，不提前裁决责任。",
 
-            responsibilities: this.collectResponsibilities(),
+            responsibilities:
+                this.collectResponsibilities(),
 
-            status: "completed",
+            questions:
+                [
+                    "谁提出了该表达？",
+                    "该表达的责任来源是否明确？"
+                ],
 
-            version: "2.1"
+            status:
+                "need_responsibility",
+
+            version:
+                "2.2"
 
         };
 
     }
+
 
     collectResponsibilities() {
 
@@ -31,13 +42,20 @@ class ResponsibilityEngine {
 
             {
 
-                testimony: this.testimony,
+                expression:
+                    this.semanticObject.originalContent || "",
 
-                subject: null,
+                provider:
+                    this.semanticObject.responsibility || null,
 
-                conclusion: null,
+                source:
+                    null,
 
-                state: "pending"
+                responsibilityType:
+                    "expression",
+
+                state:
+                    "pending"
 
             }
 
@@ -46,5 +64,6 @@ class ResponsibilityEngine {
     }
 
 }
+
 
 export default ResponsibilityEngine;
