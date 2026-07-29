@@ -1,52 +1,104 @@
 class CorrespondenceEngine {
 
-    constructor(testimony) {
 
-        this.testimony = testimony || "";
+    constructor(runtimeObject) {
+
+        this.runtimeObject = runtimeObject || {};
 
     }
+
+
 
     run() {
 
+
         return {
 
-            testimony: this.testimony,
+
+            semanticObject:
+
+                this.runtimeObject,
+
+
 
             principle:
-                "莫问只建立对应，不裁决对应。",
 
-            correspondences: this.collectCorrespondence(),
+                "莫问只建立对应，不创造证据，不裁决结论。",
 
-            status: "completed",
 
-            version: "2.1"
+
+            correspondences:
+
+                this.collectCorrespondence(),
+
+
+
+            status:
+
+                "need-correspondence-verification",
+
+
+
+            version:
+
+                "2.2"
+
 
         };
 
+
     }
 
+
+
     collectCorrespondence() {
+
 
         return [
 
             {
 
-                testimony: this.testimony,
 
-                object: null,
+                object:
 
-                definition: null,
+                    this.runtimeObject.objects || [],
 
-                evidence: null,
 
-                state: "pending"
+
+                definition:
+
+                    this.runtimeObject.definitions || [],
+
+
+
+                evidence:
+
+                    this.runtimeObject.evidences || [],
+
+
+
+                reasoning:
+
+                    null,
+
+
+
+                state:
+
+                    "pending"
+
+
 
             }
 
         ];
 
+
     }
 
+
 }
+
+
 
 export default CorrespondenceEngine;
