@@ -1,77 +1,108 @@
-# Evidence System v0.1
+# Evidence System v1.0
 
-## 核心
+# 莫问证据系统 v1.0
 
-语言需要证词。
 
-没有证词，
-表达无法承担。
+## Purpose
 
----
 
-## 证词定义
+Evidence System provides supporting information for testimony verification.
 
-证词是支持语言表达的依据。
 
-包括：
+证据系统为证词验证提供支持信息。
 
-- 原文
-- 来源
-- 时间
-- 地点
-- 数据
-- 引用
 
----
+Evidence does not create conclusions.
 
-## 证词结构
+Evidence only supports correspondence checking.
 
-一个证词包含：
 
-- 内容
-- 来源
-- 对象
-- 时间
-- 可验证性
+证据不创造结论。
+
+证据只支持对应关系检查。
+
 
 ---
 
-## 运行原则
+# Core Principle
 
-MoWen 不判断证词是否符合用户期待。
 
-MoWen 检查：
+Testimony requires evidence.
 
-证词是否支持表达。
+Evidence requires source.
+
+
+证词需要证据。
+
+证据需要来源。
+
+
+Without evidence, expression responsibility cannot be fully examined.
+
+
+没有证据，表达责任无法充分检验。
+
 
 ---
 
-## 证词关系
+# Testimony and Evidence
 
-表达
+
+Testimony:
+
+The expression being examined.
+
+
+证词：
+
+被检验的表达。
+
+
+Evidence:
+
+Information used to examine whether testimony has support.
+
+
+证据：
+
+用于检验证词是否具有支持的信息。
+
+
+Relationship:
+
+
+Testimony
 
 ↓
 
-定义
+Evidence
 
 ↓
 
-证词
+Correspondence
 
 ↓
 
-对应
+Responsibility
 
-↓
-
-承担
 
 ---
 
-## 原则
+# Evidence Object
 
-没有证词，
-就没有承担。
 
-没有对应，
-就不能扩大表达范围。
+Each Evidence contains:
+
+
+```json
+{
+ "content":"",
+ "source":"",
+ "language":"",
+ "time":"",
+ "location":"",
+ "object":"",
+ "reference":"",
+ "verificationStatus":"",
+ "responsibility":""
+}
