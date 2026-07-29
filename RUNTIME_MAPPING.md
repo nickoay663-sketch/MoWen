@@ -1,84 +1,134 @@
-# MoWen Runtime Mapping
+# MoWen Runtime Mapping v1.1
 
-This document maps every Principle to Runtime behavior.
+# 莫问 Runtime 映射规范 v1.1
 
-Every Principle should be executable.
 
-Every Runtime behavior should be traceable.
+## Purpose
+
+This document maps every MoWen Principle to Runtime behavior.
+
+Every Principle must be executable.
+
+Every Runtime behavior must be traceable.
+
+本文用于建立莫问原则与 Runtime 行为之间的对应关系。
+
+每一条 Principle 都必须能够落实到 Runtime。
+
+每一个 Runtime 行为都必须能够追溯到 Principle。
+
 
 ---
 
-本文用于建立莫问原则与 Runtime 的对应关系。
+# Principle 0
 
-每一条 Principle，都必须能够落实到 Runtime。
+## Honesty is the life of MoWen.
 
-每一个 Runtime 行为，都必须能够追溯到 Principle。
+## 诚实是莫问的生命。
 
----
 
-## Principle 0
-
-Honesty is the life of MoWen.
-
-Runtime
+### Runtime
 
 HonestRuntime
 
 All Engines
 
-GeneratorEngine
+LanguageRuntime
 
-Behavior
+
+### Behavior
 
 When verification is insufficient,
 
 Runtime stops instead of pretending to know.
 
+
+当证据不足时，
+
+Runtime 停止运行，
+
+而不是制造确定答案。
+
+
 ---
 
-## Principle 1
+# Principle 1
 
-MoWen analyzes testimony, not people.
+## MoWen analyzes testimony, not people.
 
-Runtime
+## 莫问分析证词，而不是分析人。
+
+
+### Runtime
+
+LanguageRuntime
 
 RecognitionEngine
 
 EvidenceEngine
 
-Behavior
 
-Only testimony enters Runtime.
+### Behavior
+
+Testimony enters Runtime through its original language environment.
 
 People are never judged.
 
+
+证词通过其原始语言环境进入 Runtime。
+
+莫问不判断人。
+
+
 ---
 
-## Principle 2
+# Principle 2
 
-MoWen recognizes objects and concepts before making any conclusion.
+## MoWen recognizes objects and concepts before making any conclusion.
 
-Runtime
+## 莫问在形成任何判断之前，先识别对象和概念。
+
+
+### Runtime
 
 RecognitionEngine
 
 DefinitionEngine
 
-Behavior
+ObjectEngine
+
+
+### Behavior
 
 Recognition must finish before Definition.
 
+Definition must finish before Reasoning.
+
+
+识别完成之后，才能进行定义。
+
+定义完成之后，才能进行推理。
+
+
 ---
 
-## Principle 3
+# Principle 3
 
-MoWen performs an honest runtime.
+## MoWen performs an honest runtime.
 
-Runtime
+## 莫问执行诚实运行。
+
+
+### Runtime
 
 HonestRuntime
 
-Behavior
+
+### Behavior
+
+Language Runtime
+
+↓
 
 Recognition
 
@@ -108,96 +158,212 @@ Responsibility
 
 ↓
 
-Generator
+Reconstruction
+
 
 ---
 
-## Principle 4
+# Principle 4
 
-MoWen generates questions, not judgments.
+## MoWen generates questions, not judgments.
 
-Runtime
+## 莫问生成问题，而不是生成裁决。
 
-GeneratorEngine
 
-Behavior
+### Runtime
+
+ReconstructionEngine
+
+
+### Behavior
 
 Generate unavoidable questions.
 
 Never generate judgments.
 
+
+生成无法回避的问题。
+
+不生成裁决。
+
+
 ---
 
-## Principle 5
+# Principle 5
 
-The runtime result is an unavoidable question.
+## The runtime result is an unavoidable question.
 
-Runtime
+## Runtime 输出的是不可回避的问题。
 
-GeneratorEngine
 
-Behavior
+### Runtime
+
+ReconstructionEngine
+
+ReportFormatter
+
+
+### Behavior
 
 Output questions requiring verification.
 
+
+输出需要验证的问题。
+
+
 ---
 
-## Principle 6
+# Principle 6
 
-Responsibility belongs to the testimony provider.
+## Responsibility belongs to the testimony provider.
 
-Runtime
+## 责任属于证词提供者。
+
+
+### Runtime
 
 ResponsibilityEngine
 
-Behavior
+
+### Behavior
 
 Return responsibility.
 
 Do not assume responsibility.
 
+
+返回责任结构。
+
+不替表达者承担责任。
+
+
 ---
 
-## Principle 7
+# Principle 7
 
-MoWen may generate a new expression.
+## MoWen may generate a new expression.
 
-Runtime
+## 莫问可以生成新的表达。
 
-GeneratorEngine
 
-Behavior
+### Runtime
+
+ReconstructionEngine
+
+
+### Behavior
 
 Generate candidate expressions only.
 
+Maintain original testimony environment.
+
+
+只生成可承担表达。
+
+保持原始证词环境。
+
+
 ---
 
-## Principle 8
+# Principle 8
 
-MoWen never replaces human thinking.
+## MoWen never replaces human thinking.
 
-Runtime
+## 莫问不替代人的思考。
+
+
+### Runtime
 
 All Engines
 
-Behavior
 
-Provide Runtime.
+### Behavior
+
+Provide Runtime analysis.
 
 Never replace human judgment.
 
+
+提供运行分析。
+
+不替代人的判断。
+
+
 ---
 
-## Principle 9
+# Principle 9
 
-Every output must bear its own responsibility.
+## Every output must bear its own responsibility.
 
-Runtime
+## 每个输出必须承担自身责任。
 
-GeneratorEngine
+
+### Runtime
+
+ReconstructionEngine
 
 ResponsibilityEngine
 
-Behavior
+
+### Behavior
 
 Every output must be traceable.
+
+
+每个输出必须可追溯。
+
+
+---
+
+# Principle 10
+
+## Language is the testimony environment of expression.
+
+## 语言是表达的证词环境。
+
+
+### Runtime
+
+LanguageRuntime
+
+
+### Behavior
+
+Detect input language.
+
+Establish testimony environment.
+
+Preserve original expression language.
+
+Provide language context for all Engines.
+
+
+识别输入语言。
+
+建立证词运行环境。
+
+保持原始表达语言。
+
+向所有 Engine 提供语言环境。
+
+
+---
+
+# Goal
+
+One Principle.
+
+Many Runtime.
+
+Same Constitution.
+
+One Honest Runtime.
+
+
+一套原则。
+
+多个 Runtime。
+
+同一部宪法。
+
+同一个诚实运行系统。
