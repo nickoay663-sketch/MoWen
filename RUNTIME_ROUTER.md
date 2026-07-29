@@ -1,22 +1,60 @@
-Runtime Router v1.0
+# Runtime Router v1.1
 
-莫问运行路由系统 v1.0
+# 莫问运行路由系统 v1.1
 
-Purpose
 
-Runtime Router is responsible for selecting the correct Runtime for every expression.
+## Purpose
 
-No expression may enter a Runtime without Runtime Router.
+Runtime Router is responsible for directing every expression into the MoWen Honest Runtime.
 
-运行路由系统负责为每一个表达选择正确的运行系统。
+运行路由系统负责将每一个表达导入莫问诚实运行。
 
-任何表达不得绕过运行路由系统。
+
+Runtime Router does not select different judgment systems.
+
+运行路由系统不选择不同判断系统。
+
+
+It only ensures that expressions enter the correct runtime path.
+
+它只确保表达进入正确运行路径。
+
 
 ---
 
-Position
+# Core Principle
 
-Input
+
+One Expression.
+
+One Semantic Object.
+
+One Honest Runtime.
+
+
+一个表达。
+
+一个统一语义对象。
+
+一个诚实运行系统。
+
+
+Different expressions may require different supporting modules.
+
+不同表达可以调用不同辅助模块。
+
+
+But all expressions follow the same Constitution and Responsibility Structure.
+
+但是所有表达遵循同一部宪法和同一责任结构。
+
+
+---
+
+# Position
+
+
+Input Expression
 
 ↓
 
@@ -24,11 +62,11 @@ Language Runtime
 
 ↓
 
-Semantic Object
+Expression Engine
 
 ↓
 
-Expression Engine
+Semantic Object
 
 ↓
 
@@ -36,122 +74,209 @@ Runtime Router
 
 ↓
 
-Selected Runtime
+Honest Runtime
+
+↓
+
+Runtime Engines
+
+↓
+
+Reconstruction
 
 ↓
 
 Output
 
+
+输入表达
+
+↓
+
+语言运行系统
+
+↓
+
+表达引擎
+
+↓
+
+统一语义对象
+
+↓
+
+运行路由系统
+
+↓
+
+诚实运行
+
+↓
+
+运行引擎
+
+↓
+
+重构
+
+↓
+
+输出
+
+
 ---
 
-Principle
+# Routing Responsibility
 
-One Expression.
 
-One Runtime.
+Runtime Router checks:
 
-Every expression shall enter the Runtime most suitable for its responsibility.
+- Expression readiness
+- Semantic Object availability
+- Required Runtime path
 
-一个表达。
 
-一个运行系统。
+运行路由系统检查：
 
-每个表达都应进入最适合其责任的运行系统。
+- 表达是否准备完成
+- 是否存在统一语义对象
+- 所需运行路径
+
 
 ---
 
-Routing Rules
+# Routing Rules
 
-Testimony
+
+All expressions:
 
 ↓
 
 Honest Runtime
 
+
+所有表达：
+
+↓
+
+诚实运行
+
+
+Inside Honest Runtime:
+
+
+Testimony
+
+↓
+
+Testimony Analysis
+
+
 News
 
 ↓
 
-News Runtime
+Source and Evidence Analysis
 
-Lyric
-
-↓
-
-Lyric Runtime
-
-Dialogue
-
-↓
-
-Dialogue Runtime
 
 Law
 
 ↓
 
-Law Runtime
+Definition and Responsibility Analysis
+
 
 Contract
 
 ↓
 
-Contract Runtime
+Agreement and Responsibility Analysis
+
 
 Scientific Paper
 
 ↓
 
-Academic Runtime
+Evidence and Reasoning Analysis
 
-Book
 
-↓
-
-Book Runtime
-
-Others
+Dialogue
 
 ↓
 
-General Runtime
+Expression Responsibility Analysis
+
+
+Other Expressions
+
+↓
+
+General Responsibility Analysis
+
 
 ---
 
-Responsibility
+# Responsibility
+
 
 Runtime Router does not evaluate expressions.
 
-Runtime Router only selects Runtime.
+Runtime Router does not determine truth.
+
 
 运行路由系统不评价表达。
 
-运行路由系统只负责选择运行系统。
+运行路由系统不判断真假。
+
+
+Runtime Router only ensures correct execution path.
+
+运行路由系统只确保正确运行路径。
+
 
 ---
 
-Consistency
+# Consistency
 
-The same type of expression shall always enter the same Runtime.
 
-Different Runtime shall follow the same Constitution.
+Different expression forms.
 
-同一种表达应进入同一种运行系统。
+Same Honest Runtime.
 
-不同运行系统必须遵循同一部《莫问宪法》。
+
+不同表达形式。
+
+同一诚实运行。
+
+
+Different supporting modules.
+
+Same Constitution.
+
+
+不同辅助模块。
+
+同一部宪法。
+
 
 ---
 
-Goal
+# Goal
 
-Correct Expression.
 
-Correct Runtime.
+One Expression.
 
-Correct Responsibility.
+One Semantic Object.
 
-正确的表达。
+One Honest Runtime.
 
-正确的运行系统。
+One Responsibility Structure.
 
-正确的责任。
+
+一个表达。
+
+一个统一语义对象。
+
+一个诚实运行系统。
+
+一个责任结构。
