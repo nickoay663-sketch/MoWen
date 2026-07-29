@@ -1,5 +1,6 @@
 class ReportFormatter {
 
+
     constructor(result) {
 
         this.result = result || {};
@@ -7,119 +8,160 @@ class ReportFormatter {
     }
 
 
+
     run() {
 
-        const evidence =
-            this.result.evidence;
 
+        const semanticObject =
+            this.result.semanticObject || {};
 
-        const correspondence =
-            this.result.correspondence;
-
-
-        const reasoning =
-            this.result.reasoning;
-
-
-        const responsibility =
-            this.result.responsibility;
-
-
-        const reconstruction =
-            this.result.reconstruction;
 
 
         const selfCheck =
             this.result.selfCheck;
 
 
+
         return {
+
 
             title:
 
-                "莫问 · 诚实检查报告",
+                "莫问 · 诚实运行报告",
 
 
-            testimony:
 
-                evidence?.testimony ||
+            expression:
 
-                evidence?.originalText ||
+                semanticObject.originalContent || null,
 
-                null,
+
+
+            languageEnvironment:
+
+                semanticObject.language || null,
+
+
+
+            semanticObject,
+
 
 
             evidence:
 
-                evidence?.evidences || [],
+                this.result.evidence || {},
+
 
 
             correspondence:
 
-                correspondence?.correspondences || [],
+                this.result.correspondence || {},
+
 
 
             reasoning:
 
-                reasoning?.reasonings || [],
+                this.result.reasoning || {},
+
 
 
             responsibility:
 
-                responsibility?.responsibilities || [],
+                this.result.responsibility || {},
 
 
-            questions: [
 
-                correspondence
-                    ?.correspondences
-                    ?.[0]
-                    ?.message,
+            reconstruction:
+
+                this.result.reconstruction || {},
 
 
-                reasoning
-                    ?.reasonings
-                    ?.[0]
-                    ?.message,
 
+            questions:
 
-                responsibility
-                    ?.responsibilities
-                    ?.[0]
-                    ?.message
+                this.collectQuestions(),
 
-            ].filter(Boolean),
-
-
-            reconstruction,
 
 
             selfCheck,
 
 
+
             runtimeStatus:
 
-                selfCheck?.passed
+                selfCheck?.status || "unknown",
 
-                    ? "self-check-passed"
-
-                    : "self-check-warning",
 
 
             status:
 
-                "completed",
+                selfCheck?.passed
+
+                    ? "verified-runtime"
+
+                    : "need-verification",
+
 
 
             version:
 
-                "2.1"
+                "2.2"
 
         };
 
+
     }
 
+
+
+    collectQuestions() {
+
+
+        const questions = [];
+
+
+
+        const correspondence =
+            this.result.correspondence;
+
+
+
+        const reasoning =
+            this.result.reasoning;
+
+
+
+        const responsibility =
+            this.result.responsibility;
+
+
+
+        if (correspondence?.question)
+
+            questions.push(correspondence.question);
+
+
+
+        if (reasoning?.questions)
+
+            questions.push(...reasoning.questions);
+
+
+
+        if (responsibility?.questions)
+
+            questions.push(...responsibility.questions);
+
+
+
+        return questions.filter(Boolean);
+
+
+    }
+
+
 }
+
 
 
 export default ReportFormatter;
