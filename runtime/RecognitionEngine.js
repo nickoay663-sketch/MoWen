@@ -1,3 +1,4 @@
+import LanguageDetector from "./LanguageDetector.js";
 import Dictionary from "./Dictionary.js";
 import SpanishDictionary from "../languages/es-ES/Dictionary.js";
 
@@ -11,8 +12,13 @@ class RecognitionEngine {
 
     run() {
 
+        const language =
+            new LanguageDetector(this.expression).run().language;
+
         const dictionary =
-            this.getDictionary();
+            language === "es-ES"
+                ? SpanishDictionary
+                : Dictionary;
 
         const objects =
             this.findObjects(dictionary);
@@ -28,8 +34,7 @@ class RecognitionEngine {
             principle:
                 "莫问只识别，不猜测。",
 
-            language:
-                this.detectLanguage(),
+            language,
 
             objects,
 
@@ -50,17 +55,9 @@ class RecognitionEngine {
                     ],
 
             version:
-                "2.4"
+                "2.5"
 
         };
-
-    }
-
-    getDictionary() {
-
-        return this.detectLanguage() === "es-ES"
-            ? SpanishDictionary
-            : Dictionary;
 
     }
 
@@ -87,20 +84,6 @@ class RecognitionEngine {
     contains(word) {
 
         return this.expression.includes(word);
-
-    }
-
-    detectLanguage() {
-
-        if (/[áéíóúñü¿¡]/i.test(this.expression))
-
-            return "es-ES";
-
-        if (/[\u4e00-\u9fa5]/.test(this.expression))
-
-            return "zh-CN";
-
-        return "unknown";
 
     }
 
