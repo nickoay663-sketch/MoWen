@@ -1,67 +1,137 @@
 class SelfCheckEngine {
 
+
     constructor(runtime) {
 
         this.runtime = runtime || {};
 
     }
 
+
     run() {
+
 
         const checks = {
 
+
+            semanticObject:
+
+                !!this.runtime.semanticObject,
+
+
             recognition:
-                !!this.runtime.recognition,
+
+                !!this.runtime.semanticObject?.recognition,
+
 
             definition:
-                !!this.runtime.definition,
 
-            search:
-                !!this.runtime.search,
+                !!this.runtime.semanticObject?.definition,
+
 
             evidence:
-                !!this.runtime.evidence,
+
+                !!this.runtime.semanticObject?.evidence,
+
 
             correspondence:
-                !!this.runtime.correspondence,
+
+                !!this.runtime.semanticObject?.correspondence,
+
 
             reasoning:
-                !!this.runtime.reasoning,
+
+                !!this.runtime.semanticObject?.reasoning,
+
 
             responsibility:
-                !!this.runtime.responsibility,
+
+                !!this.runtime.semanticObject?.responsibility,
+
 
             reconstruction:
+
                 !!this.runtime.reconstruction
+
 
         };
 
+
+
         const passed =
+
             Object.values(checks)
+
                 .every(Boolean);
+
+
 
         return {
 
-            version: "2.1",
+
+            version:
+
+                "2.2",
+
+
+
+            principle:
+
+                "莫问首先检查自身运行是否诚实。",
+
+
 
             checks,
 
+
+
             passed,
 
+
+
             status:
+
                 passed
+
                     ? "self-check-passed"
+
                     : "self-check-warning",
 
-            summary:
+
+
+            questions:
+
                 passed
-                    ? "Runtime Self Check Passed."
-                    : "Runtime Self Check Warning."
+
+                    ? []
+
+                    :
+
+                    [
+
+                        "Runtime 是否缺少必要运行环节？",
+
+                        "输出是否超过已有依据？"
+
+                    ],
+
+
+
+            summary:
+
+                passed
+
+                    ? "Honest Runtime Self Check Passed."
+
+                    : "Honest Runtime Self Check Warning."
 
         };
 
+
     }
 
+
 }
+
 
 export default SelfCheckEngine;
