@@ -1,11 +1,19 @@
 {
   "name": "mowen",
-  "version": "0.1.0",
-  "description": "MoWen Honest Runtime",
+  "version": "2.3.0",
+  "description": "MoWen Expression Quality Verification System - Honest Runtime",
   "type": "module",
   "main": "run.js",
   "scripts": {
-    "start": "node run.js"
+    "start": "node run.js",
+    "runtime": "node run.js",
+    "test": "node tests/runtime.test.js"
   },
+  "keywords": [
+    "MoWen",
+    "Honest Runtime",
+    "Expression Verification",
+    "Semantic Object"
+  ],
   "license": "MIT"
 }
