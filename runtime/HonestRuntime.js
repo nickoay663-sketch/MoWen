@@ -12,173 +12,164 @@ import MoWenIdentity from "./MoWenIdentity.js";
 
 class HonestRuntime {
 
-    constructor(text) {
 
-        this.text = text || "";
+    constructor(expression) {
 
-    }
-
-
-    stop(identity, data) {
-
-        const reconstruction =
-            new ReconstructionEngine(data).run();
-
-
-        const selfCheck =
-            new SelfCheckEngine({
-
-                ...data,
-
-                reconstruction
-
-            }).run();
-
-
-        return {
-
-            runtimeVersion: "2.1",
-
-            identity,
-
-            ...data,
-
-            reconstruction,
-
-            selfCheck
-
-        };
+        this.expression = expression || "";
 
     }
+
 
 
     run() {
+
 
         const identity =
             new MoWenIdentity().run();
 
 
+
         const recognition =
-            new RecognitionEngine(this.text).run();
+            new RecognitionEngine(this.expression).run();
 
-
-        if (!recognition.matched) {
-
-            return this.stop(identity, {
-
-                recognition
-
-            });
-
-        }
 
 
         const definition =
-            new DefinitionEngine(this.text).run();
+            new DefinitionEngine(recognition).run();
 
 
-        if (!definition.matched) {
 
-            return this.stop(identity, {
+        const semanticObject = {
 
-                recognition,
 
-                definition
+            originalContent:
+                this.expression,
 
-            });
 
-        }
+            language:
+                recognition.language || null,
+
+
+            expressionType:
+                recognition.type || null,
+
+
+            recognition,
+
+
+            definition
+
+        };
+
 
 
         const search =
-            new SearchEngine(this.text).run();
+            new SearchEngine(semanticObject).run();
 
-
-        const correspondence =
-            new CorrespondenceEngine(this.text).run();
 
 
         const evidence =
-            new EvidenceEngine(this.text).run();
+            new EvidenceEngine(semanticObject).run();
+
+
+
+        semanticObject.evidence =
+            evidence;
+
+
+
+        const correspondence =
+            new CorrespondenceEngine(semanticObject).run();
+
+
+
+        semanticObject.correspondence =
+            correspondence;
+
 
 
         const reasoning =
-            new ReasoningEngine(this.text).run();
+            new ReasoningEngine(semanticObject).run();
+
+
+
+        semanticObject.reasoning =
+            reasoning;
+
 
 
         const responsibility =
-            new ResponsibilityEngine(this.text).run();
+            new ResponsibilityEngine(semanticObject).run();
+
+
+
+        semanticObject.responsibility =
+            responsibility;
+
 
 
         const reconstruction =
-            new ReconstructionEngine({
+            new ReconstructionEngine(semanticObject).run();
 
-                recognition,
-
-                definition,
-
-                search,
-
-                correspondence,
-
-                evidence,
-
-                reasoning,
-
-                responsibility
-
-            }).run();
 
 
         const selfCheck =
             new SelfCheckEngine({
 
-                recognition,
-
-                definition,
-
-                search,
-
-                correspondence,
-
-                evidence,
-
-                reasoning,
-
-                responsibility,
+                semanticObject,
 
                 reconstruction
 
             }).run();
 
 
+
         return {
 
-            runtimeVersion:"2.1",
+
+            runtimeVersion:
+
+                "2.2",
+
 
             identity,
 
+
+            semanticObject,
+
+
             recognition,
+
 
             definition,
 
+
             search,
 
-            correspondence,
 
             evidence,
 
+
+            correspondence,
+
+
             reasoning,
+
 
             responsibility,
 
+
             reconstruction,
+
 
             selfCheck
 
+
         };
 
+
     }
+
 
 }
 
