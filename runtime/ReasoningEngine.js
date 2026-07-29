@@ -1,43 +1,55 @@
 class ReasoningEngine {
 
-    constructor(testimony) {
+    constructor(semanticObject) {
 
-        this.testimony = testimony || "";
+        this.semanticObject = semanticObject || {};
 
     }
+
 
     run() {
 
         return {
 
-            testimony: this.testimony,
+            semanticObject: this.semanticObject,
 
             principle:
-                "莫问只记录推理，不提前裁决。",
+                "莫问只检查推理关系，不提前生成判断。",
 
-            reasonings: this.collectReasoning(),
+            reasonings:
+                this.analyzeReasoning(),
 
-            status: "completed",
+            status:
+                "need_verification",
 
-            version: "2.1"
+            version:
+                "2.2"
 
         };
 
     }
 
-    collectReasoning() {
+
+    analyzeReasoning() {
 
         return [
 
             {
 
-                testimony: this.testimony,
+                premises:
+                    this.semanticObject.premises || [],
 
-                premises: [],
+                correspondence:
+                    this.semanticObject.correspondence || null,
 
-                conclusion: null,
+                conclusion:
+                    null,
 
-                state: "pending"
+                question:
+                    "当前表达是否由已有证据和对应关系推出？",
+
+                state:
+                    "pending"
 
             }
 
@@ -46,5 +58,6 @@ class ReasoningEngine {
     }
 
 }
+
 
 export default ReasoningEngine;
