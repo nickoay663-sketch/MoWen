@@ -1,24 +1,36 @@
-# Runtime Test
+# MoWen Runtime Test v2.3
+
+## Purpose
+
+Verify whether MoWen Honest Runtime can complete one complete expression verification process.
+
+验证莫问诚实运行是否能够完成一次完整表达检验。
+
 
 ## Input
 
 我是老师。
 
-## Expected Runtime
+
+## Expected Runtime Flow
+
+Expression
+
+↓
 
 Recognition
 
-Object
+↓
 
-我
-
-Concept
-
-老师
+Semantic Object
 
 ↓
 
 Definition
+
+↓
+
+Search
 
 ↓
 
@@ -38,4 +50,91 @@ Responsibility
 
 ↓
 
-Generator
+Reconstruction
+
+↓
+
+SelfCheck
+
+↓
+
+Report
+
+
+## Expected Principles
+
+Recognition:
+
+Identify expression objects and concepts.
+
+识别表达中的对象和概念。
+
+
+Definition:
+
+Provide available definitions.
+
+提供概念定义。
+
+
+Evidence:
+
+Record supporting evidence.
+
+记录证据信息。
+
+
+Correspondence:
+
+Check relationship between expression, object, definition and evidence.
+
+检查表达、对象、定义和证据之间的对应。
+
+
+Reasoning:
+
+Record reasoning structure.
+
+记录推理结构。
+
+
+Responsibility:
+
+Return responsibility information.
+
+返回责任关系。
+
+
+Reconstruction:
+
+Generate an expression with clearer responsibility.
+
+生成更能够承担责任的表达。
+
+
+SelfCheck:
+
+Verify Runtime integrity.
+
+检查运行完整性。
+
+
+## Expected Result
+
+MoWen does not judge whether:
+
+"我是老师。"
+
+is true or false.
+
+MoWen only checks:
+
+- Runtime completeness
+- Definition availability
+- Evidence requirement
+- Correspondence status
+- Responsibility structure
+
+莫问不直接判断真假。
+
+莫问检查表达是否能够承担责任。
