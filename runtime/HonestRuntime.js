@@ -34,32 +34,39 @@ class HonestRuntime {
 
 
 
-        const definition =
-            new DefinitionEngine(recognition).run();
-
-
-
         const semanticObject = {
 
 
             originalContent:
+
                 this.expression,
 
 
             language:
+
                 recognition.language || null,
 
 
             expressionType:
-                recognition.type || null,
+
+                recognition.expressionType || null,
 
 
-            recognition,
+            objects:
+
+                recognition.objects || [],
 
 
-            definition
+            concepts:
+
+                recognition.concepts || []
 
         };
+
+
+
+        const definition =
+            new DefinitionEngine(semanticObject).run();
 
 
 
@@ -73,50 +80,78 @@ class HonestRuntime {
 
 
 
-        semanticObject.evidence =
-            evidence;
-
-
-
         const correspondence =
-            new CorrespondenceEngine(semanticObject).run();
+            new CorrespondenceEngine({
 
+                ...semanticObject,
 
+                definitions:
+                    definition.definitions,
 
-        semanticObject.correspondence =
-            correspondence;
+                evidences:
+                    evidence.evidences
+
+            }).run();
 
 
 
         const reasoning =
-            new ReasoningEngine(semanticObject).run();
+            new ReasoningEngine({
 
+                ...semanticObject,
 
+                correspondence
 
-        semanticObject.reasoning =
-            reasoning;
+            }).run();
 
 
 
         const responsibility =
-            new ResponsibilityEngine(semanticObject).run();
+            new ResponsibilityEngine({
 
+                ...semanticObject,
 
+                reasoning
 
-        semanticObject.responsibility =
-            responsibility;
+            }).run();
 
 
 
         const reconstruction =
-            new ReconstructionEngine(semanticObject).run();
+            new ReconstructionEngine({
+
+                semanticObject,
+
+                definition,
+
+                evidence,
+
+                correspondence,
+
+                reasoning,
+
+                responsibility
+
+            }).run();
 
 
 
         const selfCheck =
             new SelfCheckEngine({
 
-                semanticObject,
+                recognition,
+
+                definition,
+
+                search,
+
+                evidence,
+
+                correspondence,
+
+                reasoning,
+
+                responsibility,
 
                 reconstruction
 
@@ -129,7 +164,7 @@ class HonestRuntime {
 
             runtimeVersion:
 
-                "2.2",
+                "2.3",
 
 
             identity,
