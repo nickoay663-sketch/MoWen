@@ -1,149 +1,127 @@
-Definition
+# MoWen Definitions
 
-Version
+# 莫问定义
 
-1.1
+---
 
-Concept
+## Definition
 
-Definition
+This document is the only official definition source of the MoWen system.
 
-Meaning
+Every official concept shall have one official term and one official definition.
 
-A definition specifies the meaning and scope of an object or concept.
+本文件是莫问系统唯一的官方定义来源。
 
-Without a clear definition, testimony cannot be interpreted consistently.
+每一个正式概念，都必须拥有一个正式术语和一个正式定义。
 
-A definition does not determine truth.
+---
 
-A definition provides the basis for verification.
+## Expression（表达）
 
-Runtime Meaning
+Expression is language that can enter the MoWen Honest Runtime System.
 
-MoWen requires definitions before reasoning.
+表达，是能够进入莫问诚实运行系统的语言。
 
-Definitions establish the meaning of objects and concepts used during Runtime.
+---
 
-Required Conditions
+## Definition（定义）
 
-A definition should be:
+Definition specifies the official meaning of an Expression or Concept.
 
-- Clear
-- Consistent
-- Traceable
-- Reviewable
+定义，是规定表达或概念正式含义的过程和结果。
 
-Without a definition,
+---
 
-reasoning cannot proceed honestly.
+## Testimony（证词）
 
-Responsibility
+Testimony is an Expression that has been defined and enters the Honest Runtime System.
 
-The provider of a definition bears responsibility for its content.
+证词，是经过定义并进入诚实运行系统的表达。
 
-MoWen bears responsibility only for applying definitions consistently during Runtime.
+---
 
-Runtime Principle
+## Honest Runtime System（诚实运行系统）
 
-Without definition,
+The Honest Runtime System is the unified runtime used by MoWen for every Testimony.
 
-there is no reasoning.
+诚实运行系统，是莫问对所有证词使用的统一运行系统。
 
-Definitions guide verification.
+---
 
-Definitions do not replace evidence.
+## Recognition（识别）
 
-Related Concepts
+Recognition identifies Expressions, Objects and Concepts.
 
-Object
+识别，是识别表达、对象和概念。
 
-Testimony
+---
 
-Evidence
+## Search（检索）
 
-Correspondence
+Search provides the information required by Honest Runtime.
 
-Reasoning
+检索，是为诚实运行提供所需的信息。
 
-Truth
+---
 
-Responsibility
+## Evidence（证据）
 
-Civilization
+Evidence supports or refutes Testimony.
 
-----------------------------------------
+证据，是支持或反驳证词的依据。
 
-定义
+---
 
-版本
+## Correspondence（对应）
 
-1.1
+Correspondence checks whether Expression, Definition, Object and Evidence correspond with one another.
 
-概念
+对应，是检验表达、定义、对象和证据之间是否相互对应。
 
-定义
+---
 
-释义
+## Reasoning（推理）
 
-定义，是对对象或概念含义与适用范围的明确说明。
+Reasoning checks whether a conclusion follows from previous Testimony.
 
-没有清晰的定义，
+推理，是检验证词是否能够推出结论。
 
-证词就无法被一致理解。
+---
 
-定义并不决定真理。
+## Expression Responsibility（表达责任）
 
-定义为验证提供基础。
+Expression Responsibility is the responsibility an Expression shall assume for its own content and conclusions.
 
-运行意义
+表达责任，是表达应当对自身内容和结论承担的责任。
 
-莫问在推理之前必须先获得定义。
+---
 
-定义用于确定运行过程中涉及的对象与概念。
+## Reconstruction（重构）
 
-所需条件
+Reconstruction continuously improves an Expression through Honest Runtime so that it can better assume its Expression Responsibility.
 
-定义应当具备：
+重构，是通过诚实运行不断改进表达，使表达更能够承担表达责任。
 
-- 清晰
-- 一致
-- 可追溯
-- 可审核
+---
 
-没有定义，
+## Runtime Report（运行报告）
 
-推理就不能诚实地继续。
+Runtime Report is the official report generated after Honest Runtime.
 
-责任
+运行报告，是诚实运行结束后生成的正式运行报告。
 
-定义的提供者，对定义内容负责。
+---
 
-莫问只对运行过程中一致地使用定义负责。
+## Official Rule
 
-运行原则
+One Concept.
 
-没有定义，
+One Official Term.
 
-就没有推理。
+One Official Definition.
 
-定义指导验证。
+一个概念。
 
-定义不能代替证据。
+一个正式术语。
 
-相关概念
-
-对象
-
-证词
-
-证据
-
-对应
-
-推理
-
-真理
-
-责任
-
-文明
+一个正式定义。
