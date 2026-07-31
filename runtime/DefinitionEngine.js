@@ -25,6 +25,12 @@ class DefinitionEngine {
 
             definitions,
 
+            result: {
+
+                definitions
+
+            },
+
             status:
                 definitions.length > 0
                     ? "definition-available"

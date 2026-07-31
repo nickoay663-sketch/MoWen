@@ -40,6 +40,20 @@ class RecognitionEngine {
 
             concepts,
 
+            result: {
+
+                language,
+
+                objects,
+
+                concepts
+
+            },
+
+            trace: [],
+
+            nextRuntimeState: "DefinitionEngine",
+
             status:
                 objects.length > 0 ||
                 concepts.length > 0
