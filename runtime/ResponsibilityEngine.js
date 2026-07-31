@@ -19,6 +19,18 @@ class ResponsibilityEngine {
             responsibilities:
                 this.collectResponsibilities(),
 
+            result: {
+
+                responsibilities
+
+            },
+
+            trace: [],
+
+            nextRuntimeState:
+                "GeneratorEngine",
+
+
             questions:
                 [
                     "谁提出了该表达？",
