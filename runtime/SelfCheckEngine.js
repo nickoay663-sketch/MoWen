@@ -99,6 +99,17 @@ class SelfCheckEngine {
 
 
             passed,
+   
+            result: {
+
+                checks,
+
+                passed
+
+            },
+
+            trace: [],
+
 
 
 
