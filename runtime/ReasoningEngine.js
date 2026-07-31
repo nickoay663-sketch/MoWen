@@ -19,6 +19,17 @@ class ReasoningEngine {
             reasonings:
                 this.analyzeReasoning(),
 
+            result: {
+
+                reasonings
+
+            },
+
+            trace: [],
+
+            nextRuntimeState:
+                "ResponsibilityEngine",
+
             status:
                 "need_verification",
 
