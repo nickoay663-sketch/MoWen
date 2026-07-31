@@ -29,6 +29,17 @@ class EvidenceEngine {
 
                 this.collectEvidence(),
 
+            result: {
+
+                evidences
+
+            },
+
+            trace: [],
+
+            nextRuntimeState:
+                "CorrespondenceEngine",
+
 
 
             status:
