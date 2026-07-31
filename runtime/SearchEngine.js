@@ -33,10 +33,24 @@ class SearchEngine {
 
                 [],
 
-
             results:
 
-                [],
+                [], 
+                
+            result: {
+
+                query,
+                
+                sources,
+
+                results
+
+            },
+
+            trace: [],
+
+            nextRuntimeState:
+                "EvidenceEngine",
 
 
             status:
