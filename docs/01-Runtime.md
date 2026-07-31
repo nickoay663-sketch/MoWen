@@ -20,7 +20,7 @@ Its mission is to establish whether an expression can bear responsibility.
 
 ---
 
-# Runtime Axiom# Runtime Principles
+# Runtime Principles
 
 Every expression enters the same Runtime.
 
