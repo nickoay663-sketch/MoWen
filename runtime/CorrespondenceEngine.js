@@ -31,6 +31,17 @@ class CorrespondenceEngine {
 
                 this.collectCorrespondence(),
 
+            result: {
+
+                correspondences
+
+            },
+
+            trace: [],
+
+            nextRuntimeState:
+                "ReasoningEngine",
+
 
 
             status:
