@@ -41,10 +41,16 @@ class HonestRuntime {
                 recognition.expressionType || null,
 
             objects:
-                recognition.objects || [],
+
+            recognition.result?.objects ??
+            recognition.objects ??
+            [],
 
             concepts:
-                recognition.concepts || []
+
+            recognition.result?.concepts ??
+            recognition.concepts ??
+            [],
 
         };
 
@@ -62,11 +68,15 @@ class HonestRuntime {
 
                 ...semanticObject,
 
-                definitions:
-                    definition.definitions,
+            definitions:
+            definition.result?.definitions ??
+            definition.definitions ??
+            [],
 
-                evidences:
-                    evidence.evidences
+            evidences:
+            evidence.result?.evidences ??
+            evidence.evidences ??
+            [],
 
             }).run();
 
