@@ -1,112 +1,129 @@
-# MoWen Reasoning v3.0
+# MoWen Reasoning v3.1
 
-# 莫问推理系统 v3.0
+# 莫问推理系统 v3.1
 
----
 
-# Purpose
+## Purpose
 
-Reasoning derives conclusions from verified responsibility chains.
+Reasoning derives conclusions from verified relationships.
+
+推理负责从已经验证的关系中推出结论。
+
 
 Reasoning never replaces Definition.
 
-Reasoning never replaces Evidence.
-
-推理负责从已经验证的责任链中推出结论。
-
 推理不能代替定义。
+
+
+Reasoning never replaces Evidence.
 
 推理不能代替证据。
 
----
 
-# Reasoning Principle
+## Reasoning Principle
 
 Every reasoning step must be traceable.
 
+每一步推理都必须可以追溯。
+
+
 Every conclusion must follow previous verified Runtime.
 
-任何推理，
+任何结论，都必须来自前面已经验证的运行。
 
-都必须可以追溯。
 
-任何结论，
-
-都必须来自前面已经验证的运行。
-
----
-
-# Reasoning Verification
+## Reasoning Verification
 
 Runtime checks:
 
-- Is every premise defined?
-- Is every premise supported by evidence?
-- Does every inference follow logically?
-- Does the conclusion introduce new unsupported content?
-
 运行检查：
 
-- 每个前提是否已经定义？
-- 每个前提是否具有证据？
-- 每一步推导是否符合逻辑？
-- 结论是否引入新的未经支持内容？
 
----
+Is every premise defined?
 
-# Reasoning Failure
+每个前提是否已经定义？
+
+
+Is every premise supported by evidence?
+
+每个前提是否具有证据支持？
+
+
+Does every inference follow logically?
+
+每一步推导是否符合逻辑？
+
+
+Does the conclusion introduce new unsupported content?
+
+结论是否引入新的未经支持内容？
+
+
+## Reasoning Failure
 
 When reasoning cannot continue,
 
 Runtime pauses.
 
-Users may:
-
-- modify definitions
-- add evidence
-- adjust assumptions
 
 当推理无法继续时，
 
 运行暂停。
 
+
+Users may:
+
 用户可以：
 
-- 修改定义
-- 补充证据
-- 调整前提
 
----
+Modify definitions
 
-# Runtime Relation
+修改定义
+
+
+Add evidence
+
+补充证据
+
+
+Adjust assumptions
+
+调整前提
+
+
+## Runtime Relation
 
 Definition establishes meaning.
 
-Evidence provides support.
-
-Correspondence verifies consistency.
-
-Reasoning derives conclusions.
-
-Responsibility evaluates the reasoning.
-
 定义建立含义。
+
+
+Evidence provides support.
 
 证据提供支持。
 
+
+Correspondence verifies consistency.
+
 对应验证一致性。
+
+
+Reasoning derives conclusions.
 
 推理推出结论。
 
-责任评价推理。
 
----
+Responsibility examines the source and ownership of reasoning.
 
-# Core Principle
+责任检查推理的来源与承担关系。
+
+
+## Core Principle
 
 No Verified Reasoning,
 
 No Responsible Conclusion.
+
 
 没有经过验证的推理，
 
