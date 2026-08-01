@@ -1,77 +1,124 @@
-# MoWen Recognition
+# MoWen Recognition v3.0
 
-Version: 1.0
+# 莫问识别系统 v3.0
 
----
 
 ## Purpose
 
-Recognition is the first Runtime process.
+Recognition identifies expressions before Definition.
 
-Recognition identifies testimony, objects and concepts before Runtime continues.
+识别负责在定义之前识别表达。
 
----
-
-## Runtime Principle
-
-Without recognition, Runtime cannot continue.
-
-Recognition never generates conclusions.
-
----
-
-## Recognition Types
-
-### Object Recognition
-
-Identify objects appearing in testimony.
-
----
-
-### Concept Recognition
-
-Identify concepts appearing in testimony.
-
----
-
-### Entity Recognition
-
-Identify people, organizations, locations and events.
-
----
-
-### Synonym Recognition
-
-Identify different words referring to the same concept.
-
----
-
-### User Object Recognition
-
-Identify objects defined by the testimony provider.
-
----
-
-## Runtime Output
-
-Recognition returns:
-
-- Objects
-- Concepts
-- Entities
-- Synonyms
-- Recognition Status
-
----
-
-## Principle
-
-Recognition identifies.
 
 Recognition does not define.
 
+识别不负责定义。
+
+
 Recognition does not reason.
 
-Recognition does not judge.
+识别不负责推理。
 
-Recognition only prepares Runtime.
+
+## Recognition Principle
+
+Every expression enters Recognition before Definition.
+
+每一个表达都先进入识别，再进入定义。
+
+
+Without Recognition,
+
+Definition cannot continue.
+
+没有识别，
+
+定义无法继续。
+
+
+## Recognition Function
+
+Recognition identifies:
+
+识别负责识别：
+
+
+Objects
+
+对象
+
+
+Concepts
+
+概念
+
+
+Entities
+
+实体
+
+
+Language
+
+语言
+
+
+Synonyms
+
+同义表达
+
+
+## Recognition Boundary
+
+Recognition does not create:
+
+识别不创造：
+
+
+Definitions
+
+定义
+
+
+Evidence
+
+证据
+
+
+Reasoning
+
+推理
+
+
+Conclusions
+
+结论
+
+
+## Runtime Relationship
+
+Expression enters Recognition.
+
+表达进入识别。
+
+
+Recognition prepares Definition.
+
+识别为定义做准备。
+
+
+Definition establishes meaning.
+
+定义建立含义。
+
+
+## Core Principle
+
+Recognition identifies.
+
+识别负责识别。
+
+
+Recognition prepares Runtime.
+
+识别为运行做准备。
