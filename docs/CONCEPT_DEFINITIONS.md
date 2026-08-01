@@ -1,85 +1,56 @@
-# MoWen Concept Definitions
+
+# MoWen Concept Definitions v2.0
 
 ## Status
 
-Research Reconstruction Draft
+Canonical Concept Dictionary
 
----
 
 # Expression（表达）
 
-Expression is the basic object entering Honest Runtime.
+表达，是针对对象形成的可识别信息。
 
-表达，是进入诚实运行的基本对象。
 
-Every expression attempts to describe, define, explain, judge, imagine, question or communicate an object.
+# Object（对象）
 
-每一个表达，都试图描述、定义、解释、判断、想象、提问或交流某个对象。
+对象，是表达所对应的事物、概念或目标。
 
-An expression may be a fact.
 
-An expression may be a definition.
+# Testimony（证词）
 
-An expression may be evidence.
+证词，是具有可识别来源的表达。
 
-An expression may be reasoning.
 
-An expression may be emotion.
+# Evidence（证据）
 
-An expression may be rhetoric.
+证据，是能够支持某个表达的证词。
 
-An expression may be belief.
-
-An expression may be opinion.
-
-An expression may be a conclusion.
-
-表达可以是事实。
-
-可以是定义。
-
-可以是证词。
-
-可以是推理。
-
-可以是情感。
-
-可以是修辞。
-
-可以是信仰。
-
-可以是观点。
-
-也可以是结论。
-
-Honest Runtime does not reject expressions.
-
-Honest Runtime identifies what kind of expression has entered the system.
-
-诚实运行不拒绝表达。
-
-诚实运行首先识别进入系统的表达属于哪一种表达。
-
----
 
 # Conclusion（结论）
 
-A conclusion is a type of expression.
+结论，是由表达形成的判断结果。
 
-结论，是表达的一种类型。
 
-Not every expression is a conclusion.
+# Responsibility（责任）
 
-并非所有表达都是结论。
+责任，是表达产生者与表达结果之间的承担关系。
 
-Only expressions that can assume their own Expression Responsibility may be treated as conclusion expressions.
 
-只有能够承担表达责任的表达，才能作为结论表达。
+# Definition（定义）
 
-MoWen does not create conclusions.
+定义，是确定对象含义的表达。
 
-MoWen examines whether an expression is qualified to become a conclusion expression.
 
-莫问不制造结论。
+# Question（问题）
 
-莫问检验表达是否具有成为结论表达的资格。
+问题，是请求验证某个表达的表达。
+
+
+# Claim（主张）
+
+主张，是要求被认可的表达。
+
+
+# Meaning（意义）
+
+意义，是表达与对象之间形成的理解关系。
