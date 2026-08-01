@@ -1,79 +1,74 @@
-# Correspondence v1.1
+# Correspondence v1.2
 
-# 莫问对应系统 v1.1
-
-
-## Definition
+# 莫问对应系统 v1.2
 
 
-Correspondence is the process of examining whether a Semantic Object, its definitions, objects and evidence maintain consistent relationships.
+## Purpose
+
+Correspondence examines whether relationships between elements of an expression are consistent.
+
+对应检验表达内部各元素之间的关系是否一致。
 
 
-对应，是检验统一语义对象、定义、对象和证据之间是否保持一致关系的过程。
-
-
-MoWen does not begin with judgment.
-
-MoWen begins with correspondence.
-
-
-莫问不始于裁决。
-
-莫问始于对应。
-
-
----
-
-# Core Principle
-
+## Core Principle
 
 Correspondence does not decide truth.
-
 
 对应不决定真假。
 
 
 Correspondence examines relationships.
 
-
 对应检验关系。
 
 
----
+## Objects of Correspondence
 
-# Objects of Correspondence
-
-
-Every Semantic Object may be checked with:
-
-
-- Original Expression
-- Language Environment
-- Concept
-- Definition
-- Object
-- Evidence
-- Reasoning
-- Responsibility
-
+Correspondence examines relationships between:
 
 对应检查：
 
+Original Expression
 
-- 原始表达
-- 语言环境
-- 概念
-- 定义
-- 对象
-- 证据
-- 推理
-- 责任
+原始表达
 
 
----
+Language Environment
 
-# Runtime Position
+语言环境
 
+
+Concept
+
+概念
+
+
+Definition
+
+定义
+
+
+Object
+
+对象
+
+
+Evidence
+
+证据
+
+
+Reasoning
+
+推理
+
+
+Responsibility
+
+责任
+
+
+## Relationship Flow
 
 Semantic Object
 
@@ -102,92 +97,88 @@ Responsibility
 Reconstruction
 
 
----
-
-# Correspondence Function
-
+## Correspondence Function
 
 Correspondence checks:
 
+对应检查：
 
-1. Does definition match concept?
 
+Does definition match concept?
 
 定义是否匹配概念？
 
 
-2. Does object match expression?
-
+Does object match expression?
 
 对象是否匹配表达？
 
 
-3. Does evidence support testimony?
-
+Does evidence support testimony?
 
 证据是否支持证词？
 
 
-4. Does reasoning follow verified relationships?
-
+Does reasoning follow verified relationships?
 
 推理是否来自已验证关系？
 
 
----
-
-# Responsibility
-
+## Boundary
 
 Correspondence does not create:
-
-
-- Testimony
-- Evidence
-- Reasoning
-- Responsibility
-
 
 对应不会创造：
 
 
-- 证词
-- 证据
-- 推理
-- 责任
+Testimony
+
+证词
 
 
-Correspondence only examines whether relationships exist.
+Evidence
+
+证据
 
 
-对应只检验关系是否成立。
+Reasoning
+
+推理
 
 
----
+Responsibility
 
-# Runtime Result
+责任
 
+
+Correspondence only examines relationships.
+
+对应只检验关系。
+
+
+## Output
 
 Correspondence returns:
-
-
-- Correspondence Status
-- Unmatched Relationships
-- Required Verification Questions
-
 
 对应输出：
 
 
-- 对应状态
-- 未对应关系
-- 需要验证的问题
+Correspondence Status
+
+对应状态
 
 
----
+Unmatched Relationships
 
-# Principle
+未对应关系
 
+
+Required Verification Questions
+
+需要验证的问题
+
+
+## Principle
 
 Without correspondence,
 
@@ -209,10 +200,7 @@ responsibility cannot be honestly returned.
 责任无法被诚实返回。
 
 
----
-
-# Core Rule
-
+## Core Rule
 
 MoWen verifies correspondence.
 
