@@ -1,8 +1,52 @@
-export { default as HonestRuntime } from "./HonestRuntime.js";
-export { default as RecognitionEngine } from "./RecognitionEngine.js";
-export { default as DefinitionEngine } from "./DefinitionEngine.js";
-export { default as EvidenceEngine } from "./EvidenceEngine.js";
-export { default as CorrespondenceEngine } from "./CorrespondenceEngine.js";
-export { default as ReasoningEngine } from "./ReasoningEngine.js";
-export { default as ResponsibilityEngine } from "./ResponsibilityEngine.js";
-export { default as ReconstructionEngine } from "./ReconstructionEngine.js";
+import HonestRuntime from "./HonestRuntime.js";
+import ReportFormatter from "./ReportFormatter.js";
+
+
+class MoWenRuntime {
+
+    constructor(expression) {
+
+        this.expression = expression || "";
+
+    }
+
+
+    run() {
+
+        const runtimeResult =
+
+            new HonestRuntime(this.expression)
+
+                .run();
+
+
+        const report =
+
+            new ReportFormatter(runtimeResult)
+
+                .run();
+
+
+        return {
+
+            runtimeResult,
+
+            report
+
+        };
+
+    }
+
+}
+
+
+export {
+
+    HonestRuntime,
+
+    ReportFormatter
+
+};
+
+
+export default MoWenRuntime;
