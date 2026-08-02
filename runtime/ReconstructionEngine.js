@@ -2,75 +2,77 @@ import MoWenConfig from "./MoWenConfig.js";
 
 class ReconstructionEngine {
 
-    constructor(semanticObject) {
+    constructor(runtimeObject) {
 
-        this.semanticObject = semanticObject || {};
+        this.runtimeObject = runtimeObject || {};
 
     }
 
-
     run() {
+
+        const reconstruction =
+            this.reconstruct();
 
         return {
 
             semanticObject:
-
-                this.semanticObject,
+                this.runtimeObject,
 
             principle:
+                "重构提高表达承担责任的能力，不创造新的依据。",
 
-                "表达范围不能超过依据范围。",
+            reconstruction,
 
-            reconstruction:
+            result: {
 
-                this.reconstruct(),
+                reconstruction
 
-            questions:
+            },
 
-                [
-                    "重构后的表达是否保留原始责任？",
-                    "重构后的表达是否超过已有依据？"
-                ],
+            trace: [],
+
+            nextRuntimeState:
+                "SelfCheckEngine",
 
             status:
 
-                "need_reconstruction_verification",
+                reconstruction
+                    ? "reconstruction-completed"
+                    : "need-reconstruction-verification",
+
+            questions:
+
+                reconstruction
+                    ? []
+                    : [
+                        "重构后的表达是否保留原始责任？",
+                        "重构后的表达是否超过已有依据？"
+                    ],
 
             version:
-
-                "2.2"
+                "3.0"
 
         };
 
     }
-
 
     reconstruct() {
 
         return {
 
             originalExpression:
-
-                this.semanticObject.originalContent || "",
-
+                this.runtimeObject.originalContent || "",
 
             reconstructedExpression:
-
-                "根据已有定义、证据、对应关系和推理结构重新表达。",
-
+                this.runtimeObject.originalContent || "",
 
             languageEnvironment:
-
-                this.semanticObject.languageEnvironment || null,
-
+                this.runtimeObject.languageEnvironment || null,
 
             responsibility:
+                this.runtimeObject.responsibility || null,
 
-                this.semanticObject.responsibility || null,
-
-
-            state:
-
+            verificationStatus:
                 "pending"
 
         };
@@ -78,6 +80,5 @@ class ReconstructionEngine {
     }
 
 }
-
 
 export default ReconstructionEngine;
