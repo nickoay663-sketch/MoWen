@@ -1,35 +1,25 @@
 class CorrespondenceEngine {
 
-
     constructor(runtimeObject) {
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
-
-
     run() {
 
+        const correspondences =
+            this.collectCorrespondence();
 
         return {
 
-
             semanticObject:
-
                 this.runtimeObject,
 
-
-
             principle:
-
                 "莫问只建立对应，不创造证据，不裁决结论。",
 
-
-
-            correspondences:
-
-                this.collectCorrespondence(),
+            correspondences,
 
             result: {
 
@@ -42,74 +32,51 @@ class CorrespondenceEngine {
             nextRuntimeState:
                 "ReasoningEngine",
 
-
-
             status:
 
-                "need-correspondence-verification",
+                correspondences.length > 0
+                    ? "correspondence-completed"
+                    : "need-correspondence-verification",
 
+            questions:
 
+                correspondences.length > 0
+                    ? []
+                    : [
+                        "表达、定义和证据之间是否已经建立对应关系？"
+                    ],
 
             version:
-
-                "2.2"
-
+                "3.0"
 
         };
 
-
     }
 
-
-
     collectCorrespondence() {
-
 
         return [
 
             {
 
-
-                object:
-
+                objects:
                     this.runtimeObject.objects || [],
 
-
-
-                definition:
-
+                definitions:
                     this.runtimeObject.definitions || [],
 
-
-
-                evidence:
-
+                evidences:
                     this.runtimeObject.evidences || [],
 
-
-
-                reasoning:
-
-                    null,
-
-
-
-                state:
-
+                verificationStatus:
                     "pending"
-
-
 
             }
 
         ];
 
-
     }
 
-
 }
-
-
 
 export default CorrespondenceEngine;
