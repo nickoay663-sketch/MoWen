@@ -1,185 +1,140 @@
 class ReportFormatter {
 
+    constructor(runtimeResult) {
 
-    constructor(result) {
-
-        this.result = result || {};
+        this.runtimeResult = runtimeResult || {};
 
     }
-
 
 
     run() {
 
+        const {
 
-        const semanticObject =
+            identity,
 
-            this.result.semanticObject || {};
+            semanticObject,
 
+            recognition,
 
+            definition,
 
-        const selfCheck =
+            evidence,
 
-            this.result.selfCheck || {};
+            correspondence,
 
+            reasoning,
+
+            responsibility,
+
+            reconstruction,
+
+            generator,
+
+            selfCheck
+
+        } = this.runtimeResult;
 
 
         return {
 
+            version:
 
-            title:
-
-                "莫问 · 诚实运行报告",
-
+                "3.0",
 
 
             principle:
 
-                "莫问报告运行过程，不替代人的判断。",
+                "莫问只整理运行结果，不增加新的判断。",
 
 
+            report: {
 
-            expression:
+                identity,
 
-                semanticObject.originalContent || null,
+                object:
 
-
-
-            language:
-
-                semanticObject.language || null,
+                    semanticObject,
 
 
+                recognition,
 
-            semanticObject,
-
-
-
-            verificationChain: {
+                definition,
 
 
-                recognition:
-
-                    this.result.recognition || {},
+                evidence,
 
 
-                definition:
-
-                    this.result.definition || {},
+                correspondence,
 
 
-                evidence:
-
-                    this.result.evidence || {},
+                reasoning,
 
 
-                correspondence:
-
-                    this.result.correspondence || {},
+                responsibility,
 
 
-                reasoning:
-
-                    this.result.reasoning || {},
+                reconstruction,
 
 
-                responsibility:
+                generator,
 
-                    this.result.responsibility || {}
+
+                selfCheck
 
             },
 
 
+            status:
 
-            reconstruction:
+                selfCheck?.passed
 
-                this.result.reconstruction || {},
+                    ? "report-generated"
 
+                    : "report-warning",
 
 
             questions:
 
-                this.collectQuestions(),
+                selfCheck?.questions || [],
 
 
+            trace:
 
-            selfCheck,
-
-
-
-            runtimeStatus:
-
-                selfCheck.status || "unknown",
-
-
-
-            status:
-
-                selfCheck.passed
-
-                    ? "self-check-passed"
-
-                    : "self-check-warning",
-
-
-
-            version:
-
-                "2.4"
-
+                this.buildTrace()
 
         };
 
-
     }
 
 
+    buildTrace() {
 
-    collectQuestions() {
+        return [
 
+            "RecognitionCompleted",
 
-        const questions = [];
+            "DefinitionCompleted",
 
+            "SearchCompleted",
 
+            "EvidenceCompleted",
 
-        const modules = [
+            "CorrespondenceCompleted",
 
-            this.result.correspondence,
+            "ReasoningCompleted",
 
-            this.result.reasoning,
+            "ResponsibilityCompleted",
 
-            this.result.responsibility,
+            "ReconstructionCompleted",
 
-            this.result.reconstruction
+            "GeneratorCompleted",
+
+            "SelfCheckCompleted"
 
         ];
 
-
-
-        modules.forEach(module => {
-
-
-            if (!module)
-
-                return;
-
-
-
-            if (Array.isArray(module.questions))
-
-                questions.push(...module.questions);
-
-
-
-        });
-
-
-
-        return questions.filter(Boolean);
-
-
     }
-
 
 }
 
