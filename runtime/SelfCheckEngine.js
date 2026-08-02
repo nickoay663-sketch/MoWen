@@ -1,5 +1,6 @@
 class SelfCheckEngine {
 
+
     constructor(runtime) {
 
         this.runtime = runtime || {};
@@ -7,21 +8,58 @@ class SelfCheckEngine {
     }
 
 
+
     run() {
+
+
+        const requiredPipeline = [
+
+            "Recognition",
+
+            "Definition",
+
+            "Search",
+
+            "Evidence",
+
+            "Correspondence",
+
+            "Reasoning",
+
+            "Responsibility",
+
+            "Reconstruction",
+
+            "Generator",
+
+            "SelfCheck"
+
+        ];
+
+
+
+        const pipelineValid =
+
+            Array.isArray(this.runtime.pipeline)
+
+            &&
+
+            requiredPipeline.every(
+
+                step =>
+
+                    this.runtime.pipeline.includes(step)
+
+            );
+
+
 
         const checks = {
 
+
             pipeline:
 
-                !!this.runtime.recognition &&
-                !!this.runtime.definition &&
-                !!this.runtime.search &&
-                !!this.runtime.evidence &&
-                !!this.runtime.correspondence &&
-                !!this.runtime.reasoning &&
-                !!this.runtime.responsibility &&
-                !!this.runtime.reconstruction &&
-                !!this.runtime.generator,
+                pipelineValid,
 
 
             outputBoundary:
@@ -81,6 +119,7 @@ class SelfCheckEngine {
         };
 
 
+
         const passed =
 
             Object.values(checks)
@@ -91,20 +130,25 @@ class SelfCheckEngine {
 
         return {
 
+
             version:
 
-                "3.0",
+                "3.1",
+
 
 
             principle:
 
-                "莫问检查自身运行，不判断表达结果。",
+                "莫问检查自身运行结构，不判断表达结果。",
+
 
 
             checks,
 
 
+
             passed,
+
 
 
             result: {
@@ -116,12 +160,15 @@ class SelfCheckEngine {
             },
 
 
+
             trace: [],
+
 
 
             nextRuntimeState:
 
                 "RuntimeCompleted",
+
 
 
             status:
@@ -133,30 +180,20 @@ class SelfCheckEngine {
                     : "self-check-warning",
 
 
+
             questions:
 
                 passed
 
                     ? []
 
-                    :
-
-                    [
+                    : [
 
                         "Runtime 是否缺少必要运行环节？",
 
                         "输出是否超过已有证词、定义和证据范围？"
 
-                    ],
-
-
-            summary:
-
-                passed
-
-                    ? "Honest Runtime Self Check Passed."
-
-                    : "Honest Runtime Self Check Warning."
+                    ]
 
         };
 
