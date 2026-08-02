@@ -1,82 +1,83 @@
-# MoWen Expression
+# MoWen Expression v1.1
 
 # 莫问表达
 
-## 1 · Definition
 
-Expression is the result of externalizing meaning through one or more carriers so that it can be understood.
+## Purpose
 
-表达，是主体通过一种或多种载体，将意义外化，使其能够被理解所形成的结果。
+Expression describes how meaning becomes externalized and can be recognized.
 
----
+表达描述意义如何被外化并被识别。
 
-## 2 · Carrier
 
-An expression may use one or more carriers.
+## Carrier
 
-Carriers include, but are not limited to:
+Expression may exist through different carriers.
 
-- Text
-- Image
-- Audio
-- Video
-- Gesture
-- Architecture
-- Symbol
-- Mixed Media
+表达可以通过不同载体存在。
 
-表达可以通过一种或多种载体形成。
+Carriers include:
 
-载体包括但不限于：
+Text
 
-- 文字
-- 图片
-- 音频
-- 视频
-- 动作
-- 建筑
-- 符号
-- 多模态组合
+Image
 
----
+Audio
 
-## 3 · Meaning
+Video
 
-Carriers are not the final object processed by MoWen.
+Gesture
 
-MoWen reconstructs the meaning carried by an expression.
+Architecture
 
-载体不是莫问最终处理的对象。
+Symbol
 
-莫问重建的是表达所承载的意义。
+Mixed Media
 
----
 
-## 4 · Recognition
+载体包括：
 
-All expressions shall first enter Recognition.
+文字
 
-Recognition reconstructs the meaning carried by the expression and converts it into language that can enter Honest Runtime.
+图片
 
-所有表达首先进入 Recognition。
+音频
 
-Recognition 重建表达所承载的意义，并将其转换为能够进入诚实运行的语言表达。
+视频
 
----
+动作
 
-## 5 · Honest Runtime
+建筑
 
-Honest Runtime does not process carriers.
+符号
 
-Honest Runtime processes the reconstructed meaning of an expression.
+多模态组合
 
-诚实运行不处理载体。
 
-诚实运行处理表达重建后的意义。
+## Meaning
 
----
+The carrier is not the complete expression meaning.
 
-## 6 · Relationship
+表达的意义不等同于载体本身。
+
+MoWen examines the meaning carried by expressions.
+
+莫问关注表达所承载的意义。
+
+
+## Recognition Relationship
+
+Expression enters Recognition through its carrier.
+
+表达通过载体进入识别过程。
+
+
+Recognition transforms the expression into a form that can participate in Honest Runtime.
+
+识别将表达转换为能够参与诚实运行的形式。
+
+
+## Structure
 
 Carrier
 
@@ -94,32 +95,23 @@ Recognition
 
 ↓
 
-Language Representation
-
-↓
-
 Honest Runtime
 
----
 
-## 7 · Principle
+## Principle
 
-MoWen does not evaluate carriers.
+MoWen does not evaluate the carrier itself.
 
-MoWen reconstructs the meaning carried by expressions.
+莫问不评价载体本身。
 
-莫问不检验载体。
 
-莫问重建表达所承载的意义。
+MoWen examines whether the meaning carried by an expression can enter responsibility verification.
 
----
+莫问检验表达所承载的意义是否能够进入责任检验。
 
-## 8 · Purpose
 
-The purpose of expression is not merely to transmit information.
+## Purpose
 
-The purpose of expression is to externalize meaning so that it can enter Honest Runtime and assume Expression Responsibility.
+Expression allows meaning to become observable, communicable and verifiable.
 
-表达不仅用于传递信息。
-
-表达使意义能够外化，进入诚实运行，并承担表达责任。
+表达使意义能够被观察、交流和验证。

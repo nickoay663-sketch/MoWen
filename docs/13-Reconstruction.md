@@ -1,113 +1,153 @@
-# MoWen Reconstruction v3.0
 
-# 莫问重构系统 v3.0
+# MoWen Reconstruction v3.1
 
----
+# 莫问重构系统 v3.1
 
-# Purpose
 
-Reconstruction produces a more responsible expression.
+## Purpose
 
-Reconstruction is not rewriting.
+Reconstruction produces a reconstructed expression after verification.
 
-Reconstruction improves the ability of an expression to bear responsibility.
+重构负责在验证完成后生成重构后的表达。
 
-重构负责生成一个更能承担责任的表达。
 
-重构不是改写。
+Reconstruction does not create new unsupported conclusions.
 
-重构是提高表达承担责任的能力。
+重构不创造新的未经支持的结论。
 
----
 
-# Reconstruction Principle
+## Reconstruction Principle
 
-Reconstruction begins only after responsibility has been established.
+Reconstruction begins after responsibility verification.
 
-Without responsibility,
+重构开始于责任验证之后。
 
-Reconstruction cannot continue.
 
-只有责任建立以后，
+Reconstruction does not replace Runtime.
 
-重构才能开始。
+重构不替代运行。
 
-没有责任，
 
-不能重构。
+Reconstruction does not replace human judgment.
 
----
+重构不替代人的判断。
 
-# Reconstruction Methods
 
-Reconstruction may include:
+## Reconstruction Function
 
-- Clarifying definitions
-- Adding evidence
-- Correcting reasoning
-- Removing unsupported conclusions
-- Improving responsibility
+Reconstruction may:
 
-重构可以包括：
+重构可以：
 
-- 澄清定义
-- 补充证据
-- 修正推理
-- 删除没有支持的结论
-- 提高责任承担能力
 
----
+Clarify expression structure.
 
-# Reconstruction Failure
+澄清表达结构。
 
-When responsibility cannot be completed,
 
-MoWen does not fabricate reconstruction.
+Improve definition clarity.
 
-MoWen leaves an unavoidable question.
+提高定义清晰度。
 
-当责任无法建立时，
 
-莫问不会制造重构。
+Present supporting evidence.
 
-莫问留下无法回避的问题。
+呈现支持证据。
 
----
 
-# Runtime Relation
+Correct unsupported reasoning.
+
+修正未经支持的推理。
+
+
+Make responsibility relationships clearer.
+
+使责任关系更加清晰。
+
+
+## Reconstruction Boundary
+
+Reconstruction does not create:
+
+重构不创造：
+
+
+New evidence.
+
+新的证据。
+
+
+New definitions.
+
+新的定义。
+
+
+New conclusions without support.
+
+没有支持的新结论。
+
+
+## Runtime Relationship
 
 Definition establishes meaning.
 
-Evidence supports.
-
-Correspondence verifies.
-
-Reasoning derives.
-
-Responsibility evaluates.
-
-Reconstruction improves.
-
 定义建立含义。
+
+
+Evidence provides support.
 
 证据提供支持。
 
-对应验证一致性。
+
+Correspondence verifies relationships.
+
+对应验证关系。
+
+
+Reasoning derives conclusions.
 
 推理推出结论。
 
-责任完成评价。
 
-重构持续改进。
+Responsibility examines source and ownership.
 
----
+责任检查来源与承担关系。
 
-# Core Principle
+
+Reconstruction improves expression clarity.
+
+重构提高表达清晰度。
+
+
+## Output
+
+Reconstruction may produce:
+
+重构可以产生：
+
+
+Runtime Report
+
+运行报告
+
+
+Runtime Questions
+
+运行问题
+
+
+Reconstructed Expression
+
+重构表达
+
+
+## Core Principle
 
 Reconstruction never hides responsibility.
 
-Reconstruction makes responsibility clearer.
-
 重构绝不隐藏责任。
+
+
+Reconstruction makes responsibility clearer.
 
 重构使责任更加清晰。

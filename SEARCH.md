@@ -1,8 +1,7 @@
 # MoWen Search
 
-Version: 2.0
+Version: 2.1
 
----
 
 ## Principle
 
@@ -10,57 +9,104 @@ Search is not a Runtime stage.
 
 Search is a Runtime capability.
 
-Search runs throughout the entire Honest Runtime.
 
----
+Search supports the entire Honest Runtime.
 
-## Runtime
+搜索不是运行阶段。
 
-Recognition
-    ↕ Search
+搜索是运行能力。
 
-Definition
-    ↕ Search
 
-Evidence
-    ↕ Search
+## Runtime Relationship
 
-Correspondence
-    ↕ Search
+Runtime
 
-Reasoning
-    ↕ Search
+Recognition ↕ Search
 
-Responsibility
-    ↕ Search
+Definition ↕ Search
 
-Generator
-    ↕ Search
+Evidence ↕ Search
 
----
+Correspondence ↕ Search
+
+Reasoning ↕ Search
+
+Responsibility ↕ Search
+
+Reconstruction ↕ Search
+
 
 ## Search Responsibilities
 
-Search retrieves:
+Search retrieves information related to:
 
-- Objects
-- Definitions
-- Evidence
-- Knowledge
-- Laws
-- Academic Papers
-- Historical Records
-- Standards
-- Previous Runtime Reports
+搜索获取相关信息：
+
+
+Objects
+
+对象
+
+
+Definitions
+
+定义
+
+
+Evidence
+
+证据
+
+
+Knowledge
+
+知识
+
+
+Laws
+
+法律
+
+
+Academic Papers
+
+学术论文
+
+
+Historical Records
+
+历史记录
+
+
+Standards
+
+标准
+
+
+Previous Runtime Reports
+
+历史运行报告
+
+
+## Boundary
 
 Search never generates conclusions.
 
----
+搜索不生成结论。
 
-## Principle
+
+Search does not replace Runtime.
+
+搜索不替代运行。
+
+
+## Core Rule
 
 Every Runtime stage may request Search.
 
+每一个运行阶段都可以请求搜索。
+
+
 Search serves Runtime.
 
-Search never replaces Runtime.
+搜索服务于运行。

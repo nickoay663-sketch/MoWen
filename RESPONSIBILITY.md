@@ -1,80 +1,101 @@
-# MoWen Responsibility
-
-Version: 1.0
-
----
+# MoWen Responsibility v1.1
 
 ## Purpose
 
-Responsibility determines who bears responsibility for testimony and conclusions.
+Responsibility connects expressions with their responsible sources.
 
-MoWen returns responsibility to the testimony provider.
+责任连接表达与其责任来源。
 
----
 
-## Runtime Principle
+## Responsibility Principle
 
-Every testimony has a responsibility.
+Every testimony has a responsible source.
 
-Every conclusion has a responsibility.
+每一份证词都有责任来源。
 
-MoWen never assumes responsibility for testimony.
 
----
+Every conclusion has a responsible source.
+
+每一个结论都有责任来源。
+
+
+Responsibility belongs to its source.
+
+责任属于其来源。
+
 
 ## Responsibility Types
 
 ### Testimony Responsibility
 
-Who provides the testimony?
+Source of the testimony.
 
----
+证词的提供来源。
+
 
 ### Definition Responsibility
 
-Who provides the definition?
+Source of the definition.
 
----
+定义的提供来源。
+
 
 ### Evidence Responsibility
 
-Who provides the evidence?
+Source of the evidence.
 
----
+证据的提供来源。
+
 
 ### Reasoning Responsibility
 
-Who builds the reasoning?
+Source of the reasoning process.
 
----
+推理过程的来源。
+
 
 ### Report Responsibility
 
-Who generates the Runtime report?
+Source of the generated report.
 
-MoWen generates reports.
+生成报告的来源。
 
-MoWen does not become the responsibility holder of testimony.
 
----
-
-## Runtime Output
-
-Responsibility returns:
-
-- Responsibility Subject
-- Responsibility Source
-- Responsibility Scope
-- Responsibility Status
-
----
-
-## Principle
-
-Responsibility always belongs to its source.
+## MoWen Responsibility Boundary
 
 MoWen records responsibility.
 
-MoWen never transfers responsibility.
+莫问记录责任。
 
-MoWen never replaces human responsibility.
+
+MoWen does not assume responsibility for testimony.
+
+莫问不承担证词责任。
+
+
+MoWen does not replace human responsibility.
+
+莫问不替代人的责任。
+
+
+## Responsibility Record
+
+Responsibility contains:
+
+责任记录包含：
+
+Responsibility Subject
+
+责任主体
+
+Responsibility Source
+
+责任来源
+
+Responsibility Scope
+
+责任范围
+
+Responsibility Status
+
+责任状态
