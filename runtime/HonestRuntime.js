@@ -138,9 +138,10 @@ class HonestRuntime {
 
             }).run();
 
-
         const selfCheck =
             new SelfCheckEngine({
+
+                semanticObject,
 
                 recognition,
 
