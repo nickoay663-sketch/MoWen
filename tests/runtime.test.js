@@ -1,15 +1,13 @@
-import HonestRuntime from "../runtime/HonestRuntime.js";
-
-
-const input =
-
-    "我是老师。";
+import MoWenRuntime from "../runtime/index.js";
 
 
 const runtime =
 
-    new HonestRuntime(input);
+    new MoWenRuntime(
 
+        "测试表达"
+
+    );
 
 
 const result =
@@ -18,110 +16,64 @@ const result =
 
 
 
-function assert(condition, message) {
+const checks = {
 
-    if (!condition) {
 
-        throw new Error(message);
+    runtimeResult:
 
-    }
+        !!result.runtimeResult,
+
+
+    report:
+
+        !!result.report,
+
+
+    generator:
+
+        !!result.runtimeResult.generator,
+
+
+    selfCheck:
+
+        !!result.runtimeResult.selfCheck,
+
+
+    reportStatus:
+
+        !!result.report.status
+
+};
+
+
+
+const passed =
+
+    Object.values(checks)
+
+        .every(Boolean);
+
+
+
+if (passed) {
+
+    console.log(
+
+        "MoWen Runtime v3.0 Test Passed."
+
+    );
+
+} else {
+
+    console.log(
+
+        "MoWen Runtime v3.0 Test Failed."
+
+    );
+
+
+    console.log(checks);
+
+    process.exit(1);
 
 }
-
-
-
-assert(
-
-    result.semanticObject,
-
-    "Semantic Object missing"
-
-);
-
-
-
-assert(
-
-    result.recognition,
-
-    "Recognition missing"
-
-);
-
-
-
-assert(
-
-    result.definition,
-
-    "Definition missing"
-
-);
-
-
-
-assert(
-
-    result.evidence,
-
-    "Evidence missing"
-
-);
-
-
-
-assert(
-
-    result.correspondence,
-
-    "Correspondence missing"
-
-);
-
-
-
-assert(
-
-    result.reasoning,
-
-    "Reasoning missing"
-
-);
-
-
-
-assert(
-
-    result.responsibility,
-
-    "Responsibility missing"
-
-);
-
-
-
-assert(
-
-    result.reconstruction,
-
-    "Reconstruction missing"
-
-);
-
-
-
-assert(
-
-    result.selfCheck,
-
-    "SelfCheck missing"
-
-);
-
-
-
-console.log(
-
-    "MoWen Runtime Test Passed."
-
-);
