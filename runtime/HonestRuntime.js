@@ -23,6 +23,7 @@ class HonestRuntime {
 
     run() {
 
+
         const identity =
             new MoWenIdentity().run();
 
@@ -33,6 +34,7 @@ class HonestRuntime {
 
         const recognition =
             new RecognitionEngine(this.expression).run();
+
 
 
         const semanticObject = {
@@ -59,16 +61,20 @@ class HonestRuntime {
         };
 
 
+
         const definition =
             new DefinitionEngine(semanticObject).run();
+
 
 
         const search =
             new SearchEngine(semanticObject).run();
 
 
+
         const evidence =
             new EvidenceEngine(semanticObject).run();
+
 
 
         const correspondence =
@@ -89,6 +95,7 @@ class HonestRuntime {
             }).run();
 
 
+
         const reasoning =
             new ReasoningEngine({
 
@@ -99,6 +106,7 @@ class HonestRuntime {
             }).run();
 
 
+
         const responsibility =
             new ResponsibilityEngine({
 
@@ -107,6 +115,7 @@ class HonestRuntime {
                 reasoning
 
             }).run();
+
 
 
         const reconstruction =
@@ -127,6 +136,7 @@ class HonestRuntime {
             }).run();
 
 
+
         const generator =
             new GeneratorEngine({
 
@@ -137,6 +147,8 @@ class HonestRuntime {
                 responsibility
 
             }).run();
+
+
 
         const selfCheck =
             new SelfCheckEngine({
@@ -164,10 +176,38 @@ class HonestRuntime {
             }).run();
 
 
+
         return {
 
             runtimeVersion:
-                "3.0",
+
+                "3.1",
+
+
+            pipeline: [
+
+                "Recognition",
+
+                "Definition",
+
+                "Search",
+
+                "Evidence",
+
+                "Correspondence",
+
+                "Reasoning",
+
+                "Responsibility",
+
+                "Reconstruction",
+
+                "Generator",
+
+                "SelfCheck"
+
+            ],
+
 
             identity,
 
