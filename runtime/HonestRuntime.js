@@ -7,8 +7,10 @@ import CorrespondenceEngine from "./CorrespondenceEngine.js";
 import ReasoningEngine from "./ReasoningEngine.js";
 import ResponsibilityEngine from "./ResponsibilityEngine.js";
 import ReconstructionEngine from "./ReconstructionEngine.js";
+import GeneratorEngine from "./GeneratorEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
+
 
 class HonestRuntime {
 
@@ -18,16 +20,20 @@ class HonestRuntime {
 
     }
 
+
     run() {
 
         const identity =
             new MoWenIdentity().run();
 
+
         const language =
             new LanguageDetector(this.expression).run();
 
+
         const recognition =
             new RecognitionEngine(this.expression).run();
+
 
         const semanticObject = {
 
@@ -41,44 +47,47 @@ class HonestRuntime {
                 recognition.expressionType || null,
 
             objects:
-
-            recognition.result?.objects ??
-            recognition.objects ??
-            [],
+                recognition.result?.objects ??
+                recognition.objects ??
+                [],
 
             concepts:
-
-            recognition.result?.concepts ??
-            recognition.concepts ??
-            [],
+                recognition.result?.concepts ??
+                recognition.concepts ??
+                []
 
         };
+
 
         const definition =
             new DefinitionEngine(semanticObject).run();
 
+
         const search =
             new SearchEngine(semanticObject).run();
 
+
         const evidence =
             new EvidenceEngine(semanticObject).run();
+
 
         const correspondence =
             new CorrespondenceEngine({
 
                 ...semanticObject,
 
-            definitions:
-            definition.result?.definitions ??
-            definition.definitions ??
-            [],
+                definitions:
+                    definition.result?.definitions ??
+                    definition.definitions ??
+                    [],
 
-            evidences:
-            evidence.result?.evidences ??
-            evidence.evidences ??
-            [],
+                evidences:
+                    evidence.result?.evidences ??
+                    evidence.evidences ??
+                    []
 
             }).run();
+
 
         const reasoning =
             new ReasoningEngine({
@@ -89,6 +98,7 @@ class HonestRuntime {
 
             }).run();
 
+
         const responsibility =
             new ResponsibilityEngine({
 
@@ -97,6 +107,7 @@ class HonestRuntime {
                 reasoning
 
             }).run();
+
 
         const reconstruction =
             new ReconstructionEngine({
@@ -115,6 +126,19 @@ class HonestRuntime {
 
             }).run();
 
+
+        const generator =
+            new GeneratorEngine({
+
+                semanticObject,
+
+                reconstruction,
+
+                responsibility
+
+            }).run();
+
+
         const selfCheck =
             new SelfCheckEngine({
 
@@ -132,13 +156,17 @@ class HonestRuntime {
 
                 responsibility,
 
-                reconstruction
+                reconstruction,
+
+                generator
 
             }).run();
 
+
         return {
 
-            runtimeVersion: "2.4",
+            runtimeVersion:
+                "3.0",
 
             identity,
 
@@ -162,6 +190,8 @@ class HonestRuntime {
 
             reconstruction,
 
+            generator,
+
             selfCheck
 
         };
@@ -169,5 +199,6 @@ class HonestRuntime {
     }
 
 }
+
 
 export default HonestRuntime;
