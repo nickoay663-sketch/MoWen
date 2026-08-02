@@ -1,78 +1,118 @@
-# MoWen Language
+MoWen Runtime Language
 
-## Purpose
+Version: 2.0
 
-MoWen executes testimony through a standardized Runtime language.
-
-Every Runtime process follows the same language specification.
-
----
-
-# Runtime Language
-
-Recognition
-
-↓
+莫问运行语言规范 v2.0
 
 Definition
 
-↓
+MoWen Runtime Language is the standardized language used by MoWen Runtime.
 
-Search
+It defines the concepts, terms and results used during Honest Runtime execution.
 
-↓
+莫问运行语言是莫问 Runtime 使用的标准化语言。
 
-Evidence
-
-↓
-
-Correspondence
-
-↓
-
-Reasoning
-
-↓
-
-Responsibility
-
-↓
-
-Generator
+它定义诚实运行过程中使用的概念、术语和结果。
 
 ---
 
-# Runtime Keywords
+Purpose
 
-Testimony
+MoWen Runtime Language does not replace natural languages.
 
-Definition
+It does not determine the input language.
 
-Search
+It provides a unified expression system for Runtime communication.
 
-Evidence
+莫问运行语言不替代自然语言。
 
-Correspondence
+它不决定输入语言。
 
-Reasoning
-
-Responsibility
-
-Truth
-
-Honesty
-
-Trust
-
-Civilization
-
-Question
-
-Knowledge
+它为 Runtime 内部交流提供统一表达系统。
 
 ---
 
-# Runtime Verbs
+Relationship
+
+Natural Language
+
+↓
+
+Language Runtime
+
+↓
+
+Semantic Object
+
+↓
+
+Honest Runtime
+
+↓
+
+MoWen Runtime Language
+
+↓
+
+Runtime Report
+
+自然语言
+
+↓
+
+语言运行系统
+
+↓
+
+统一语义对象
+
+↓
+
+诚实运行
+
+↓
+
+莫问运行语言
+
+↓
+
+运行报告
+
+---
+
+Core Concepts
+
+MoWen Runtime Language includes:
+
+- Expression
+- Testimony
+- Definition
+- Evidence
+- Correspondence
+- Reasoning
+- Responsibility
+- Reconstruction
+- Verification Status
+- Question
+
+莫问运行语言包括：
+
+- 表达
+- 证词
+- 定义
+- 证据
+- 对应
+- 推理
+- 责任
+- 重构
+- 验证状态
+- 问题
+
+---
+
+Runtime Actions
+
+MoWen Runtime uses standardized actions:
 
 Recognize
 
@@ -80,83 +120,90 @@ Define
 
 Search
 
-Collect
+Collect Evidence
 
 Correspond
 
 Reason
 
-Return
+Return Responsibility
 
-Generate
+Reconstruct
 
 Report
 
----
+莫问 Runtime 使用标准化动作：
 
-# Runtime Results
+识别
 
-Completed
+定义
 
-Not Found
+检索
 
-Undefined
+收集证据
 
-Insufficient Evidence
+对应
 
-Corresponding
+推理
 
-Not Corresponding
+返回责任
 
-Runtime Finished
+重构
 
----
-
-# Language Principle
-
-MoWen never assumes.
-
-MoWen always searches.
-
-MoWen always corresponds.
-
-MoWen always reports.
-
-MoWen never replaces human responsibility.
+报告
 
 ---
 
-# Language Rule
+Runtime Results
 
-Every Runtime module must use the same Runtime language.
+Runtime results describe verification conditions.
 
-Every report must use standardized Runtime keywords.
+They do not represent final judgment.
 
-Every generated question must follow the Runtime language.
+运行结果描述验证状态。
+
+它不代表最终裁决。
+
+Examples:
+
+- Completed
+- Undefined
+- Not Found
+- Insufficient Evidence
+- Corresponding
+- Not Corresponding
+- Runtime Finished
+
+例如：
+
+- 完成
+- 未定义
+- 未找到
+- 证据不足
+- 已对应
+- 未对应
+- 运行完成
+
 ---
 
-# UI Language Principle
+Principle
 
-Default language: Chinese.
+Every Runtime module uses the same Runtime Language.
 
-Every language uses the same layout.
+Every Runtime report follows standardized Runtime expressions.
 
-No punctuation.
+每一个 Runtime 模块使用同一套运行语言。
 
-No exclamation marks.
-
-No quotation marks.
-
-The interface invites.
-
-It never persuades.
+每一个 Runtime 报告遵循标准化运行表达。
 
 ---
 
-## Welcome
+Core Rule
 
-欢迎回来
+Natural languages may change.
 
-回到诚实
+Runtime Language remains consistent.
 
-文明开始的地方
+自然语言可以不同。
+
+莫问运行语言保持一致。
