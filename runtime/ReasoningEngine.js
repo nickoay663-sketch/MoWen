@@ -9,6 +9,9 @@ class ReasoningEngine {
 
     run() {
 
+    const reasonings =
+        this.analyzeReasoning();
+
         return {
 
             semanticObject: this.semanticObject,
@@ -16,8 +19,7 @@ class ReasoningEngine {
             principle:
                 "莫问只检查推理关系，不提前生成判断。",
 
-            reasonings:
-                this.analyzeReasoning(),
+            reasonings,
 
             result: {
 

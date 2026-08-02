@@ -10,6 +10,8 @@ class EvidenceEngine {
 
     run() {
 
+        const evidences = this.collectEvidence();
+
 
         return {
 
@@ -23,11 +25,7 @@ class EvidenceEngine {
 
                 "莫问只收集和记录证据，不判断证据。",
 
-
-
-            evidences:
-
-                this.collectEvidence(),
+               evidences,
 
             result: {
 

@@ -14,6 +14,15 @@ class SelfCheckEngine {
 
         const checks = {
 
+             pipeline:
+
+                !!this.runtime.pipeline,
+
+
+            outputBoundary:
+
+                !this.runtime.overreach,
+
 
             semanticObject:
 
@@ -84,7 +93,7 @@ class SelfCheckEngine {
 
             version:
 
-                "2.4",
+                "2.5",
 
 
 

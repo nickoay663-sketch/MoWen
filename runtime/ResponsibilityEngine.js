@@ -9,15 +9,17 @@ class ResponsibilityEngine {
 
     run() {
 
-        return {
+    const responsibilities =
+       this.collectResponsibilities();
+
+    return {
 
             semanticObject: this.semanticObject,
 
             principle:
                 "莫问只建立责任关系，不提前裁决责任。",
 
-            responsibilities:
-                this.collectResponsibilities(),
+            responsibilities,
 
             result: {
 

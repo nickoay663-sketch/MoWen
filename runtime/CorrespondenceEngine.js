@@ -11,6 +11,9 @@ class CorrespondenceEngine {
 
     run() {
 
+        const correspondences =
+            this.collectCorrespondence();
+
 
         return {
 
@@ -25,11 +28,7 @@ class CorrespondenceEngine {
 
                 "莫问只建立对应，不创造证据，不裁决结论。",
 
-
-
-            correspondences:
-
-                this.collectCorrespondence(),
+            correspondences,
 
             result: {
 

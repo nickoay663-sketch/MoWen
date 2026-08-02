@@ -10,6 +10,12 @@ class SearchEngine {
 
     run() {
 
+        const query = this.buildQuery();
+
+        const sources = [];
+
+        const results = [];
+
 
         return {
 
@@ -24,18 +30,11 @@ class SearchEngine {
                 "Search 提供信息支持，不替代定义、证据和判断。",
 
 
-            query:
+           query,
 
-                this.buildQuery(),
+           sources,
 
-
-            sources:
-
-                [],
-
-            results:
-
-                [], 
+           results,
                 
             result: {
 
