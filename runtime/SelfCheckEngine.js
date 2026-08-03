@@ -29,7 +29,7 @@ class SelfCheckEngine {
 
             principle:
 
-                "莫问检查自身运行结构，不判断表达结论。",
+                "莫问检查自身运行结构，不判断表达结果。",
 
 
 
@@ -85,7 +85,7 @@ class SelfCheckEngine {
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
@@ -149,7 +149,9 @@ class SelfCheckEngine {
 
             search:
 
-                !!search,
+                !!search &&
+
+                Array.isArray(search.searches),
 
 
 
@@ -161,13 +163,15 @@ class SelfCheckEngine {
 
 
 
-            evidenceValidation:
+            evidenceSourceStructure:
 
                 evidence?.evidences
 
                     ? evidence.evidences.every(item =>
 
-                        !!item.verificationStatus
+                        "source" in item &&
+
+                        "reference" in item
 
                     )
 
@@ -209,7 +213,7 @@ class SelfCheckEngine {
 
                 !!generator &&
 
-                generator.status === "generator-validated"
+                generator.status === "generator-ready"
 
 
         };

@@ -197,7 +197,7 @@ class HonestRuntime {
                     []
 
             }).run();
-            
+
                     const reconstruction =
 
             new ReconstructionEngine({
@@ -267,7 +267,7 @@ class HonestRuntime {
 
             runtimeVersion:
 
-                "3.6",
+                "3.7",
 
 
             pipeline,

@@ -21,7 +21,6 @@ class GeneratorEngine {
         return {
 
 
-
             semanticObject:
 
                 this.runtimeObject.semanticObject,
@@ -30,7 +29,7 @@ class GeneratorEngine {
 
             principle:
 
-                "莫问只生成运行结果，不把验证状态转换为事实结论。",
+                "莫问生成验证报告，不把验证状态转换为事实。",
 
 
 
@@ -52,7 +51,7 @@ class GeneratorEngine {
 
             conclusion:
 
-                "莫问不直接给出结论，只呈现表达、证据与验证关系。",
+                "莫问不直接判断结论，只展示表达、证据、来源和责任关系。",
 
 
 
@@ -76,13 +75,13 @@ class GeneratorEngine {
 
             status:
 
-                "generator-validated",
+                "generator-ready",
 
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
@@ -100,9 +99,13 @@ class GeneratorEngine {
 
             this.runtimeObject.reconstruction?.reconstruction ??
 
-            this.runtimeObject.reconstruction?.result?.reconstruction ??
-
             {};
+
+
+
+        const responsibilities =
+
+            reconstruction.responsibilities || [];
 
 
 
@@ -116,31 +119,43 @@ class GeneratorEngine {
 
 
 
-            reconstruction,
+            reconstructedExpression:
+
+                reconstruction.reconstructedExpression || "",
 
 
 
-            responsibilities:
-
-                reconstruction.responsibilities || [],
+            responsibilities,
 
 
 
             responsibilityCount:
 
-                reconstruction.responsibilityCount || 0,
-
-
-
-            supportedCount:
-
-                reconstruction.supportedCount || 0,
+                responsibilities.length,
 
 
 
             evidenceBoundary:
 
                 reconstruction.evidenceBoundary || "unknown",
+
+
+
+            responsibilityBoundary:
+
+                reconstruction.responsibilityBoundary || "unknown",
+
+
+
+            sourceBoundary:
+
+                reconstruction.sourceBoundary || "unknown",
+
+
+
+            expansion:
+
+                reconstruction.expansion || false,
 
 
 

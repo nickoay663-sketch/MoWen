@@ -26,12 +26,15 @@ class ReasoningEngine {
                 this.semanticObject,
 
 
+
             principle:
 
-                "莫问只验证推理链，不制造结论。",
+                "莫问检查推理是否有对应依据，不把可能性变成结论。",
+
 
 
             reasonings,
+
 
 
             result: {
@@ -41,7 +44,9 @@ class ReasoningEngine {
             },
 
 
+
             trace: [],
+
 
 
             nextRuntimeState:
@@ -54,7 +59,7 @@ class ReasoningEngine {
 
                 reasonings.length > 0
 
-                    ? "reasoning-validated"
+                    ? "reasoning-ready"
 
                     : "need-reasoning",
 
@@ -67,19 +72,20 @@ class ReasoningEngine {
                     ? []
 
                     : [
-                        "当前推理是否有足够对应关系？"
+                        "当前推理是否有足够依据？"
                     ],
 
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
 
     }
+
 
 
 
@@ -97,13 +103,15 @@ class ReasoningEngine {
 
 
 
-            const evidenceCount =
+            const sourceAvailable =
 
-                item.evidenceCount ??
+                item.sourceAvailable === true;
 
-                item.evidences?.length ??
 
-                0;
+
+            const supported =
+
+                item.supported === true;
 
 
 
@@ -123,31 +131,33 @@ class ReasoningEngine {
 
 
 
-                evidenceCount,
+                evidenceCount:
+
+                    item.evidenceCount || 0,
 
 
 
-                supported:
+                sourceAvailable,
 
-                    item.supported === true
-                        ||
-                    evidenceCount > 0,
+
+
+                supported,
 
 
 
                 reasoningType:
 
-                    "evidence-supported-definition",
+                    "evidence-source-chain",
 
 
 
                 verificationStatus:
 
-                    item.supported
+                    supported && sourceAvailable
 
                         ? "pending"
 
-                        : "insufficient-evidence"
+                        : "insufficient-source"
 
 
             };

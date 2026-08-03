@@ -1,146 +1,156 @@
 class SearchEngine {
 
+
     constructor(semanticObject) {
 
         this.semanticObject = semanticObject || {};
 
     }
 
+
+
     run() {
 
-        const query =
-            this.buildQuery();
 
         const searches =
-            this.buildSearches(query);
+
+            this.createSearches();
+
+
 
         return {
 
+
             semanticObject:
+
                 this.semanticObject,
 
-            principle:
-                "莫问只检索，不创造知识。",
 
-            query,
+
+            principle:
+
+                "莫问搜索只提出验证方向，不把搜索结果当作证据。",
+
+
 
             searches,
 
-            result: {
 
-                query,
+
+            result: {
 
                 searches
 
             },
 
+
+
             trace: [],
 
+
+
             nextRuntimeState:
+
                 "EvidenceEngine",
+
+
 
             status:
 
                 searches.length > 0
-                    ? "search-completed"
-                    : "need-search-verification",
+
+                    ? "search-ready"
+
+                    : "need-search",
+
+
 
             questions:
 
                 searches.length > 0
+
                     ? []
+
                     : [
-                        "应该检索哪些对象？",
-                        "还缺少哪些证据来源？"
+                        "当前表达是否需要外部验证来源？"
                     ],
 
+
+
             version:
-                "3.5"
+
+                "3.7"
+
 
         };
 
     }
 
-    buildQuery() {
 
-        return {
 
-            language:
-                this.semanticObject.language || null,
 
-            expression:
-                this.semanticObject.originalContent || "",
 
-            concepts:
-                this.semanticObject.concepts || [],
+    createSearches() {
 
-            objects:
-                this.semanticObject.objects || []
 
-        };
+        const concepts =
 
-    }
+            this.semanticObject.concepts || [];
 
-    buildSearches(query) {
 
-        const searches = [];
 
-        for (const concept of query.concepts) {
+        return concepts.map(concept => {
 
-            searches.push({
+
+
+            return {
+
 
                 keyword:
+
                     concept.word,
 
-                id:
+
+
+                conceptId:
+
                     concept.id,
 
+
+
                 category:
+
                     concept.category,
 
-                searchType:
-                    "definition",
 
-                priority:
-                    "normal",
-
-                verificationStatus:
-                    "pending"
-
-            });
-
-        }
-
-        for (const object of query.objects) {
-
-            searches.push({
-
-                keyword:
-                    object.word,
-
-                id:
-                    object.id,
-
-                category:
-                    object.category,
 
                 searchType:
-                    "object",
 
-                priority:
-                    "normal",
+                    "verification",
 
-                verificationStatus:
+
+
+                sourceRequired:
+
+                    true,
+
+
+
+                status:
+
                     "pending"
 
-            });
 
-        }
+            };
 
-        return searches;
+
+        });
+
 
     }
 
+
 }
+
 
 export default SearchEngine;

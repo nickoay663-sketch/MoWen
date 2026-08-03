@@ -26,9 +26,10 @@ class ResponsibilityEngine {
                 this.semanticObject,
 
 
+
             principle:
 
-                "莫问只记录责任关系，不提前裁决责任归属。",
+                "莫问区分表达责任、证据责任和来源责任。",
 
 
 
@@ -58,7 +59,7 @@ class ResponsibilityEngine {
 
                 responsibilities.length > 0
 
-                    ? "responsibility-validated"
+                    ? "responsibility-ready"
 
                     : "need-responsibility",
 
@@ -71,14 +72,14 @@ class ResponsibilityEngine {
                     ? []
 
                     : [
-                        "当前表达由谁承担验证责任？"
+                        "当前验证责任是否明确？"
                     ],
 
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
@@ -130,37 +131,49 @@ class ResponsibilityEngine {
 
 
 
-                reasoningType:
+                sourceAvailable:
 
-                    reasoning.reasoningType,
-
-
-
-                provider:
-
-                    null,
+                    reasoning.sourceAvailable,
 
 
 
-                source:
+                expressionResponsibility:
 
-                    null,
+                    "unknown",
+
+
+
+                evidenceResponsibility:
+
+                    "unknown",
+
+
+
+                sourceResponsibility:
+
+                    "unknown",
+
+
+
+                verificationResponsibility:
+
+                    "required",
 
 
 
                 responsibilityType:
 
-                    "verification",
+                    "verification-chain",
 
 
 
                 verificationStatus:
 
-                    reasoning.supported
+                    reasoning.sourceAvailable
 
                         ? "pending"
 
-                        : "insufficient-evidence"
+                        : "source-required"
 
 
             };

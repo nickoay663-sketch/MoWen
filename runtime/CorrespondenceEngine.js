@@ -13,6 +13,7 @@ class CorrespondenceEngine {
 
 
         const correspondences =
+
             this.buildCorrespondences();
 
 
@@ -21,14 +22,19 @@ class CorrespondenceEngine {
 
 
             semanticObject:
+
                 this.semanticObject,
 
 
+
             principle:
-                "莫问只建立对应关系，不把对应关系等同于证明。",
+
+                "莫问建立定义、证据与来源之间的对应，不制造证明。",
+
 
 
             correspondences,
+
 
 
             result: {
@@ -38,20 +44,25 @@ class CorrespondenceEngine {
             },
 
 
+
             trace: [],
 
 
+
             nextRuntimeState:
+
                 "ReasoningEngine",
+
 
 
             status:
 
                 correspondences.length > 0
 
-                    ? "correspondence-validated"
+                    ? "correspondence-ready"
 
                     : "need-correspondence",
+
 
 
             questions:
@@ -61,18 +72,21 @@ class CorrespondenceEngine {
                     ? []
 
                     : [
-                        "当前定义是否获得对应证据？"
+                        "当前定义是否获得对应证据支持？"
                     ],
+
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
 
     }
+
+
 
 
 
@@ -95,11 +109,11 @@ class CorrespondenceEngine {
 
 
 
-            const matchedEvidence =
+            const matched =
 
                 evidences.filter(evidence =>
 
-                    evidence.id === definition.id
+                    evidence.conceptId === definition.id
 
                 );
 
@@ -111,29 +125,54 @@ class CorrespondenceEngine {
                 definition,
 
 
+
                 evidences:
 
-                    matchedEvidence,
+                    matched,
+
 
 
                 evidenceCount:
 
-                    matchedEvidence.length,
+                    matched.length,
+
+
+
+                sourceCount:
+
+                    matched.filter(item =>
+
+                        item.source
+
+                    ).length,
+
 
 
                 supported:
 
-                    matchedEvidence.length > 0,
+                    matched.length > 0,
+
+
+
+                sourceAvailable:
+
+                    matched.some(item =>
+
+                        item.source
+
+                    ),
+
 
 
                 correspondenceType:
 
-                    "definition-evidence",
+                    "definition-evidence-source",
+
 
 
                 verificationStatus:
 
-                    matchedEvidence.length > 0
+                    matched.length > 0
 
                         ? "pending"
 

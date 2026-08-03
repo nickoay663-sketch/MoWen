@@ -29,7 +29,7 @@ class ReconstructionEngine {
 
             principle:
 
-                "莫问重构表达，但不增加原表达没有的依据。",
+                "莫问重构表达，但保持证据边界和责任边界。",
 
 
 
@@ -59,7 +59,7 @@ class ReconstructionEngine {
 
                 reconstruction
 
-                    ? "reconstruction-validated"
+                    ? "reconstruction-ready"
 
                     : "need-reconstruction",
 
@@ -72,14 +72,14 @@ class ReconstructionEngine {
                     ? []
 
                     : [
-                        "重构是否保持原始证据边界？"
+                        "重构是否超越原始证据范围？"
                     ],
 
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
@@ -139,19 +139,27 @@ class ReconstructionEngine {
 
 
 
-            supportedCount:
-
-                responsibilities.filter(item =>
-
-                    item.supported === true
-
-                ).length,
-
-
-
             evidenceBoundary:
 
                 "preserved",
+
+
+
+            responsibilityBoundary:
+
+                "preserved",
+
+
+
+            sourceBoundary:
+
+                "preserved",
+
+
+
+            expansion:
+
+                false,
 
 
 

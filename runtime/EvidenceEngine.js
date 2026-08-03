@@ -1,5 +1,6 @@
 class EvidenceEngine {
 
+
     constructor(semanticObject) {
 
         this.semanticObject = semanticObject || {};
@@ -7,25 +8,33 @@ class EvidenceEngine {
     }
 
 
+
     run() {
 
 
         const evidences =
+
             this.collectEvidence();
+
 
 
         return {
 
 
             semanticObject:
+
                 this.semanticObject,
 
 
+
             principle:
-                "莫问只记录证据状态，不替证据提供真实性保证。",
+
+                "莫问记录证据来源与状态，不替代验证过程。",
+
 
 
             evidences,
+
 
 
             result: {
@@ -35,20 +44,25 @@ class EvidenceEngine {
             },
 
 
+
             trace: [],
 
 
+
             nextRuntimeState:
+
                 "CorrespondenceEngine",
+
 
 
             status:
 
                 evidences.length > 0
 
-                    ? "evidence-validated"
+                    ? "evidence-ready"
 
                     : "need-evidence",
+
 
 
             questions:
@@ -58,18 +72,21 @@ class EvidenceEngine {
                     ? []
 
                     : [
-                        "当前表达是否存在可验证证据？"
+                        "当前表达是否存在可追溯证据？"
                     ],
+
 
 
             version:
 
-                "3.6"
+                "3.7"
 
 
         };
 
     }
+
+
 
 
 
@@ -85,6 +102,7 @@ class EvidenceEngine {
         return searches.map(search => {
 
 
+
             return {
 
 
@@ -93,14 +111,17 @@ class EvidenceEngine {
                     search.keyword,
 
 
-                id:
 
-                    search.id,
+                conceptId:
+
+                    search.conceptId,
+
 
 
                 category:
 
                     search.category,
+
 
 
                 content:
@@ -114,19 +135,35 @@ class EvidenceEngine {
                     null,
 
 
+
+                sourceType:
+
+                    "unknown",
+
+
+
                 reference:
 
                     null,
 
 
+
+                citation:
+
+                    null,
+
+
+
                 verificationStatus:
 
-                    this.validate(search),
+                    "pending",
+
 
 
                 evidenceType:
 
-                    "concept",
+                    "verification-source",
+
 
 
                 responsibility:
@@ -138,30 +175,6 @@ class EvidenceEngine {
 
 
         });
-
-
-    }
-
-
-
-    validate(search) {
-
-
-        if (!search) {
-
-            return "invalid";
-
-        }
-
-
-        if (!search.id) {
-
-            return "unverified";
-
-        }
-
-
-        return "pending";
 
 
     }
