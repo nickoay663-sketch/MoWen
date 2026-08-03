@@ -6,7 +6,6 @@ class GeneratorEngine {
 
     }
 
-
     run() {
 
         return {
@@ -18,25 +17,45 @@ class GeneratorEngine {
                 "莫问不直接给出结论，只生成基于运行链的表达。",
 
             reconstruction:
-                this.runtimeObject.reconstruction || {},
+                this.runtimeObject.reconstruction || null,
 
             responsibility:
-                this.runtimeObject.responsibility || {},
+                this.runtimeObject.responsibility || null,
+
+            report: {
+
+                expression:
+                    this.runtimeObject.semanticObject?.originalContent || "",
+
+                reconstruction:
+                    this.runtimeObject.reconstruction?.reconstruction || null,
+
+                responsibility:
+                    this.runtimeObject.responsibility?.responsibilities || [],
+
+                status:
+                    "pending"
+
+            },
 
             conclusion:
                 "莫问没有直接给出结论，而是提出需要验证的问题。",
 
+            trace: [],
+
+            nextRuntimeState:
+                "SelfCheckEngine",
+
             status:
-                "Generated",
+                "generator-completed",
 
             version:
-                "3.0"
+                "3.1"
 
         };
 
     }
 
 }
-
 
 export default GeneratorEngine;

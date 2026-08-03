@@ -1,30 +1,25 @@
 class ResponsibilityEngine {
 
-    constructor(semanticObject) {
+    constructor(runtimeObject) {
 
-        this.semanticObject = semanticObject || {};
+        this.runtimeObject = runtimeObject || {};
 
     }
-
 
     run() {
 
         const responsibilities =
             this.collectResponsibilities();
 
-
         return {
 
             semanticObject:
-                this.semanticObject,
-
+                this.runtimeObject,
 
             principle:
                 "莫问只建立责任关系，不提前裁决责任。",
 
-
             responsibilities,
-
 
             result: {
 
@@ -32,45 +27,31 @@ class ResponsibilityEngine {
 
             },
 
-
             trace: [],
-
 
             nextRuntimeState:
                 "ReconstructionEngine",
 
-
             status:
 
                 responsibilities.length > 0
-
                     ? "responsibility-completed"
-
                     : "need-responsibility-verification",
-
 
             questions:
 
                 responsibilities.length > 0
-
                     ? []
-
                     : [
-
-                        "谁提出了该表达？",
-
-                        "该表达的责任来源是否明确？"
-
+                        "谁应当对该表达承担责任？"
                     ],
 
-
             version:
-                "3.0"
+                "3.1"
 
         };
 
     }
-
 
     collectResponsibilities() {
 
@@ -79,27 +60,21 @@ class ResponsibilityEngine {
             {
 
                 expression:
-
-                    this.semanticObject.originalContent || "",
-
+                    this.runtimeObject.originalContent || "",
 
                 provider:
-
-                    this.semanticObject.responsibility || null,
-
-
-                source:
-
                     null,
 
+                source:
+                    null,
+
+                reasoning:
+                    this.runtimeObject.reasoning || null,
 
                 responsibilityType:
-
                     "expression",
 
-
                 verificationStatus:
-
                     "pending"
 
             }
@@ -108,8 +83,6 @@ class ResponsibilityEngine {
 
     }
 
-
 }
-
 
 export default ResponsibilityEngine;

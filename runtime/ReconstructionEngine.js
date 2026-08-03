@@ -32,7 +32,7 @@ class ReconstructionEngine {
             trace: [],
 
             nextRuntimeState:
-                "SelfCheckEngine",
+                "GeneratorEngine",
 
             status:
 
@@ -46,11 +46,11 @@ class ReconstructionEngine {
                     ? []
                     : [
                         "重构后的表达是否保留原始责任？",
-                        "重构后的表达是否超过已有依据？"
+                        "重构后的表达是否超出已有定义、证据和推理范围？"
                     ],
 
             version:
-                "3.0"
+                "3.1"
 
         };
 
@@ -58,16 +58,31 @@ class ReconstructionEngine {
 
     reconstruct() {
 
+        const semantic =
+            this.runtimeObject.semanticObject || {};
+
         return {
 
             originalExpression:
-                this.runtimeObject.originalContent || "",
+                semantic.originalContent || "",
 
             reconstructedExpression:
-                this.runtimeObject.originalContent || "",
+                semantic.originalContent || "",
 
             languageEnvironment:
-                this.runtimeObject.languageEnvironment || null,
+                semantic.language || null,
+
+            definition:
+                this.runtimeObject.definition || null,
+
+            evidence:
+                this.runtimeObject.evidence || null,
+
+            correspondence:
+                this.runtimeObject.correspondence || null,
+
+            reasoning:
+                this.runtimeObject.reasoning || null,
 
             responsibility:
                 this.runtimeObject.responsibility || null,

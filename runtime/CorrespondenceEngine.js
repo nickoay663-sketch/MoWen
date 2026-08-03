@@ -11,7 +11,6 @@ class CorrespondenceEngine {
         const correspondences =
             this.collectCorrespondence();
 
-
         return {
 
             semanticObject:
@@ -44,11 +43,11 @@ class CorrespondenceEngine {
                 correspondences.length > 0
                     ? []
                     : [
-                        "表达、定义和证据之间是否已经建立对应关系？"
+                        "表达、定义、检索和证据之间是否已经建立对应关系？"
                     ],
 
             version:
-                "3.0"
+                "3.1"
 
         };
 
@@ -68,6 +67,9 @@ class CorrespondenceEngine {
 
                 evidences:
                     this.runtimeObject.evidences || [],
+
+                search:
+                    this.runtimeObject.search || null,
 
                 verificationStatus:
                     "pending"

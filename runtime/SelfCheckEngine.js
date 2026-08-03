@@ -1,155 +1,61 @@
 class SelfCheckEngine {
 
+    constructor(runtimeObject) {
 
-    constructor(runtime) {
-
-        this.runtime = runtime || {};
+        this.runtimeObject = runtimeObject || {};
 
     }
 
-
-
     run() {
-
-
-        const requiredPipeline = [
-
-            "Recognition",
-
-            "Definition",
-
-            "Search",
-
-            "Evidence",
-
-            "Correspondence",
-
-            "Reasoning",
-
-            "Responsibility",
-
-            "Reconstruction",
-
-            "Generator",
-
-            "SelfCheck"
-
-        ];
-
-
-
-        const pipelineValid =
-
-            Array.isArray(this.runtime.pipeline)
-
-            &&
-
-            requiredPipeline.every(
-
-                step =>
-
-                    this.runtime.pipeline.includes(step)
-
-            );
-
-
 
         const checks = {
 
-
             pipeline:
-
-                pipelineValid,
-
-
-            outputBoundary:
-
-                !this.runtime.overreach,
-
+                Array.isArray(this.runtimeObject.pipeline),
 
             semanticObject:
-
-                !!this.runtime.semanticObject,
-
+                !!this.runtimeObject.semanticObject,
 
             recognition:
-
-                !!this.runtime.recognition,
-
+                !!this.runtimeObject.recognition,
 
             definition:
-
-                !!this.runtime.definition,
-
+                !!this.runtimeObject.definition,
 
             search:
-
-                !!this.runtime.search,
-
+                !!this.runtimeObject.search,
 
             evidence:
-
-                !!this.runtime.evidence,
-
+                !!this.runtimeObject.evidence,
 
             correspondence:
-
-                !!this.runtime.correspondence,
-
+                !!this.runtimeObject.correspondence,
 
             reasoning:
-
-                !!this.runtime.reasoning,
-
+                !!this.runtimeObject.reasoning,
 
             responsibility:
-
-                !!this.runtime.responsibility,
-
+                !!this.runtimeObject.responsibility,
 
             reconstruction:
-
-                !!this.runtime.reconstruction,
-
+                !!this.runtimeObject.reconstruction,
 
             generator:
-
-                !!this.runtime.generator
+                !!this.runtimeObject.generator
 
         };
 
-
-
         const passed =
-
-            Object.values(checks)
-
-                .every(Boolean);
-
-
+            Object.values(checks).every(Boolean);
 
         return {
 
-
-            version:
-
-                "3.1",
-
-
-
             principle:
-
                 "莫问检查自身运行结构，不判断表达结果。",
-
-
 
             checks,
 
-
-
             passed,
-
-
 
             result: {
 
@@ -159,47 +65,32 @@ class SelfCheckEngine {
 
             },
 
-
-
             trace: [],
 
-
-
             nextRuntimeState:
-
                 "RuntimeCompleted",
-
-
 
             status:
 
                 passed
-
                     ? "self-check-passed"
-
-                    : "self-check-warning",
-
-
+                    : "self-check-failed",
 
             questions:
 
                 passed
-
                     ? []
-
                     : [
+                        "运行链是否存在缺失模块？"
+                    ],
 
-                        "Runtime 是否缺少必要运行环节？",
-
-                        "输出是否超过已有证词、定义和证据范围？"
-
-                    ]
+            version:
+                "3.2"
 
         };
 
     }
 
 }
-
 
 export default SelfCheckEngine;

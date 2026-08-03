@@ -1,20 +1,20 @@
 class EvidenceEngine {
 
-    constructor(semanticObject) {
+    constructor(runtimeObject) {
 
-        this.semanticObject = semanticObject || {};
+        this.runtimeObject = runtimeObject || {};
 
     }
 
     run() {
 
-        const evidences = this.collectEvidence();
-        
+        const evidences =
+            this.collectEvidence();
 
         return {
 
             semanticObject:
-                this.semanticObject,
+                this.runtimeObject,
 
             principle:
                 "莫问只收集和记录证据，不判断证据。",
@@ -47,7 +47,7 @@ class EvidenceEngine {
                     ],
 
             version:
-                "3.0"
+                "3.1"
 
         };
 
@@ -60,13 +60,19 @@ class EvidenceEngine {
             {
 
                 content:
-                    this.semanticObject.originalContent || "",
-
-                objects:
-                    this.semanticObject.objects || [],
+                    this.runtimeObject.originalContent || "",
 
                 language:
-                    this.semanticObject.language || null,
+                    this.runtimeObject.language || null,
+
+                objects:
+                    this.runtimeObject.objects || [],
+
+                concepts:
+                    this.runtimeObject.concepts || [],
+
+                search:
+                    this.runtimeObject.search || null,
 
                 source:
                     null,

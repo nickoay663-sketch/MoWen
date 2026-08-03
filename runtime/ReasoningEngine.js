@@ -47,7 +47,7 @@ class ReasoningEngine {
                     ],
 
             version:
-                "3.0"
+                "3.1"
 
         };
 
@@ -55,15 +55,20 @@ class ReasoningEngine {
 
     analyzeReasoning() {
 
+        const correspondence =
+            this.semanticObject.correspondence || {};
+
+        const correspondences =
+            correspondence.correspondences || [];
+
         return [
 
             {
 
                 premises:
-                    this.semanticObject.premises || [],
+                    correspondences,
 
-                correspondences:
-                    this.semanticObject.correspondences || [],
+                correspondences,
 
                 conclusion:
                     null,
