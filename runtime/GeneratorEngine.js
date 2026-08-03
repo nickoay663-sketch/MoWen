@@ -1,176 +1,94 @@
 class GeneratorEngine {
 
-
     constructor(runtimeObject) {
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
-
-
     run() {
 
-
         const report =
-
             this.buildReport();
-
-
 
         return {
 
-
             semanticObject:
-
                 this.runtimeObject.semanticObject,
 
-
-
             principle:
-
-                "莫问生成验证报告，不把验证状态转换为事实。",
-
-
-
-            reconstruction:
-
-                this.runtimeObject.reconstruction,
-
-
-
-            responsibility:
-
-                this.runtimeObject.responsibility,
-
-
+                "莫问输出验证报告，不输出未经验证的事实结论。",
 
             report,
 
-
-
-            conclusion:
-
-                "莫问不直接判断结论，只展示表达、证据、来源和责任关系。",
-
-
-
             result: {
-
                 report
-
             },
-
-
 
             trace: [],
 
-
-
             nextRuntimeState:
-
                 "SelfCheckEngine",
 
-
-
             status:
+                "generator-connected",
 
-                "generator-ready",
-
-
+            questions: [],
 
             version:
-
-                "3.7"
-
+                "3.8"
 
         };
 
     }
-
-
-
-
 
     buildReport() {
 
-
         const reconstruction =
-
-            this.runtimeObject.reconstruction?.reconstruction ??
-
-            {};
-
-
-
-        const responsibilities =
-
-            reconstruction.responsibilities || [];
-
-
+            this.runtimeObject.reconstruction?.reconstruction || {};
 
         return {
 
-
-
             expression:
-
-                reconstruction.originalExpression || "",
-
-
+                reconstruction.originalExpression,
 
             reconstructedExpression:
+                reconstruction.reconstructedExpression,
 
-                reconstruction.reconstructedExpression || "",
+            language:
+                reconstruction.language,
 
-
-
-            responsibilities,
-
-
+            responsibilities:
+                reconstruction.responsibilities || [],
 
             responsibilityCount:
+                reconstruction.responsibilityCount || 0,
 
-                responsibilities.length,
+            sources:
+                reconstruction.sources || [],
 
-
+            sourceCount:
+                reconstruction.sourceCount || 0,
 
             evidenceBoundary:
-
-                reconstruction.evidenceBoundary || "unknown",
-
-
-
-            responsibilityBoundary:
-
-                reconstruction.responsibilityBoundary || "unknown",
-
-
+                reconstruction.evidenceBoundary,
 
             sourceBoundary:
+                reconstruction.sourceBoundary,
 
-                reconstruction.sourceBoundary || "unknown",
-
-
+            responsibilityBoundary:
+                reconstruction.responsibilityBoundary,
 
             expansion:
-
-                reconstruction.expansion || false,
-
-
+                reconstruction.expansion,
 
             verificationStatus:
-
-                reconstruction.verificationStatus || "pending"
-
+                reconstruction.verificationStatus
 
         };
 
-
     }
 
-
 }
-
 
 export default GeneratorEngine;

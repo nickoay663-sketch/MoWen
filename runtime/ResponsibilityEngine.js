@@ -1,191 +1,103 @@
 class ResponsibilityEngine {
 
-
     constructor(semanticObject) {
 
         this.semanticObject = semanticObject || {};
 
     }
 
-
-
     run() {
 
-
         const responsibilities =
-
             this.buildResponsibilities();
-
-
 
         return {
 
-
-            semanticObject:
-
-                this.semanticObject,
-
-
+            semanticObject: this.semanticObject,
 
             principle:
-
-                "莫问区分表达责任、证据责任和来源责任。",
-
-
+                "莫问记录表达、证据与来源责任，不替任何来源背书。",
 
             responsibilities,
 
-
-
             result: {
-
                 responsibilities
-
             },
-
-
 
             trace: [],
 
-
-
             nextRuntimeState:
-
                 "ReconstructionEngine",
 
-
-
             status:
-
                 responsibilities.length > 0
-
-                    ? "responsibility-ready"
-
+                    ? "responsibility-connected"
                     : "need-responsibility",
 
-
-
             questions:
-
                 responsibilities.length > 0
-
                     ? []
-
                     : [
-                        "当前验证责任是否明确？"
+                        "当前来源责任是否明确？"
                     ],
 
-
-
             version:
-
-                "3.7"
-
+                "3.8"
 
         };
 
     }
 
-
-
-
-
     buildResponsibilities() {
 
-
         const reasonings =
-
             this.semanticObject.reasonings || [];
 
+        return reasonings.map(reasoning => ({
 
+            expression:
+                this.semanticObject.originalContent || "",
 
-        return reasonings.map(reasoning => {
+            definition:
+                reasoning.definition,
 
+            supported:
+                reasoning.supported,
 
+            evidenceCount:
+                reasoning.evidenceCount,
 
-            return {
+            sourceCount:
+                reasoning.sourceCount,
 
+            sourceAvailable:
+                reasoning.sourceAvailable,
 
+            sources:
+                reasoning.evidences || [],
 
-                expression:
+            expressionResponsibility:
+                null,
 
-                    this.semanticObject.originalContent || "",
+            evidenceResponsibility:
+                null,
 
+            sourceResponsibility:
+                null,
 
+            verificationResponsibility:
+                "required",
 
-                definition:
+            responsibilityType:
+                "external-source-chain",
 
-                    reasoning.definition,
+            verificationStatus:
+                reasoning.verificationStatus
 
-
-
-                supported:
-
-                    reasoning.supported,
-
-
-
-                evidenceCount:
-
-                    reasoning.evidenceCount,
-
-
-
-                sourceAvailable:
-
-                    reasoning.sourceAvailable,
-
-
-
-                expressionResponsibility:
-
-                    "unknown",
-
-
-
-                evidenceResponsibility:
-
-                    "unknown",
-
-
-
-                sourceResponsibility:
-
-                    "unknown",
-
-
-
-                verificationResponsibility:
-
-                    "required",
-
-
-
-                responsibilityType:
-
-                    "verification-chain",
-
-
-
-                verificationStatus:
-
-                    reasoning.sourceAvailable
-
-                        ? "pending"
-
-                        : "source-required"
-
-
-            };
-
-
-        });
-
+        }));
 
     }
 
-
 }
-
 
 export default ResponsibilityEngine;

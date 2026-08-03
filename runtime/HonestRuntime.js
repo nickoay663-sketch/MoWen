@@ -25,6 +25,7 @@ class HonestRuntime {
 
     run() {
 
+        const trace = [];
 
         const pipeline = [
 
@@ -62,11 +63,19 @@ class HonestRuntime {
 
             new LanguageDetector(this.expression).run();
 
-
-
         const recognition =
 
             new RecognitionEngine(this.expression).run();
+
+                    trace.push({
+
+            engine: "RecognitionEngine",
+
+            status: recognition.status,
+
+            version: recognition.version
+
+        });
 
 
 
@@ -113,11 +122,31 @@ class HonestRuntime {
 
             new DefinitionEngine(semanticObject).run();
 
+                    trace.push({
+
+            engine: "DefinitionEngine",
+
+            status: definition.status,
+
+            version: definition.version
+
+        });
+
 
 
         const search =
 
             new SearchEngine(semanticObject).run();
+
+                    trace.push({
+
+            engine: "SearchEngine",
+
+            status: search.status,
+
+            version: search.version
+
+        });
 
 
 
@@ -131,7 +160,7 @@ class HonestRuntime {
 
             }).run();
 
-                    const correspondence =
+        const correspondence =
 
             new CorrespondenceEngine({
 
@@ -160,6 +189,16 @@ class HonestRuntime {
 
             }).run();
 
+                    trace.push({
+
+            engine: "EvidenceEngine",
+
+            status: evidence.status,
+
+            version: evidence.version
+
+        });
+
 
 
         const reasoning =
@@ -178,6 +217,16 @@ class HonestRuntime {
                     []
 
             }).run();
+
+                    trace.push({
+
+            engine: "CorrespondenceEngine",
+
+            status: correspondence.status,
+
+            version: correspondence.version
+
+        });
 
 
 
@@ -198,7 +247,27 @@ class HonestRuntime {
 
             }).run();
 
-                    const reconstruction =
+                    trace.push({
+
+            engine: "ResponsibilityEngine",
+
+            status: responsibility.status,
+
+            version: responsibility.version
+
+        });
+
+                    trace.push({
+
+            engine: "CorrespondenceEngine",
+
+            status: correspondence.status,
+
+            version: correspondence.version
+
+        });
+
+        const reconstruction =
 
             new ReconstructionEngine({
 
@@ -216,6 +285,16 @@ class HonestRuntime {
 
             }).run();
 
+                    trace.push({
+
+            engine: "ReconstructionEngine",
+
+            status: reconstruction.status,
+
+            version: reconstruction.version
+
+        });
+
 
 
         const generator =
@@ -229,6 +308,16 @@ class HonestRuntime {
                 responsibility
 
             }).run();
+
+                    trace.push({
+
+            engine: "GeneratorEngine",
+
+            status: generator.status,
+
+            version: generator.version
+
+        });
 
 
 
@@ -260,6 +349,16 @@ class HonestRuntime {
 
             }).run();
 
+                    trace.push({
+
+            engine: "GeneratorEngine",
+
+            status: generator.status,
+
+            version: generator.version
+
+        });
+
 
 
         return {
@@ -267,7 +366,7 @@ class HonestRuntime {
 
             runtimeVersion:
 
-                "3.7",
+                "3.9",
 
 
             pipeline,
@@ -309,7 +408,9 @@ class HonestRuntime {
             generator,
 
 
-            selfCheck
+                        selfCheck,
+
+            runtimeTrace: trace
 
 
         };

@@ -1,3 +1,6 @@
+import ExternalSourceConnector from "./ExternalSourceConnector.js";
+
+
 class SearchEngine {
 
 
@@ -18,6 +21,18 @@ class SearchEngine {
 
 
 
+        const sources =
+
+            searches.flatMap(search => {
+
+
+                return new ExternalSourceConnector(search).run().sources;
+
+
+            });
+
+
+
         return {
 
 
@@ -29,7 +44,7 @@ class SearchEngine {
 
             principle:
 
-                "莫问搜索只提出验证方向，不把搜索结果当作证据。",
+                "莫问搜索只发现验证入口，不把来源直接作为证据。",
 
 
 
@@ -37,9 +52,15 @@ class SearchEngine {
 
 
 
+            sources,
+
+
+
             result: {
 
-                searches
+                searches,
+
+                sources
 
             },
 
@@ -59,7 +80,7 @@ class SearchEngine {
 
                 searches.length > 0
 
-                    ? "search-ready"
+                    ? "search-connected"
 
                     : "need-search",
 
@@ -72,14 +93,14 @@ class SearchEngine {
                     ? []
 
                     : [
-                        "当前表达是否需要外部验证来源？"
+                        "当前表达是否需要外部来源验证？"
                     ],
 
 
 
             version:
 
-                "3.7"
+                "3.8"
 
 
         };

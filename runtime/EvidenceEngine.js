@@ -29,7 +29,7 @@ class EvidenceEngine {
 
             principle:
 
-                "莫问记录证据来源与状态，不替代验证过程。",
+                "莫问记录来源入口和证据状态，不替代真实性验证。",
 
 
 
@@ -59,7 +59,7 @@ class EvidenceEngine {
 
                 evidences.length > 0
 
-                    ? "evidence-ready"
+                    ? "evidence-connected"
 
                     : "need-evidence",
 
@@ -72,14 +72,14 @@ class EvidenceEngine {
                     ? []
 
                     : [
-                        "当前表达是否存在可追溯证据？"
+                        "当前表达是否存在可验证来源？"
                     ],
 
 
 
             version:
 
-                "3.7"
+                "3.8"
 
 
         };
@@ -99,7 +99,23 @@ class EvidenceEngine {
 
 
 
+        const sources =
+
+            this.semanticObject.search?.sources || [];
+
+
+
         return searches.map(search => {
+
+
+
+            const source =
+
+                sources.find(item =>
+
+                    item.keyword === search.keyword
+
+                ) || null;
 
 
 
@@ -130,21 +146,19 @@ class EvidenceEngine {
 
 
 
-                source:
-
-                    null,
+                source,
 
 
 
-                sourceType:
+                sourceAvailable:
 
-                    "unknown",
+                    !!source,
 
 
 
                 reference:
 
-                    null,
+                    source?.url || null,
 
 
 
@@ -162,7 +176,7 @@ class EvidenceEngine {
 
                 evidenceType:
 
-                    "verification-source",
+                    "external-source-entry",
 
 
 

@@ -29,7 +29,7 @@ class ReasoningEngine {
 
             principle:
 
-                "莫问检查推理是否有对应依据，不把可能性变成结论。",
+                "莫问根据证据和来源状态生成推理状态，不直接生成事实结论。",
 
 
 
@@ -59,7 +59,7 @@ class ReasoningEngine {
 
                 reasonings.length > 0
 
-                    ? "reasoning-ready"
+                    ? "reasoning-connected"
 
                     : "need-reasoning",
 
@@ -72,14 +72,14 @@ class ReasoningEngine {
                     ? []
 
                     : [
-                        "当前推理是否有足够依据？"
+                        "当前推理是否具有来源支持？"
                     ],
 
 
 
             version:
 
-                "3.7"
+                "3.8"
 
 
         };
@@ -100,18 +100,6 @@ class ReasoningEngine {
 
 
         return correspondences.map(item => {
-
-
-
-            const sourceAvailable =
-
-                item.sourceAvailable === true;
-
-
-
-            const supported =
-
-                item.supported === true;
 
 
 
@@ -137,23 +125,33 @@ class ReasoningEngine {
 
 
 
-                sourceAvailable,
+                sourceAvailable:
+
+                    item.sourceAvailable || false,
 
 
 
-                supported,
+                sourceCount:
+
+                    item.sourceCount || 0,
+
+
+
+                supported:
+
+                    item.supported || false,
 
 
 
                 reasoningType:
 
-                    "evidence-source-chain",
+                    "source-supported-chain",
 
 
 
                 verificationStatus:
 
-                    supported && sourceAvailable
+                    item.supported && item.sourceAvailable
 
                         ? "pending"
 

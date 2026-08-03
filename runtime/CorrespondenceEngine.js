@@ -29,7 +29,7 @@ class CorrespondenceEngine {
 
             principle:
 
-                "莫问建立定义、证据与来源之间的对应，不制造证明。",
+                "莫问建立定义、证据和来源入口之间的对应关系。",
 
 
 
@@ -59,7 +59,7 @@ class CorrespondenceEngine {
 
                 correspondences.length > 0
 
-                    ? "correspondence-ready"
+                    ? "correspondence-connected"
 
                     : "need-correspondence",
 
@@ -72,14 +72,14 @@ class CorrespondenceEngine {
                     ? []
 
                     : [
-                        "当前定义是否获得对应证据支持？"
+                        "当前定义是否获得来源支持？"
                     ],
 
 
 
             version:
 
-                "3.7"
+                "3.8"
 
 
         };
@@ -122,6 +122,7 @@ class CorrespondenceEngine {
             return {
 
 
+
                 definition,
 
 
@@ -142,15 +143,9 @@ class CorrespondenceEngine {
 
                     matched.filter(item =>
 
-                        item.source
+                        item.sourceAvailable === true
 
                     ).length,
-
-
-
-                supported:
-
-                    matched.length > 0,
 
 
 
@@ -158,9 +153,15 @@ class CorrespondenceEngine {
 
                     matched.some(item =>
 
-                        item.source
+                        item.sourceAvailable === true
 
                     ),
+
+
+
+                supported:
+
+                    matched.length > 0,
 
 
 
