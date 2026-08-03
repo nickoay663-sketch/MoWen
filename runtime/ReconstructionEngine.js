@@ -1,25 +1,41 @@
 class ReconstructionEngine {
 
+
     constructor(runtimeObject) {
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
+
+
     run() {
 
+
         const reconstruction =
+
             this.buildReconstruction();
+
+
 
         return {
 
+
             semanticObject:
+
                 this.runtimeObject,
 
+
+
             principle:
-                "重构提高表达承担责任的能力，不创造新的依据。",
+
+                "莫问重构表达，但不增加原表达没有的依据。",
+
+
 
             reconstruction,
+
+
 
             result: {
 
@@ -27,43 +43,67 @@ class ReconstructionEngine {
 
             },
 
+
+
             trace: [],
 
+
+
             nextRuntimeState:
+
                 "GeneratorEngine",
+
+
 
             status:
 
                 reconstruction
-                    ? "reconstruction-completed"
-                    : "need-reconstruction-verification",
+
+                    ? "reconstruction-validated"
+
+                    : "need-reconstruction",
+
+
 
             questions:
 
                 reconstruction
+
                     ? []
+
                     : [
-                        "重构是否保持原始责任？",
-                        "重构是否超出已有证据？"
+                        "重构是否保持原始证据边界？"
                     ],
 
+
+
             version:
-                "3.5"
+
+                "3.6"
+
 
         };
 
     }
 
+
+
+
+
     buildReconstruction() {
 
-        const responsibilities =
-            this.runtimeObject.responsibility?.responsibilities ??
 
-            this.runtimeObject.responsibility?.result?.responsibilities ??
+        const responsibilities =
+
+            this.runtimeObject.responsibility?.responsibilities ||
 
             [];
 
+
+
         return {
+
+
 
             originalExpression:
 
@@ -71,11 +111,15 @@ class ReconstructionEngine {
 
                 "",
 
+
+
             reconstructedExpression:
 
                 this.runtimeObject.semanticObject?.originalContent ||
 
                 "",
+
+
 
             language:
 
@@ -83,20 +127,46 @@ class ReconstructionEngine {
 
                 null,
 
+
+
             responsibilities,
+
+
 
             responsibilityCount:
 
                 responsibilities.length,
 
+
+
+            supportedCount:
+
+                responsibilities.filter(item =>
+
+                    item.supported === true
+
+                ).length,
+
+
+
+            evidenceBoundary:
+
+                "preserved",
+
+
+
             verificationStatus:
 
                 "pending"
 
+
         };
+
 
     }
 
+
 }
+
 
 export default ReconstructionEngine;

@@ -1,26 +1,45 @@
 class SelfCheckEngine {
 
+
     constructor(runtimeObject) {
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
+
+
     run() {
 
-        const checks = this.buildChecks();
+
+        const checks =
+
+            this.check();
+
+
 
         const passed =
+
             Object.values(checks).every(Boolean);
+
+
 
         return {
 
+
             principle:
-                "莫问检查自身运行结构，不判断表达结果。",
+
+                "莫问检查自身运行结构，不判断表达结论。",
+
+
 
             checks,
 
+
+
             passed,
+
+
 
             result: {
 
@@ -30,74 +49,176 @@ class SelfCheckEngine {
 
             },
 
+
+
             trace: [],
 
+
+
             nextRuntimeState:
+
                 "RuntimeCompleted",
+
+
 
             status:
 
                 passed
+
                     ? "self-check-passed"
-                    : "self-check-failed",
+
+                    : "self-check-warning",
+
+
 
             questions:
 
                 passed
+
                     ? []
+
                     : [
-                        "Runtime 是否存在缺失模块？",
-                        "Runtime 是否存在运行链断裂？"
+                        "运行链是否存在验证缺口？"
                     ],
 
+
+
             version:
-                "3.3"
+
+                "3.6"
+
 
         };
 
     }
 
-    buildChecks() {
+
+
+
+
+    check() {
+
+
+        const {
+
+            pipeline,
+
+            semanticObject,
+
+            definition,
+
+            search,
+
+            evidence,
+
+            correspondence,
+
+            reasoning,
+
+            responsibility,
+
+            reconstruction,
+
+            generator
+
+        } = this.runtimeObject;
+
+
 
         return {
 
+
+
             pipeline:
-                !!this.runtimeObject.pipeline,
+
+                Array.isArray(pipeline),
+
+
 
             semanticObject:
-                !!this.runtimeObject.semanticObject,
 
-            recognition:
-                !!this.runtimeObject.recognition,
+                !!semanticObject,
+
+
 
             definition:
-                !!this.runtimeObject.definition,
+
+                !!definition,
+
+
 
             search:
-                !!this.runtimeObject.search,
+
+                !!search,
+
+
 
             evidence:
-                !!this.runtimeObject.evidence,
+
+                !!evidence &&
+
+                Array.isArray(evidence.evidences),
+
+
+
+            evidenceValidation:
+
+                evidence?.evidences
+
+                    ? evidence.evidences.every(item =>
+
+                        !!item.verificationStatus
+
+                    )
+
+                    : false,
+
+
 
             correspondence:
-                !!this.runtimeObject.correspondence,
+
+                !!correspondence &&
+
+                Array.isArray(correspondence.correspondences),
+
+
 
             reasoning:
-                !!this.runtimeObject.reasoning,
+
+                !!reasoning &&
+
+                Array.isArray(reasoning.reasonings),
+
+
 
             responsibility:
-                !!this.runtimeObject.responsibility,
+
+                !!responsibility &&
+
+                Array.isArray(responsibility.responsibilities),
+
+
 
             reconstruction:
-                !!this.runtimeObject.reconstruction,
+
+                !!reconstruction,
+
+
 
             generator:
-                !!this.runtimeObject.generator
+
+                !!generator &&
+
+                generator.status === "generator-validated"
+
 
         };
 
+
     }
 
+
 }
+
 
 export default SelfCheckEngine;

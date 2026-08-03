@@ -6,20 +6,27 @@ class EvidenceEngine {
 
     }
 
+
     run() {
+
 
         const evidences =
             this.collectEvidence();
 
+
         return {
+
 
             semanticObject:
                 this.semanticObject,
 
+
             principle:
-                "莫问只收集和记录证据，不判断证据。",
+                "莫问只记录证据状态，不替证据提供真实性保证。",
+
 
             evidences,
+
 
             result: {
 
@@ -27,82 +34,140 @@ class EvidenceEngine {
 
             },
 
+
             trace: [],
+
 
             nextRuntimeState:
                 "CorrespondenceEngine",
 
+
             status:
 
                 evidences.length > 0
-                    ? "evidence-collected"
-                    : "need-evidence-verification",
+
+                    ? "evidence-validated"
+
+                    : "need-evidence",
+
 
             questions:
 
                 evidences.length > 0
+
                     ? []
+
                     : [
-                        "是否存在支持该表达的证据？"
+                        "当前表达是否存在可验证证据？"
                     ],
 
+
             version:
-                "3.5"
+
+                "3.6"
+
 
         };
 
     }
 
+
+
     collectEvidence() {
 
+
         const searches =
+
             this.semanticObject.search?.searches || [];
 
-        return searches.map(search => ({
 
-            keyword:
-                search.keyword,
 
-            id:
-                search.id,
+        return searches.map(search => {
 
-            category:
-                search.category,
 
-            searchType:
-                search.searchType,
+            return {
 
-            priority:
-                search.priority,
 
-            content:
-                this.semanticObject.originalContent || "",
+                keyword:
 
-            language:
-                this.semanticObject.language || null,
+                    search.keyword,
 
-            source:
-                null,
 
-            time:
-                null,
+                id:
 
-            location:
-                null,
+                    search.id,
 
-            reference:
-                null,
 
-            verificationStatus:
-                "unverified",
+                category:
 
-            responsibility:
-                null
+                    search.category,
 
-        }));
+
+                content:
+
+                    this.semanticObject.originalContent || "",
+
+
+
+                source:
+
+                    null,
+
+
+                reference:
+
+                    null,
+
+
+                verificationStatus:
+
+                    this.validate(search),
+
+
+                evidenceType:
+
+                    "concept",
+
+
+                responsibility:
+
+                    null
+
+
+            };
+
+
+        });
+
 
     }
 
+
+
+    validate(search) {
+
+
+        if (!search) {
+
+            return "invalid";
+
+        }
+
+
+        if (!search.id) {
+
+            return "unverified";
+
+        }
+
+
+        return "pending";
+
+
+    }
+
+
 }
+
 
 export default EvidenceEngine;

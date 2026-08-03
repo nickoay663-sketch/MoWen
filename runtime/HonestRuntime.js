@@ -22,6 +22,7 @@ class HonestRuntime {
     }
 
 
+
     run() {
 
 
@@ -52,16 +53,19 @@ class HonestRuntime {
 
 
         const identity =
+
             new MoWenIdentity().run();
 
 
 
         const language =
+
             new LanguageDetector(this.expression).run();
 
 
 
         const recognition =
+
             new RecognitionEngine(this.expression).run();
 
 
@@ -106,16 +110,19 @@ class HonestRuntime {
 
 
         const definition =
+
             new DefinitionEngine(semanticObject).run();
 
 
 
         const search =
+
             new SearchEngine(semanticObject).run();
 
 
 
         const evidence =
+
             new EvidenceEngine({
 
                 ...semanticObject,
@@ -125,9 +132,11 @@ class HonestRuntime {
             }).run();
 
                     const correspondence =
+
             new CorrespondenceEngine({
 
                 ...semanticObject,
+
 
                 definitions:
 
@@ -137,6 +146,7 @@ class HonestRuntime {
 
                     [],
 
+
                 evidences:
 
                     evidence.result?.evidences ??
@@ -145,6 +155,7 @@ class HonestRuntime {
 
                     [],
 
+
                 search
 
             }).run();
@@ -152,9 +163,11 @@ class HonestRuntime {
 
 
         const reasoning =
+
             new ReasoningEngine({
 
                 ...semanticObject,
+
 
                 correspondences:
 
@@ -169,9 +182,11 @@ class HonestRuntime {
 
 
         const responsibility =
+
             new ResponsibilityEngine({
 
                 ...semanticObject,
+
 
                 reasonings:
 
@@ -182,15 +197,14 @@ class HonestRuntime {
                     []
 
             }).run();
-
+            
                     const reconstruction =
+
             new ReconstructionEngine({
 
                 semanticObject,
 
                 definition,
-
-                search,
 
                 evidence,
 
@@ -205,6 +219,7 @@ class HonestRuntime {
 
 
         const generator =
+
             new GeneratorEngine({
 
                 semanticObject,
@@ -218,6 +233,7 @@ class HonestRuntime {
 
 
         const selfCheck =
+
             new SelfCheckEngine({
 
                 pipeline,
@@ -248,9 +264,10 @@ class HonestRuntime {
 
         return {
 
+
             runtimeVersion:
 
-                "3.5",
+                "3.6",
 
 
             pipeline,
@@ -293,6 +310,7 @@ class HonestRuntime {
 
 
             selfCheck
+
 
         };
 
