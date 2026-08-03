@@ -1,22 +1,45 @@
-# MoWen Documentation Architecture v3.0
-
-# 莫问文档架构 v3.0
-
----
+# MoWen Documentation Architecture v4.0
+# 莫问文档架构 v4.0
 
 # Purpose
 
-Documentation Architecture defines how MoWen documents are organized.
+Documentation Architecture defines how all MoWen documents are organized, maintained and evolved.
 
-Documents are part of Runtime.
+Documents are part of Honest Runtime.
 
-Therefore documents must also follow Runtime Principles.
+Therefore every document shall follow Honest Runtime Principles.
 
-文档架构规定莫问文档如何组织。
+文档架构规定莫问全部文档如何组织、维护与演进。
 
-文档也是运行对象。
+文档属于诚实运行的一部分。
 
-因此文档同样遵循诚实运行。
+因此所有文档都必须遵循诚实运行原则。
+
+---
+
+# Documentation Object
+
+Every document is one Documentation Object.
+
+Every Documentation Object contains:
+
+- Document Name
+- Responsibility
+- Architecture Layer
+- Runtime Relation
+- Version
+- Status
+
+每一个文档都是一个文档对象。
+
+每一个文档对象包含：
+
+- 文档名称
+- 文档职责
+- 所属架构层
+- 运行关系
+- 版本
+- 状态
 
 ---
 
@@ -26,51 +49,55 @@ One Responsibility
 
 One Document
 
-One Location
+One Architecture Layer
 
-Every document belongs to exactly one architecture layer.
+One Runtime Relation
+
+One Version
 
 一个职责。
 
 一个文档。
 
-一个位置。
+一个架构层。
 
-任何文档只能属于一个架构层。
+一个运行关系。
+
+一个版本。
 
 ---
 
 # Documentation Layers
 
+## Constitution
+
+Defines the highest principles of MoWen.
+
+定义莫问最高原则。
+
 ## Runtime
 
-Defines how Runtime works.
+Defines Honest Runtime.
 
-定义运行如何工作。
+定义诚实运行。
 
----
+## Runtime Engine
 
-## Knowledge
+Defines every Runtime Engine.
 
-Defines concepts and responsibility objects.
+定义各 Runtime Engine。
 
-定义概念与责任对象。
+## Engineering
 
----
+Defines implementation architecture.
 
-## Implementation
+定义工程实现。
 
-Defines executable structures.
+## Reference
 
-定义实现结构。
+Provides supplementary specifications.
 
----
-
-## Review
-
-Defines architecture verification.
-
-定义体系审查。
+提供参考规范。
 
 ---
 
@@ -80,11 +107,33 @@ Moving documents does not change responsibility.
 
 Only organization changes.
 
-移动文档，
+Version upgrades shall be completed by whole-document refactoring.
 
-不改变职责。
+移动文档，不改变职责。
 
-只改变组织结构。
+只改变组织方式。
+
+版本升级采用整体重构，不进行零散追加。
+
+---
+
+# Documentation Rule
+
+No duplicated responsibility.
+
+No undefined document.
+
+No architecture without definition.
+
+No implementation before definition.
+
+没有重复职责。
+
+没有未定义文档。
+
+没有定义，不建立架构。
+
+没有定义，不进入实现。
 
 ---
 
@@ -94,6 +143,24 @@ Architecture serves responsibility.
 
 Organization serves architecture.
 
+Documentation evolves by refactoring.
+
+Git preserves historical versions.
+
+Current documents represent the latest architecture.
+
 架构服务责任。
 
 组织服务架构。
+
+文档通过重构演进。
+
+Git 保存历史版本。
+
+当前文档始终代表最新架构。
+
+---
+
+Version
+
+4.0
