@@ -1,20 +1,20 @@
 class CorrespondenceEngine {
 
-    constructor(runtimeObject) {
+    constructor(semanticObject) {
 
-        this.runtimeObject = runtimeObject || {};
+        this.semanticObject = semanticObject || {};
 
     }
 
     run() {
 
         const correspondences =
-            this.collectCorrespondence();
+            this.buildCorrespondences();
 
         return {
 
             semanticObject:
-                this.runtimeObject,
+                this.semanticObject,
 
             principle:
                 "莫问只建立对应，不创造证据，不裁决结论。",
@@ -43,40 +43,43 @@ class CorrespondenceEngine {
                 correspondences.length > 0
                     ? []
                     : [
-                        "表达、定义、检索和证据之间是否已经建立对应关系？"
+                        "定义是否找到对应证据？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
     }
 
-    collectCorrespondence() {
+    buildCorrespondences() {
 
-        return [
+        const definitions =
+            this.semanticObject.definitions || [];
 
-            {
+        const evidences =
+            this.semanticObject.evidences || [];
 
-                objects:
-                    this.runtimeObject.objects || [],
+        return definitions.map(definition => ({
 
-                definitions:
-                    this.runtimeObject.definitions || [],
+            definition,
 
-                evidences:
-                    this.runtimeObject.evidences || [],
+            evidences:
 
-                search:
-                    this.runtimeObject.search || null,
+                evidences.filter(evidence =>
 
-                verificationStatus:
-                    "pending"
+                    evidence.id === definition.id
 
-            }
+                ),
 
-        ];
+            correspondenceType:
+                "definition-evidence",
+
+            verificationStatus:
+                "pending"
+
+        }));
 
     }
 

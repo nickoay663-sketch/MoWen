@@ -1,8 +1,8 @@
 class EvidenceEngine {
 
-    constructor(runtimeObject) {
+    constructor(semanticObject) {
 
-        this.runtimeObject = runtimeObject || {};
+        this.semanticObject = semanticObject || {};
 
     }
 
@@ -14,7 +14,7 @@ class EvidenceEngine {
         return {
 
             semanticObject:
-                this.runtimeObject,
+                this.semanticObject,
 
             principle:
                 "莫问只收集和记录证据，不判断证据。",
@@ -43,11 +43,11 @@ class EvidenceEngine {
                 evidences.length > 0
                     ? []
                     : [
-                        "是否存在可以支持该表达的证据？"
+                        "是否存在支持该表达的证据？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
@@ -55,46 +55,51 @@ class EvidenceEngine {
 
     collectEvidence() {
 
-        return [
+        const searches =
+            this.semanticObject.search?.searches || [];
 
-            {
+        return searches.map(search => ({
 
-                content:
-                    this.runtimeObject.originalContent || "",
+            keyword:
+                search.keyword,
 
-                language:
-                    this.runtimeObject.language || null,
+            id:
+                search.id,
 
-                objects:
-                    this.runtimeObject.objects || [],
+            category:
+                search.category,
 
-                concepts:
-                    this.runtimeObject.concepts || [],
+            searchType:
+                search.searchType,
 
-                search:
-                    this.runtimeObject.search || null,
+            priority:
+                search.priority,
 
-                source:
-                    null,
+            content:
+                this.semanticObject.originalContent || "",
 
-                time:
-                    null,
+            language:
+                this.semanticObject.language || null,
 
-                location:
-                    null,
+            source:
+                null,
 
-                reference:
-                    null,
+            time:
+                null,
 
-                verificationStatus:
-                    "unverified",
+            location:
+                null,
 
-                responsibility:
-                    null
+            reference:
+                null,
 
-            }
+            verificationStatus:
+                "unverified",
 
-        ];
+            responsibility:
+                null
+
+        }));
 
     }
 

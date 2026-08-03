@@ -9,7 +9,7 @@ class ReasoningEngine {
     run() {
 
         const reasonings =
-            this.analyzeReasoning();
+            this.buildReasonings();
 
         return {
 
@@ -43,42 +43,48 @@ class ReasoningEngine {
                 reasonings.length > 0
                     ? []
                     : [
-                        "当前表达是否能够由已有定义、证据和对应关系推出？"
+                        "当前对应关系是否能够支持表达？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
     }
 
-    analyzeReasoning() {
-
-        const correspondence =
-            this.semanticObject.correspondence || {};
+    buildReasonings() {
 
         const correspondences =
-            correspondence.correspondences || [];
+            this.semanticObject.correspondences || [];
 
-        return [
+        return correspondences.map(item => {
 
-            {
+            const evidenceCount =
+                item.evidences.length;
 
-                premises:
-                    correspondences,
+            return {
 
-                correspondences,
+                definition:
+                    item.definition,
 
-                conclusion:
-                    null,
+                evidences:
+                    item.evidences,
+
+                evidenceCount,
+
+                supported:
+                    evidenceCount > 0,
+
+                reasoningType:
+                    "definition-supported-by-evidence",
 
                 verificationStatus:
                     "pending"
 
-            }
+            };
 
-        ];
+        });
 
     }
 

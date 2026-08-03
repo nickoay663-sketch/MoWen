@@ -1,5 +1,3 @@
-import MoWenConfig from "./MoWenConfig.js";
-
 class ReconstructionEngine {
 
     constructor(runtimeObject) {
@@ -11,7 +9,7 @@ class ReconstructionEngine {
     run() {
 
         const reconstruction =
-            this.reconstruct();
+            this.buildReconstruction();
 
         return {
 
@@ -45,49 +43,54 @@ class ReconstructionEngine {
                 reconstruction
                     ? []
                     : [
-                        "重构后的表达是否保留原始责任？",
-                        "重构后的表达是否超出已有定义、证据和推理范围？"
+                        "重构是否保持原始责任？",
+                        "重构是否超出已有证据？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
     }
 
-    reconstruct() {
+    buildReconstruction() {
 
-        const semantic =
-            this.runtimeObject.semanticObject || {};
+        const responsibilities =
+            this.runtimeObject.responsibility?.responsibilities ??
+
+            this.runtimeObject.responsibility?.result?.responsibilities ??
+
+            [];
 
         return {
 
             originalExpression:
-                semantic.originalContent || "",
+
+                this.runtimeObject.semanticObject?.originalContent ||
+
+                "",
 
             reconstructedExpression:
-                semantic.originalContent || "",
 
-            languageEnvironment:
-                semantic.language || null,
+                this.runtimeObject.semanticObject?.originalContent ||
 
-            definition:
-                this.runtimeObject.definition || null,
+                "",
 
-            evidence:
-                this.runtimeObject.evidence || null,
+            language:
 
-            correspondence:
-                this.runtimeObject.correspondence || null,
+                this.runtimeObject.semanticObject?.language ||
 
-            reasoning:
-                this.runtimeObject.reasoning || null,
+                null,
 
-            responsibility:
-                this.runtimeObject.responsibility || null,
+            responsibilities,
+
+            responsibilityCount:
+
+                responsibilities.length,
 
             verificationStatus:
+
                 "pending"
 
         };

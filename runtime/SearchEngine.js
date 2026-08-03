@@ -50,11 +50,12 @@ class SearchEngine {
                 searches.length > 0
                     ? []
                     : [
-                        "是否已经为所有对象和概念建立检索任务？"
+                        "应该检索哪些对象？",
+                        "还缺少哪些证据来源？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
@@ -84,33 +85,53 @@ class SearchEngine {
 
         const searches = [];
 
-        for (const object of query.objects) {
+        for (const concept of query.concepts) {
 
             searches.push({
 
-                keyword: object.word,
+                keyword:
+                    concept.word,
 
-                id: object.id,
+                id:
+                    concept.id,
 
-                category: object.type,
+                category:
+                    concept.category,
 
-                status: "pending"
+                searchType:
+                    "definition",
+
+                priority:
+                    "normal",
+
+                verificationStatus:
+                    "pending"
 
             });
 
         }
 
-        for (const concept of query.concepts) {
+        for (const object of query.objects) {
 
             searches.push({
 
-                keyword: concept.word,
+                keyword:
+                    object.word,
 
-                id: concept.id,
+                id:
+                    object.id,
 
-                category: concept.category,
+                category:
+                    object.category,
 
-                status: "pending"
+                searchType:
+                    "object",
+
+                priority:
+                    "normal",
+
+                verificationStatus:
+                    "pending"
 
             });
 

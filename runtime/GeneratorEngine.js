@@ -8,38 +8,33 @@ class GeneratorEngine {
 
     run() {
 
+        const report =
+            this.buildReport();
+
         return {
 
             semanticObject:
-                this.runtimeObject.semanticObject || {},
+                this.runtimeObject.semanticObject,
 
             principle:
                 "莫问不直接给出结论，只生成基于运行链的表达。",
 
             reconstruction:
-                this.runtimeObject.reconstruction || null,
+                this.runtimeObject.reconstruction,
 
             responsibility:
-                this.runtimeObject.responsibility || null,
+                this.runtimeObject.responsibility,
 
-            report: {
-
-                expression:
-                    this.runtimeObject.semanticObject?.originalContent || "",
-
-                reconstruction:
-                    this.runtimeObject.reconstruction?.reconstruction || null,
-
-                responsibility:
-                    this.runtimeObject.responsibility?.responsibilities || [],
-
-                status:
-                    "pending"
-
-            },
+            report,
 
             conclusion:
                 "莫问没有直接给出结论，而是提出需要验证的问题。",
+
+            result: {
+
+                report
+
+            },
 
             trace: [],
 
@@ -50,7 +45,36 @@ class GeneratorEngine {
                 "generator-completed",
 
             version:
-                "3.1"
+                "3.5"
+
+        };
+
+    }
+
+    buildReport() {
+
+        const reconstruction =
+            this.runtimeObject.reconstruction?.reconstruction ??
+
+            this.runtimeObject.reconstruction?.result?.reconstruction ??
+
+            {};
+
+        return {
+
+            expression:
+                reconstruction.originalExpression || "",
+
+            reconstruction,
+
+            responsibilities:
+                reconstruction.responsibilities || [],
+
+            responsibilityCount:
+                reconstruction.responsibilityCount || 0,
+
+            verificationStatus:
+                reconstruction.verificationStatus || "pending"
 
         };
 

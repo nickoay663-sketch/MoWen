@@ -1,20 +1,20 @@
 class ResponsibilityEngine {
 
-    constructor(runtimeObject) {
+    constructor(semanticObject) {
 
-        this.runtimeObject = runtimeObject || {};
+        this.semanticObject = semanticObject || {};
 
     }
 
     run() {
 
         const responsibilities =
-            this.collectResponsibilities();
+            this.buildResponsibilities();
 
         return {
 
             semanticObject:
-                this.runtimeObject,
+                this.semanticObject,
 
             principle:
                 "莫问只建立责任关系，不提前裁决责任。",
@@ -43,43 +43,48 @@ class ResponsibilityEngine {
                 responsibilities.length > 0
                     ? []
                     : [
-                        "谁应当对该表达承担责任？"
+                        "谁应当对当前表达承担责任？"
                     ],
 
             version:
-                "3.1"
+                "3.5"
 
         };
 
     }
 
-    collectResponsibilities() {
+    buildResponsibilities() {
 
-        return [
+        const reasonings =
+            this.semanticObject.reasonings || [];
 
-            {
+        return reasonings.map(reasoning => ({
 
-                expression:
-                    this.runtimeObject.originalContent || "",
+            expression:
+                this.semanticObject.originalContent || "",
 
-                provider:
-                    null,
+            definition:
+                reasoning.definition,
 
-                source:
-                    null,
+            supported:
+                reasoning.supported,
 
-                reasoning:
-                    this.runtimeObject.reasoning || null,
+            evidenceCount:
+                reasoning.evidenceCount,
 
-                responsibilityType:
-                    "expression",
+            responsibilityType:
+                "expression",
 
-                verificationStatus:
-                    "pending"
+            provider:
+                null,
 
-            }
+            source:
+                null,
 
-        ];
+            verificationStatus:
+                "pending"
+
+        }));
 
     }
 

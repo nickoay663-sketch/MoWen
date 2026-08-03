@@ -8,42 +8,7 @@ class SelfCheckEngine {
 
     run() {
 
-        const checks = {
-
-            pipeline:
-                Array.isArray(this.runtimeObject.pipeline),
-
-            semanticObject:
-                !!this.runtimeObject.semanticObject,
-
-            recognition:
-                !!this.runtimeObject.recognition,
-
-            definition:
-                !!this.runtimeObject.definition,
-
-            search:
-                !!this.runtimeObject.search,
-
-            evidence:
-                !!this.runtimeObject.evidence,
-
-            correspondence:
-                !!this.runtimeObject.correspondence,
-
-            reasoning:
-                !!this.runtimeObject.reasoning,
-
-            responsibility:
-                !!this.runtimeObject.responsibility,
-
-            reconstruction:
-                !!this.runtimeObject.reconstruction,
-
-            generator:
-                !!this.runtimeObject.generator
-
-        };
+        const checks = this.buildChecks();
 
         const passed =
             Object.values(checks).every(Boolean);
@@ -81,11 +46,53 @@ class SelfCheckEngine {
                 passed
                     ? []
                     : [
-                        "运行链是否存在缺失模块？"
+                        "Runtime 是否存在缺失模块？",
+                        "Runtime 是否存在运行链断裂？"
                     ],
 
             version:
-                "3.2"
+                "3.3"
+
+        };
+
+    }
+
+    buildChecks() {
+
+        return {
+
+            pipeline:
+                !!this.runtimeObject.pipeline,
+
+            semanticObject:
+                !!this.runtimeObject.semanticObject,
+
+            recognition:
+                !!this.runtimeObject.recognition,
+
+            definition:
+                !!this.runtimeObject.definition,
+
+            search:
+                !!this.runtimeObject.search,
+
+            evidence:
+                !!this.runtimeObject.evidence,
+
+            correspondence:
+                !!this.runtimeObject.correspondence,
+
+            reasoning:
+                !!this.runtimeObject.reasoning,
+
+            responsibility:
+                !!this.runtimeObject.responsibility,
+
+            reconstruction:
+                !!this.runtimeObject.reconstruction,
+
+            generator:
+                !!this.runtimeObject.generator
 
         };
 
