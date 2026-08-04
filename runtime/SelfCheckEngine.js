@@ -12,6 +12,7 @@ class SelfCheckEngine {
         const checks =
             this.check();
 
+
         const contractReport =
             this.validateEngineContract();
 
@@ -27,7 +28,7 @@ class SelfCheckEngine {
                 "SelfCheckEngine",
 
             version:
-                "4.4",
+                "4.5",
 
 
             principle:
@@ -36,9 +37,7 @@ class SelfCheckEngine {
 
             checks,
 
-
             contractReport,
-
 
             passed,
 
@@ -128,27 +127,27 @@ class SelfCheckEngine {
     validateEngineContract() {
 
 
+        const contract =
+            this.runtimeObject.contract;
+
+
         const engines =
             this.runtimeObject.engines || {};
 
 
-        const requiredFields = [
 
-            "engine",
+        const engineContract =
+            contract?.engineContract || {};
 
-            "version",
 
-            "status",
 
-            "result",
+        const requiredFields =
+            engineContract.requiredFields || [];
 
-            "trace",
 
-            "questions",
 
-            "nextRuntimeState"
-
-        ];
+        const fieldTypes =
+            engineContract.fieldTypes || {};
 
 
 
@@ -157,6 +156,10 @@ class SelfCheckEngine {
 
             passed:
                 true,
+
+
+            totalEngines:
+                Object.keys(engines).length,
 
 
             engines: {}
@@ -168,9 +171,9 @@ class SelfCheckEngine {
         for (const [engineName, engine] of Object.entries(engines)) {
 
 
-            const missing = [];
+            const missingFields = [];
 
-            const invalid = [];
+            const invalidFields = [];
 
 
 
@@ -179,7 +182,7 @@ class SelfCheckEngine {
 
                 if (!(field in engine)) {
 
-                    missing.push(field);
+                    missingFields.push(field);
 
                     continue;
 
@@ -187,61 +190,30 @@ class SelfCheckEngine {
 
 
 
-                const value =
-                    engine[field];
+                const expectedType =
+                    fieldTypes[field];
 
 
 
-                if (
-
-                    field === "version" &&
-                    typeof value !== "string"
-
-                ) {
-
-                    invalid.push(field);
-
-                }
+                if (expectedType) {
 
 
+                    const valid =
+                        this.validateType(
 
-                if (
+                            engine[field],
 
-                    field === "trace" &&
-                    !Array.isArray(value)
+                            expectedType
 
-                ) {
-
-                    invalid.push(field);
-
-                }
+                        );
 
 
 
-                if (
+                    if (!valid) {
 
-                    field === "questions" &&
-                    !Array.isArray(value)
+                        invalidFields.push(field);
 
-                ) {
-
-                    invalid.push(field);
-
-                }
-
-
-
-                if (
-
-                    field === "result" &&
-                    (
-                        typeof value !== "object" ||
-                        value === null
-                    )
-
-                ) {
-
-                    invalid.push(field);
+                    }
 
                 }
 
@@ -262,8 +234,8 @@ class SelfCheckEngine {
                         (
 
                             requiredFields.length -
-                            missing.length -
-                            invalid.length
+                            missingFields.length -
+                            invalidFields.length
 
                         )
 
@@ -285,10 +257,10 @@ class SelfCheckEngine {
                 compliance,
 
 
-                missing,
+                missingFields,
 
 
-                invalid
+                invalidFields
 
             };
 
@@ -296,8 +268,8 @@ class SelfCheckEngine {
 
             if (
 
-                missing.length > 0 ||
-                invalid.length > 0
+                missingFields.length > 0 ||
+                invalidFields.length > 0
 
             ) {
 
@@ -310,6 +282,35 @@ class SelfCheckEngine {
 
 
         return report;
+
+    }
+
+
+
+    validateType(value, type) {
+
+
+        if (type === "array") {
+
+            return Array.isArray(value);
+
+        }
+
+
+        if (type === "object") {
+
+            return (
+
+                typeof value === "object" &&
+                value !== null &&
+                !Array.isArray(value)
+
+            );
+
+        }
+
+
+        return typeof value === type;
 
     }
 

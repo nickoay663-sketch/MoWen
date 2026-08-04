@@ -1,6 +1,6 @@
 const RuntimeContract = {
 
-    version: "4.1",
+    version: "4.2",
 
     principles: {
 
@@ -12,21 +12,29 @@ const RuntimeContract = {
 
     },
 
+
     identity: {
 
-        name: "MoWen Runtime",
+        name:
+            "MoWen Runtime",
 
-        runtimeVersion: "3.9",
+        runtimeVersion:
+            "3.9",
 
-        contractVersion: "4.1"
+        contractVersion:
+            "4.2"
 
     },
 
+
     pipeline: {
 
-        input: "Expression",
+        input:
+            "Expression",
 
-        output: "ResponsibilityReport",
+        output:
+            "ResponsibilityReport",
+
 
         engines: [
 
@@ -54,9 +62,12 @@ const RuntimeContract = {
 
     },
 
+
     engineContract: {
 
-        version: "1.0",
+        version:
+            "1.1",
+
 
         requiredFields: [
 
@@ -75,6 +86,51 @@ const RuntimeContract = {
             "nextRuntimeState"
 
         ],
+
+
+        fieldTypes: {
+
+            engine:
+                "string",
+
+            version:
+                "string",
+
+            status:
+                "string",
+
+            result:
+                "object",
+
+            trace:
+                "array",
+
+            questions:
+                "array",
+
+            nextRuntimeState:
+                "string"
+
+        },
+
+
+        complianceReport: {
+
+            enabled:
+                true,
+
+            metrics: [
+
+                "compliance",
+
+                "missingFields",
+
+                "invalidFields"
+
+            ]
+
+        },
+
 
         allowedStatus: [
 
@@ -96,44 +152,62 @@ const RuntimeContract = {
 
     },
 
+
     engineResult: {
 
-        engine: "",
+        engine:
+            "",
 
-        version: "",
+        version:
+            "",
 
-        status: "",
+        status:
+            "",
 
-        result: {},
+        result:
+            {},
 
-        trace: [],
+        trace:
+            [],
 
-        questions: [],
+        questions:
+            [],
 
-        nextRuntimeState: ""
+        nextRuntimeState:
+            ""
 
     },
 
+
     runtimeResult: {
 
-        runtimeVersion: "",
+        runtimeVersion:
+            "",
 
-        contractVersion: "",
+        contractVersion:
+            "",
 
-        identity: {},
+        identity:
+            {},
 
-        pipeline: [],
+        pipeline:
+            [],
 
-        semanticObject: {},
+        semanticObject:
+            {},
 
-        runtimeTrace: [],
+        runtimeTrace:
+            [],
 
-        selfCheck: {},
+        selfCheck:
+            {},
 
-        report: {}
+        report:
+            {}
 
     }
 
 };
+
 
 export default RuntimeContract;
