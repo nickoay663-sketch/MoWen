@@ -270,30 +270,37 @@ class HonestRuntime {
 
         });
 
-        return {
+    return {
 
-            runtimeVersion: "4.3",
+    runtimeVersion: "4.4",
 
-            contract: RuntimeContract,
+    contract: RuntimeContract,
 
-            contractVersion:
-                RuntimeContract.version,
+    contractVersion:
+        RuntimeContract.version,
 
-            identity,
+    identity,
 
-            pipeline,
+    pipeline,
 
-            language,
+    language,
 
-            semanticObject,
+    semanticObject,
 
-            engines,
 
-            selfCheck,
+    engines,
 
-            runtimeTrace: trace
 
-        };
+    // Runtime compatibility layer
+
+    generator,
+
+    selfCheck,
+
+
+    runtimeTrace: trace
+
+};
 
     }
 
