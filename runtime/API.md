@@ -1,13 +1,15 @@
 # MoWen Runtime API
 
-Version: 1.0
+Version: 7.6
 
 ---
 
 # Runtime
 
 ```javascript
-const runtime = new HonestRuntime(text);
+import MoWenRuntime from "./index.js";
+
+const runtime = new MoWenRuntime(text);
 
 const result = runtime.run();
 ```
@@ -16,7 +18,7 @@ const result = runtime.run();
 
 # Input
 
-Text
+Text Expression
 
 ---
 
@@ -24,13 +26,17 @@ Text
 
 RuntimeResult
 
+ReportFormatter
+
 ---
 
-# RuntimeResult
+# Runtime Pipeline
 
 Recognition
 
 Definition
+
+Search
 
 Evidence
 
@@ -40,7 +46,49 @@ Reasoning
 
 Responsibility
 
+Reconstruction
+
 Generator
+
+SelfCheck
+
+---
+
+# Runtime Metadata
+
+RuntimeVersion
+
+ContractVersion
+
+RuntimeTrace
+
+EngineRegistry
+
+GeneratedAt
+
+---
+
+# RuntimeResult
+
+Recognition
+
+Definition
+
+Search
+
+Evidence
+
+Correspondence
+
+Reasoning
+
+Responsibility
+
+Reconstruction
+
+Generator
+
+SelfCheck
 
 ---
 
@@ -53,4 +101,13 @@ RuntimeError
 # Status
 
 RuntimeStatus
-```
+
+---
+
+# Entry
+
+MoWenRuntime
+
+HonestRuntime
+
+ReportFormatter
