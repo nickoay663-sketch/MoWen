@@ -1,3 +1,4 @@
+
 class SelfCheckEngine {
 
 
@@ -103,6 +104,8 @@ class SelfCheckEngine {
 
             pipeline,
 
+            contract,
+
             semanticObject,
 
             definition,
@@ -127,6 +130,9 @@ class SelfCheckEngine {
 
         return {
 
+       contract:
+
+             !!contract,
 
 
             pipeline:
@@ -186,13 +192,11 @@ class SelfCheckEngine {
                 Array.isArray(correspondence.correspondences),
 
 
-
             reasoning:
 
                 !!reasoning &&
 
                 Array.isArray(reasoning.reasonings),
-
 
 
             responsibility:
@@ -202,18 +206,20 @@ class SelfCheckEngine {
                 Array.isArray(responsibility.responsibilities),
 
 
-
             reconstruction:
 
                 !!reconstruction,
 
 
-
-            generator:
+           generator:
 
                 !!generator &&
 
-                generator.status === "generator-ready"
+                (
+                    generator.status === "generator-ready" ||
+
+                    generator.status === "generator-connected"
+                )
 
 
         };

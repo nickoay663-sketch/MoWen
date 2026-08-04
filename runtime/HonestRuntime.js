@@ -10,6 +10,7 @@ import ReconstructionEngine from "./ReconstructionEngine.js";
 import GeneratorEngine from "./GeneratorEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
+import RuntimeContract from "./RuntimeContract.js";
 
 
 class HonestRuntime {
@@ -268,6 +269,10 @@ class HonestRuntime {
 
                 pipeline,
 
+                contract:
+
+                      RuntimeContract,
+
                 semanticObject,
 
                 recognition,
@@ -303,7 +308,10 @@ class HonestRuntime {
 
         return {
 
-            runtimeVersion: "3.9",
+    runtimeVersion: "3.9",
+
+    contractVersion:
+        RuntimeContract.version,
 
             pipeline,
 
