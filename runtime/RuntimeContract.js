@@ -1,7 +1,6 @@
 const RuntimeContract = {
 
-    version: "5.4",
-
+    version: "8.4",
 
     principles: {
 
@@ -12,10 +11,12 @@ const RuntimeContract = {
             "没有 Contract，就没有 Runtime。",
 
         registry:
-            "没有注册，就没有可信运行。"
+            "没有注册，就没有可信运行。",
+
+        result:
+            "没有 RuntimeResult，就没有统一运行结果。"
 
     },
-
 
     identity: {
 
@@ -23,13 +24,12 @@ const RuntimeContract = {
             "MoWen Runtime",
 
         runtimeVersion:
-            "3.9",
+            "8.4",
 
         contractVersion:
-            "5.4"
+            "8.4"
 
     },
-
 
     pipeline: {
 
@@ -37,8 +37,7 @@ const RuntimeContract = {
             "Expression",
 
         output:
-            "ResponsibilityReport",
-
+            "RuntimeResult",
 
         engines: [
 
@@ -66,12 +65,10 @@ const RuntimeContract = {
 
     },
 
-
     engineContract: {
 
         version:
-            "1.2",
-
+            "2.0",
 
         requiredFields: [
 
@@ -90,7 +87,6 @@ const RuntimeContract = {
             "nextRuntimeState"
 
         ],
-
 
         fieldTypes: {
 
@@ -115,130 +111,83 @@ const RuntimeContract = {
             nextRuntimeState:
                 "string"
 
-        },
+        }
 
+    },
 
-        registryContract: {
+    runtimeResultContract: {
 
-            required:
-                true,
+        requiredFields: [
 
+            "runtimeVersion",
 
-            requireMetadata:
-                true,
+            "generatedAt",
 
+            "metadata",
 
-            requiredMetadataFields: [
+            "recognition",
 
-                "name",
+            "definition",
 
-                "version",
+            "search",
 
-                "capabilities"
+            "evidence",
 
-            ]
+            "correspondence",
 
-        },
+            "reasoning",
 
+            "responsibility",
 
-        complianceReport: {
+            "reconstruction",
 
-            enabled:
-                true,
+            "generator",
 
+            "selfCheck",
 
-            metrics: [
+            "runtimeTrace",
 
-                "compliance",
+            "pipeline",
 
-                "missingFields",
-
-                "invalidFields"
-
-            ]
-
-        },
-
-
-        allowedStatus: [
-
-            "Passed",
-
-            "Failed",
-
-            "Need Definition",
-
-            "Need Evidence",
-
-            "Need Correspondence",
-
-            "Need Responsibility",
-
-            "Generated"
+            "engineRegistry"
 
         ]
 
     },
 
+    metadataContract: {
 
-    engineResult: {
+        requiredFields: [
 
-        engine:
-            "",
+            "runtimeVersion",
 
-        version:
-            "",
+            "contractVersion",
 
-        status:
-            "",
+            "engineCount",
 
-        result:
-            {},
+            "generatedAt"
 
-        trace:
-            [],
-
-        questions:
-            [],
-
-        nextRuntimeState:
-            ""
+        ]
 
     },
 
+    registryContract: {
 
-    runtimeResult: {
+        required:
+            true,
 
-    runtimeVersion:
-        "",
+        requiredMetadataFields: [
 
-    contractVersion:
-        "",
+            "name",
 
-    identity:
-        {},
+            "version",
 
-    pipeline:
-        [],
+            "capabilities"
 
-    registry:
-        {},
+        ]
 
-    semanticObject:
-        {},
-
-    runtimeTrace:
-        [],
-
-    selfCheck:
-        {},
-
-    report:
-        {}
-
-}
+    }
 
 };
-
 
 export default RuntimeContract;
