@@ -8,6 +8,9 @@ class ReasoningEngine {
 
     run() {
 
+        const metadata =
+            this.buildMetadata();
+
         const reasonings =
             this.buildReasonings();
 
@@ -17,7 +20,7 @@ class ReasoningEngine {
                 "ReasoningEngine",
 
             version:
-                "4.2",
+                "6.3",
 
             semanticObject:
                 this.semanticObject,
@@ -25,9 +28,13 @@ class ReasoningEngine {
             principle:
                 "莫问根据证据和来源状态生成推理状态，不直接生成事实结论。",
 
+            metadata,
+
             reasonings,
 
             result: {
+
+                metadata,
 
                 reasonings
 
@@ -60,6 +67,37 @@ class ReasoningEngine {
 
     }
 
+        buildMetadata() {
+
+        return {
+
+            generatedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                this.semanticObject.contract?.identity?.runtimeVersion || "",
+
+            contractVersion:
+                this.semanticObject.contract?.version || "",
+
+            engineCount:
+
+                Object.keys(
+
+                    this.semanticObject.engines || {}
+
+                ).length,
+
+            traceCount:
+
+                (this.semanticObject.runtimeTrace || []).length
+
+        };
+
+    }
+
+
+
     buildReasonings() {
 
         const correspondences =
@@ -69,7 +107,7 @@ class ReasoningEngine {
 
             return {
 
-                definition:
+                                definition:
                     item.definition,
 
                 evidences:
@@ -96,7 +134,14 @@ class ReasoningEngine {
 
                         ? "pending"
 
-                        : "insufficient-source"
+                        : "insufficient-source",
+
+                runtimeTrace:
+                    this.semanticObject.runtimeTrace || [],
+
+                engineRegistry:
+
+                    this.semanticObject.engineRegistry?.describe?.() || []
 
             };
 
