@@ -308,42 +308,44 @@ class HonestRuntime {
 
         return {
 
-    runtimeVersion: "3.9",
+    runtimeVersion: "4.2",
+
+    contract: RuntimeContract,
 
     contractVersion:
         RuntimeContract.version,
 
-            pipeline,
+    identity,
 
-            identity,
+    pipeline,
 
-            language,
+    language,
 
-            semanticObject,
+    semanticObject,
 
-            recognition,
+    recognition,
 
-            definition,
+    definition,
 
-            search,
+    search,
 
-            evidence,
+    evidence,
 
-            correspondence,
+    correspondence,
 
-            reasoning,
+    reasoning,
 
-            responsibility,
+    responsibility,
 
-            reconstruction,
+    reconstruction,
 
-            generator,
+    generator,
 
-            selfCheck,
+    selfCheck,
 
-            runtimeTrace: trace
+    runtimeTrace: trace
 
-        };
+};
 
     }
 
