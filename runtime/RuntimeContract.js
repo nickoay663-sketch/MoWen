@@ -1,6 +1,6 @@
 const RuntimeContract = {
 
-    version: "5.0",
+    version: "5.4",
 
 
     principles: {
@@ -11,8 +11,8 @@ const RuntimeContract = {
         runtime:
             "没有 Contract，就没有 Runtime。",
 
-        evolution:
-            "没有版本演化，就没有持续运行。"
+        registry:
+            "没有注册，就没有可信运行。"
 
     },
 
@@ -26,7 +26,7 @@ const RuntimeContract = {
             "3.9",
 
         contractVersion:
-            "5.0"
+            "5.4"
 
     },
 
@@ -67,75 +67,10 @@ const RuntimeContract = {
     },
 
 
-    contractEvolution: {
-
-        enabled:
-            true,
-
-
-        versionPolicy: {
-
-            major:
-                "Breaking change requires migration.",
-
-            minor:
-                "Backward compatible extension.",
-
-            patch:
-                "Compatible correction."
-
-        },
-
-
-        migrationSupport:
-
-        {
-
-            enabled:
-                true,
-
-            currentVersion:
-                "5.0"
-
-        }
-
-    },
-
-
     engineContract: {
 
-        engineRegistry: {
-
-    enabled:
-        true,
-
-
-    version:
-        "1.0",
-
-
-    registrationRequired:
-        true,
-
-
-    registryMethods: [
-
-        "register",
-
-        "get",
-
-        "all",
-
-        "has",
-
-        "list"
-
-    ]
-
-},
-
         version:
-            "2.0",
+            "1.2",
 
 
         requiredFields: [
@@ -183,42 +118,25 @@ const RuntimeContract = {
         },
 
 
-        selfDescription: {
+        registryContract: {
 
-            enabled:
+            required:
                 true,
 
 
-            requiredMetadata: [
+            requireMetadata:
+                true,
 
-                "engine",
+
+            requiredMetadataFields: [
+
+                "name",
 
                 "version",
 
                 "capabilities"
 
             ]
-
-        },
-
-
-        compatibility: {
-
-            enabled:
-                true,
-
-
-            strategy:
-
-                [
-
-                    "major",
-
-                    "minor",
-
-                    "patch"
-
-                ]
 
         },
 
@@ -274,9 +192,6 @@ const RuntimeContract = {
         status:
             "",
 
-        capabilities:
-            [],
-
         result:
             {},
 
@@ -311,6 +226,9 @@ const RuntimeContract = {
 
         runtimeTrace:
             [],
+
+        registry:
+            {},
 
         selfCheck:
             {},
