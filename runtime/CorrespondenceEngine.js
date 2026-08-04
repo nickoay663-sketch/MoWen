@@ -1,59 +1,49 @@
 class CorrespondenceEngine {
 
-
     constructor(semanticObject) {
 
         this.semanticObject = semanticObject || {};
 
     }
 
-
-
     run() {
 
+        const metadata =
+            this.buildMetadata();
 
         const correspondences =
-
             this.buildCorrespondences();
-
-
 
         return {
 
+            engine:
+                "CorrespondenceEngine",
+
+            version:
+                "6.4",
 
             semanticObject:
-
                 this.semanticObject,
 
-
-
             principle:
-
                 "莫问建立定义、证据和来源入口之间的对应关系。",
 
-
+            metadata,
 
             correspondences,
 
-
-
             result: {
+
+                metadata,
 
                 correspondences
 
             },
 
-
-
             trace: [],
 
-
-
             nextRuntimeState:
-
                 "ReasoningEngine",
-
-
 
             status:
 
@@ -63,8 +53,6 @@ class CorrespondenceEngine {
 
                     : "need-correspondence",
 
-
-
             questions:
 
                 correspondences.length > 0
@@ -73,14 +61,36 @@ class CorrespondenceEngine {
 
                     : [
                         "当前定义是否获得来源支持？"
-                    ],
+                    ]
 
+        };
 
+    }
 
-            version:
+        buildMetadata() {
 
-                "3.8"
+        return {
 
+            generatedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                this.semanticObject.contract?.identity?.runtimeVersion || "",
+
+            contractVersion:
+                this.semanticObject.contract?.version || "",
+
+            engineCount:
+
+                Object.keys(
+
+                    this.semanticObject.engines || {}
+
+                ).length,
+
+            traceCount:
+
+                (this.semanticObject.runtimeTrace || []).length
 
         };
 
@@ -88,88 +98,57 @@ class CorrespondenceEngine {
 
 
 
-
-
     buildCorrespondences() {
 
-
         const definitions =
-
             this.semanticObject.definitions || [];
 
-
-
         const evidences =
-
             this.semanticObject.evidences || [];
-
-
 
         return definitions.map(definition => {
 
-
-
             const matched =
 
-                evidences.filter(evidence =>
+                evidences.filter(
 
-                    evidence.conceptId === definition.id
+                    evidence =>
+
+                        evidence.conceptId === definition.id
 
                 );
 
-
-
             return {
 
-
-
-                definition,
-
-
+                                definition,
 
                 evidences:
-
                     matched,
 
-
-
                 evidenceCount:
-
                     matched.length,
-
-
 
                 sourceCount:
 
-                    matched.filter(item =>
+                    matched.filter(
 
-                        item.sourceAvailable === true
+                        item => item.sourceAvailable === true
 
                     ).length,
 
-
-
                 sourceAvailable:
 
-                    matched.some(item =>
+                    matched.some(
 
-                        item.sourceAvailable === true
+                        item => item.sourceAvailable === true
 
                     ),
 
-
-
                 supported:
-
                     matched.length > 0,
 
-
-
                 correspondenceType:
-
                     "definition-evidence-source",
-
-
 
                 verificationStatus:
 
@@ -177,19 +156,21 @@ class CorrespondenceEngine {
 
                         ? "pending"
 
-                        : "missing-evidence"
+                        : "missing-evidence",
 
+                runtimeTrace:
+                    this.semanticObject.runtimeTrace || [],
+
+                engineRegistry:
+
+                    this.semanticObject.engineRegistry?.describe?.() || []
 
             };
 
-
         });
-
 
     }
 
-
 }
-
 
 export default CorrespondenceEngine;
