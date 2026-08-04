@@ -8,10 +8,19 @@ class ReconstructionEngine {
 
     run() {
 
+        const metadata =
+            this.buildMetadata();
+
         const reconstruction =
             this.buildReconstruction();
 
         return {
+
+            engine:
+                "ReconstructionEngine",
+
+            version:
+                "6.1",
 
             semanticObject:
                 this.runtimeObject.semanticObject,
@@ -19,10 +28,16 @@ class ReconstructionEngine {
             principle:
                 "莫问重构表达，同时保持证据、来源和责任链完整。",
 
+            metadata,
+
             reconstruction,
 
             result: {
+
+                metadata,
+
                 reconstruction
+
             },
 
             trace: [],
@@ -33,14 +48,42 @@ class ReconstructionEngine {
             status:
                 "reconstruction-connected",
 
-            questions: [],
-
-            version:
-                "3.8"
+            questions: []
 
         };
 
     }
+
+        buildMetadata() {
+
+        return {
+
+            reconstructedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                this.runtimeObject.contract?.identity?.runtimeVersion || "",
+
+            contractVersion:
+                this.runtimeObject.contract?.version || "",
+
+            engineCount:
+
+                Object.keys(
+
+                    this.runtimeObject.engines || {}
+
+                ).length,
+
+            traceCount:
+
+                (this.runtimeObject.runtimeTrace || []).length
+
+        };
+
+    }
+
+
 
     buildReconstruction() {
 
@@ -48,9 +91,13 @@ class ReconstructionEngine {
             this.runtimeObject.responsibility?.responsibilities || [];
 
         const sources =
-            responsibilities.flatMap(item => item.sources || []);
+            responsibilities.flatMap(
 
-        return {
+                item => item.sources || []
+
+            );
+
+                    return {
 
             originalExpression:
                 this.runtimeObject.semanticObject?.originalContent || "",
@@ -84,7 +131,14 @@ class ReconstructionEngine {
                 false,
 
             verificationStatus:
-                "pending"
+                "pending",
+
+            runtimeTrace:
+                this.runtimeObject.runtimeTrace || [],
+
+            engineRegistry:
+
+                this.runtimeObject.engineRegistry?.describe?.() || []
 
         };
 
