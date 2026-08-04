@@ -17,25 +17,40 @@ class SelfCheckEngine {
             this.validateEngineContract();
 
 
+        const selfDescriptionReport =
+            this.validateEngineDescription();
+
+
         const failureExplanation =
-            this.createFailureExplanation(contractReport);
+            this.createFailureExplanation(
+
+                contractReport,
+
+                selfDescriptionReport
+
+            );
 
 
         const recoveryGuidance =
             this.createRecoveryGuidance(
+
                 failureExplanation
+
             );
 
 
         const auditTrail =
             this.createAuditTrail(
+
                 contractReport
+
             );
 
 
         const passed =
             Object.values(checks).every(Boolean) &&
-            contractReport.passed;
+            contractReport.passed &&
+            selfDescriptionReport.passed;
 
 
         return {
@@ -45,7 +60,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.9",
+                "5.1",
 
 
             principle:
@@ -56,6 +71,9 @@ class SelfCheckEngine {
 
 
             contractReport,
+
+
+            selfDescriptionReport,
 
 
             failureExplanation,
@@ -75,6 +93,8 @@ class SelfCheckEngine {
                 checks,
 
                 contractReport,
+
+                selfDescriptionReport,
 
                 failureExplanation,
 
@@ -222,17 +242,17 @@ class SelfCheckEngine {
                 if (expectedType) {
 
 
-                    const valid =
-                        this.validateType(
+                    if (
+
+                        !this.validateType(
 
                             engine[field],
 
                             expectedType
 
-                        );
+                        )
 
-
-                    if (!valid) {
+                    ) {
 
                         invalidFields.push(field);
 
@@ -243,38 +263,36 @@ class SelfCheckEngine {
             }
 
 
-            const compliance =
-
-                requiredFields.length === 0
-
-                    ? 100
-
-                    :
-
-                    Math.round(
-
-                        (
-
-                            requiredFields.length -
-                            missingFields.length -
-                            invalidFields.length
-
-                        )
-
-                        /
-
-                        requiredFields.length
-
-                        *
-
-                        100
-
-                    );
-
-
             report.engines[engineName] = {
 
-                compliance,
+                compliance:
+
+                    requiredFields.length === 0
+
+                        ? 100
+
+                        :
+
+                        Math.round(
+
+                            (
+
+                                requiredFields.length -
+                                missingFields.length -
+                                invalidFields.length
+
+                            )
+
+                            /
+
+                            requiredFields.length
+
+                            *
+
+                            100
+
+                        ),
+
 
                 missingFields,
 
@@ -303,14 +321,80 @@ class SelfCheckEngine {
 
 
 
-    createFailureExplanation(report) {
+    validateEngineDescription() {
+
+
+        const engines =
+            this.runtimeObject.engines || {};
+
+
+        const report = {
+
+            passed:
+                true,
+
+
+            engines: {}
+
+        };
+
+
+        for (const [engineName, engine] of Object.entries(engines)) {
+
+
+            const missing = [];
+
+
+            if (!engine.engine) {
+
+                missing.push("engine");
+
+            }
+
+
+            if (!engine.version) {
+
+                missing.push("version");
+
+            }
+
+
+            if (!Array.isArray(engine.capabilities)) {
+
+                missing.push("capabilities");
+
+            }
+
+
+            report.engines[engineName] = {
+
+                missing
+
+            };
+
+
+            if (missing.length > 0) {
+
+                report.passed = false;
+
+            }
+
+        }
+
+
+        return report;
+
+    }
+
+
+
+    createFailureExplanation(contractReport, descriptionReport) {
 
 
         const failures = [];
 
 
-        for (const [engineName, data] of Object.entries(report.engines)) {
-
+        for (const [engineName, data] of Object.entries(contractReport.engines)) {
 
             if (
 
@@ -319,35 +403,45 @@ class SelfCheckEngine {
 
             ) {
 
+                failures.push({
+
+                    engine: engineName,
+
+                    problemType:
+                        "contract-failure",
+
+                    fields:
+                        [
+                            ...data.missingFields,
+                            ...data.invalidFields
+                        ],
+
+                    impact:
+                        "该 Engine 不符合运行契约。"
+
+                });
+
+            }
+
+        }
+
+
+        for (const [engineName, data] of Object.entries(descriptionReport.engines)) {
+
+            if (data.missing.length > 0) {
 
                 failures.push({
 
-                    engine:
-                        engineName,
-
+                    engine: engineName,
 
                     problemType:
-
-                        data.missingFields.length > 0
-
-                            ? "missing-fields"
-
-                            : "invalid-fields",
-
+                        "self-description-failure",
 
                     fields:
-
-                        [
-
-                            ...data.missingFields,
-
-                            ...data.invalidFields
-
-                        ],
-
+                        data.missing,
 
                     impact:
-                        "该 Engine 不符合运行契约，结果不能被完全信任。"
+                        "该 Engine 无法完整描述自身能力。"
 
                 });
 
@@ -364,9 +458,7 @@ class SelfCheckEngine {
 
     createRecoveryGuidance(failures) {
 
-
         return failures.map(failure => {
-
 
             return {
 
@@ -375,28 +467,21 @@ class SelfCheckEngine {
 
 
                 action:
-
-                    failure.fields.length > 0
-
-                        ? "补充或修正缺失字段后重新运行 SelfCheck。"
-
-                        : "检查 Engine 输出契约后重新运行。",
+                    "补充 Engine 自描述信息或修正 Contract 后重新运行 SelfCheck。",
 
 
                 reason:
-                    "当前 Engine 输出不满足 Runtime Contract，需要人工修正。"
+                    failure.impact
 
             };
 
         });
-
 
     }
 
 
 
     createAuditTrail(contractReport) {
-
 
         return {
 
@@ -405,7 +490,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.9",
+                "5.1",
 
 
             timestamp:
@@ -413,11 +498,7 @@ class SelfCheckEngine {
 
 
             checkedEngines:
-                Object.keys(
-
-                    contractReport.engines
-
-                ),
+                Object.keys(contractReport.engines),
 
 
             runtimeTrace:
@@ -442,7 +523,6 @@ class SelfCheckEngine {
 
 
     validateType(value, type) {
-
 
         if (type === "array") {
 
