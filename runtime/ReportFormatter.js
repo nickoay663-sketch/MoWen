@@ -8,46 +8,10 @@ class ReportFormatter {
 
     run() {
 
-        const {
-
-            identity,
-
-            semanticObject,
-
-            recognition,
-
-            definition,
-
-            search,
-
-            evidence,
-
-            correspondence,
-
-            reasoning,
-
-            responsibility,
-
-            reconstruction,
-
-            generator,
-
-            selfCheck,
-
-            runtimeTrace,
-
-            engineRegistry,
-
-            contract,
-
-            contractVersion
-
-        } = this.runtimeResult;
-
-                return {
+        return {
 
             version:
-                "7.1",
+                "8.2",
 
             principle:
                 "莫问只整理运行结果，不增加新的判断。",
@@ -55,103 +19,41 @@ class ReportFormatter {
             metadata: {
 
                 generatedAt:
-                    new Date().toISOString(),
+                    this.runtimeResult.generatedAt,
 
                 runtimeVersion:
-                    "7.1",
+                    this.runtimeResult.runtimeVersion,
 
-                contractVersion,
+                contractVersion:
+                    this.runtimeResult.metadata?.contractVersion || null,
 
                 engineCount:
-
-                    engineRegistry?.list?.().length || 0
-
-            },
-
-            report: {
-
-                identity,
-
-                object:
-                    semanticObject,
-
-                recognition,
-
-                definition,
-
-                search,
-
-                evidence,
-
-                correspondence,
-
-                reasoning,
-
-                responsibility,
-
-                reconstruction,
-
-                generator,
-
-                selfCheck,
-
-                contract,
-
-                runtimeTrace,
-
-                engineRegistry
+                    this.runtimeResult.metadata?.engineCount || 0
 
             },
+
+            report:
+                this.runtimeResult,
 
             status:
 
-                selfCheck?.passed
+                this.runtimeResult.selfCheck?.passed
 
                     ? "report-generated"
 
                     : "report-warning",
 
             questions:
-                selfCheck?.questions || [],
+
+                this.runtimeResult.selfCheck?.questions || [],
 
             trace:
-                this.buildTrace(runtimeTrace)
+
+                this.runtimeResult.runtimeTrace ||
+
+                []
 
         };
-
-    }
-
-        buildTrace(runtimeTrace = []) {
-
-        if (runtimeTrace.length > 0) {
-
-            return runtimeTrace;
-
-        }
-
-        return [
-
-            "RecognitionCompleted",
-
-            "DefinitionCompleted",
-
-            "SearchCompleted",
-
-            "EvidenceCompleted",
-
-            "CorrespondenceCompleted",
-
-            "ReasoningCompleted",
-
-            "ResponsibilityCompleted",
-
-            "ReconstructionCompleted",
-
-            "GeneratorCompleted",
-
-            "SelfCheckCompleted"
-
-        ];
 
     }
 
