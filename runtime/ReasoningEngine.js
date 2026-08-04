@@ -1,41 +1,31 @@
 class ReasoningEngine {
 
-
     constructor(semanticObject) {
 
         this.semanticObject = semanticObject || {};
 
     }
 
-
-
     run() {
 
-
         const reasonings =
-
             this.buildReasonings();
-
-
 
         return {
 
+            engine:
+                "ReasoningEngine",
+
+            version:
+                "4.2",
 
             semanticObject:
-
                 this.semanticObject,
 
-
-
             principle:
-
                 "莫问根据证据和来源状态生成推理状态，不直接生成事实结论。",
 
-
-
             reasonings,
-
-
 
             result: {
 
@@ -43,27 +33,7 @@ class ReasoningEngine {
 
             },
 
-
-
             trace: [],
-
-
-
-            nextRuntimeState:
-
-                "ResponsibilityEngine",
-
-
-
-            status:
-
-                reasonings.length > 0
-
-                    ? "reasoning-connected"
-
-                    : "need-reasoning",
-
-
 
             questions:
 
@@ -75,79 +45,50 @@ class ReasoningEngine {
                         "当前推理是否具有来源支持？"
                     ],
 
+            nextRuntimeState:
+                "ResponsibilityEngine",
 
+            status:
 
-            version:
+                reasonings.length > 0
 
-                "3.8"
+                    ? "reasoning-connected"
 
+                    : "need-reasoning"
 
         };
 
     }
 
-
-
-
-
     buildReasonings() {
 
-
         const correspondences =
-
             this.semanticObject.correspondences || [];
-
-
 
         return correspondences.map(item => {
 
-
-
             return {
 
-
-
                 definition:
-
                     item.definition,
 
-
-
                 evidences:
-
                     item.evidences || [],
 
-
-
                 evidenceCount:
-
                     item.evidenceCount || 0,
 
-
-
                 sourceAvailable:
-
                     item.sourceAvailable || false,
 
-
-
                 sourceCount:
-
                     item.sourceCount || 0,
 
-
-
                 supported:
-
                     item.supported || false,
 
-
-
                 reasoningType:
-
                     "source-supported-chain",
-
-
 
                 verificationStatus:
 
@@ -157,17 +98,12 @@ class ReasoningEngine {
 
                         : "insufficient-source"
 
-
             };
-
 
         });
 
-
     }
 
-
 }
-
 
 export default ReasoningEngine;
