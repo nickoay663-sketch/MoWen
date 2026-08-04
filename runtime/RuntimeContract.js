@@ -118,13 +118,19 @@ const RuntimeContract = {
 
         runtimeVersion: "",
 
+        contractVersion: "",
+
+        identity: {},
+
         pipeline: [],
 
         semanticObject: {},
 
         runtimeTrace: [],
 
-        selfCheck: {}
+        selfCheck: {},
+
+        report: {}
 
     }
 
