@@ -33,7 +33,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.6",
+                "4.7",
 
 
             principle:
@@ -138,7 +138,6 @@ class SelfCheckEngine {
 
     validateEngineContract() {
 
-
         const contract =
             this.runtimeObject.contract;
 
@@ -160,7 +159,6 @@ class SelfCheckEngine {
 
 
         const report = {
-
 
             passed:
                 true,
@@ -200,7 +198,6 @@ class SelfCheckEngine {
 
 
                 if (expectedType) {
-
 
                     const valid =
                         this.validateType(
@@ -254,12 +251,9 @@ class SelfCheckEngine {
 
             report.engines[engineName] = {
 
-
                 compliance,
 
-
                 missingFields,
-
 
                 invalidFields
 
@@ -296,7 +290,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.6",
+                "4.7",
 
 
             timestamp:
@@ -309,6 +303,14 @@ class SelfCheckEngine {
                     contractReport.engines
 
                 ),
+
+
+            runtimeTrace:
+                this.runtimeObject.runtimeTrace || [],
+
+
+            traceCount:
+                (this.runtimeObject.runtimeTrace || []).length,
 
 
             validationResult:
