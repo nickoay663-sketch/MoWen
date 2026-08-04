@@ -11,6 +11,7 @@ import GeneratorEngine from "./GeneratorEngine.js";
 import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 import RuntimeContract from "./RuntimeContract.js";
+import EngineRegistry from "./EngineRegistry.js";
 
 class HonestRuntime {
 
@@ -227,40 +228,75 @@ class HonestRuntime {
 
         });
 
-        const engines = {
+        const engineRegistry =
+    new EngineRegistry();
 
-            recognition,
 
-            definition,
+engineRegistry.register(
+    "recognition",
+    recognition
+);
 
-            search,
+engineRegistry.register(
+    "definition",
+    definition
+);
 
-            evidence,
+engineRegistry.register(
+    "search",
+    search
+);
 
-            correspondence,
+engineRegistry.register(
+    "evidence",
+    evidence
+);
 
-            reasoning,
+engineRegistry.register(
+    "correspondence",
+    correspondence
+);
 
-            responsibility,
+engineRegistry.register(
+    "reasoning",
+    reasoning
+);
 
-            reconstruction,
+engineRegistry.register(
+    "responsibility",
+    responsibility
+);
 
-            generator
+engineRegistry.register(
+    "reconstruction",
+    reconstruction
+);
 
-        };
+engineRegistry.register(
+    "generator",
+    generator
+);
+
+
+const engines =
+    engineRegistry.all();
 
         const selfCheck =
-            new SelfCheckEngine({
+    new SelfCheckEngine({
 
-                pipeline,
+        pipeline,
 
-                contract: RuntimeContract,
+        contract: RuntimeContract,
 
-                engines,
+        engines,
 
-                semanticObject
+        engineRegistry,
 
-            }).run();
+        semanticObject,
+
+        runtimeTrace: trace
+
+    }).run();
 
         trace.push({
 
@@ -270,37 +306,37 @@ class HonestRuntime {
 
         });
 
-    return {
+        return {
 
-    runtimeVersion: "4.4",
+            runtimeVersion: "4.4",
 
-    contract: RuntimeContract,
+            contract: RuntimeContract,
 
-    contractVersion:
-        RuntimeContract.version,
+            contractVersion:
+                RuntimeContract.version,
 
-    identity,
+            identity,
 
-    pipeline,
+            pipeline,
 
-    language,
+            language,
 
-    semanticObject,
-
-
-    engines,
+            semanticObject,
 
 
-    // Runtime compatibility layer
-
-    generator,
-
-    selfCheck,
+            engines,
 
 
-    runtimeTrace: trace
+            // Runtime compatibility layer
 
-};
+            generator,
+
+            selfCheck,
+
+
+            runtimeTrace: trace
+
+        };
 
     }
 

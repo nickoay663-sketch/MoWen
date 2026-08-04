@@ -1,6 +1,7 @@
 const RuntimeContract = {
 
-    version: "4.2",
+    version: "5.0",
+
 
     principles: {
 
@@ -8,7 +9,10 @@ const RuntimeContract = {
             "没有定义，就没有推理。",
 
         runtime:
-            "没有 Contract，就没有 Runtime。"
+            "没有 Contract，就没有 Runtime。",
+
+        evolution:
+            "没有版本演化，就没有持续运行。"
 
     },
 
@@ -22,7 +26,7 @@ const RuntimeContract = {
             "3.9",
 
         contractVersion:
-            "4.2"
+            "5.0"
 
     },
 
@@ -63,10 +67,75 @@ const RuntimeContract = {
     },
 
 
+    contractEvolution: {
+
+        enabled:
+            true,
+
+
+        versionPolicy: {
+
+            major:
+                "Breaking change requires migration.",
+
+            minor:
+                "Backward compatible extension.",
+
+            patch:
+                "Compatible correction."
+
+        },
+
+
+        migrationSupport:
+
+        {
+
+            enabled:
+                true,
+
+            currentVersion:
+                "5.0"
+
+        }
+
+    },
+
+
     engineContract: {
 
+        engineRegistry: {
+
+    enabled:
+        true,
+
+
+    version:
+        "1.0",
+
+
+    registrationRequired:
+        true,
+
+
+    registryMethods: [
+
+        "register",
+
+        "get",
+
+        "all",
+
+        "has",
+
+        "list"
+
+    ]
+
+},
+
         version:
-            "1.1",
+            "2.0",
 
 
         requiredFields: [
@@ -114,10 +183,51 @@ const RuntimeContract = {
         },
 
 
+        selfDescription: {
+
+            enabled:
+                true,
+
+
+            requiredMetadata: [
+
+                "engine",
+
+                "version",
+
+                "capabilities"
+
+            ]
+
+        },
+
+
+        compatibility: {
+
+            enabled:
+                true,
+
+
+            strategy:
+
+                [
+
+                    "major",
+
+                    "minor",
+
+                    "patch"
+
+                ]
+
+        },
+
+
         complianceReport: {
 
             enabled:
                 true,
+
 
             metrics: [
 
@@ -163,6 +273,9 @@ const RuntimeContract = {
 
         status:
             "",
+
+        capabilities:
+            [],
 
         result:
             {},
