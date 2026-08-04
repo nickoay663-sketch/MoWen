@@ -1,6 +1,4 @@
-
 class SelfCheckEngine {
-
 
     constructor(runtimeObject) {
 
@@ -8,69 +6,46 @@ class SelfCheckEngine {
 
     }
 
-
-
     run() {
 
-
         const checks =
-
             this.check();
 
-
+        const contractChecks =
+            this.validateEngineContract();
 
         const passed =
-
-            Object.values(checks).every(Boolean);
-
-
+            Object.values(checks).every(Boolean) &&
+            Object.values(contractChecks).every(Boolean);
 
         return {
 
+            engine:
+                "SelfCheckEngine",
+
+            version:
+                "4.2",
 
             principle:
-
-                "莫问检查自身运行结构，不判断表达结果。",
-
-
+                "莫问检查自身运行契约，不判断表达结果。",
 
             checks,
 
-
+            contractChecks,
 
             passed,
-
-
 
             result: {
 
                 checks,
 
+                contractChecks,
+
                 passed
 
             },
 
-
-
             trace: [],
-
-
-
-            nextRuntimeState:
-
-                "RuntimeCompleted",
-
-
-
-            status:
-
-                passed
-
-                    ? "self-check-passed"
-
-                    : "self-check-warning",
-
-
 
             questions:
 
@@ -79,26 +54,25 @@ class SelfCheckEngine {
                     ? []
 
                     : [
-                        "运行链是否存在验证缺口？"
+                        "运行链是否存在契约违反？"
                     ],
 
+            nextRuntimeState:
+                "RuntimeCompleted",
 
+            status:
 
-            version:
+                passed
 
-                "3.7"
+                    ? "self-check-passed"
 
+                    : "self-check-warning"
 
         };
 
     }
 
-
-
-
-
     check() {
-
 
         const {
 
@@ -126,109 +100,85 @@ class SelfCheckEngine {
 
         } = this.runtimeObject;
 
-
-
         return {
 
-       contract:
-
-             !!contract,
-
+            contract:
+                !!contract,
 
             pipeline:
-
                 Array.isArray(pipeline),
 
-
-
             semanticObject:
-
                 !!semanticObject,
 
-
-
             definition:
-
                 !!definition,
 
-
-
             search:
-
-                !!search &&
-
-                Array.isArray(search.searches),
-
-
+                !!search,
 
             evidence:
-
-                !!evidence &&
-
-                Array.isArray(evidence.evidences),
-
-
-
-            evidenceSourceStructure:
-
-                evidence?.evidences
-
-                    ? evidence.evidences.every(item =>
-
-                        "source" in item &&
-
-                        "reference" in item
-
-                    )
-
-                    : false,
-
-
+                !!evidence,
 
             correspondence:
-
-                !!correspondence &&
-
-                Array.isArray(correspondence.correspondences),
-
+                !!correspondence,
 
             reasoning:
-
-                !!reasoning &&
-
-                Array.isArray(reasoning.reasonings),
-
+                !!reasoning,
 
             responsibility:
-
-                !!responsibility &&
-
-                Array.isArray(responsibility.responsibilities),
-
+                !!responsibility,
 
             reconstruction:
-
                 !!reconstruction,
 
-
-           generator:
-
-                !!generator &&
-
-                (
-                    generator.status === "generator-ready" ||
-
-                    generator.status === "generator-connected"
-                )
-
+            generator:
+                !!generator
 
         };
 
+    }
+
+    validateEngineContract() {
+
+        const contract =
+            this.runtimeObject.contract;
+
+        if (!contract?.engineContract) {
+
+            return {
+
+                contractLoaded: false
+
+            };
+
+        }
+
+        const requiredFields =
+            contract.engineContract.requiredFields || [];
+
+        const generator =
+            this.runtimeObject.generator || {};
+
+        const result = {};
+
+        for (const field of requiredFields) {
+
+            result[field] =
+                field in generator;
+
+        }
+
+        return {
+
+            contractLoaded: true,
+
+            ...result
+
+        };
 
     }
 
-
 }
-
 
 export default SelfCheckEngine;
