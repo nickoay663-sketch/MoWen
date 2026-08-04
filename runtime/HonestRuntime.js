@@ -12,7 +12,6 @@ import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 import RuntimeContract from "./RuntimeContract.js";
 
-
 class HonestRuntime {
 
     constructor(expression) {
@@ -21,11 +20,9 @@ class HonestRuntime {
 
     }
 
-
     run() {
 
         const trace = [];
-
 
         const pipeline = [
 
@@ -42,20 +39,14 @@ class HonestRuntime {
 
         ];
 
-
         const identity =
             new MoWenIdentity().run();
-
-
 
         const language =
             new LanguageDetector(this.expression).run();
 
-
-
         const recognition =
             new RecognitionEngine(this.expression).run();
-
 
         trace.push({
 
@@ -64,8 +55,6 @@ class HonestRuntime {
             version: recognition.version
 
         });
-
-
 
         const semanticObject = {
 
@@ -88,11 +77,8 @@ class HonestRuntime {
 
         };
 
-
-
         const definition =
             new DefinitionEngine(semanticObject).run();
-
 
         trace.push({
 
@@ -102,11 +88,8 @@ class HonestRuntime {
 
         });
 
-
-
         const search =
             new SearchEngine(semanticObject).run();
-
 
         trace.push({
 
@@ -115,8 +98,6 @@ class HonestRuntime {
             version: search.version
 
         });
-
-
 
         const evidence =
             new EvidenceEngine({
@@ -127,7 +108,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "EvidenceEngine",
@@ -135,8 +115,6 @@ class HonestRuntime {
             version: evidence.version
 
         });
-
-
 
         const correspondence =
             new CorrespondenceEngine({
@@ -157,7 +135,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "CorrespondenceEngine",
@@ -165,8 +142,6 @@ class HonestRuntime {
             version: correspondence.version
 
         });
-
-
 
         const reasoning =
             new ReasoningEngine({
@@ -180,7 +155,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "ReasoningEngine",
@@ -188,8 +162,6 @@ class HonestRuntime {
             version: reasoning.version
 
         });
-
-
 
         const responsibility =
             new ResponsibilityEngine({
@@ -203,7 +175,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "ResponsibilityEngine",
@@ -211,8 +182,6 @@ class HonestRuntime {
             version: responsibility.version
 
         });
-
-
 
         const reconstruction =
             new ReconstructionEngine({
@@ -231,7 +200,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "ReconstructionEngine",
@@ -239,8 +207,6 @@ class HonestRuntime {
             version: reconstruction.version
 
         });
-
-
 
         const generator =
             new GeneratorEngine({
@@ -253,7 +219,6 @@ class HonestRuntime {
 
             }).run();
 
-
         trace.push({
 
             engine: "GeneratorEngine",
@@ -262,39 +227,40 @@ class HonestRuntime {
 
         });
 
+        const engines = {
 
+            recognition,
+
+            definition,
+
+            search,
+
+            evidence,
+
+            correspondence,
+
+            reasoning,
+
+            responsibility,
+
+            reconstruction,
+
+            generator
+
+        };
 
         const selfCheck =
             new SelfCheckEngine({
 
                 pipeline,
 
-                contract:
+                contract: RuntimeContract,
 
-                      RuntimeContract,
+                engines,
 
-                semanticObject,
-
-                recognition,
-
-                definition,
-
-                search,
-
-                evidence,
-
-                correspondence,
-
-                reasoning,
-
-                responsibility,
-
-                reconstruction,
-
-                generator
+                semanticObject
 
             }).run();
-
 
         trace.push({
 
@@ -304,52 +270,33 @@ class HonestRuntime {
 
         });
 
-
-
         return {
 
-    runtimeVersion: "4.2",
+            runtimeVersion: "4.3",
 
-    contract: RuntimeContract,
+            contract: RuntimeContract,
 
-    contractVersion:
-        RuntimeContract.version,
+            contractVersion:
+                RuntimeContract.version,
 
-    identity,
+            identity,
 
-    pipeline,
+            pipeline,
 
-    language,
+            language,
 
-    semanticObject,
+            semanticObject,
 
-    recognition,
+            engines,
 
-    definition,
+            selfCheck,
 
-    search,
+            runtimeTrace: trace
 
-    evidence,
-
-    correspondence,
-
-    reasoning,
-
-    responsibility,
-
-    reconstruction,
-
-    generator,
-
-    selfCheck,
-
-    runtimeTrace: trace
-
-};
+        };
 
     }
 
 }
-
 
 export default HonestRuntime;
