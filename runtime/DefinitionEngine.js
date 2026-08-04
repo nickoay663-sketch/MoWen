@@ -12,10 +12,19 @@ class DefinitionEngine {
 
     run() {
 
+        const metadata =
+            this.buildMetadata();
+
         const definitions =
             this.findDefinitions();
 
         return {
+
+            engine:
+                "DefinitionEngine",
+
+            version:
+                "6.7",
 
             semanticObject:
                 this.semanticObject,
@@ -23,40 +32,82 @@ class DefinitionEngine {
             principle:
                 MoWenConfig.principles.definition,
 
+            metadata,
+
             definitions,
 
             result: {
+
+                metadata,
 
                 definitions
 
             },
 
             status:
+
                 definitions.length > 0
+
                     ? "definition-available"
+
                     : "need-definition-verification",
 
             questions:
+
                 definitions.length > 0
+
                     ? []
+
                     : [
                         "该表达中的概念是否已经明确定义？"
-                    ],
-
-            version:
-                "2.4"
+                    ]
 
         };
 
     }
 
+        buildMetadata() {
+
+        return {
+
+            generatedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                this.semanticObject.contract?.identity?.runtimeVersion || "",
+
+            contractVersion:
+                this.semanticObject.contract?.version || "",
+
+            engineCount:
+
+                Object.keys(
+
+                    this.semanticObject.engines || {}
+
+                ).length,
+
+            traceCount:
+
+                (this.semanticObject.runtimeTrace || []).length
+
+        };
+
+    }
+
+
+
     getDefinitions() {
 
         return this.semanticObject.language === "es-ES"
+
             ? SpanishDefinitions
+
             : Definitions;
 
     }
+
+
 
     findDefinitions() {
 
@@ -68,9 +119,11 @@ class DefinitionEngine {
 
         return concepts
 
-            .filter(concept =>
+                    .filter(
 
-                library[concept.word || concept]
+                concept =>
+
+                    library[concept.word || concept]
 
             )
 
@@ -83,7 +136,14 @@ class DefinitionEngine {
                     library[concept.word || concept],
 
                 source:
-                    "MoWen Definition Library"
+                    "MoWen Definition Library",
+
+                runtimeTrace:
+                    this.semanticObject.runtimeTrace || [],
+
+                engineRegistry:
+
+                    this.semanticObject.engineRegistry?.describe?.() || []
 
             }));
 
