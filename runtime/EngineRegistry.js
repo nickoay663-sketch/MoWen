@@ -39,13 +39,11 @@ class EngineRegistry {
     }
 
 
-
     get(name) {
 
         return this.engines[name];
 
     }
-
 
 
     getEngine(name) {
@@ -55,13 +53,11 @@ class EngineRegistry {
     }
 
 
-
     all() {
 
         return this.engines;
 
     }
-
 
 
     has(name) {
@@ -71,54 +67,95 @@ class EngineRegistry {
     }
 
 
-
     list() {
 
         return Object.keys(this.engines);
 
     }
 
-    validateVersions(contractVersion) {
+        validateVersions(contractVersion) {
 
-    const report = {
+        const report = {
 
-        passed: true,
+            passed:
+                true,
 
-        versions: {},
+            contractVersion,
 
-        contractVersion
-
-    };
-
-    for (const [name, engine] of Object.entries(this.engines)) {
-
-        const version = engine.version || "unknown";
-
-        report.versions[name] = {
-
-            version,
-
-            valid:
-
-                version !== "unknown"
+            versions: {}
 
         };
 
-        if (version === "unknown") {
 
-            report.passed = false;
+        for (const [name, item] of Object.entries(this.engines)) {
+
+            const version =
+                item.version || "unknown";
+
+
+            report.versions[name] = {
+
+                version,
+
+                valid:
+                    version !== "unknown"
+
+            };
+
+
+            if (version === "unknown") {
+
+                report.passed = false;
+
+            }
 
         }
 
+
+        return report;
+
     }
 
-    return report;
-
-}
 
 
+    statistics() {
 
-    describe() {
+        const engines =
+            Object.values(this.engines);
+
+
+        return {
+
+            total:
+                engines.length,
+
+            versions:
+
+                engines.map(
+
+                    item => item.version
+
+                ),
+
+            capabilities:
+
+                engines.reduce(
+
+                    (count, item) =>
+
+                        count +
+
+                        item.capabilities.length,
+
+                    0
+
+                )
+
+        };
+
+    }
+
+        describe() {
 
         return Object.values(
 
@@ -135,7 +172,10 @@ class EngineRegistry {
                     item.version,
 
                 capabilities:
-                    item.capabilities
+                    item.capabilities,
+
+                registeredAt:
+                    item.registeredAt
 
             };
 
@@ -158,7 +198,6 @@ class EngineRegistry {
 
 
         for (const [name, item] of Object.entries(this.engines)) {
-
 
             const missing = [];
 
@@ -186,7 +225,16 @@ class EngineRegistry {
 
             result.engines[name] = {
 
-                missing
+                missing,
+
+                version:
+                    item.version,
+
+                capabilityCount:
+                    item.capabilities.length,
+
+                registeredAt:
+                    item.registeredAt
 
             };
 
@@ -205,6 +253,5 @@ class EngineRegistry {
     }
 
 }
-
 
 export default EngineRegistry;
