@@ -3,7 +3,7 @@ class RuntimeResult {
     constructor() {
 
         this.runtimeVersion =
-            "7.0";
+            "8.0";
 
         this.generatedAt =
             new Date().toISOString();
@@ -38,7 +38,7 @@ class RuntimeResult {
         this.selfCheck =
             null;
 
-                    this.engineRegistry =
+        this.engineRegistry =
             null;
 
         this.runtimeTrace =
@@ -53,7 +53,7 @@ class RuntimeResult {
                 null,
 
             runtimeVersion:
-                "7.0",
+                "8.0",
 
             engineCount:
                 0,
@@ -65,21 +65,6 @@ class RuntimeResult {
 
     }
 
-        setMetadata(metadata = {}) {
-
-        this.metadata = {
-
-            ...this.metadata,
-
-            ...metadata
-
-        };
-
-        return this;
-
-    }
-
-}
     setMetadata(metadata = {}) {
 
         this.metadata = {
@@ -94,5 +79,30 @@ class RuntimeResult {
 
     }
 
+    setEngine(name, value) {
+
+        this[name] = value;
+
+        return this;
+
+    }
+
+    setTrace(trace = []) {
+
+        this.runtimeTrace = trace;
+
+        return this;
+
+    }
+
+    setPipeline(pipeline = []) {
+
+        this.pipeline = pipeline;
+
+        return this;
+
+    }
+
+}
 
 export default RuntimeResult;
