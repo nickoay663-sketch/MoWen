@@ -78,6 +78,44 @@ class EngineRegistry {
 
     }
 
+    validateVersions(contractVersion) {
+
+    const report = {
+
+        passed: true,
+
+        versions: {},
+
+        contractVersion
+
+    };
+
+    for (const [name, engine] of Object.entries(this.engines)) {
+
+        const version = engine.version || "unknown";
+
+        report.versions[name] = {
+
+            version,
+
+            valid:
+
+                version !== "unknown"
+
+        };
+
+        if (version === "unknown") {
+
+            report.passed = false;
+
+        }
+
+    }
+
+    return report;
+
+}
+
 
 
     describe() {
