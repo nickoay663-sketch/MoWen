@@ -31,10 +31,8 @@ class HonestRuntime {
 
         const trace = [];
 
-        const trace = [];
-
-const runtimeResult =
-    new RuntimeResult();
+        const runtimeResult =
+            new RuntimeResult();
 
 
         const pipeline = [
@@ -420,74 +418,83 @@ const runtimeResult =
 
         });
 
+        runtimeResult.runtimeVersion =
+            "8.1";
 
         runtimeResult.setMetadata({
 
-    contractVersion:
-        RuntimeContract.version,
+            contractVersion:
+                RuntimeContract.version,
 
-    runtimeVersion:
-        "8.1",
+            runtimeVersion:
+                "8.1",
 
-    engineCount:
-        engineRegistry.list().length
+            engineCount:
+                engineRegistry.list().length
 
-});
+        });
 
-runtimeResult.recognition =
-    recognition;
+        runtimeResult.recognition =
+            recognition;
 
-runtimeResult.definition =
-    definition;
+        runtimeResult.definition =
+            definition;
 
-runtimeResult.search =
-    search;
+        runtimeResult.search =
+            search;
 
-runtimeResult.evidence =
-    evidence;
+        runtimeResult.evidence =
+            evidence;
 
-runtimeResult.correspondence =
-    correspondence;
+        runtimeResult.correspondence =
+            correspondence;
 
-runtimeResult.reasoning =
-    reasoning;
+        runtimeResult.reasoning =
+            reasoning;
 
-runtimeResult.responsibility =
-    responsibility;
+        runtimeResult.responsibility =
+            responsibility;
 
-runtimeResult.reconstruction =
-    reconstruction;
+        runtimeResult.reconstruction =
+            reconstruction;
 
-runtimeResult.generator =
-    generator;
+        runtimeResult.generator =
+            generator;
 
-runtimeResult.selfCheck =
-    selfCheck;
+        runtimeResult.selfCheck =
+            selfCheck;
 
-runtimeResult.engineRegistry =
-    engineRegistry;
+        runtimeResult.engineRegistry =
+            engineRegistry;
 
-runtimeResult.setPipeline(
-    pipeline
-);
+        runtimeResult.setPipeline(
+            pipeline
+        );
 
-runtimeResult.setTrace(
-    trace
-);
+        runtimeResult.setTrace(
+            trace
+        );
 
-runtimeResult.identity =
-    identity;
+        runtimeResult.identity =
+            identity;
 
-runtimeResult.contract =
-    RuntimeContract;
+        runtimeResult.contract =
+            RuntimeContract;
 
-runtimeResult.contractVersion =
-    RuntimeContract.version;
+        runtimeResult.contractVersion =
+            RuntimeContract.version;
 
-runtimeResult.semanticObject =
-    semanticObject;
+        runtimeResult.semanticObject =
+            semanticObject;
 
-runtimeResult.language =
-    language;
+        runtimeResult.language =
+            language;
 
-return runtimeResult;
+        return runtimeResult;
+
+    }
+
+}
+
+
+export default HonestRuntime;
