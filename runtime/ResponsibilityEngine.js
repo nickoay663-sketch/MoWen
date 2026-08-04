@@ -8,6 +8,9 @@ class ResponsibilityEngine {
 
     run() {
 
+        const metadata =
+            this.buildMetadata();
+
         const responsibilities =
             this.buildResponsibilities();
 
@@ -17,7 +20,7 @@ class ResponsibilityEngine {
                 "ResponsibilityEngine",
 
             version:
-                "4.2",
+                "6.2",
 
             semanticObject:
                 this.semanticObject,
@@ -25,9 +28,13 @@ class ResponsibilityEngine {
             principle:
                 "莫问记录表达、证据与来源责任，不替任何来源背书。",
 
+            metadata,
+
             responsibilities,
 
             result: {
+
+                metadata,
 
                 responsibilities
 
@@ -60,6 +67,37 @@ class ResponsibilityEngine {
 
     }
 
+        buildMetadata() {
+
+        return {
+
+            generatedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                this.semanticObject.contract?.identity?.runtimeVersion || "",
+
+            contractVersion:
+                this.semanticObject.contract?.version || "",
+
+            engineCount:
+
+                Object.keys(
+
+                    this.semanticObject.engines || {}
+
+                ).length,
+
+            traceCount:
+
+                (this.semanticObject.runtimeTrace || []).length
+
+        };
+
+    }
+
+
+
     buildResponsibilities() {
 
         const reasonings =
@@ -67,7 +105,7 @@ class ResponsibilityEngine {
 
         return reasonings.map(reasoning => ({
 
-            expression:
+                        expression:
                 this.semanticObject.originalContent || "",
 
             definition:
@@ -104,7 +142,14 @@ class ResponsibilityEngine {
                 "external-source-chain",
 
             verificationStatus:
-                reasoning.verificationStatus
+                reasoning.verificationStatus,
+
+            runtimeTrace:
+                this.semanticObject.runtimeTrace || [],
+
+            engineRegistry:
+
+                this.semanticObject.engineRegistry?.describe?.() || []
 
         }));
 
