@@ -12,6 +12,9 @@ class RecognitionEngine {
 
     run() {
 
+        const metadata =
+            this.buildMetadata();
+
         const language =
             new LanguageDetector(this.expression).run().language;
 
@@ -28,11 +31,19 @@ class RecognitionEngine {
 
         return {
 
+            engine:
+                "RecognitionEngine",
+
+            version:
+                "6.8",
+
             originalContent:
                 this.expression,
 
             principle:
                 "莫问只识别，不猜测。",
+
+            metadata,
 
             language,
 
@@ -41,6 +52,8 @@ class RecognitionEngine {
             concepts,
 
             result: {
+
+                metadata,
 
                 language,
 
@@ -52,28 +65,51 @@ class RecognitionEngine {
 
             trace: [],
 
-            nextRuntimeState: "DefinitionEngine",
+            nextRuntimeState:
+                "DefinitionEngine",
 
             status:
+
                 objects.length > 0 ||
                 concepts.length > 0
+
                     ? "recognition-completed"
+
                     : "need-recognition",
 
             questions:
+
                 objects.length > 0 ||
                 concepts.length > 0
+
                     ? []
+
                     : [
                         "该表达中是否存在尚未识别的对象或概念？"
-                    ],
-
-            version:
-                "2.5"
+                    ]
 
         };
 
     }
+
+        buildMetadata() {
+
+        return {
+
+            generatedAt:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                "6.8",
+
+            detector:
+                "LanguageDetector"
+
+        };
+
+    }
+
+
 
     findObjects(dictionary) {
 
@@ -85,6 +121,8 @@ class RecognitionEngine {
 
     }
 
+
+
     findConcepts(dictionary) {
 
         return dictionary.concepts.filter(
@@ -95,7 +133,7 @@ class RecognitionEngine {
 
     }
 
-    contains(word) {
+        contains(word) {
 
         return this.expression.includes(word);
 
