@@ -17,8 +17,16 @@ class SelfCheckEngine {
             this.validateEngineContract();
 
 
+        const failureExplanation =
+            this.createFailureExplanation(contractReport);
+
+
         const auditTrail =
-            this.createAuditTrail(contractReport);
+            this.createAuditTrail(
+
+                contractReport
+
+            );
 
 
         const passed =
@@ -33,7 +41,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.7",
+                "4.8",
 
 
             principle:
@@ -44,6 +52,9 @@ class SelfCheckEngine {
 
 
             contractReport,
+
+
+            failureExplanation,
 
 
             auditTrail,
@@ -57,6 +68,8 @@ class SelfCheckEngine {
                 checks,
 
                 contractReport,
+
+                failureExplanation,
 
                 auditTrail,
 
@@ -280,6 +293,65 @@ class SelfCheckEngine {
 
 
 
+    createFailureExplanation(report) {
+
+
+        const failures = [];
+
+
+        for (const [engineName, data] of Object.entries(report.engines)) {
+
+
+            if (
+
+                data.missingFields.length > 0 ||
+                data.invalidFields.length > 0
+
+            ) {
+
+
+                failures.push({
+
+                    engine:
+                        engineName,
+
+
+                    problemType:
+
+                        data.missingFields.length > 0
+
+                            ? "missing-fields"
+
+                            : "invalid-fields",
+
+
+                    fields:
+
+                        [
+
+                            ...data.missingFields,
+
+                            ...data.invalidFields
+
+                        ],
+
+
+                    impact:
+                        "该 Engine 不符合运行契约，结果不能被完全信任。"
+
+                });
+
+            }
+
+        }
+
+
+        return failures;
+
+    }
+
+
+
     createAuditTrail(contractReport) {
 
 
@@ -290,7 +362,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.7",
+                "4.8",
 
 
             timestamp:
