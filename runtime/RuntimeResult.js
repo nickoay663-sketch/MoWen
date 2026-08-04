@@ -1,23 +1,98 @@
 class RuntimeResult {
 
-    constructor(){
+    constructor() {
 
-        this.recognition = null;
+        this.runtimeVersion =
+            "7.0";
 
-        this.definition = null;
+        this.generatedAt =
+            new Date().toISOString();
 
-        this.evidence = null;
+        this.recognition =
+            null;
 
-        this.correspondence = null;
+        this.definition =
+            null;
 
-        this.reasoning = null;
+        this.search =
+            null;
 
-        this.responsibility = null;
+        this.evidence =
+            null;
 
-        this.reconstruction = null;
+        this.correspondence =
+            null;
+
+        this.reasoning =
+            null;
+
+        this.responsibility =
+            null;
+
+        this.reconstruction =
+            null;
+
+        this.generator =
+            null;
+
+        this.selfCheck =
+            null;
+
+                    this.engineRegistry =
+            null;
+
+        this.runtimeTrace =
+            [];
+
+        this.pipeline =
+            [];
+
+        this.metadata = {
+
+            contractVersion:
+                null,
+
+            runtimeVersion:
+                "7.0",
+
+            engineCount:
+                0,
+
+            generatedAt:
+                this.generatedAt
+
+        };
+
+    }
+
+        setMetadata(metadata = {}) {
+
+        this.metadata = {
+
+            ...this.metadata,
+
+            ...metadata
+
+        };
+
+        return this;
 
     }
 
 }
+    setMetadata(metadata = {}) {
+
+        this.metadata = {
+
+            ...this.metadata,
+
+            ...metadata
+
+        };
+
+        return this;
+
+    }
+
 
 export default RuntimeResult;
