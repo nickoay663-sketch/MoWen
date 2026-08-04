@@ -12,6 +12,7 @@ import SelfCheckEngine from "./SelfCheckEngine.js";
 import MoWenIdentity from "./MoWenIdentity.js";
 import RuntimeContract from "./RuntimeContract.js";
 import EngineRegistry from "./EngineRegistry.js";
+import RuntimeResult from "./RuntimeResult.js";
 
 
 class HonestRuntime {
@@ -29,6 +30,11 @@ class HonestRuntime {
     run() {
 
         const trace = [];
+
+        const trace = [];
+
+const runtimeResult =
+    new RuntimeResult();
 
 
         const pipeline = [
@@ -415,65 +421,73 @@ class HonestRuntime {
         });
 
 
-        return {
+        runtimeResult.setMetadata({
 
-            runtimeVersion:
-                "6.9",
+    contractVersion:
+        RuntimeContract.version,
 
+    runtimeVersion:
+        "8.1",
 
-            contract:
-                RuntimeContract,
+    engineCount:
+        engineRegistry.list().length
 
+});
 
-            contractVersion:
-                RuntimeContract.version,
+runtimeResult.recognition =
+    recognition;
 
+runtimeResult.definition =
+    definition;
 
-            identity,
+runtimeResult.search =
+    search;
 
+runtimeResult.evidence =
+    evidence;
 
-            pipeline,
+runtimeResult.correspondence =
+    correspondence;
 
+runtimeResult.reasoning =
+    reasoning;
 
-            language,
+runtimeResult.responsibility =
+    responsibility;
 
+runtimeResult.reconstruction =
+    reconstruction;
 
-            semanticObject,
+runtimeResult.generator =
+    generator;
 
+runtimeResult.selfCheck =
+    selfCheck;
 
-            registry: {
+runtimeResult.engineRegistry =
+    engineRegistry;
 
-                engines:
-                    engineRegistry.list(),
+runtimeResult.setPipeline(
+    pipeline
+);
 
-                statistics:
-                    engineRegistry.statistics?.(),
+runtimeResult.setTrace(
+    trace
+);
 
-                validation:
-                    engineRegistry.validate?.()
+runtimeResult.identity =
+    identity;
 
-            },
+runtimeResult.contract =
+    RuntimeContract;
 
+runtimeResult.contractVersion =
+    RuntimeContract.version;
 
-            engines,
+runtimeResult.semanticObject =
+    semanticObject;
 
+runtimeResult.language =
+    language;
 
-            generator,
-
-
-            selfCheck,
-
-
-            runtimeTrace:
-                trace
-
-        };
-
-
-    }
-
-
-}
-
-
-export default HonestRuntime;
+return runtimeResult;
