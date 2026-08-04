@@ -28,7 +28,6 @@ class HonestRuntime {
 
     run() {
 
-
         const trace = [];
 
 
@@ -57,10 +56,8 @@ class HonestRuntime {
         ];
 
 
-
         const identity =
             new MoWenIdentity().run();
-
 
 
         const language =
@@ -69,12 +66,10 @@ class HonestRuntime {
             ).run();
 
 
-
         const recognition =
             new RecognitionEngine(
                 this.expression
             ).run();
-
 
 
         trace.push({
@@ -90,44 +85,34 @@ class HonestRuntime {
 
         });
 
-
-
         const semanticObject = {
-
 
             originalContent:
                 this.expression,
 
-
             language:
                 language.language,
 
-
             expressionType:
                 recognition.expressionType || null,
-
 
             objects:
                 recognition.result?.objects ??
                 recognition.objects ??
                 [],
 
-
             concepts:
                 recognition.result?.concepts ??
                 recognition.concepts ??
                 []
 
-
         };
-
 
 
         const definition =
             new DefinitionEngine(
                 semanticObject
             ).run();
-
 
 
         trace.push({
@@ -144,12 +129,10 @@ class HonestRuntime {
         });
 
 
-
         const search =
             new SearchEngine(
                 semanticObject
             ).run();
-
 
 
         trace.push({
@@ -165,6 +148,7 @@ class HonestRuntime {
 
         });
 
+
         const evidence =
             new EvidenceEngine({
 
@@ -173,7 +157,6 @@ class HonestRuntime {
                 search
 
             }).run();
-
 
 
         trace.push({
@@ -189,33 +172,24 @@ class HonestRuntime {
 
         });
 
-
-
         const correspondence =
             new CorrespondenceEngine({
 
                 ...semanticObject,
 
-
                 definitions:
-
                     definition.result?.definitions ??
                     definition.definitions ??
                     [],
 
-
                 evidences:
-
                     evidence.result?.evidences ??
                     evidence.evidences ??
                     [],
 
-
                 search
 
-
             }).run();
-
 
 
         trace.push({
@@ -232,22 +206,17 @@ class HonestRuntime {
         });
 
 
-
         const reasoning =
             new ReasoningEngine({
 
                 ...semanticObject,
 
-
                 correspondences:
-
                     correspondence.result?.correspondences ??
                     correspondence.correspondences ??
                     []
 
-
             }).run();
-
 
 
         trace.push({
@@ -263,23 +232,17 @@ class HonestRuntime {
 
         });
 
-
-
         const responsibility =
             new ResponsibilityEngine({
 
                 ...semanticObject,
 
-
                 reasonings:
-
                     reasoning.result?.reasonings ??
                     reasoning.reasonings ??
                     []
 
-
             }).run();
-
 
 
         trace.push({
@@ -312,7 +275,6 @@ class HonestRuntime {
 
                 responsibility
 
-
             }).run();
 
 
@@ -341,7 +303,6 @@ class HonestRuntime {
 
                 responsibility
 
-
             }).run();
 
 
@@ -363,107 +324,65 @@ class HonestRuntime {
             new EngineRegistry();
 
 
-
         engineRegistry.register(
-
             "recognition",
-
             recognition
-
         );
 
 
-
         engineRegistry.register(
-
             "definition",
-
             definition
-
         );
 
 
-
         engineRegistry.register(
-
             "search",
-
             search
-
         );
 
 
-
         engineRegistry.register(
-
             "evidence",
-
             evidence
-
         );
 
 
-
         engineRegistry.register(
-
             "correspondence",
-
             correspondence
-
         );
 
 
-
         engineRegistry.register(
-
             "reasoning",
-
             reasoning
-
         );
 
 
-
         engineRegistry.register(
-
             "responsibility",
-
             responsibility
-
         );
 
 
-
         engineRegistry.register(
-
             "reconstruction",
-
             reconstruction
-
         );
-
 
 
         engineRegistry.register(
-
             "generator",
-
             generator
-
         );
-
-
 
 
         const engines =
-
             engineRegistry.all();
 
 
-
-
         const selfCheck =
-
             new SelfCheckEngine({
 
                 pipeline,
@@ -480,10 +399,7 @@ class HonestRuntime {
                 runtimeTrace:
                     trace
 
-
             }).run();
-
-
 
         trace.push({
 
@@ -498,71 +414,58 @@ class HonestRuntime {
 
         });
 
+
         return {
 
-
             runtimeVersion:
-
-                "4.4",
-
+                "6.9",
 
 
             contract:
-
                 RuntimeContract,
 
 
-
             contractVersion:
-
                 RuntimeContract.version,
-
 
 
             identity,
 
 
-
             pipeline,
-
 
 
             language,
 
 
-
             semanticObject,
-
 
 
             registry: {
 
-
                 engines:
+                    engineRegistry.list(),
 
-                    engineRegistry.list()
+                statistics:
+                    engineRegistry.statistics?.(),
 
+                validation:
+                    engineRegistry.validate?.()
 
             },
-
 
 
             engines,
 
 
-
             generator,
-
 
 
             selfCheck,
 
 
-
             runtimeTrace:
-
                 trace
-
 
         };
 
