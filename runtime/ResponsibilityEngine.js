@@ -13,7 +13,14 @@ class ResponsibilityEngine {
 
         return {
 
-            semanticObject: this.semanticObject,
+            engine:
+                "ResponsibilityEngine",
+
+            version:
+                "4.2",
+
+            semanticObject:
+                this.semanticObject,
 
             principle:
                 "莫问记录表达、证据与来源责任，不替任何来源背书。",
@@ -21,28 +28,33 @@ class ResponsibilityEngine {
             responsibilities,
 
             result: {
+
                 responsibilities
+
             },
 
             trace: [],
+
+            questions:
+
+                responsibilities.length > 0
+
+                    ? []
+
+                    : [
+                        "当前来源责任是否明确？"
+                    ],
 
             nextRuntimeState:
                 "ReconstructionEngine",
 
             status:
+
                 responsibilities.length > 0
+
                     ? "responsibility-connected"
-                    : "need-responsibility",
 
-            questions:
-                responsibilities.length > 0
-                    ? []
-                    : [
-                        "当前来源责任是否明确？"
-                    ],
-
-            version:
-                "3.8"
+                    : "need-responsibility"
 
         };
 
