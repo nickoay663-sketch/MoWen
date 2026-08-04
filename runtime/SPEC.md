@@ -1,6 +1,6 @@
 # MoWen Runtime Specification
 
-Version: 1.1
+Version: 7.8
 
 ## Purpose
 
@@ -8,33 +8,37 @@ MoWen is an Honest Runtime.
 
 It does not produce opinions.
 
-It performs an honest execution on testimony.
+It executes a transparent, traceable and responsibility-bounded Runtime.
 
-## Runtime Input
+---
+
+# Runtime Input
 
 MoWen accepts human expressions.
 
 Input may include:
 
-Text
+- Text
+- Image
+- Audio
+- Video
+- Document
 
-Image
+All inputs are transformed into Runtime Objects before entering the Runtime Pipeline.
 
-Audio
+---
 
-Video
-
-Document
-
-All inputs must first become Testimony.
-
-## Runtime Flow
+# Runtime Pipeline
 
 Recognition
 
 ↓
 
 Definition
+
+↓
+
+Search
 
 ↓
 
@@ -56,19 +60,48 @@ Responsibility
 
 Reconstruction
 
-## Runtime Output
+↓
 
-MoWen never outputs a judgment.
+Generator
+
+↓
+
+SelfCheck
+
+---
+
+# Runtime Output
+
+MoWen never outputs truth claims.
 
 MoWen outputs:
 
-Runtime Report
+- RuntimeResult
+- RuntimeReport
+- RuntimeTrace
+- EngineRegistry
+- Responsibility Chain
+- Reconstructed Expression
+- Verification Status
+- Unavoidable Questions
 
-An unavoidable question
+---
 
-A reconstructed expression
+# Runtime Metadata
 
-## Runtime Boundary
+Every Runtime execution contains:
+
+- RuntimeVersion
+- ContractVersion
+- RuntimeTrace
+- GeneratedAt
+- EngineRegistry
+- RuntimeStatus
+- SelfCheck Report
+
+---
+
+# Runtime Boundary
 
 MoWen analyzes testimony.
 
@@ -76,33 +109,35 @@ MoWen does not analyze people.
 
 MoWen does not replace human judgment.
 
-MoWen never replaces human responsibility.
+MoWen does not replace human responsibility.
 
-## Runtime Principle
+MoWen does not extend beyond available evidence.
 
-Every output must be able to bear its own responsibility.
+---
 
-Every Runtime execution must remain honest.
+# Runtime Principles
+
+No definition.
+
+No reasoning.
+
+No evidence.
+
+No conclusion.
+
+Every output must remain bounded by available evidence.
+
+Every Runtime execution must be auditable.
+
+Every Runtime execution must be reproducible.
+
+---
 
 # Engine Responsibilities
 
 ## Recognition
 
-Purpose:
-
-Recognize every object and every concept contained in testimony.
-
-Input:
-
-Testimony.
-
-Output:
-
-Recognized objects.
-
-Recognized concepts.
-
-Boundary:
+Recognize objects and concepts.
 
 Never defines.
 
@@ -114,45 +149,25 @@ Never judges.
 
 ## Definition
 
-Purpose:
+Load standardized definitions.
 
-Load standard definitions.
-
-Input:
-
-Recognized concepts.
-
-Output:
-
-Standard definitions.
-
-Boundary:
-
-Never creates definitions.
+Never invents definitions.
 
 Never performs reasoning.
 
 ---
 
+## Search
+
+Discover possible verification entrances.
+
+Never treats sources as evidence.
+
+---
+
 ## Evidence
 
-Purpose:
-
-Collect available testimony and evidence.
-
-Input:
-
-Definitions.
-
-Objects.
-
-Testimony.
-
-Output:
-
-Evidence list.
-
-Boundary:
+Collect evidence and source entries.
 
 Never reaches conclusions.
 
@@ -160,41 +175,15 @@ Never reaches conclusions.
 
 ## Correspondence
 
-Purpose:
+Build correspondence between definitions, evidence and sources.
 
-Verify whether testimony corresponds with evidence and definitions.
-
-Input:
-
-Evidence.
-
-Definitions.
-
-Output:
-
-Correspondence report.
-
-Boundary:
-
-Never judges motives.
+Never infers motives.
 
 ---
 
 ## Reasoning
 
-Purpose:
-
-Build logical relationships from correspondence.
-
-Input:
-
-Correspondence report.
-
-Output:
-
-Reasoning chain.
-
-Boundary:
+Generate reasoning chains from supported correspondence.
 
 Never replaces responsibility.
 
@@ -202,41 +191,39 @@ Never replaces responsibility.
 
 ## Responsibility
 
-Purpose:
+Determine responsibility boundaries.
 
-Determine whether conclusions can bear their own responsibility.
-
-Input:
-
-Reasoning chain.
-
-Output:
-
-Responsibility report.
-
-Boundary:
-
-Never replaces human choice.
+Never replaces human decisions.
 
 ---
 
 ## Reconstruction
 
-Purpose:
+Reconstruct the expression while preserving responsibility.
 
-Reconstruct expression into one that can better bear responsibility.
+Never expands beyond evidence.
 
-Input:
+---
 
-Complete Runtime report.
+## Generator
 
-Output:
+Generate Runtime reports.
 
-Reconstructed expression.
+Never creates unsupported conclusions.
 
-Boundary:
+---
 
-The testimony provider decides whether to adopt it.
+## SelfCheck
+
+Verify Runtime integrity.
+
+Validate Runtime Contract.
+
+Validate Engine Registry.
+
+Validate Runtime Trace.
+
+Validate output consistency.
 
 ---
 
@@ -244,32 +231,48 @@ The testimony provider decides whether to adopt it.
 
 ## Rule 1
 
-Every Runtime execution starts from testimony.
+Every Runtime starts from an expression.
 
-Without testimony,
-
-Runtime does not execute.
+---
 
 ## Rule 2
 
-Every Runtime stage must finish before the next stage begins.
+Every Engine executes sequentially.
 
-No Engine may skip another Engine.
+No Engine skips another Engine.
+
+---
 
 ## Rule 3
 
 Every Runtime output must be traceable.
 
-Every conclusion must return to its testimony.
+---
 
 ## Rule 4
 
-Runtime never replaces human responsibility.
+Every Runtime output must pass SelfCheck.
 
-Runtime only provides an honest report.
+---
 
 ## Rule 5
 
-Runtime never produces truth.
+Every conclusion must remain evidence-bounded.
 
-Runtime only verifies whether testimony can support itself.
+---
+
+## Rule 6
+
+Every Runtime execution records complete metadata.
+
+---
+
+## Rule 7
+
+Every Runtime execution is reproducible from the same input.
+
+---
+
+## Rule 8
+
+Runtime never replaces human responsibility.
