@@ -13,90 +13,155 @@ import MoWenIdentity from "./MoWenIdentity.js";
 import RuntimeContract from "./RuntimeContract.js";
 import EngineRegistry from "./EngineRegistry.js";
 
+
 class HonestRuntime {
+
 
     constructor(expression) {
 
-        this.expression = expression || "";
+        this.expression =
+            expression || "";
 
     }
 
+
+
     run() {
 
+
         const trace = [];
+
 
         const pipeline = [
 
             "Recognition",
+
             "Definition",
+
             "Search",
+
             "Evidence",
+
             "Correspondence",
+
             "Reasoning",
+
             "Responsibility",
+
             "Reconstruction",
+
             "Generator",
+
             "SelfCheck"
 
         ];
 
+
+
         const identity =
             new MoWenIdentity().run();
 
+
+
         const language =
-            new LanguageDetector(this.expression).run();
+            new LanguageDetector(
+                this.expression
+            ).run();
+
+
 
         const recognition =
-            new RecognitionEngine(this.expression).run();
+            new RecognitionEngine(
+                this.expression
+            ).run();
+
+
 
         trace.push({
 
-            engine: "RecognitionEngine",
-            status: recognition.status,
-            version: recognition.version
+            engine:
+                "RecognitionEngine",
+
+            status:
+                recognition.status,
+
+            version:
+                recognition.version
 
         });
 
+
+
         const semanticObject = {
 
-            originalContent: this.expression,
 
-            language: language.language,
+            originalContent:
+                this.expression,
+
+
+            language:
+                language.language,
+
 
             expressionType:
                 recognition.expressionType || null,
+
 
             objects:
                 recognition.result?.objects ??
                 recognition.objects ??
                 [],
 
+
             concepts:
                 recognition.result?.concepts ??
                 recognition.concepts ??
                 []
 
+
         };
 
+
+
         const definition =
-            new DefinitionEngine(semanticObject).run();
+            new DefinitionEngine(
+                semanticObject
+            ).run();
+
+
 
         trace.push({
 
-            engine: "DefinitionEngine",
-            status: definition.status,
-            version: definition.version
+            engine:
+                "DefinitionEngine",
+
+            status:
+                definition.status,
+
+            version:
+                definition.version
 
         });
 
+
+
         const search =
-            new SearchEngine(semanticObject).run();
+            new SearchEngine(
+                semanticObject
+            ).run();
+
+
 
         trace.push({
 
-            engine: "SearchEngine",
-            status: search.status,
-            version: search.version
+            engine:
+                "SearchEngine",
+
+            status:
+                search.status,
+
+            version:
+                search.version
 
         });
 
@@ -109,80 +174,128 @@ class HonestRuntime {
 
             }).run();
 
+
+
         trace.push({
 
-            engine: "EvidenceEngine",
-            status: evidence.status,
-            version: evidence.version
+            engine:
+                "EvidenceEngine",
+
+            status:
+                evidence.status,
+
+            version:
+                evidence.version
 
         });
+
+
 
         const correspondence =
             new CorrespondenceEngine({
 
                 ...semanticObject,
 
+
                 definitions:
+
                     definition.result?.definitions ??
                     definition.definitions ??
                     [],
 
+
                 evidences:
+
                     evidence.result?.evidences ??
                     evidence.evidences ??
                     [],
 
+
                 search
+
 
             }).run();
 
+
+
         trace.push({
 
-            engine: "CorrespondenceEngine",
-            status: correspondence.status,
-            version: correspondence.version
+            engine:
+                "CorrespondenceEngine",
+
+            status:
+                correspondence.status,
+
+            version:
+                correspondence.version
 
         });
+
+
 
         const reasoning =
             new ReasoningEngine({
 
                 ...semanticObject,
 
+
                 correspondences:
+
                     correspondence.result?.correspondences ??
                     correspondence.correspondences ??
                     []
 
+
             }).run();
+
+
 
         trace.push({
 
-            engine: "ReasoningEngine",
-            status: reasoning.status,
-            version: reasoning.version
+            engine:
+                "ReasoningEngine",
+
+            status:
+                reasoning.status,
+
+            version:
+                reasoning.version
 
         });
+
+
 
         const responsibility =
             new ResponsibilityEngine({
 
                 ...semanticObject,
 
+
                 reasonings:
+
                     reasoning.result?.reasonings ??
                     reasoning.reasonings ??
                     []
 
+
             }).run();
+
+
 
         trace.push({
 
-            engine: "ResponsibilityEngine",
-            status: responsibility.status,
-            version: responsibility.version
+            engine:
+                "ResponsibilityEngine",
+
+            status:
+                responsibility.status,
+
+            version:
+                responsibility.version
 
         });
+
+
 
         const reconstruction =
             new ReconstructionEngine({
@@ -199,15 +312,25 @@ class HonestRuntime {
 
                 responsibility
 
+
             }).run();
+
+
 
         trace.push({
 
-            engine: "ReconstructionEngine",
-            status: reconstruction.status,
-            version: reconstruction.version
+            engine:
+                "ReconstructionEngine",
+
+            status:
+                reconstruction.status,
+
+            version:
+                reconstruction.version
 
         });
+
+
 
         const generator =
             new GeneratorEngine({
@@ -218,128 +341,236 @@ class HonestRuntime {
 
                 responsibility
 
+
             }).run();
+
+
 
         trace.push({
 
-            engine: "GeneratorEngine",
-            status: generator.status,
-            version: generator.version
+            engine:
+                "GeneratorEngine",
+
+            status:
+                generator.status,
+
+            version:
+                generator.version
 
         });
 
         const engineRegistry =
-    new EngineRegistry();
+            new EngineRegistry();
 
 
-engineRegistry.register(
-    "recognition",
-    recognition
-);
 
-engineRegistry.register(
-    "definition",
-    definition
-);
+        engineRegistry.register(
 
-engineRegistry.register(
-    "search",
-    search
-);
+            "recognition",
 
-engineRegistry.register(
-    "evidence",
-    evidence
-);
+            recognition
 
-engineRegistry.register(
-    "correspondence",
-    correspondence
-);
-
-engineRegistry.register(
-    "reasoning",
-    reasoning
-);
-
-engineRegistry.register(
-    "responsibility",
-    responsibility
-);
-
-engineRegistry.register(
-    "reconstruction",
-    reconstruction
-);
-
-engineRegistry.register(
-    "generator",
-    generator
-);
+        );
 
 
-const engines =
-    engineRegistry.all();
+
+        engineRegistry.register(
+
+            "definition",
+
+            definition
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "search",
+
+            search
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "evidence",
+
+            evidence
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "correspondence",
+
+            correspondence
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "reasoning",
+
+            reasoning
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "responsibility",
+
+            responsibility
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "reconstruction",
+
+            reconstruction
+
+        );
+
+
+
+        engineRegistry.register(
+
+            "generator",
+
+            generator
+
+        );
+
+
+
+
+        const engines =
+
+            engineRegistry.all();
+
+
+
 
         const selfCheck =
-    new SelfCheckEngine({
 
-        pipeline,
+            new SelfCheckEngine({
 
-        contract: RuntimeContract,
+                pipeline,
 
-        engines,
+                contract:
+                    RuntimeContract,
 
-        engineRegistry,
+                engines,
 
-        semanticObject,
+                engineRegistry,
 
-        runtimeTrace: trace
+                semanticObject,
 
-    }).run();
+                runtimeTrace:
+                    trace
+
+
+            }).run();
+
+
 
         trace.push({
 
-            engine: "SelfCheckEngine",
-            status: selfCheck.status,
-            version: selfCheck.version
+            engine:
+                "SelfCheckEngine",
+
+            status:
+                selfCheck.status,
+
+            version:
+                selfCheck.version
 
         });
 
         return {
 
-            runtimeVersion: "4.4",
 
-            contract: RuntimeContract,
+            runtimeVersion:
+
+                "4.4",
+
+
+
+            contract:
+
+                RuntimeContract,
+
+
 
             contractVersion:
+
                 RuntimeContract.version,
+
+
 
             identity,
 
+
+
             pipeline,
+
+
 
             language,
 
+
+
             semanticObject,
+
+
+
+            registry: {
+
+
+                engines:
+
+                    engineRegistry.list()
+
+
+            },
+
 
 
             engines,
 
 
-            // Runtime compatibility layer
 
             generator,
+
+
 
             selfCheck,
 
 
-            runtimeTrace: trace
+
+            runtimeTrace:
+
+                trace
+
 
         };
 
+
     }
 
+
 }
+
 
 export default HonestRuntime;
