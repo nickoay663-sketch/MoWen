@@ -54,6 +54,48 @@ const RuntimeContract = {
 
     },
 
+    engineContract: {
+
+        version: "1.0",
+
+        requiredFields: [
+
+            "engine",
+
+            "version",
+
+            "status",
+
+            "result",
+
+            "trace",
+
+            "questions",
+
+            "nextRuntimeState"
+
+        ],
+
+        allowedStatus: [
+
+            "Passed",
+
+            "Failed",
+
+            "Need Definition",
+
+            "Need Evidence",
+
+            "Need Correspondence",
+
+            "Need Responsibility",
+
+            "Generated"
+
+        ]
+
+    },
+
     engineResult: {
 
         engine: "",
