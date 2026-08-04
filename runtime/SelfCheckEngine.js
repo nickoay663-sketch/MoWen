@@ -24,10 +24,10 @@ class SelfCheckEngine {
                 "SelfCheckEngine",
 
             version:
-                "4.2",
+                "4.3",
 
             principle:
-                "莫问检查自身运行契约，不判断表达结果。",
+                "莫问检查运行契约，不判断表达结果。",
 
             checks,
 
@@ -82,21 +82,7 @@ class SelfCheckEngine {
 
             semanticObject,
 
-            definition,
-
-            search,
-
-            evidence,
-
-            correspondence,
-
-            reasoning,
-
-            responsibility,
-
-            reconstruction,
-
-            generator
+            engines
 
         } = this.runtimeObject;
 
@@ -111,29 +97,8 @@ class SelfCheckEngine {
             semanticObject:
                 !!semanticObject,
 
-            definition:
-                !!definition,
-
-            search:
-                !!search,
-
-            evidence:
-                !!evidence,
-
-            correspondence:
-                !!correspondence,
-
-            reasoning:
-                !!reasoning,
-
-            responsibility:
-                !!responsibility,
-
-            reconstruction:
-                !!reconstruction,
-
-            generator:
-                !!generator
+            engines:
+                !!engines && typeof engines === "object"
 
         };
 
@@ -143,6 +108,9 @@ class SelfCheckEngine {
 
         const contract =
             this.runtimeObject.contract;
+
+        const engines =
+            this.runtimeObject.engines || {};
 
         if (!contract?.engineContract) {
 
@@ -157,25 +125,26 @@ class SelfCheckEngine {
         const requiredFields =
             contract.engineContract.requiredFields || [];
 
-        const generator =
-            this.runtimeObject.generator || {};
+        const result = {
 
-        const result = {};
+            contractLoaded: true
 
-        for (const field of requiredFields) {
+        };
 
-            result[field] =
-                field in generator;
+        for (const [engineName, engine] of Object.entries(engines)) {
+
+            result[engineName] = {};
+
+            for (const field of requiredFields) {
+
+                result[engineName][field] =
+                    field in engine;
+
+            }
 
         }
 
-        return {
-
-            contractLoaded: true,
-
-            ...result
-
-        };
+        return result;
 
     }
 
