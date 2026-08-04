@@ -1,33 +1,42 @@
 import HonestRuntime from "./HonestRuntime.js";
 import ReportFormatter from "./ReportFormatter.js";
 
-
 class MoWenRuntime {
 
     constructor(expression) {
 
-        this.expression = expression || "";
+        this.expression =
+            expression || "";
+
+        this.version =
+            "7.5";
 
     }
-
 
     run() {
 
         const runtimeResult =
-
             new HonestRuntime(this.expression)
-
                 .run();
-
 
         const report =
-
             new ReportFormatter(runtimeResult)
-
                 .run();
 
-
         return {
+
+            version:
+                this.version,
+
+            metadata: {
+
+                runtimeVersion:
+                    "7.5",
+
+                generatedAt:
+                    new Date().toISOString()
+
+            },
 
             runtimeResult,
 
@@ -39,7 +48,6 @@ class MoWenRuntime {
 
 }
 
-
 export {
 
     HonestRuntime,
@@ -47,6 +55,5 @@ export {
     ReportFormatter
 
 };
-
 
 export default MoWenRuntime;
