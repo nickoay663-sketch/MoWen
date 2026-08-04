@@ -33,6 +33,10 @@ class SelfCheckEngine {
 
 
 
+        const runtimeResultReport =
+            this.validateRuntimeResult();
+
+
         const failureExplanation =
             this.createFailureExplanation(
 
@@ -60,13 +64,15 @@ class SelfCheckEngine {
 
                 contractReport,
 
-                registryReport
+                registryReport,
+
+                runtimeResultReport
 
             );
 
 
 
-        const passed =
+            const passed =
 
             Object.values(checks).every(Boolean)
 
@@ -80,7 +86,11 @@ class SelfCheckEngine {
 
             &&
 
-            selfDescriptionReport.passed;
+            selfDescriptionReport.passed
+
+            &&
+
+            runtimeResultReport.passed;
 
 
 
@@ -117,6 +127,9 @@ class SelfCheckEngine {
             selfDescriptionReport,
 
 
+            runtimeResultReport,
+
+
             failureExplanation,
 
 
@@ -139,6 +152,8 @@ class SelfCheckEngine {
                 registryReport,
 
                 selfDescriptionReport,
+
+                runtimeResultReport,
 
                 failureExplanation,
 
@@ -194,7 +209,7 @@ class SelfCheckEngine {
 
     }
 
-        check() {
+    check() {
 
 
         const {
@@ -611,7 +626,37 @@ class SelfCheckEngine {
 
     }
 
-        createFailureExplanation(
+
+    validateRuntimeResult() {
+
+        const result =
+            this.runtimeObject.runtimeResult;
+
+        const requiredFields =
+            this.runtimeObject.contract
+                ?.runtimeResultContract
+                ?.requiredFields || [];
+
+        const missingFields =
+            requiredFields.filter(
+
+                field =>
+                    !(field in (result || {}))
+
+            );
+
+        return {
+
+            passed:
+                missingFields.length === 0,
+
+            missingFields
+
+        };
+
+    }
+
+    createFailureExplanation(
 
         contractReport,
 
@@ -809,7 +854,10 @@ class SelfCheckEngine {
 
         contractReport,
 
-        registryReport
+        registryReport,
+
+
+        runtimeResultReport
 
     ) {
 
@@ -848,6 +896,15 @@ class SelfCheckEngine {
             registryStatus:
 
                 registryReport.passed
+
+                    ? "PASS"
+
+                    : "FAIL",
+
+
+            runtimeResultStatus:
+
+                runtimeResultReport.passed
 
                     ? "PASS"
 
