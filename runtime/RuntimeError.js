@@ -1,10 +1,49 @@
 class RuntimeError {
 
-    constructor(code, message){
+    constructor(code, message, metadata = {}) {
 
-        this.code = code;
+        this.version =
+            "7.4";
 
-        this.message = message;
+        this.code =
+            code;
+
+        this.message =
+            message;
+
+        this.metadata = {
+
+            timestamp:
+                new Date().toISOString(),
+
+            runtimeVersion:
+                "7.4",
+
+            ...metadata
+
+        };
+
+    }
+
+
+
+    toJSON() {
+
+        return {
+
+            version:
+                this.version,
+
+            code:
+                this.code,
+
+            message:
+                this.message,
+
+            metadata:
+                this.metadata
+
+        };
 
     }
 
