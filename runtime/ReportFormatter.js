@@ -6,7 +6,6 @@ class ReportFormatter {
 
     }
 
-
     run() {
 
         const {
@@ -18,6 +17,8 @@ class ReportFormatter {
             recognition,
 
             definition,
+
+            search,
 
             evidence,
 
@@ -31,59 +32,76 @@ class ReportFormatter {
 
             generator,
 
-            selfCheck
+            selfCheck,
+
+            runtimeTrace,
+
+            engineRegistry,
+
+            contract,
+
+            contractVersion
 
         } = this.runtimeResult;
 
-
-        return {
+                return {
 
             version:
-
-                "3.0",
-
+                "7.1",
 
             principle:
-
                 "莫问只整理运行结果，不增加新的判断。",
 
+            metadata: {
+
+                generatedAt:
+                    new Date().toISOString(),
+
+                runtimeVersion:
+                    "7.1",
+
+                contractVersion,
+
+                engineCount:
+
+                    engineRegistry?.list?.().length || 0
+
+            },
 
             report: {
 
                 identity,
 
                 object:
-
                     semanticObject,
-
 
                 recognition,
 
                 definition,
 
+                search,
 
                 evidence,
 
-
                 correspondence,
-
 
                 reasoning,
 
-
                 responsibility,
-
 
                 reconstruction,
 
-
                 generator,
 
+                selfCheck,
 
-                selfCheck
+                contract,
+
+                runtimeTrace,
+
+                engineRegistry
 
             },
-
 
             status:
 
@@ -93,22 +111,23 @@ class ReportFormatter {
 
                     : "report-warning",
 
-
             questions:
-
                 selfCheck?.questions || [],
 
-
             trace:
-
-                this.buildTrace()
+                this.buildTrace(runtimeTrace)
 
         };
 
     }
 
+        buildTrace(runtimeTrace = []) {
 
-    buildTrace() {
+        if (runtimeTrace.length > 0) {
+
+            return runtimeTrace;
+
+        }
 
         return [
 
@@ -137,6 +156,5 @@ class ReportFormatter {
     }
 
 }
-
 
 export default ReportFormatter;
