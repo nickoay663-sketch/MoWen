@@ -209,34 +209,34 @@ const RuntimeContract = {
 
     runtimeResult: {
 
-        runtimeVersion:
-            "",
+    runtimeVersion:
+        "",
 
-        contractVersion:
-            "",
+    contractVersion:
+        "",
 
-        identity:
-            {},
+    identity:
+        {},
 
-        pipeline:
-            [],
+    pipeline:
+        [],
 
-        semanticObject:
-            {},
+    registry:
+        {},
 
-        runtimeTrace:
-            [],
+    semanticObject:
+        {},
 
-        registry:
-            {},
+    runtimeTrace:
+        [],
 
-        selfCheck:
-            {},
+    selfCheck:
+        {},
 
-        report:
-            {}
+    report:
+        {}
 
-    }
+}
 
 };
 
