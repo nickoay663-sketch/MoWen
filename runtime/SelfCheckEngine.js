@@ -17,6 +17,10 @@ class SelfCheckEngine {
             this.validateEngineContract();
 
 
+        const auditTrail =
+            this.createAuditTrail(contractReport);
+
+
         const passed =
             Object.values(checks).every(Boolean) &&
             contractReport.passed;
@@ -27,8 +31,9 @@ class SelfCheckEngine {
             engine:
                 "SelfCheckEngine",
 
+
             version:
-                "4.5",
+                "4.6",
 
 
             principle:
@@ -37,7 +42,12 @@ class SelfCheckEngine {
 
             checks,
 
+
             contractReport,
+
+
+            auditTrail,
+
 
             passed,
 
@@ -47,6 +57,8 @@ class SelfCheckEngine {
                 checks,
 
                 contractReport,
+
+                auditTrail,
 
                 passed
 
@@ -135,20 +147,16 @@ class SelfCheckEngine {
             this.runtimeObject.engines || {};
 
 
-
         const engineContract =
             contract?.engineContract || {};
-
 
 
         const requiredFields =
             engineContract.requiredFields || [];
 
 
-
         const fieldTypes =
             engineContract.fieldTypes || {};
-
 
 
         const report = {
@@ -167,14 +175,12 @@ class SelfCheckEngine {
         };
 
 
-
         for (const [engineName, engine] of Object.entries(engines)) {
 
 
             const missingFields = [];
 
             const invalidFields = [];
-
 
 
             for (const field of requiredFields) {
@@ -189,10 +195,8 @@ class SelfCheckEngine {
                 }
 
 
-
                 const expectedType =
                     fieldTypes[field];
-
 
 
                 if (expectedType) {
@@ -208,7 +212,6 @@ class SelfCheckEngine {
                         );
 
 
-
                     if (!valid) {
 
                         invalidFields.push(field);
@@ -218,7 +221,6 @@ class SelfCheckEngine {
                 }
 
             }
-
 
 
             const compliance =
@@ -250,7 +252,6 @@ class SelfCheckEngine {
                     );
 
 
-
             report.engines[engineName] = {
 
 
@@ -263,7 +264,6 @@ class SelfCheckEngine {
                 invalidFields
 
             };
-
 
 
             if (
@@ -280,8 +280,45 @@ class SelfCheckEngine {
         }
 
 
-
         return report;
+
+    }
+
+
+
+    createAuditTrail(contractReport) {
+
+
+        return {
+
+            engine:
+                "SelfCheckEngine",
+
+
+            version:
+                "4.6",
+
+
+            timestamp:
+                new Date().toISOString(),
+
+
+            checkedEngines:
+                Object.keys(
+
+                    contractReport.engines
+
+                ),
+
+
+            validationResult:
+                contractReport.passed
+
+                    ? "PASS"
+
+                    : "FAIL"
+
+        };
 
     }
 
