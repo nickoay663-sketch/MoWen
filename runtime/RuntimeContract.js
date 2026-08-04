@@ -12,6 +12,15 @@ const RuntimeContract = {
 
     },
 
+    identity: {
+
+        name: "MoWen Runtime",
+
+        runtimeVersion: "3.9",
+
+        contractVersion: "4.1"
+
+    },
 
     engineResult: {
 
@@ -31,7 +40,6 @@ const RuntimeContract = {
 
     },
 
-
     runtimeResult: {
 
         runtimeVersion: "",
@@ -47,6 +55,5 @@ const RuntimeContract = {
     }
 
 };
-
 
 export default RuntimeContract;
