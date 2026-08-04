@@ -1,6 +1,6 @@
 const RuntimeContract = {
 
-    version: "4.0",
+    version: "4.1",
 
     principles: {
 
@@ -19,6 +19,38 @@ const RuntimeContract = {
         runtimeVersion: "3.9",
 
         contractVersion: "4.1"
+
+    },
+
+    pipeline: {
+
+        input: "Expression",
+
+        output: "ResponsibilityReport",
+
+        engines: [
+
+            "RecognitionEngine",
+
+            "DefinitionEngine",
+
+            "SearchEngine",
+
+            "EvidenceEngine",
+
+            "CorrespondenceEngine",
+
+            "ReasoningEngine",
+
+            "ResponsibilityEngine",
+
+            "ReconstructionEngine",
+
+            "GeneratorEngine",
+
+            "SelfCheckEngine"
+
+        ]
 
     },
 
