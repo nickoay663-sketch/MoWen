@@ -6,17 +6,20 @@ class SelfCheckEngine {
 
     }
 
+
     run() {
 
         const checks =
             this.check();
 
-        const contractChecks =
+        const contractReport =
             this.validateEngineContract();
+
 
         const passed =
             Object.values(checks).every(Boolean) &&
-            Object.values(contractChecks).every(Boolean);
+            contractReport.passed;
+
 
         return {
 
@@ -24,28 +27,35 @@ class SelfCheckEngine {
                 "SelfCheckEngine",
 
             version:
-                "4.3",
+                "4.4",
+
 
             principle:
                 "莫问检查运行契约，不判断表达结果。",
 
+
             checks,
 
-            contractChecks,
+
+            contractReport,
+
 
             passed,
+
 
             result: {
 
                 checks,
 
-                contractChecks,
+                contractReport,
 
                 passed
 
             },
 
+
             trace: [],
+
 
             questions:
 
@@ -57,8 +67,10 @@ class SelfCheckEngine {
                         "运行链是否存在契约违反？"
                     ],
 
+
             nextRuntimeState:
                 "RuntimeCompleted",
+
 
             status:
 
@@ -71,6 +83,8 @@ class SelfCheckEngine {
         };
 
     }
+
+
 
     check() {
 
@@ -86,68 +100,220 @@ class SelfCheckEngine {
 
         } = this.runtimeObject;
 
+
         return {
 
             contract:
                 !!contract,
 
+
             pipeline:
                 Array.isArray(pipeline),
+
 
             semanticObject:
                 !!semanticObject,
 
+
             engines:
-                !!engines && typeof engines === "object"
+                !!engines &&
+                typeof engines === "object"
 
         };
 
     }
 
+
+
     validateEngineContract() {
 
-        const contract =
-            this.runtimeObject.contract;
 
         const engines =
             this.runtimeObject.engines || {};
 
-        if (!contract?.engineContract) {
 
-            return {
+        const requiredFields = [
 
-                contractLoaded: false
+            "engine",
 
-            };
+            "version",
 
-        }
+            "status",
 
-        const requiredFields =
-            contract.engineContract.requiredFields || [];
+            "result",
 
-        const result = {
+            "trace",
 
-            contractLoaded: true
+            "questions",
+
+            "nextRuntimeState"
+
+        ];
+
+
+
+        const report = {
+
+
+            passed:
+                true,
+
+
+            engines: {}
 
         };
 
+
+
         for (const [engineName, engine] of Object.entries(engines)) {
 
-            result[engineName] = {};
+
+            const missing = [];
+
+            const invalid = [];
+
+
 
             for (const field of requiredFields) {
 
-                result[engineName][field] =
-                    field in engine;
+
+                if (!(field in engine)) {
+
+                    missing.push(field);
+
+                    continue;
+
+                }
+
+
+
+                const value =
+                    engine[field];
+
+
+
+                if (
+
+                    field === "version" &&
+                    typeof value !== "string"
+
+                ) {
+
+                    invalid.push(field);
+
+                }
+
+
+
+                if (
+
+                    field === "trace" &&
+                    !Array.isArray(value)
+
+                ) {
+
+                    invalid.push(field);
+
+                }
+
+
+
+                if (
+
+                    field === "questions" &&
+                    !Array.isArray(value)
+
+                ) {
+
+                    invalid.push(field);
+
+                }
+
+
+
+                if (
+
+                    field === "result" &&
+                    (
+                        typeof value !== "object" ||
+                        value === null
+                    )
+
+                ) {
+
+                    invalid.push(field);
+
+                }
+
+            }
+
+
+
+            const compliance =
+
+                requiredFields.length === 0
+
+                    ? 100
+
+                    :
+
+                    Math.round(
+
+                        (
+
+                            requiredFields.length -
+                            missing.length -
+                            invalid.length
+
+                        )
+
+                        /
+
+                        requiredFields.length
+
+                        *
+
+                        100
+
+                    );
+
+
+
+            report.engines[engineName] = {
+
+
+                compliance,
+
+
+                missing,
+
+
+                invalid
+
+            };
+
+
+
+            if (
+
+                missing.length > 0 ||
+                invalid.length > 0
+
+            ) {
+
+                report.passed = false;
 
             }
 
         }
 
-        return result;
+
+
+        return report;
 
     }
 
 }
+
 
 export default SelfCheckEngine;
