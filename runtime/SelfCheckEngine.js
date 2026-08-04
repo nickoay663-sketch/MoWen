@@ -21,11 +21,15 @@ class SelfCheckEngine {
             this.createFailureExplanation(contractReport);
 
 
+        const recoveryGuidance =
+            this.createRecoveryGuidance(
+                failureExplanation
+            );
+
+
         const auditTrail =
             this.createAuditTrail(
-
                 contractReport
-
             );
 
 
@@ -41,7 +45,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.8",
+                "4.9",
 
 
             principle:
@@ -57,6 +61,9 @@ class SelfCheckEngine {
             failureExplanation,
 
 
+            recoveryGuidance,
+
+
             auditTrail,
 
 
@@ -70,6 +77,8 @@ class SelfCheckEngine {
                 contractReport,
 
                 failureExplanation,
+
+                recoveryGuidance,
 
                 auditTrail,
 
@@ -212,6 +221,7 @@ class SelfCheckEngine {
 
                 if (expectedType) {
 
+
                     const valid =
                         this.validateType(
 
@@ -352,6 +362,39 @@ class SelfCheckEngine {
 
 
 
+    createRecoveryGuidance(failures) {
+
+
+        return failures.map(failure => {
+
+
+            return {
+
+                engine:
+                    failure.engine,
+
+
+                action:
+
+                    failure.fields.length > 0
+
+                        ? "补充或修正缺失字段后重新运行 SelfCheck。"
+
+                        : "检查 Engine 输出契约后重新运行。",
+
+
+                reason:
+                    "当前 Engine 输出不满足 Runtime Contract，需要人工修正。"
+
+            };
+
+        });
+
+
+    }
+
+
+
     createAuditTrail(contractReport) {
 
 
@@ -362,7 +405,7 @@ class SelfCheckEngine {
 
 
             version:
-                "4.8",
+                "4.9",
 
 
             timestamp:
