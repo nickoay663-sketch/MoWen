@@ -13,6 +13,12 @@ class GeneratorEngine {
 
         return {
 
+            engine:
+                "GeneratorEngine",
+
+            version:
+                "4.2",
+
             semanticObject:
                 this.runtimeObject.semanticObject,
 
@@ -22,21 +28,20 @@ class GeneratorEngine {
             report,
 
             result: {
+
                 report
+
             },
 
             trace: [],
+
+            questions: [],
 
             nextRuntimeState:
                 "SelfCheckEngine",
 
             status:
-                "generator-connected",
-
-            questions: [],
-
-            version:
-                "3.8"
+                "generator-connected"
 
         };
 
