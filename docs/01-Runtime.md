@@ -15,6 +15,29 @@ Every Runtime component shall execute under the same Runtime Principles.
 
 所有 Runtime 组件均遵循统一运行原则。
 
+## Axiom Foundation
+
+MoWen Honest Runtime operates under MoWen First Axiom.
+
+> 主体不可互相否定。
+
+Honest Runtime verifies whether expressions preserve the ability of subjects to:
+
+- recognize reality
+- make choices
+- assume responsibility
+
+莫问诚实运行遵循莫问第一公理：
+
+> 主体不可互相否定。
+
+诚实运行验证表达是否维护主体：
+
+- 认识现实
+- 进行选择
+- 承担责任
+
+的能力。
 ---
 
 # Runtime Flow
@@ -150,6 +173,24 @@ No Runtime step may be skipped.
 没有责任。
 
 任何 Runtime 步骤不得跳过。
+
+## Subject Protection Principle
+
+Runtime verification must not establish conclusions by denying subjectivity.
+
+运行验证不得通过否定主体性来建立结论。
+
+Every Runtime step must preserve:
+
+- Truth
+- Autonomy
+- Responsibility
+
+每一个运行步骤必须维护：
+
+- 真实
+- 自主
+- 责任
 
 ---
 
