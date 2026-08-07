@@ -1,4 +1,3 @@
-import ExternalSourceConnector from "./ExternalSourceConnector.js";
 import EngineBase from "./EngineBase.js";
 
 class SearchEngine extends EngineBase {
@@ -7,158 +6,99 @@ class SearchEngine extends EngineBase {
 
         super(
             "SearchEngine",
-            "6.6",
-            "莫问搜索只发现验证入口，不把来源直接作为证据。"
+            "10.2",
+            "莫问搜索运行所需的信息来源。"
         );
 
-        this.semanticObject = semanticObject || {};
+        this.semanticObject =
+            semanticObject || {};
 
     }
 
-    run() {
 
-        const metadata =
-            this.buildMetadata();
-
-        const searches =
-            this.createSearches();
+    execute() {
 
         const sources =
+            this.search();
 
-            searches.flatMap(search =>
 
-                new ExternalSourceConnector(search).run().sources
+        return this.result({
 
-            );
+            status:
+                "completed",
 
-        return {
+            metadata:
+                this.metadata({
 
-            engine:
-                "SearchEngine",
+                    sourceCount:
+                        sources.length
 
-            version:
-                "6.6",
-
-            semanticObject:
-                this.semanticObject,
-
-            principle:
-                "莫问搜索只发现验证入口，不把来源直接作为证据。",
-
-            metadata,
-
-            searches,
+                }),
 
             sources,
 
             result: {
 
-                metadata,
-
-                searches,
-
                 sources
 
             },
 
-            trace: [],
+            trace: [
+
+                {
+
+                    engine:
+                        "SearchEngine",
+
+                    action:
+                        "search",
+
+                    status:
+                        "completed"
+
+                }
+
+            ],
+
+            questions: [],
 
             nextRuntimeState:
-                "EvidenceEngine",
-
-            status:
-
-                searches.length > 0
-
-                    ? "search-connected"
-
-                    : "need-search",
-
-            questions:
-
-                searches.length > 0
-
-                    ? []
-
-                    : [
-                        "当前表达是否需要外部来源验证？"
-                    ]
-
-        };
-
-    }
-
-    buildMetadata() {
-
-        return {
-
-            generatedAt:
-                new Date().toISOString(),
-
-            runtimeVersion:
-                this.semanticObject.contract?.identity?.runtimeVersion || "",
-
-            contractVersion:
-                this.semanticObject.contract?.version || "",
-
-            engineCount:
-
-                Object.keys(
-
-                    this.semanticObject.engines || {}
-
-                ).length,
-
-            traceCount:
-
-                (this.semanticObject.runtimeTrace || []).length
-
-        };
-
-    }
-
-
-
-    createSearches() {
-
-        const concepts =
-            this.semanticObject.concepts || [];
-
-        return concepts.map(concept => {
-
-            return {
-
-                keyword:
-                    concept.word,
-
-                conceptId:
-                    concept.id,
-
-                category:
-                    concept.category,
-
-                searchType:
-                    "verification",
-
-                sourceRequired:
-                    true,
-
-                status:
-                    "pending",
-
-                runtimeTrace:
-                    this.semanticObject.runtimeTrace || [],
-
-                engineRegistry:
-
-                    this.semanticObject.engineRegistry?.describe?.() || []
-
-            };
+                "EvidenceEngine"
 
         });
 
     }
 
+
+    search() {
+
+        const content =
+            this.semanticObject.originalContent || "";
+
+
+        if (!content) {
+
+            return [];
+
+        }
+
+
+        return [
+
+            {
+
+                source:
+                    "RuntimeInput",
+
+                content
+
+            }
+
+        ];
+
+    }
+
 }
+
 
 export default SearchEngine;

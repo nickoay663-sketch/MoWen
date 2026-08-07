@@ -131,10 +131,11 @@ class HonestRuntime {
         };
 
 
-const definition =
-    new DefinitionEngine(
-        semanticObject
-    ).execute();
+        const definition =
+            new DefinitionEngine(
+                semanticObject
+            ).execute();
+
 
 
         trace.push({
@@ -153,9 +154,9 @@ const definition =
 
 
         const search =
-            new SearchEngine(
-                semanticObject
-            ).run();
+    new SearchEngine(
+        semanticObject
+    ).execute();
 
 
 
