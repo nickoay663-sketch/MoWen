@@ -37,6 +37,17 @@ class SelfCheckEngine {
             this.validateRuntimeResult();
 
 
+
+        const integrityReport =
+            this.validateRuntimeIntegrity();
+
+
+
+        const boundaryReport =
+            this.validateResponsibilityBoundary();
+
+
+
         const failureExplanation =
             this.createFailureExplanation(
 
@@ -44,7 +55,11 @@ class SelfCheckEngine {
 
                 registryReport,
 
-                selfDescriptionReport
+                selfDescriptionReport,
+
+                integrityReport,
+
+                boundaryReport
 
             );
 
@@ -66,13 +81,18 @@ class SelfCheckEngine {
 
                 registryReport,
 
-                runtimeResultReport
+                runtimeResultReport,
+
+                integrityReport,
+
+                boundaryReport
 
             );
 
 
 
-            const passed =
+        const passed =
+
 
             Object.values(checks).every(Boolean)
 
@@ -90,7 +110,15 @@ class SelfCheckEngine {
 
             &&
 
-            runtimeResultReport.passed;
+            runtimeResultReport.passed
+
+            &&
+
+            integrityReport.passed
+
+            &&
+
+            boundaryReport.passed;
 
 
 
@@ -105,13 +133,13 @@ class SelfCheckEngine {
 
             version:
 
-                "5.4",
+                "7.0",
 
 
 
             principle:
 
-                "莫问检查运行契约，不判断表达结果。",
+                "莫问检查自身运行完整性、责任边界和证据边界，不判断表达结果。",
 
 
 
@@ -130,6 +158,12 @@ class SelfCheckEngine {
             runtimeResultReport,
 
 
+            integrityReport,
+
+
+            boundaryReport,
+
+
             failureExplanation,
 
 
@@ -145,21 +179,36 @@ class SelfCheckEngine {
 
             result: {
 
+
                 checks,
+
 
                 contractReport,
 
+
                 registryReport,
+
 
                 selfDescriptionReport,
 
+
                 runtimeResultReport,
+
+
+                integrityReport,
+
+
+                boundaryReport,
+
 
                 failureExplanation,
 
+
                 recoveryGuidance,
 
+
                 auditTrail,
+
 
                 passed
 
@@ -167,7 +216,9 @@ class SelfCheckEngine {
 
 
 
-            trace: [],
+            trace:
+
+                this.runtimeObject.runtimeTrace || [],
 
 
 
@@ -182,7 +233,7 @@ class SelfCheckEngine {
 
                     [
 
-                        "运行链是否存在契约违反？"
+                        "运行链是否存在责任边界违反？"
 
                     ],
 
@@ -209,7 +260,7 @@ class SelfCheckEngine {
 
     }
 
-    check() {
+        check() {
 
 
         const {
@@ -405,6 +456,7 @@ class SelfCheckEngine {
                         ),
 
 
+
                 missingFields,
 
 
@@ -423,7 +475,9 @@ class SelfCheckEngine {
 
             ) {
 
+
                 report.passed = false;
+
 
             }
 
@@ -543,6 +597,162 @@ class SelfCheckEngine {
 
 
 
+    validateRuntimeIntegrity() {
+
+
+        const pipeline =
+
+            this.runtimeObject.pipeline || [];
+
+
+
+        const expected = [
+
+
+            "RecognitionEngine",
+
+
+            "DefinitionEngine",
+
+
+            "EvidenceEngine",
+
+
+            "CorrespondenceEngine",
+
+
+            "ReasoningEngine",
+
+
+            "ResponsibilityEngine",
+
+
+            "ReconstructionEngine",
+
+
+            "GeneratorEngine",
+
+
+            "SelfCheckEngine"
+
+
+        ];
+
+
+
+        const passed =
+
+            expected.every(
+
+                (engine, index) =>
+
+                    pipeline[index] === engine
+
+            );
+
+
+
+        return {
+
+
+            passed,
+
+
+            expectedPipeline:
+
+                expected,
+
+
+
+            actualPipeline:
+
+                pipeline,
+
+
+
+            status:
+
+                passed
+
+                    ? "pipeline-integrity-pass"
+
+                    : "pipeline-integrity-failed"
+
+
+        };
+
+
+    }
+
+        validateResponsibilityBoundary() {
+
+
+        const generator =
+
+            this.runtimeObject.generator || {};
+
+
+
+        const report = {
+
+
+            passed:
+
+                true,
+
+
+
+            checks: {
+
+                expansion:
+
+                    true,
+
+                sourceBoundary:
+
+                    true,
+
+                evidenceBoundary:
+
+                    true
+
+            }
+
+        };
+
+
+
+        const reportData =
+
+            generator.report || {};
+
+
+
+        if (
+
+            reportData.expansion === true
+
+        ) {
+
+
+            report.passed = false;
+
+
+            report.checks.expansion = false;
+
+
+        }
+
+
+
+        return report;
+
+
+    }
+
+
+
+
     validateEngineDescription() {
 
 
@@ -583,6 +793,7 @@ class SelfCheckEngine {
 
                 );
 
+
             }
 
 
@@ -596,6 +807,7 @@ class SelfCheckEngine {
 
                 );
 
+
             }
 
 
@@ -605,6 +817,7 @@ class SelfCheckEngine {
 
                 missing
 
+
             };
 
 
@@ -613,6 +826,7 @@ class SelfCheckEngine {
 
 
                 report.passed = false;
+
 
             }
 
@@ -627,34 +841,60 @@ class SelfCheckEngine {
     }
 
 
+
+
     validateRuntimeResult() {
 
+
         const result =
+
             this.runtimeObject.runtimeResult;
 
+
+
         const requiredFields =
+
             this.runtimeObject.contract
+
                 ?.runtimeResultContract
+
                 ?.requiredFields || [];
 
+
+
         const missingFields =
+
             requiredFields.filter(
 
+
                 field =>
+
                     !(field in (result || {}))
+
 
             );
 
+
+
         return {
 
+
             passed:
+
                 missingFields.length === 0,
+
+
 
             missingFields
 
+
         };
 
+
     }
+
+
+
 
     createFailureExplanation(
 
@@ -662,7 +902,11 @@ class SelfCheckEngine {
 
         registryReport,
 
-        descriptionReport
+        descriptionReport,
+
+        integrityReport,
+
+        boundaryReport
 
     ) {
 
@@ -671,88 +915,21 @@ class SelfCheckEngine {
 
 
 
-        for (const [engineName, data] of Object.entries(contractReport.engines)) {
-
-
-            if (
-
-                data.missingFields.length > 0 ||
-
-                data.invalidFields.length > 0
-
-            ) {
-
-
-                failures.push({
-
-
-                    engine:
-
-                        engineName,
-
-
-
-                    problemType:
-
-                        "contract-failure",
-
-
-
-                    fields:
-
-                        [
-
-                            ...data.missingFields,
-
-                            ...data.invalidFields
-
-                        ],
-
-
-
-                    impact:
-
-                        "该 Engine 不符合 Runtime Contract。"
-
-
-                });
-
-
-            }
-
-
-        }
-
-
-
-
-        if (!registryReport.passed) {
+        if (!contractReport.passed) {
 
 
             failures.push({
 
 
-                engine:
-
-                    "EngineRegistry",
-
-
-
                 problemType:
 
-                    "registry-failure",
-
-
-
-                fields:
-
-                    registryReport.missing,
+                    "contract-failure",
 
 
 
                 impact:
 
-                    "Engine 未完成注册，不能进入可信运行链。"
+                    "Engine 不符合 Runtime Contract。"
 
 
             });
@@ -762,43 +939,96 @@ class SelfCheckEngine {
 
 
 
-
-        for (const [engineName, data] of Object.entries(descriptionReport.engines)) {
-
-
-            if (data.missing.length > 0) {
+        if (!registryReport.passed) {
 
 
-                failures.push({
+            failures.push({
 
 
-                    engine:
+                problemType:
 
-                        engineName,
+                    "registry-failure",
 
 
 
-                    problemType:
+                impact:
 
-                        "description-failure",
-
-
-
-                    fields:
-
-                        data.missing,
+                    "Engine 未完成注册。"
 
 
-
-                    impact:
-
-                        "Engine 无法完整描述自身能力。"
+            });
 
 
-                });
+        }
 
 
-            }
+
+        if (!descriptionReport.passed) {
+
+
+            failures.push({
+
+
+                problemType:
+
+                    "description-failure",
+
+
+
+                impact:
+
+                    "Engine 无法完整描述自身能力。"
+
+
+            });
+
+
+        }
+
+
+
+        if (!integrityReport.passed) {
+
+
+            failures.push({
+
+
+                problemType:
+
+                    "pipeline-integrity-failure",
+
+
+
+                impact:
+
+                    "Runtime Pipeline 顺序异常。"
+
+
+            });
+
+
+        }
+
+
+
+        if (!boundaryReport.passed) {
+
+
+            failures.push({
+
+
+                problemType:
+
+                    "responsibility-boundary-failure",
+
+
+
+                impact:
+
+                    "输出超过证据或责任边界。"
+
+
+            });
 
 
         }
@@ -816,33 +1046,27 @@ class SelfCheckEngine {
     createRecoveryGuidance(failures) {
 
 
-        return failures.map(failure => {
+        return failures.map(failure => ({
 
 
-            return {
+            problemType:
 
-
-                engine:
-
-                    failure.engine,
+                failure.problemType,
 
 
 
-                action:
+            action:
 
-                    "修正 Engine 注册信息或 Contract 后重新运行 SelfCheck。",
-
-
-
-                reason:
-
-                    failure.impact
+                "修正运行链后重新执行 SelfCheck。",
 
 
-            };
+
+            reason:
+
+                failure.impact
 
 
-        });
+        }));
 
 
     }
@@ -856,8 +1080,11 @@ class SelfCheckEngine {
 
         registryReport,
 
+        runtimeResultReport,
 
-        runtimeResultReport
+        integrityReport,
+
+        boundaryReport
 
     ) {
 
@@ -873,7 +1100,7 @@ class SelfCheckEngine {
 
             version:
 
-                "5.4",
+                "7.0",
 
 
 
@@ -902,9 +1129,26 @@ class SelfCheckEngine {
                     : "FAIL",
 
 
+
             runtimeResultStatus:
 
                 runtimeResultReport.passed
+
+                    ? "PASS"
+
+                    : "FAIL",
+
+
+
+            pipelineStatus:
+
+                integrityReport.status,
+
+
+
+            boundaryStatus:
+
+                boundaryReport.passed
 
                     ? "PASS"
 
@@ -948,7 +1192,6 @@ class SelfCheckEngine {
 
 
 
-
         if (type === "object") {
 
 
@@ -978,7 +1221,6 @@ class SelfCheckEngine {
 
 
 }
-
 
 
 export default SelfCheckEngine;
