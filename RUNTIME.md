@@ -1,7 +1,6 @@
-# MoWen Runtime v1.3
+# MoWen Runtime v10.1
 
-# 莫问运行系统 v1.3
-
+# 莫问运行系统 v10.1
 
 ## Runtime
 
@@ -9,117 +8,126 @@ MoWen uses one Honest Runtime.
 
 All expressions enter the same responsibility verification structure.
 
-莫问使用同一套诚实运行。
+Every expression enters Runtime and becomes a verifiable testimony chain.
 
-所有表达进入同一套责任验证结构。
+## EngineBase Architecture
 
+MoWen Runtime uses EngineBase v10.1.
 
-## Entry Principle
+Every Engine follows the unified lifecycle:
 
-Every expression enters MoWen through Language Runtime.
+- Constructor
+- Execute
+- Runtime Contract
+- Trace
+- Result
+- Next Runtime State
 
-Language Runtime establishes the original language environment of the expression.
+All Engines share the same execution standard.
 
-每一个表达通过语言运行系统进入莫问。
+## Runtime Pipeline
 
-语言运行系统建立表达所属的原始语言环境。
+Expression
 
+↓
 
-Without Definition,
+RecognitionEngine
 
-Runtime cannot continue.
+↓
 
-没有定义，
+DefinitionEngine
 
-运行无法继续。
+↓
+
+SearchEngine
+
+↓
+
+EvidenceEngine
+
+↓
+
+CorrespondenceEngine
+
+↓
+
+ReasoningEngine
+
+↓
+
+ResponsibilityEngine
+
+↓
+
+ReconstructionEngine
+
+↓
+
+GeneratorEngine
+
+↓
+
+SelfCheckEngine
+
+↓
+
+Responsibility Report
 
 
 ## Expression and Testimony
 
 Expression enters MoWen Runtime.
 
-After recognition and source identification, an expression becomes Testimony.
+After recognition and definition processing, expression becomes Testimony.
 
-表达进入莫问运行系统。
+Testimony enters the verification chain.
 
-经过识别和来源确认后，表达成为证词。
+Runtime does not directly judge expression.
 
+Runtime verifies relationships and responsibility boundaries.
 
 ## Honest Runtime
 
 MoWen uses one Honest Runtime for every expression.
 
-MoWen itself can also become an expression and enter the same Honest Runtime.
+MoWen itself can also become an expression and enter the same Runtime.
 
-An Honest Runtime is a complete process of responsibility verification.
+An Honest Runtime is a complete responsibility verification process.
 
-莫问对所有表达使用同一套诚实运行。
+## Runtime Contract
 
-莫问自身也可以作为表达进入同一套诚实运行。
+Every Engine must provide:
 
-一次诚实运行，是一次完整的责任验证过程。
+- engine
+- version
+- status
+- result
+- trace
+- questions
+- nextRuntimeState
 
+Runtime Contract ensures every Engine can describe its own execution responsibility.
 
-## Runtime Flow
+## SelfCheck
 
+SelfCheckEngine verifies:
 
-Expression
+- Engine Contract
+- Engine Registry
+- Pipeline Integrity
+- Runtime Result
+- Responsibility Boundary
+- Audit Trail
 
-↓
+SelfCheck does not judge expression truth.
 
-Language Runtime
-
-↓
-
-Recognition
-
-↓
-
-Testimony
-
-↓
-
-Definition
-
-↓
-
-Evidence
-
-↓
-
-Correspondence
-
-↓
-
-Reasoning
-
-↓
-
-Responsibility
-
-↓
-
-Reconstruction
-
-↓
-
-New Testimony
-
+SelfCheck verifies Runtime integrity.
 
 ## Search Capability
 
-Search is not a fixed Runtime stage.
-
 Search is a Runtime capability.
 
-Every Runtime process may request Search.
-
-检索不是固定运行阶段。
-
-检索是运行能力。
-
-每一个运行过程都可以请求检索。
-
+Search may be requested by Runtime processes when evidence is required.
 
 ## Runtime Principle
 
@@ -127,17 +135,8 @@ Runtime does not generate judgment.
 
 Runtime verifies relationships, records status and returns responsibility.
 
-运行不产生裁决。
-
-运行验证关系，记录状态，并返回责任。
-
-
 ## Core Rule
 
 Every expression may enter Runtime.
 
 Every Runtime result must bear responsibility.
-
-每一个表达都可以进入运行。
-
-每一个运行结果都必须承担责任。
