@@ -3,7 +3,7 @@ class RuntimeResult {
     constructor() {
 
         this.runtimeVersion =
-            "10.1";
+            "10.2";
 
 
         this.generatedAt =
@@ -85,13 +85,16 @@ class RuntimeResult {
         this.metadata = {
 
             contractVersion:
-                null,
+                "10.2",
+
 
             runtimeVersion:
-                "10.1",
+                "10.2",
+
 
             engineCount:
                 0,
+
 
             generatedAt:
                 this.generatedAt
@@ -112,6 +115,7 @@ class RuntimeResult {
 
         };
 
+
         return this;
 
     }
@@ -120,7 +124,9 @@ class RuntimeResult {
 
     setEngine(name, value) {
 
-        this[name] = value;
+        this[name] =
+            value;
+
 
         return this;
 
@@ -133,6 +139,7 @@ class RuntimeResult {
         this.runtimeTrace =
             trace;
 
+
         return this;
 
     }
@@ -143,6 +150,7 @@ class RuntimeResult {
 
         this.pipeline =
             pipeline;
+
 
         return this;
 
@@ -155,6 +163,7 @@ class RuntimeResult {
         this.responsibilityModel =
             model;
 
+
         return this;
 
     }
@@ -165,6 +174,7 @@ class RuntimeResult {
 
         this.testimonyChain =
             chain;
+
 
         return this;
 
@@ -177,14 +187,38 @@ class RuntimeResult {
         this.verificationBoundary =
             boundary;
 
+
         return this;
 
     }
 
 
 
-}
+    complete() {
 
+        return {
+
+            runtimeVersion:
+                this.runtimeVersion,
+
+
+            generatedAt:
+                this.generatedAt,
+
+
+            metadata:
+                this.metadata,
+
+
+            result:
+                this
+
+        };
+
+    }
+
+
+}
 
 
 export default RuntimeResult;
