@@ -18,14 +18,12 @@ import TestimonyValidator from "./TestimonyValidator.js";
 
 class HonestRuntime {
 
-
     constructor(expression) {
 
         this.expression =
             expression || "";
 
     }
-
 
 
     run() {
@@ -35,15 +33,18 @@ class HonestRuntime {
         const runtimeResult =
             new RuntimeResult();
 
-            const testimony =
-    new TestimonyBuilder(
-        this.expression
-    ).run();
 
-const testimonyValidation =
-    new TestimonyValidator(
-        testimony
-    ).run();
+        const testimony =
+            new TestimonyBuilder(
+                this.expression
+            ).run();
+
+
+        const testimonyValidation =
+            new TestimonyValidator(
+                testimony
+            ).run();
+
 
 
         const pipeline = [
@@ -71,8 +72,10 @@ const testimonyValidation =
         ];
 
 
+
         const identity =
             new MoWenIdentity().run();
+
 
 
         const language =
@@ -81,10 +84,12 @@ const testimonyValidation =
             ).run();
 
 
+
         const recognition =
             new RecognitionEngine(
                 this.expression
             ).run();
+
 
 
         trace.push({
@@ -100,6 +105,8 @@ const testimonyValidation =
 
         });
 
+
+
         const semanticObject = {
 
             originalContent:
@@ -108,20 +115,18 @@ const testimonyValidation =
             language:
                 language.language,
 
-            expressionType:
-                recognition.expressionType || null,
-
             objects:
-                recognition.result?.objects ??
-                recognition.objects ??
-                [],
+                recognition.objects || [],
 
             concepts:
-                recognition.result?.concepts ??
-                recognition.concepts ??
-                []
+                recognition.concepts || [],
+
+            testimony,
+
+            testimonyValidation
 
         };
+
 
 
         const definition =
@@ -144,24 +149,12 @@ const testimonyValidation =
         });
 
 
+
         const search =
             new SearchEngine(
                 semanticObject
             ).run();
 
-
-        trace.push({
-
-            engine:
-                "SearchEngine",
-
-            status:
-                search.status,
-
-            version:
-                search.version
-
-        });
 
 
         const evidence =
@@ -174,18 +167,6 @@ const testimonyValidation =
             }).run();
 
 
-        trace.push({
-
-            engine:
-                "EvidenceEngine",
-
-            status:
-                evidence.status,
-
-            version:
-                evidence.version
-
-        });
 
         const correspondence =
             new CorrespondenceEngine({
@@ -193,32 +174,13 @@ const testimonyValidation =
                 ...semanticObject,
 
                 definitions:
-                    definition.result?.definitions ??
-                    definition.definitions ??
-                    [],
+                    definition.definitions || [],
 
                 evidences:
-                    evidence.result?.evidences ??
-                    evidence.evidences ??
-                    [],
-
-                search
+                    evidence.evidences || []
 
             }).run();
 
-
-        trace.push({
-
-            engine:
-                "CorrespondenceEngine",
-
-            status:
-                correspondence.status,
-
-            version:
-                correspondence.version
-
-        });
 
 
         const reasoning =
@@ -227,25 +189,11 @@ const testimonyValidation =
                 ...semanticObject,
 
                 correspondences:
-                    correspondence.result?.correspondences ??
-                    correspondence.correspondences ??
-                    []
+                    correspondence.correspondences || []
 
             }).run();
 
 
-        trace.push({
-
-            engine:
-                "ReasoningEngine",
-
-            status:
-                reasoning.status,
-
-            version:
-                reasoning.version
-
-        });
 
         const responsibility =
             new ResponsibilityEngine({
@@ -253,25 +201,9 @@ const testimonyValidation =
                 ...semanticObject,
 
                 reasonings:
-                    reasoning.result?.reasonings ??
-                    reasoning.reasonings ??
-                    []
+                    reasoning.reasonings || []
 
             }).run();
-
-
-        trace.push({
-
-            engine:
-                "ResponsibilityEngine",
-
-            status:
-                responsibility.status,
-
-            version:
-                responsibility.version
-
-        });
 
 
 
@@ -280,32 +212,9 @@ const testimonyValidation =
 
                 semanticObject,
 
-                definition,
-
-                evidence,
-
-                correspondence,
-
-                reasoning,
-
                 responsibility
 
             }).run();
-
-
-
-        trace.push({
-
-            engine:
-                "ReconstructionEngine",
-
-            status:
-                reconstruction.status,
-
-            version:
-                reconstruction.version
-
-        });
 
 
 
@@ -322,19 +231,6 @@ const testimonyValidation =
 
 
 
-        trace.push({
-
-            engine:
-                "GeneratorEngine",
-
-            status:
-                generator.status,
-
-            version:
-                generator.version
-
-        });
-
         const engineRegistry =
             new EngineRegistry();
 
@@ -344,48 +240,40 @@ const testimonyValidation =
             recognition
         );
 
-
         engineRegistry.register(
             "definition",
             definition
         );
-
 
         engineRegistry.register(
             "search",
             search
         );
 
-
         engineRegistry.register(
             "evidence",
             evidence
         );
-
 
         engineRegistry.register(
             "correspondence",
             correspondence
         );
 
-
         engineRegistry.register(
             "reasoning",
             reasoning
         );
-
 
         engineRegistry.register(
             "responsibility",
             responsibility
         );
 
-
         engineRegistry.register(
             "reconstruction",
             reconstruction
         );
-
 
         engineRegistry.register(
             "generator",
@@ -393,8 +281,10 @@ const testimonyValidation =
         );
 
 
+
         const engines =
             engineRegistry.all();
+
 
 
         const selfCheck =
@@ -416,6 +306,8 @@ const testimonyValidation =
 
             }).run();
 
+
+
         trace.push({
 
             engine:
@@ -429,8 +321,12 @@ const testimonyValidation =
 
         });
 
+
+
         runtimeResult.runtimeVersion =
-            "8.1";
+            "9.0";
+
+
 
         runtimeResult.setMetadata({
 
@@ -438,74 +334,122 @@ const testimonyValidation =
                 RuntimeContract.version,
 
             runtimeVersion:
-                "8.1",
+                "9.0",
 
             engineCount:
                 engineRegistry.list().length
 
         });
 
+
+
         runtimeResult.recognition =
             recognition;
+
 
         runtimeResult.definition =
             definition;
 
+
+        runtimeResult.testimony =
+            testimony;
+
+
+        runtimeResult.testimonyValidation =
+            testimonyValidation;
+
+
         runtimeResult.search =
             search;
+
 
         runtimeResult.evidence =
             evidence;
 
+
         runtimeResult.correspondence =
             correspondence;
+
 
         runtimeResult.reasoning =
             reasoning;
 
+
         runtimeResult.responsibility =
             responsibility;
+
+
+        runtimeResult.responsibilityModel =
+            responsibility.responsibilities || [];
+
+
 
         runtimeResult.reconstruction =
             reconstruction;
 
+
         runtimeResult.generator =
             generator;
+
 
         runtimeResult.selfCheck =
             selfCheck;
 
+
         runtimeResult.engineRegistry =
             engineRegistry;
+
+
+
+        runtimeResult.testimonyChain = {
+
+            testimony,
+
+            testimonyValidation,
+
+            responsibility
+
+        };
+
+
+
+        runtimeResult.verificationBoundary = {
+
+            evidenceBoundary:
+                reconstruction.reconstruction?.evidenceBoundary,
+
+            sourceBoundary:
+                reconstruction.reconstruction?.sourceBoundary,
+
+            responsibilityBoundary:
+                reconstruction.reconstruction?.responsibilityBoundary
+
+        };
+
+
 
         runtimeResult.setPipeline(
             pipeline
         );
 
+
         runtimeResult.setTrace(
             trace
         );
 
+
         runtimeResult.identity =
             identity;
+
 
         runtimeResult.contract =
             RuntimeContract;
 
-        runtimeResult.contractVersion =
-            RuntimeContract.version;
 
         runtimeResult.semanticObject =
             semanticObject;
 
-        runtimeResult.language =
-            language;
 
-            runtimeResult.testimony =
-    testimony;
-
-runtimeResult.testimonyValidation =
-    testimonyValidation;
 
         return runtimeResult;
 
