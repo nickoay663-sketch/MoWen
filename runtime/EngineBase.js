@@ -1,6 +1,10 @@
 class EngineBase {
 
-    constructor(engine, version, principle) {
+    constructor(
+        engine,
+        version,
+        principle
+    ) {
 
         this.engine =
             engine;
@@ -14,29 +18,6 @@ class EngineBase {
     }
 
 
-    execute(input = {}) {
-
-        if (
-            typeof this.run === "function"
-        ) {
-
-            return this.run(input);
-
-        }
-
-
-        return this.result({
-
-            status:
-                "engine-no-run-method",
-
-            input
-
-        });
-
-    }
-
-
     metadata(extra = {}) {
 
         return {
@@ -46,9 +27,6 @@ class EngineBase {
 
             runtimeVersion:
                 this.version,
-
-            engine:
-                this.engine,
 
             ...extra
 
@@ -70,9 +48,40 @@ class EngineBase {
             principle:
                 this.principle,
 
+            status:
+                "completed",
+
+            trace:
+                [],
+
+            questions:
+                [],
+
+            nextRuntimeState:
+                null,
+
+            metadata:
+                this.metadata(),
+
             ...data
 
         };
+
+    }
+
+
+    execute() {
+
+        if (typeof this.run === "function") {
+
+            return this.run();
+
+        }
+
+
+        throw new Error(
+            `${this.engine} must implement execute()`
+        );
 
     }
 
