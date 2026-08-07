@@ -1,62 +1,47 @@
-class GeneratorEngine {
+import EngineBase from "./EngineBase.js";
 
+class GeneratorEngine extends EngineBase {
 
     constructor(runtimeObject) {
+
+        super(
+            "GeneratorEngine",
+            "7.0",
+            "莫问生成责任链报告，不生成超过验证范围的结论。"
+        );
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
-
-
     run() {
-
 
         const metadata =
             this.buildMetadata();
 
-
-
         const report =
             this.buildReport();
 
-
-
         return {
 
-
             engine:
-                "GeneratorEngine",
-
-
+                this.engine,
 
             version:
-                "7.0",
-
-
+                this.version,
 
             semanticObject:
                 this.runtimeObject.semanticObject,
 
-
-
             principle:
-                "莫问生成责任链报告，不生成超过验证范围的结论。",
-
-
+                this.principle,
 
             generator:
                 true,
 
-
-
             metadata,
 
-
-
             report,
-
-
 
             result: {
 
@@ -69,22 +54,14 @@ class GeneratorEngine {
 
             },
 
-
-
             trace:
                 this.runtimeObject.runtimeTrace || [],
-
-
 
             questions:
                 [],
 
-
-
             nextRuntimeState:
                 "SelfCheckEngine",
-
-
 
             status:
 
@@ -98,34 +75,21 @@ class GeneratorEngine {
 
     }
 
-
-
-
     buildMetadata() {
 
-
         return {
-
 
             generatedAt:
                 new Date().toISOString(),
 
-
-
             runtimeVersion:
                 this.runtimeObject.contract?.identity?.runtimeVersion || "",
-
-
 
             contractVersion:
                 this.runtimeObject.contract?.version || "",
 
-
-
             pipeline:
                 this.runtimeObject.pipeline || [],
-
-
 
             engineCount:
 
@@ -135,8 +99,6 @@ class GeneratorEngine {
 
                 ).length,
 
-
-
             traceCount:
 
                 (this.runtimeObject.runtimeTrace || []).length
@@ -145,39 +107,25 @@ class GeneratorEngine {
 
     }
 
-
-
-
     buildReport() {
-
 
         const reconstruction =
 
             this.runtimeObject.reconstruction?.reconstruction || {};
 
-
-
         return {
-
-
 
             expression:
 
                 reconstruction.originalExpression || "",
 
-
-
             reconstructedExpression:
 
                 reconstruction.reconstructedExpression || "",
 
-
-
             language:
 
                 reconstruction.language || null,
-
-
 
             responsibilities:
 
@@ -187,65 +135,43 @@ class GeneratorEngine {
 
                 [],
 
-
-
             responsibilityCount:
 
                 reconstruction.responsibilityCount || 0,
-
-
 
             evidenceChain:
 
                 reconstruction.evidenceChain || [],
 
-
-
             sources:
 
                 reconstruction.sources || [],
-
-
 
             sourceCount:
 
                 reconstruction.sourceCount || 0,
 
-
-
             boundaries:
-
-                reconstruction.boudaries || 
 
                 reconstruction.boundaries ||
 
                 {},
 
-
-
             expansion:
 
                 reconstruction.expansion || false,
-
-
 
             reportType:
 
                 "responsibility-verification-report",
 
-
-
             verificationStatus:
 
                 reconstruction.verificationStatus || "pending",
 
-
-
             runtimeTrace:
 
                 this.runtimeObject.runtimeTrace || [],
-
-
 
             engineRegistry:
 
@@ -255,8 +181,6 @@ class GeneratorEngine {
 
     }
 
-
 }
-
 
 export default GeneratorEngine;
