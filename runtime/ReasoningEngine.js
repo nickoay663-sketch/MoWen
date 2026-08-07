@@ -1,6 +1,14 @@
-class ReasoningEngine {
+import EngineBase from "./EngineBase.js";
+
+class ReasoningEngine extends EngineBase {
 
     constructor(semanticObject) {
+
+        super(
+            "ReasoningEngine",
+            "7.0",
+            "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。"
+        );
 
         this.semanticObject = semanticObject || {};
 
@@ -26,11 +34,11 @@ class ReasoningEngine {
         return {
 
             engine:
-                "ReasoningEngine",
+                this.engine,
 
 
             version:
-                "7.0",
+                this.version,
 
 
             semanticObject:
@@ -38,7 +46,7 @@ class ReasoningEngine {
 
 
             principle:
-                "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。",
+                this.principle,
 
 
             metadata,
@@ -127,7 +135,6 @@ class ReasoningEngine {
             this.semanticObject.correspondences || [];
 
 
-
         return correspondences.map(item => {
 
 
@@ -135,15 +142,12 @@ class ReasoningEngine {
                 this.detectAssumptions(item);
 
 
-
             const leap =
                 this.detectReasoningLeap(item);
 
 
-
             const strength =
                 this.evaluateStrength(item);
-
 
 
             return {
@@ -157,45 +161,36 @@ class ReasoningEngine {
                     item.evidences || [],
 
 
-
                 evidenceCount:
                     item.evidenceCount || 0,
-
 
 
                 sourceAvailable:
                     item.sourceAvailable || false,
 
 
-
                 sourceCount:
                     item.sourceCount || 0,
-
 
 
                 supported:
                     item.supported || false,
 
 
-
                 reasoningStrength:
                     strength,
-
 
 
                 hiddenAssumptions:
                     assumptions,
 
 
-
                 reasoningLeap:
                     leap,
 
 
-
                 reasoningType:
                     "responsibility-bounded-reasoning",
-
 
 
                 verificationStatus:
@@ -207,10 +202,8 @@ class ReasoningEngine {
                         : "insufficient-support",
 
 
-
                 runtimeTrace:
                     this.semanticObject.runtimeTrace || [],
-
 
 
                 engineRegistry:
@@ -258,7 +251,6 @@ class ReasoningEngine {
             item.overreach || {};
 
 
-
         return {
 
             detected:
@@ -290,7 +282,6 @@ class ReasoningEngine {
         }
 
 
-
         if (
 
             item.supported &&
@@ -303,13 +294,10 @@ class ReasoningEngine {
         }
 
 
-
         return "weak";
 
     }
 
-
 }
-
 
 export default ReasoningEngine;
