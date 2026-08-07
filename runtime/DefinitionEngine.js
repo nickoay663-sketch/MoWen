@@ -1,12 +1,19 @@
 import MoWenConfig from "./MoWenConfig.js";
 import Definitions from "../definitions/index.js";
 import SpanishDefinitions from "../languages/es-ES/Definitions.js";
+import EngineBase from "./EngineBase.js";
 
 
-class DefinitionEngine {
+class DefinitionEngine extends EngineBase {
 
 
     constructor(semanticObject) {
+
+        super(
+            "DefinitionEngine",
+            "7.0",
+            "莫问明确表达对象的概念边界，不让未定义概念进入责任判断。"
+        );
 
         this.semanticObject = semanticObject || {};
 
