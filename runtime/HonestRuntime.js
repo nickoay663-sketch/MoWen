@@ -89,9 +89,9 @@ class HonestRuntime {
 
 
         const recognition =
-    new RecognitionEngine(
-        this.expression
-    ).execute();
+            new RecognitionEngine(
+                this.expression
+            ).execute();
 
 
 
@@ -131,11 +131,10 @@ class HonestRuntime {
         };
 
 
-
-        const definition =
-            new DefinitionEngine(
-                semanticObject
-            ).run();
+const definition =
+    new DefinitionEngine(
+        semanticObject
+    ).execute();
 
 
         trace.push({
