@@ -35,7 +35,7 @@ const checks = {
 
     runtimeVersion:
 
-        runtimeResult.runtimeVersion === "9.1",
+        runtimeResult.runtimeVersion === "10.1",
 
 
     runtimeTrace:
@@ -123,7 +123,7 @@ if (passed) {
 
     console.log(
 
-        "MoWen Runtime v9.0 Test Passed."
+        "MoWen Runtime v10.1 Test Passed."
 
     );
 
@@ -133,7 +133,7 @@ if (passed) {
 
     console.log(
 
-        "MoWen Runtime v9.0 Test Failed."
+        "MoWen Runtime v10.1 Test Failed."
 
     );
 
