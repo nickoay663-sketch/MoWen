@@ -1,16 +1,21 @@
-class SelfCheckEngine {
+import EngineBase from "./EngineBase.js";
 
 
-    constructor(runtimeObject) {
-
-        this.runtimeObject =
-            runtimeObject || {};
-
-    }
+class SelfCheckEngine extends EngineBase {
 
 
+   constructor(runtimeObject) {
 
-    run() {
+    super(runtimeObject);
+
+    this.runtimeObject =
+        runtimeObject || {};
+
+}
+
+
+
+    execute() {
 
 
         const checks =
@@ -133,7 +138,7 @@ class SelfCheckEngine {
 
             version:
 
-                "7.0",
+                "10.1",
 
 
 
@@ -227,7 +232,9 @@ class SelfCheckEngine {
 
                 passed
 
-                    ? []
+                    ?
+
+                    []
 
                     :
 
@@ -250,9 +257,13 @@ class SelfCheckEngine {
 
                 passed
 
-                    ? "self-check-passed"
+                    ?
 
-                    : "self-check-warning"
+                    "self-check-passed"
+
+                    :
+
+                    "self-check-warning"
 
 
         };
@@ -260,7 +271,7 @@ class SelfCheckEngine {
 
     }
 
-        check() {
+    check() {
 
 
         const {
@@ -396,26 +407,25 @@ class SelfCheckEngine {
 
 
 
-                if (expectedType) {
+                if (
+
+                    expectedType &&
+
+                    !this.validateType(
+
+                        engine[field],
+
+                        expectedType
+
+                    )
+
+                ) {
 
 
-                    if (
-
-                        !this.validateType(
-
-                            engine[field],
-
-                            expectedType
-
-                        )
-
-                    ) {
-
-                        invalidFields.push(field);
-
-                    }
+                    invalidFields.push(field);
 
                 }
+
 
             }
 
@@ -429,7 +439,9 @@ class SelfCheckEngine {
 
                     requiredFields.length === 0
 
-                        ? 100
+                        ?
+
+                        100
 
                         :
 
@@ -437,9 +449,13 @@ class SelfCheckEngine {
 
                             (
 
-                                requiredFields.length -
+                                requiredFields.length
 
-                                missingFields.length -
+                                -
+
+                                missingFields.length
+
+                                -
 
                                 invalidFields.length
 
@@ -469,7 +485,9 @@ class SelfCheckEngine {
 
             if (
 
-                missingFields.length > 0 ||
+                missingFields.length > 0
+
+                ||
 
                 invalidFields.length > 0
 
@@ -594,9 +612,6 @@ class SelfCheckEngine {
 
     }
 
-
-
-
     validateRuntimeIntegrity() {
 
 
@@ -613,6 +628,9 @@ class SelfCheckEngine {
 
 
             "DefinitionEngine",
+
+
+            "SearchEngine",
 
 
             "EvidenceEngine",
@@ -658,6 +676,7 @@ class SelfCheckEngine {
             passed,
 
 
+
             expectedPipeline:
 
                 expected,
@@ -674,9 +693,13 @@ class SelfCheckEngine {
 
                 passed
 
-                    ? "pipeline-integrity-pass"
+                    ?
 
-                    : "pipeline-integrity-failed"
+                    "pipeline-integrity-pass"
+
+                    :
+
+                    "pipeline-integrity-failed"
 
 
         };
@@ -684,7 +707,10 @@ class SelfCheckEngine {
 
     }
 
-        validateResponsibilityBoundary() {
+
+
+
+    validateResponsibilityBoundary() {
 
 
         const generator =
@@ -704,17 +730,23 @@ class SelfCheckEngine {
 
             checks: {
 
+
                 expansion:
 
                     true,
+
+
 
                 sourceBoundary:
 
                     true,
 
+
+
                 evidenceBoundary:
 
                     true
+
 
             }
 
@@ -892,9 +924,6 @@ class SelfCheckEngine {
 
 
     }
-
-
-
 
     createFailureExplanation(
 
@@ -1100,7 +1129,7 @@ class SelfCheckEngine {
 
             version:
 
-                "7.0",
+                "10.1",
 
 
 
@@ -1124,9 +1153,13 @@ class SelfCheckEngine {
 
                 registryReport.passed
 
-                    ? "PASS"
+                    ?
 
-                    : "FAIL",
+                    "PASS"
+
+                    :
+
+                    "FAIL",
 
 
 
@@ -1134,9 +1167,13 @@ class SelfCheckEngine {
 
                 runtimeResultReport.passed
 
-                    ? "PASS"
+                    ?
 
-                    : "FAIL",
+                    "PASS"
+
+                    :
+
+                    "FAIL",
 
 
 
@@ -1150,9 +1187,13 @@ class SelfCheckEngine {
 
                 boundaryReport.passed
 
-                    ? "PASS"
+                    ?
 
-                    : "FAIL",
+                    "PASS"
+
+                    :
+
+                    "FAIL",
 
 
 
@@ -1175,9 +1216,6 @@ class SelfCheckEngine {
 
 
     }
-
-
-
 
     validateType(value, type) {
 

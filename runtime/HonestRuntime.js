@@ -33,8 +33,8 @@ class HonestRuntime {
         const runtimeResult =
             new RuntimeResult();
 
-            const runtimeVersion =
-    "9.1";
+        const runtimeVersion =
+            "9.1";
 
 
         const testimony =
@@ -403,7 +403,7 @@ class HonestRuntime {
                 runtimeTrace:
                     trace
 
-            }).run();
+           }).execute();
 
 
 
