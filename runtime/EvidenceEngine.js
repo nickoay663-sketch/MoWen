@@ -1,6 +1,14 @@
-class EvidenceEngine {
+import EngineBase from "./EngineBase.js";
+
+class EvidenceEngine extends EngineBase {
 
     constructor(semanticObject) {
+
+        super(
+            "EvidenceEngine",
+            "7.0",
+            "莫问分析证据来源、支持能力和责任边界，不替代真实性判断。"
+        );
 
         this.semanticObject = semanticObject || {};
 
@@ -26,11 +34,11 @@ class EvidenceEngine {
         return {
 
             engine:
-                "EvidenceEngine",
+                this.engine,
 
 
             version:
-                "7.0",
+                this.version,
 
 
             semanticObject:
@@ -38,7 +46,7 @@ class EvidenceEngine {
 
 
             principle:
-                "莫问分析证据来源、支持能力和责任边界，不替代真实性判断。",
+                this.principle,
 
 
             metadata,
@@ -131,7 +139,6 @@ class EvidenceEngine {
             this.semanticObject.search?.sources || [];
 
 
-
         return searches.map(search => {
 
 
@@ -146,12 +153,10 @@ class EvidenceEngine {
                 ) || null;
 
 
-
             const strength =
                 this.evaluateStrength(
                     source
                 );
-
 
 
             return {
@@ -172,7 +177,6 @@ class EvidenceEngine {
                     this.semanticObject.originalContent || "",
 
 
-
                 source,
 
 
@@ -180,20 +184,16 @@ class EvidenceEngine {
                     !!source,
 
 
-
                 reference:
                     source?.url || null,
-
 
 
                 citation:
                     null,
 
 
-
                 evidenceStrength:
                     strength,
-
 
 
                 evidenceLimitation:
@@ -205,19 +205,17 @@ class EvidenceEngine {
                         : "没有发现对应来源。",
 
 
-
                 responsibility:
 
-                    {
+                {
 
-                        level:
-                            strength,
+                    level:
+                        strength,
 
-                        type:
-                            "evidence-support"
+                    type:
+                        "evidence-support"
 
-                    },
-
+                },
 
 
                 verificationStatus:
@@ -229,15 +227,12 @@ class EvidenceEngine {
                         : "missing-source",
 
 
-
                 evidenceType:
                     "responsibility-bounded-evidence",
 
 
-
                 runtimeTrace:
                     this.semanticObject.runtimeTrace || [],
-
 
 
                 engineRegistry:
@@ -278,8 +273,6 @@ class EvidenceEngine {
 
     }
 
-
 }
-
 
 export default EvidenceEngine;
