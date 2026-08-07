@@ -1,5 +1,6 @@
 class GeneratorEngine {
 
+
     constructor(runtimeObject) {
 
         this.runtimeObject = runtimeObject || {};
@@ -7,36 +8,55 @@ class GeneratorEngine {
     }
 
 
-    run() {
 
-        const report =
-            this.buildReport();
+    run() {
 
 
         const metadata =
             this.buildMetadata();
 
 
+
+        const report =
+            this.buildReport();
+
+
+
         return {
+
 
             engine:
                 "GeneratorEngine",
 
+
+
             version:
-                "6.0",
+                "7.0",
+
+
 
             semanticObject:
                 this.runtimeObject.semanticObject,
 
+
+
             principle:
-                "莫问输出验证报告，不输出未经验证的事实结论。",
+                "莫问生成责任链报告，不生成超过验证范围的结论。",
+
+
 
             generator:
                 true,
 
+
+
             metadata,
 
+
+
             report,
+
+
 
             result: {
 
@@ -44,39 +64,68 @@ class GeneratorEngine {
 
                 report,
 
-                generator: true
+                generator:
+                    true
 
             },
 
-            trace: [],
 
-            questions: [],
+
+            trace:
+                this.runtimeObject.runtimeTrace || [],
+
+
+
+            questions:
+                [],
+
+
 
             nextRuntimeState:
                 "SelfCheckEngine",
 
+
+
             status:
-                "generator-connected"
+
+                report.responsibilityCount > 0
+
+                    ? "generator-evaluated"
+
+                    : "need-report-data"
 
         };
 
     }
 
-        buildMetadata() {
+
+
+
+    buildMetadata() {
+
 
         return {
+
 
             generatedAt:
                 new Date().toISOString(),
 
+
+
             runtimeVersion:
                 this.runtimeObject.contract?.identity?.runtimeVersion || "",
+
+
 
             contractVersion:
                 this.runtimeObject.contract?.version || "",
 
+
+
             pipeline:
                 this.runtimeObject.pipeline || [],
+
+
 
             engineCount:
 
@@ -85,6 +134,8 @@ class GeneratorEngine {
                     this.runtimeObject.engines || {}
 
                 ).length,
+
+
 
             traceCount:
 
@@ -96,51 +147,105 @@ class GeneratorEngine {
 
 
 
+
     buildReport() {
 
+
         const reconstruction =
+
             this.runtimeObject.reconstruction?.reconstruction || {};
 
-                    return {
+
+
+        return {
+
+
 
             expression:
-                reconstruction.originalExpression,
+
+                reconstruction.originalExpression || "",
+
+
 
             reconstructedExpression:
-                reconstruction.reconstructedExpression,
+
+                reconstruction.reconstructedExpression || "",
+
+
 
             language:
-                reconstruction.language,
+
+                reconstruction.language || null,
+
+
 
             responsibilities:
-                reconstruction.responsibilities || [],
+
+                reconstruction.responsibilityChain ||
+
+                reconstruction.responsibilities ||
+
+                [],
+
+
 
             responsibilityCount:
+
                 reconstruction.responsibilityCount || 0,
 
+
+
+            evidenceChain:
+
+                reconstruction.evidenceChain || [],
+
+
+
             sources:
+
                 reconstruction.sources || [],
 
+
+
             sourceCount:
+
                 reconstruction.sourceCount || 0,
 
-            evidenceBoundary:
-                reconstruction.evidenceBoundary,
 
-            sourceBoundary:
-                reconstruction.sourceBoundary,
 
-            responsibilityBoundary:
-                reconstruction.responsibilityBoundary,
+            boundaries:
+
+                reconstruction.boudaries || 
+
+                reconstruction.boundaries ||
+
+                {},
+
+
 
             expansion:
-                reconstruction.expansion,
+
+                reconstruction.expansion || false,
+
+
+
+            reportType:
+
+                "responsibility-verification-report",
+
+
 
             verificationStatus:
-                reconstruction.verificationStatus,
+
+                reconstruction.verificationStatus || "pending",
+
+
 
             runtimeTrace:
+
                 this.runtimeObject.runtimeTrace || [],
+
+
 
             engineRegistry:
 
@@ -150,6 +255,8 @@ class GeneratorEngine {
 
     }
 
+
 }
+
 
 export default GeneratorEngine;
