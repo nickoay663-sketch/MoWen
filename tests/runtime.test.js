@@ -35,7 +35,7 @@ const checks = {
 
     runtimeVersion:
 
-        runtimeResult.runtimeVersion === "9.0",
+        runtimeResult.runtimeVersion === "9.1",
 
 
     runtimeTrace:

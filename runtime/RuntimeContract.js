@@ -84,11 +84,21 @@ const RuntimeContract = {
 
             "questions",
 
-            "nextRuntimeState"
+            "nextRuntimeState",
+
+            "principle",
+
+            "metadata"
 
         ],
 
         fieldTypes: {
+
+            principle:
+                "string",
+
+            metadata:
+                "object",
 
             engine:
                 "string",
@@ -176,16 +186,19 @@ const RuntimeContract = {
         required:
             true,
 
-        requiredMetadataFields: [
+     requiredMetadataFields: [
 
-            "name",
+    "name",
 
-            "version",
+    "version",
 
-            "capabilities"
+    "status",
 
-        ]
+    "nextRuntimeState",
 
+    "capabilities"
+
+]
     }
 
 };

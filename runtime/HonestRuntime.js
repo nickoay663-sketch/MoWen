@@ -33,6 +33,9 @@ class HonestRuntime {
         const runtimeResult =
             new RuntimeResult();
 
+            const runtimeVersion =
+    "9.1";
+
 
         const testimony =
             new TestimonyBuilder(
@@ -430,7 +433,8 @@ class HonestRuntime {
                 RuntimeContract.version,
 
             runtimeVersion:
-    runtimeVersion,
+                runtimeVersion,
+
             engineCount:
                 engineRegistry.list().length
 
