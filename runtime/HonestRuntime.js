@@ -152,12 +152,10 @@ class HonestRuntime {
         });
 
 
-
         const search =
-    new SearchEngine(
-        semanticObject
-    ).execute();
-
+            new SearchEngine(
+                semanticObject
+            ).execute();
 
 
         const evidence =
@@ -167,8 +165,7 @@ class HonestRuntime {
 
                 search
 
-            }).run();
-
+            }).execute();
 
 
         const correspondence =

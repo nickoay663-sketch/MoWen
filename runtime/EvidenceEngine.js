@@ -6,273 +6,100 @@ class EvidenceEngine extends EngineBase {
 
         super(
             "EvidenceEngine",
-            "7.0",
-            "莫问分析证据来源、支持能力和责任边界，不替代真实性判断。"
+            "10.2",
+            "莫问记录并验证表达相关证据。"
         );
 
-        this.semanticObject = semanticObject || {};
+        this.semanticObject =
+            semanticObject || {};
 
     }
 
 
-    run() {
-
-        const metadata =
-            this.buildMetadata();
-
+    execute() {
 
         const evidences =
-            this.collectEvidence();
+            this.buildEvidence();
 
 
-        const status =
-            evidences.length > 0
-                ? "evidence-evaluated"
-                : "need-evidence";
+        return this.result({
 
+            status:
+                "completed",
 
-        return {
+            metadata:
+                this.metadata({
 
-            engine:
-                this.engine,
+                    evidenceCount:
+                        evidences.length
 
-
-            version:
-                this.version,
-
-
-            semanticObject:
-                this.semanticObject,
-
-
-            principle:
-                this.principle,
-
-
-            metadata,
-
+                }),
 
             evidences,
 
-
             result: {
 
-                metadata,
-
-                evidences,
-
-                status
+                evidences
 
             },
 
-
-            trace:
-                this.semanticObject.runtimeTrace || [],
-
-
-            nextRuntimeState:
-                "CorrespondenceEngine",
-
-
-            status,
-
-
-            questions:
-
-                evidences.length > 0
-
-                    ? []
-
-                    : [
-                        "当前表达是否存在可分析证据？"
-                    ]
-
-        };
-
-    }
-
-
-
-    buildMetadata() {
-
-        return {
-
-            generatedAt:
-                new Date().toISOString(),
-
-
-            runtimeVersion:
-                this.semanticObject.contract?.identity?.runtimeVersion || "",
-
-
-            contractVersion:
-                this.semanticObject.contract?.version || "",
-
-
-            engineCount:
-
-                Object.keys(
-
-                    this.semanticObject.engines || {}
-
-                ).length,
-
-
-            traceCount:
-
-                (this.semanticObject.runtimeTrace || []).length
-
-        };
-
-    }
-
-
-
-    collectEvidence() {
-
-
-        const searches =
-            this.semanticObject.search?.searches || [];
-
-
-        const sources =
-            this.semanticObject.search?.sources || [];
-
-
-        return searches.map(search => {
-
-
-            const source =
-
-                sources.find(
-
-                    item =>
-
-                        item.keyword === search.keyword
-
-                ) || null;
-
-
-            const strength =
-                this.evaluateStrength(
-                    source
-                );
-
-
-            return {
-
-                keyword:
-                    search.keyword,
-
-
-                conceptId:
-                    search.conceptId,
-
-
-                category:
-                    search.category,
-
-
-                content:
-                    this.semanticObject.originalContent || "",
-
-
-                source,
-
-
-                sourceAvailable:
-                    !!source,
-
-
-                reference:
-                    source?.url || null,
-
-
-                citation:
-                    null,
-
-
-                evidenceStrength:
-                    strength,
-
-
-                evidenceLimitation:
-
-                    source
-
-                        ? "来源存在，但需要进一步验证支持范围。"
-
-                        : "没有发现对应来源。",
-
-
-                responsibility:
+            trace: [
 
                 {
 
-                    level:
-                        strength,
+                    engine:
+                        "EvidenceEngine",
 
-                    type:
-                        "evidence-support"
+                    action:
+                        "collect",
 
-                },
+                    status:
+                        "completed"
 
+                }
 
-                verificationStatus:
+            ],
 
-                    source
+            questions: [],
 
-                        ? "evaluated"
-
-                        : "missing-source",
-
-
-                evidenceType:
-                    "responsibility-bounded-evidence",
-
-
-                runtimeTrace:
-                    this.semanticObject.runtimeTrace || [],
-
-
-                engineRegistry:
-
-                    this.semanticObject.engineRegistry?.describe?.() || []
-
-            };
+            nextRuntimeState:
+                "CorrespondenceEngine"
 
         });
 
     }
 
 
+    buildEvidence() {
 
-    evaluateStrength(source) {
-
-
-        if (!source) {
-
-            return "none";
-
-        }
+        const content =
+            this.semanticObject.originalContent || "";
 
 
-        if (
+        if (!content) {
 
-            source.url &&
-            source.title
-
-        ) {
-
-            return "medium";
+            return [];
 
         }
 
 
-        return "weak";
+        return [
+
+            {
+
+                type:
+                    "expression",
+
+                source:
+                    content
+
+            }
+
+        ];
 
     }
 
 }
+
 
 export default EvidenceEngine;
