@@ -13,6 +13,30 @@ class EngineBase {
 
     }
 
+
+    execute(input = {}) {
+
+        if (
+            typeof this.run === "function"
+        ) {
+
+            return this.run(input);
+
+        }
+
+
+        return this.result({
+
+            status:
+                "engine-no-run-method",
+
+            input
+
+        });
+
+    }
+
+
     metadata(extra = {}) {
 
         return {
@@ -23,11 +47,15 @@ class EngineBase {
             runtimeVersion:
                 this.version,
 
+            engine:
+                this.engine,
+
             ...extra
 
         };
 
     }
+
 
     result(data = {}) {
 
@@ -49,5 +77,6 @@ class EngineBase {
     }
 
 }
+
 
 export default EngineBase;
