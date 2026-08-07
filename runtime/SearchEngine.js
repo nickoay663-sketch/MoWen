@@ -1,8 +1,15 @@
 import ExternalSourceConnector from "./ExternalSourceConnector.js";
+import EngineBase from "./EngineBase.js";
 
-class SearchEngine {
+class SearchEngine extends EngineBase {
 
     constructor(semanticObject) {
+
+        super(
+            "SearchEngine",
+            "6.6",
+            "莫问搜索只发现验证入口，不把来源直接作为证据。"
+        );
 
         this.semanticObject = semanticObject || {};
 
@@ -81,7 +88,7 @@ class SearchEngine {
 
     }
 
-        buildMetadata() {
+    buildMetadata() {
 
         return {
 
@@ -121,7 +128,7 @@ class SearchEngine {
 
             return {
 
-                                keyword:
+                keyword:
                     concept.word,
 
                 conceptId:
