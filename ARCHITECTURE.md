@@ -1,6 +1,6 @@
-# MoWen Architecture v2.2
+# MoWen Architecture v10.1
 
-# 莫问系统架构 v2.2
+# 莫问系统架构 v10.1
 
 
 ## Overview
@@ -9,422 +9,239 @@ MoWen is an Expression Responsibility Verification System.
 
 Every expression enters the same Honest Runtime.
 
-莫问是表达责任检验系统。
-
-每一个表达进入同一套诚实运行。
-
-
 MoWen does not judge people.
 
 MoWen verifies expressions.
 
-莫问不判断人。
 
-莫问检验表达。
+---
+
+# Core Architecture
+
+MoWen consists of four layers:
+
+1. Value Layer
+2. Runtime Layer
+3. Phenomenon Layer
+4. Implementation Layer
 
 
 ---
 
-# Expression Architecture
+# Value Layer
 
+Core Value:
 
-Expression is the object of MoWen verification.
+Honesty
 
-表达是莫问检验的对象。
+Honesty is the existence condition of MoWen.
 
-
-Expression may include:
-
-- Text
-- Language
-- Image
-- Audio
-- Video
-- Code
-- Symbol
-
-
-表达可以包括：
-
-- 文字
-- 语言
-- 图片
-- 音频
-- 视频
-- 代码
-- 符号
-
-
-All forms of expression enter the same responsibility verification system.
-
-所有形式的表达进入同一个责任检验系统。
+The Runtime must preserve responsibility boundaries.
 
 
 ---
 
-# Expression Entry Flow
+# Runtime Layer
 
+MoWen Runtime uses EngineBase v10.1.
+
+All Engines follow one unified execution architecture.
+
+Each Engine contains:
+
+- Identity
+- Version
+- Contract
+- Execute Lifecycle
+- Result
+- Trace
+- Next Runtime State
+
+
+---
+
+# Runtime Pipeline
 
 Expression
 
 ↓
 
-Language Runtime
+RecognitionEngine
 
 ↓
 
-Recognition
+DefinitionEngine
 
 ↓
 
-Definition
+SearchEngine
 
 ↓
 
-Testimony
+EvidenceEngine
 
 ↓
 
-Honest Runtime
-
-
-表达
+CorrespondenceEngine
 
 ↓
 
-语言运行系统
+ReasoningEngine
 
 ↓
 
-识别
+ResponsibilityEngine
 
 ↓
 
-定义
+ReconstructionEngine
 
 ↓
 
-证词
+GeneratorEngine
 
 ↓
 
-诚实运行
+SelfCheckEngine
 
+↓
 
-Every expression first establishes its original testimony environment through Language Runtime.
-
-每一个表达首先通过语言运行系统建立原始证词环境。
+Responsibility Report
 
 
 ---
 
-# Language Runtime Layer
+# Engine Responsibilities
 
 
-Language Runtime is the first Runtime layer of MoWen.
+## RecognitionEngine
 
-语言运行系统是莫问第一层运行环境。
-
-
-Its responsibility:
-
-- Detect input language
-- Establish testimony environment
-- Preserve original expression language
-- Provide language context for all Engines
+Recognizes expressions, objects and concepts.
 
 
-其责任：
+## DefinitionEngine
 
-- 识别输入语言
-- 建立证词运行环境
-- 保留原始表达语言
-- 向所有 Engine 提供语言环境
+Provides official definitions.
 
+Definition answers:
 
-Language changes.
-
-Runtime responsibility does not change.
+"What is it?"
 
 
-语言可以变化。
+## SearchEngine
 
-Runtime 责任结构不变化。
+Provides information retrieval capability.
+
+Search is a Runtime capability, not an independent judgment stage.
+
+
+## EvidenceEngine
+
+Processes evidence related to testimony.
+
+
+## CorrespondenceEngine
+
+Checks relationships between:
+
+- Expression
+- Definition
+- Object
+- Evidence
+
+
+## ReasoningEngine
+
+Checks whether conclusions follow from previous Runtime states.
+
+
+## ResponsibilityEngine
+
+Checks responsibility boundaries.
+
+
+## ReconstructionEngine
+
+Reconstructs expressions into forms that can better bear responsibility.
+
+
+## GeneratorEngine
+
+Generates Runtime reports and final expressions.
+
+
+## SelfCheckEngine
+
+Checks:
+
+- Runtime Contract
+- Engine Registry
+- Pipeline Integrity
+- Runtime Result
+- Responsibility Boundary
+- Audit Trail
+
+
+SelfCheck does not judge expressions.
+
+SelfCheck verifies Runtime integrity.
+
+
+---
+
+# EngineBase Architecture
+
+EngineBase provides the unified Runtime foundation.
+
+All Engines inherit the same base structure.
+
+Benefits:
+
+- Unified lifecycle
+- Unified contract
+- Unified trace
+- Unified status
+- Unified audit
 
 
 ---
 
 # Honest Runtime
 
+Honest Runtime transforms expressions into verifiable responsibility chains.
 
-Honest Runtime transforms testimony into a verifiable responsibility chain.
+Runtime verifies relationships.
 
-诚实运行将证词转化为可验证责任链。
+Runtime records status.
 
-
-## Runtime Flow
-
-
-Language Runtime
-
-↓
-
-Recognition
-
-↓
-
-Definition
-
-↓
-
-Search
-
-↓
-
-Evidence
-
-↓
-
-Correspondence
-
-↓
-
-Reasoning
-
-↓
-
-Responsibility
-
-↓
-
-Reconstruction
-
-
-运行流程：
-
-语言运行系统
-
-↓
-
-识别
-
-↓
-
-定义
-
-↓
-
-检索
-
-↓
-
-证据
-
-↓
-
-对应
-
-↓
-
-推理
-
-↓
-
-责任
-
-↓
-
-重构
+Runtime returns responsibility.
 
 
 ---
 
-# Search Service
+# Runtime Contract
+
+Every Engine must provide:
+
+- engine
+- version
+- status
+- result
+- trace
+- questions
+- nextRuntimeState
 
 
-Search is not an independent Runtime.
-
-Search is a shared capability of Honest Runtime.
-
-
-检索不是独立 Runtime。
-
-检索是诚实运行的共享能力。
-
-
-All Runtime Engines may call Search Service when verification requires information.
-
-
-所有 Runtime Engine 在需要信息时，都可以调用检索服务。
-
-
-Search supports:
-
-- Recognition
-- Definition
-- Evidence
-- Correspondence
-- Reasoning
-- Responsibility
-- Reconstruction
-
-
-检索支持：
-
-- 识别
-- 定义
-- 证据
-- 对应
-- 推理
-- 责任
-- 重构
-
-
-Search runs throughout the entire Runtime.
-
-
-检索贯穿整个运行。
+Runtime Contract ensures every Engine can describe its own execution responsibility.
 
 
 ---
 
-# Runtime Engines
+# Implementation Layer
 
-
-## Recognition Engine
-
-Recognizes expressions, objects and concepts.
-
-识别表达、对象和概念。
-
-
-## Definition Engine
-
-Provides clear and consistent definitions.
-
-提供明确一致的定义。
-
-
-## Evidence Engine
-
-Records and evaluates evidence related to testimony.
-
-记录并检验证词相关证据。
-
-
-## Correspondence Engine
-
-Checks correspondence between expression, definition, object and evidence.
-
-检查表达、定义、对象和证据之间的对应。
-
-
-## Reasoning Engine
-
-Checks whether conclusions follow from previous Runtime.
-
-检查结论是否由前面的运行推出。
-
-
-## Responsibility Engine
-
-Checks expression responsibility.
-
-检查表达责任。
-
-
-## Reconstruction Engine
-
-Reconstructs expression into one that can better bear responsibility.
-
-将表达重构为更能够承担责任的表达。
-
-
----
-
-# Architecture Layers
-
-
-MoWen consists of four architecture layers.
-
-莫问由四个架构层组成。
-
-
-## Value Layer
-
-价值层
-
-
-Core:
-
-Honesty
-
-
-核心：
-
-诚实
-
-
-Honesty is the existence condition of MoWen.
-
-诚实是莫问存在的条件。
-
-
----
-
-## Runtime Layer
-
-运行层
-
-
-Responsible for honest verification.
-
-负责诚实检验。
-
+Implementation Layer transforms architecture into executable systems.
 
 Includes:
-
-Language Runtime
-
-Honest Runtime
-
-Runtime Engines
-
-
-包括：
-
-语言运行系统
-
-诚实运行系统
-
-运行引擎
-
-
----
-
-## Phenomenon Layer
-
-现象层
-
-
-Describes results produced by Honest Runtime.
-
-描述诚实运行产生的结果。
-
-
----
-
-## Implementation Layer
-
-实现层
-
-
-Transforms architecture into executable systems.
-
-将架构转化为可运行系统。
-
-
-Implementation Layer includes:
 
 - Engine Layer
 - Service Layer
@@ -434,64 +251,27 @@ Implementation Layer includes:
 
 ---
 
-# Runtime Result
+# Self Application
 
+MoWen itself follows the same Runtime rules.
 
-Honest Runtime produces reconstructed expressions.
-
-The reconstructed expression may become new testimony.
-
-
-诚实运行生成重构后的表达。
-
-重构后的表达可以成为新的证词。
-
-
-The process can continue.
-
-运行可以继续。
+Documents, principles, modules and expressions may enter the same verification process.
 
 
 ---
 
 # Architecture Rules
 
-
 Each Engine has one responsibility.
-
-每一个 Engine 只有一个职责。
-
-
-Any Engine may call Search Service when required.
-
-任何 Engine 可以在需要时调用检索服务。
-
 
 No Engine replaces another Engine.
 
-任何 Engine 不替代其他 Engine。
-
-
----
-
-# Self Application
-
-
-MoWen architecture itself follows the same Honest Runtime.
-
-莫问架构自身也遵循同一套诚实运行。
-
-
-MoWen documents, principles, modules and expressions can all enter the same verification process.
-
-
-莫问的文档、原则、模块和表达，都可以进入同一套检验过程。
+Every Runtime result must preserve responsibility boundaries.
 
 
 ---
 
 # Core Principle
-
 
 One concept.
 
@@ -500,24 +280,10 @@ One official term.
 One official definition.
 
 
-一个概念。
-
-一个正式术语。
-
-一个正式定义。
-
 ---
 
-# Axiom Reference
+# Version
 
-MoWen Architecture follows MoWen First Axiom.
+MoWen Architecture v10.1
 
-莫问系统架构遵循莫问第一公理。
-
-
-> 主体不可互相否定。
-
-
-All Runtime Layers, Engines and Implementation modules must operate under this principle.
-
-所有 Runtime Layer、Engine 和实现模块，都必须在该原则下运行。
+EngineBase Migration Complete
