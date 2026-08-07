@@ -6,52 +6,68 @@ class EvidenceEngine {
 
     }
 
+
     run() {
 
         const metadata =
             this.buildMetadata();
 
+
         const evidences =
             this.collectEvidence();
+
+
+        const status =
+            evidences.length > 0
+                ? "evidence-evaluated"
+                : "need-evidence";
+
 
         return {
 
             engine:
                 "EvidenceEngine",
 
+
             version:
-                "6.5",
+                "7.0",
+
 
             semanticObject:
                 this.semanticObject,
 
+
             principle:
-                "莫问记录来源入口和证据状态，不替代真实性验证。",
+                "莫问分析证据来源、支持能力和责任边界，不替代真实性判断。",
+
 
             metadata,
 
+
             evidences,
+
 
             result: {
 
                 metadata,
 
-                evidences
+                evidences,
+
+                status
 
             },
 
-            trace: [],
+
+            trace:
+                this.semanticObject.runtimeTrace || [],
+
 
             nextRuntimeState:
                 "CorrespondenceEngine",
 
-            status:
 
-                evidences.length > 0
+            status,
 
-                    ? "evidence-connected"
-
-                    : "need-evidence",
 
             questions:
 
@@ -60,12 +76,14 @@ class EvidenceEngine {
                     ? []
 
                     : [
-                        "当前表达是否存在可验证来源？"
+                        "当前表达是否存在可分析证据？"
                     ]
 
         };
 
     }
+
+
 
     buildMetadata() {
 
@@ -74,11 +92,14 @@ class EvidenceEngine {
             generatedAt:
                 new Date().toISOString(),
 
+
             runtimeVersion:
                 this.semanticObject.contract?.identity?.runtimeVersion || "",
 
+
             contractVersion:
                 this.semanticObject.contract?.version || "",
+
 
             engineCount:
 
@@ -87,6 +108,7 @@ class EvidenceEngine {
                     this.semanticObject.engines || {}
 
                 ).length,
+
 
             traceCount:
 
@@ -100,58 +122,123 @@ class EvidenceEngine {
 
     collectEvidence() {
 
+
         const searches =
             this.semanticObject.search?.searches || [];
+
 
         const sources =
             this.semanticObject.search?.sources || [];
 
+
+
         return searches.map(search => {
+
 
             const source =
 
                 sources.find(
 
-                    item => item.keyword === search.keyword
+                    item =>
+
+                        item.keyword === search.keyword
 
                 ) || null;
+
+
+
+            const strength =
+                this.evaluateStrength(
+                    source
+                );
+
+
 
             return {
 
                 keyword:
                     search.keyword,
 
+
                 conceptId:
                     search.conceptId,
+
 
                 category:
                     search.category,
 
+
                 content:
                     this.semanticObject.originalContent || "",
 
+
+
                 source,
+
 
                 sourceAvailable:
                     !!source,
 
+
+
                 reference:
                     source?.url || null,
+
+
 
                 citation:
                     null,
 
-                verificationStatus:
-                    "pending",
 
-                evidenceType:
-                    "external-source-entry",
+
+                evidenceStrength:
+                    strength,
+
+
+
+                evidenceLimitation:
+
+                    source
+
+                        ? "来源存在，但需要进一步验证支持范围。"
+
+                        : "没有发现对应来源。",
+
+
 
                 responsibility:
-                    null,
+
+                    {
+
+                        level:
+                            strength,
+
+                        type:
+                            "evidence-support"
+
+                    },
+
+
+
+                verificationStatus:
+
+                    source
+
+                        ? "evaluated"
+
+                        : "missing-source",
+
+
+
+                evidenceType:
+                    "responsibility-bounded-evidence",
+
+
 
                 runtimeTrace:
                     this.semanticObject.runtimeTrace || [],
+
+
 
                 engineRegistry:
 
@@ -163,6 +250,36 @@ class EvidenceEngine {
 
     }
 
+
+
+    evaluateStrength(source) {
+
+
+        if (!source) {
+
+            return "none";
+
+        }
+
+
+        if (
+
+            source.url &&
+            source.title
+
+        ) {
+
+            return "medium";
+
+        }
+
+
+        return "weak";
+
+    }
+
+
 }
+
 
 export default EvidenceEngine;
