@@ -25,6 +25,12 @@ class EngineRegistry {
             version:
                 engine.version || "",
 
+            status:
+                engine.status || "",
+
+            nextRuntimeState:
+                engine.nextRuntimeState || "",
+
             capabilities:
                 engine.capabilities || [],
 
@@ -32,7 +38,6 @@ class EngineRegistry {
                 new Date().toISOString()
 
         };
-
 
         return true;
 
@@ -73,7 +78,7 @@ class EngineRegistry {
 
     }
 
-        validateVersions(contractVersion) {
+    validateVersions(contractVersion) {
 
         const report = {
 
@@ -155,7 +160,7 @@ class EngineRegistry {
 
     }
 
-        describe() {
+    describe() {
 
         return Object.values(
 
@@ -170,6 +175,12 @@ class EngineRegistry {
 
                 version:
                     item.version,
+
+                status:
+                    item.status,
+
+                nextRuntimeState:
+                    item.nextRuntimeState,
 
                 capabilities:
                     item.capabilities,
