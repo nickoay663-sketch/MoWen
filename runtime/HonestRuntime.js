@@ -89,9 +89,9 @@ class HonestRuntime {
 
 
         const recognition =
-            new RecognitionEngine(
-                this.expression
-            ).run();
+    new RecognitionEngine(
+        this.expression
+    ).execute();
 
 
 
