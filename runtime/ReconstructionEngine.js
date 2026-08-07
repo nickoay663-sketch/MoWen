@@ -1,12 +1,18 @@
-class ReconstructionEngine {
+import EngineBase from "./EngineBase.js";
 
+class ReconstructionEngine extends EngineBase {
 
     constructor(runtimeObject) {
+
+        super(
+            "ReconstructionEngine",
+            "7.0",
+            "莫问重构责任链结构，不增加未经验证的信息。"
+        );
 
         this.runtimeObject = runtimeObject || {};
 
     }
-
 
 
     run() {
@@ -16,41 +22,33 @@ class ReconstructionEngine {
             this.buildMetadata();
 
 
-
         const reconstruction =
             this.buildReconstruction();
-
 
 
         return {
 
 
             engine:
-                "ReconstructionEngine",
-
+                this.engine,
 
 
             version:
-                "7.0",
-
+                this.version,
 
 
             semanticObject:
                 this.runtimeObject.semanticObject,
 
 
-
             principle:
-                "莫问重构责任链结构，不增加未经验证的信息。",
-
+                this.principle,
 
 
             metadata,
 
 
-
             reconstruction,
-
 
 
             result: {
@@ -62,15 +60,12 @@ class ReconstructionEngine {
             },
 
 
-
             trace:
                 this.runtimeObject.runtimeTrace || [],
 
 
-
             nextRuntimeState:
                 "GeneratorEngine",
-
 
 
             status:
@@ -80,7 +75,6 @@ class ReconstructionEngine {
                     ? "reconstruction-evaluated"
 
                     : "need-reconstruction",
-
 
 
             questions:
@@ -112,15 +106,12 @@ class ReconstructionEngine {
                 new Date().toISOString(),
 
 
-
             runtimeVersion:
                 this.runtimeObject.contract?.identity?.runtimeVersion || "",
 
 
-
             contractVersion:
                 this.runtimeObject.contract?.version || "",
-
 
 
             engineCount:
@@ -130,7 +121,6 @@ class ReconstructionEngine {
                     this.runtimeObject.engines || {}
 
                 ).length,
-
 
 
             traceCount:
@@ -152,7 +142,6 @@ class ReconstructionEngine {
             this.runtimeObject.responsibility?.responsibilities || [];
 
 
-
         const sources =
 
             responsibilities.flatMap(
@@ -160,7 +149,6 @@ class ReconstructionEngine {
                 item => item.sources || []
 
             );
-
 
 
         const evidenceChain =
@@ -183,7 +171,6 @@ class ReconstructionEngine {
             );
 
 
-
         return {
 
 
@@ -192,11 +179,9 @@ class ReconstructionEngine {
                 this.runtimeObject.semanticObject?.originalContent || "",
 
 
-
             reconstructedExpression:
 
                 this.runtimeObject.semanticObject?.originalContent || "",
-
 
 
             language:
@@ -204,11 +189,9 @@ class ReconstructionEngine {
                 this.runtimeObject.semanticObject?.language || null,
 
 
-
             responsibilityChain:
 
                 responsibilities,
-
 
 
             responsibilityCount:
@@ -216,19 +199,15 @@ class ReconstructionEngine {
                 responsibilities.length,
 
 
-
             evidenceChain,
-
 
 
             sources,
 
 
-
             sourceCount:
 
                 sources.length,
-
 
 
             boundaries: {
@@ -238,10 +217,8 @@ class ReconstructionEngine {
                     "preserved",
 
 
-
                 source:
                     "preserved",
-
 
 
                 responsibility:
@@ -250,17 +227,14 @@ class ReconstructionEngine {
             },
 
 
-
             expansion:
 
                 false,
 
 
-
             reconstructionType:
 
                 "responsibility-chain-reconstruction",
-
 
 
             verificationStatus:
@@ -272,11 +246,9 @@ class ReconstructionEngine {
                     : "missing-responsibility",
 
 
-
             runtimeTrace:
 
                 this.runtimeObject.runtimeTrace || [],
-
 
 
             engineRegistry:
@@ -287,8 +259,6 @@ class ReconstructionEngine {
 
     }
 
-
 }
-
 
 export default ReconstructionEngine;
