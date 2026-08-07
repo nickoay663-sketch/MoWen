@@ -1,16 +1,27 @@
 import LanguageDetector from "./LanguageDetector.js";
 import Dictionary from "./Dictionary.js";
 import SpanishDictionary from "../languages/es-ES/Dictionary.js";
+import EngineBase from "./EngineBase.js";
 
 
-class RecognitionEngine {
+class RecognitionEngine extends EngineBase {
 
+constructor(expression) {
 
-    constructor(expression) {
+    super(
 
-        this.expression = expression || "";
+        "RecognitionEngine",
 
-    }
+        "7.0",
+
+        "莫问识别表达结构，不替表达者解释责任。"
+
+    );
+
+    this.expression =
+        expression || "";
+
+}
 
 
 
@@ -62,7 +73,7 @@ class RecognitionEngine {
         const status =
 
             objects.length > 0 ||
-            concepts.length > 0
+                concepts.length > 0
 
                 ? "recognition-evaluated"
 
@@ -293,7 +304,7 @@ class RecognitionEngine {
             reason:
 
                 objects.length === 0 &&
-                concepts.length === 0
+                    concepts.length === 0
 
                     ? "未识别到明确对象或概念。"
 
