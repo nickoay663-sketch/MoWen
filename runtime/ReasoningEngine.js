@@ -6,41 +6,61 @@ class ReasoningEngine {
 
     }
 
+
     run() {
 
         const metadata =
             this.buildMetadata();
 
+
         const reasonings =
             this.buildReasonings();
+
+
+        const status =
+            reasonings.length > 0
+                ? "reasoning-evaluated"
+                : "need-reasoning";
+
 
         return {
 
             engine:
                 "ReasoningEngine",
 
+
             version:
-                "6.3",
+                "7.0",
+
 
             semanticObject:
                 this.semanticObject,
 
+
             principle:
-                "莫问根据证据和来源状态生成推理状态，不直接生成事实结论。",
+                "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。",
+
 
             metadata,
 
+
             reasonings,
+
 
             result: {
 
                 metadata,
 
-                reasonings
+                reasonings,
+
+                status
 
             },
 
-            trace: [],
+
+            trace:
+                this.semanticObject.runtimeTrace || [],
+
 
             questions:
 
@@ -49,36 +69,37 @@ class ReasoningEngine {
                     ? []
 
                     : [
-                        "当前推理是否具有来源支持？"
+                        "当前推理是否具有有效支持？"
                     ],
+
 
             nextRuntimeState:
                 "ResponsibilityEngine",
 
-            status:
 
-                reasonings.length > 0
-
-                    ? "reasoning-connected"
-
-                    : "need-reasoning"
+            status
 
         };
 
     }
 
-        buildMetadata() {
+
+
+    buildMetadata() {
 
         return {
 
             generatedAt:
                 new Date().toISOString(),
 
+
             runtimeVersion:
                 this.semanticObject.contract?.identity?.runtimeVersion || "",
 
+
             contractVersion:
                 this.semanticObject.contract?.version || "",
+
 
             engineCount:
 
@@ -87,6 +108,7 @@ class ReasoningEngine {
                     this.semanticObject.engines || {}
 
                 ).length,
+
 
             traceCount:
 
@@ -100,44 +122,96 @@ class ReasoningEngine {
 
     buildReasonings() {
 
+
         const correspondences =
             this.semanticObject.correspondences || [];
 
+
+
         return correspondences.map(item => {
+
+
+            const assumptions =
+                this.detectAssumptions(item);
+
+
+
+            const leap =
+                this.detectReasoningLeap(item);
+
+
+
+            const strength =
+                this.evaluateStrength(item);
+
+
 
             return {
 
-                                definition:
+
+                definition:
                     item.definition,
+
 
                 evidences:
                     item.evidences || [],
 
+
+
                 evidenceCount:
                     item.evidenceCount || 0,
+
+
 
                 sourceAvailable:
                     item.sourceAvailable || false,
 
+
+
                 sourceCount:
                     item.sourceCount || 0,
+
+
 
                 supported:
                     item.supported || false,
 
+
+
+                reasoningStrength:
+                    strength,
+
+
+
+                hiddenAssumptions:
+                    assumptions,
+
+
+
+                reasoningLeap:
+                    leap,
+
+
+
                 reasoningType:
-                    "source-supported-chain",
+                    "responsibility-bounded-reasoning",
+
+
 
                 verificationStatus:
 
                     item.supported && item.sourceAvailable
 
-                        ? "pending"
+                        ? "evaluated"
 
-                        : "insufficient-source",
+                        : "insufficient-support",
+
+
 
                 runtimeTrace:
                     this.semanticObject.runtimeTrace || [],
+
+
 
                 engineRegistry:
 
@@ -149,6 +223,93 @@ class ReasoningEngine {
 
     }
 
+
+
+    detectAssumptions(item) {
+
+
+        const assumptions = [];
+
+
+        if (
+
+            item.definition &&
+            item.evidenceCount === 0
+
+        ) {
+
+            assumptions.push(
+                "当前定义缺少直接证据支持"
+            );
+
+        }
+
+
+        return assumptions;
+
+    }
+
+
+
+    detectReasoningLeap(item) {
+
+
+        const overreach =
+            item.overreach || {};
+
+
+
+        return {
+
+            detected:
+                overreach.detected || false,
+
+
+            reason:
+                overreach.reason || ""
+
+        };
+
+    }
+
+
+
+    evaluateStrength(item) {
+
+
+        if (
+
+            item.supported &&
+            item.sourceAvailable &&
+            item.evidenceCount > 3
+
+        ) {
+
+            return "strong";
+
+        }
+
+
+
+        if (
+
+            item.supported &&
+            item.sourceAvailable
+
+        ) {
+
+            return "medium";
+
+        }
+
+
+
+        return "weak";
+
+    }
+
+
 }
+
 
 export default ReasoningEngine;
