@@ -1,6 +1,6 @@
 const RuntimeContract = {
 
-    version: "8.4",
+    version: "10.1",
 
     principles: {
 
@@ -24,10 +24,10 @@ const RuntimeContract = {
             "MoWen Runtime",
 
         runtimeVersion:
-            "8.4",
+            "10.1",
 
         contractVersion:
-            "8.4"
+            "10.1"
 
     },
 
