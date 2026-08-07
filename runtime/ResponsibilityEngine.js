@@ -6,13 +6,22 @@ class ResponsibilityEngine {
 
     }
 
+
     run() {
 
         const metadata =
             this.buildMetadata();
 
+
         const responsibilities =
             this.buildResponsibilities();
+
+
+        const status =
+            responsibilities.length > 0
+                ? "responsibility-evaluated"
+                : "need-responsibility";
+
 
         return {
 
@@ -20,27 +29,37 @@ class ResponsibilityEngine {
                 "ResponsibilityEngine",
 
             version:
-                "6.2",
+                "7.0",
+
 
             semanticObject:
                 this.semanticObject,
 
+
             principle:
-                "莫问记录表达、证据与来源责任，不替任何来源背书。",
+                "莫问判断表达要求承担的责任与证据推理允许承担的责任之间的边界。",
+
 
             metadata,
 
+
             responsibilities,
+
 
             result: {
 
                 metadata,
 
-                responsibilities
+                responsibilities,
+
+                status
 
             },
 
-            trace: [],
+
+            trace:
+                this.semanticObject.runtimeTrace || [],
+
 
             questions:
 
@@ -49,36 +68,37 @@ class ResponsibilityEngine {
                     ? []
 
                     : [
-                        "当前来源责任是否明确？"
+                        "当前表达责任是否可以评估？"
                     ],
+
 
             nextRuntimeState:
                 "ReconstructionEngine",
 
-            status:
 
-                responsibilities.length > 0
-
-                    ? "responsibility-connected"
-
-                    : "need-responsibility"
+            status
 
         };
 
     }
 
-        buildMetadata() {
+
+
+    buildMetadata() {
 
         return {
 
             generatedAt:
                 new Date().toISOString(),
 
+
             runtimeVersion:
                 this.semanticObject.contract?.identity?.runtimeVersion || "",
 
+
             contractVersion:
                 this.semanticObject.contract?.version || "",
+
 
             engineCount:
 
@@ -87,6 +107,7 @@ class ResponsibilityEngine {
                     this.semanticObject.engines || {}
 
                 ).length,
+
 
             traceCount:
 
@@ -100,61 +121,264 @@ class ResponsibilityEngine {
 
     buildResponsibilities() {
 
+
         const reasonings =
             this.semanticObject.reasonings || [];
 
-        return reasonings.map(reasoning => ({
 
-                        expression:
-                this.semanticObject.originalContent || "",
 
-            definition:
-                reasoning.definition,
+        return reasonings.map(reasoning => {
 
-            supported:
-                reasoning.supported,
 
-            evidenceCount:
-                reasoning.evidenceCount,
+            const demand =
+                this.analyzeResponsibilityDemand(
+                    reasoning
+                );
 
-            sourceCount:
-                reasoning.sourceCount,
 
-            sourceAvailable:
-                reasoning.sourceAvailable,
+            const capacity =
+                this.analyzeResponsibilityCapacity(
+                    reasoning
+                );
 
-            sources:
-                reasoning.evidences || [],
 
-            expressionResponsibility:
-                null,
+            const boundary =
+                this.calculateBoundary(
+                    demand,
+                    capacity
+                );
 
-            evidenceResponsibility:
-                null,
 
-            sourceResponsibility:
-                null,
 
-            verificationResponsibility:
-                "required",
+            return {
 
-            responsibilityType:
-                "external-source-chain",
+                expression:
+                    this.semanticObject.originalContent || "",
 
-            verificationStatus:
-                reasoning.verificationStatus,
 
-            runtimeTrace:
-                this.semanticObject.runtimeTrace || [],
+                definition:
+                    reasoning.definition,
 
-            engineRegistry:
 
-                this.semanticObject.engineRegistry?.describe?.() || []
+                supported:
+                    reasoning.supported,
 
-        }));
+
+                evidenceCount:
+                    reasoning.evidenceCount || 0,
+
+
+                sourceCount:
+                    reasoning.sourceCount || 0,
+
+
+                sourceAvailable:
+                    reasoning.sourceAvailable,
+
+
+                sources:
+                    reasoning.evidences || [],
+
+
+
+                responsibilityDemand:
+                    demand,
+
+
+                responsibilityCapacity:
+                    capacity,
+
+
+                responsibilityBoundary:
+                    boundary,
+
+
+
+                expressionResponsibility:
+                    demand.level,
+
+
+                evidenceResponsibility:
+                    capacity.level,
+
+
+                sourceResponsibility:
+                    reasoning.sourceAvailable
+                        ? "available"
+                        : "missing",
+
+
+
+                verificationResponsibility:
+                    "required",
+
+
+
+                responsibilityType:
+                    "responsibility-evaluation",
+
+
+
+                verificationStatus:
+                    reasoning.verificationStatus,
+
+
+
+                runtimeTrace:
+                    this.semanticObject.runtimeTrace || [],
+
+
+
+                engineRegistry:
+
+                    this.semanticObject.engineRegistry?.describe?.() || []
+
+            };
+
+        });
 
     }
 
+
+
+    analyzeResponsibilityDemand(reasoning) {
+
+
+        const content =
+            this.semanticObject.originalContent || "";
+
+
+        let level =
+            "medium";
+
+
+        if (
+
+            content.includes("一定") ||
+
+            content.includes("必然") ||
+
+            content.includes("所有")
+
+        ) {
+
+            level =
+                "high";
+
+        }
+
+
+        return {
+
+            level,
+
+            source:
+                "expression-strength"
+
+        };
+
+    }
+
+
+
+    analyzeResponsibilityCapacity(reasoning) {
+
+
+        let level =
+            "low";
+
+
+        const evidenceCount =
+            reasoning.evidenceCount || 0;
+
+
+        const sourceAvailable =
+            reasoning.sourceAvailable;
+
+
+
+        if (
+
+            evidenceCount > 0 &&
+            sourceAvailable
+
+        ) {
+
+            level =
+                "medium";
+
+        }
+
+
+
+        if (
+
+            evidenceCount > 3 &&
+            sourceAvailable
+
+        ) {
+
+            level =
+                "high";
+
+        }
+
+
+
+        return {
+
+            level,
+
+            source:
+                "evidence-and-reasoning"
+
+        };
+
+    }
+
+
+
+    calculateBoundary(
+        demand,
+        capacity
+    ) {
+
+
+        if (
+
+            demand.level === "high" &&
+            capacity.level !== "high"
+
+        ) {
+
+            return {
+
+                status:
+                    "partial",
+
+                explanation:
+                    "表达责任要求超过当前证据与推理支持能力。"
+
+            };
+
+        }
+
+
+
+        return {
+
+            status:
+                "matched",
+
+            explanation:
+                "当前表达责任与支持能力基本匹配。"
+
+        };
+
+    }
+
+
 }
+
 
 export default ResponsibilityEngine;
