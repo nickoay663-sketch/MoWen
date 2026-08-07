@@ -3,55 +3,84 @@ class RuntimeResult {
     constructor() {
 
         this.runtimeVersion =
-            "8.0";
+            "9.0";
+
 
         this.generatedAt =
             new Date().toISOString();
 
+
         this.recognition =
             null;
 
+
         this.definition =
             null;
-     
-            this.testimony =
+
+
+        this.testimony =
             null;
+
 
         this.testimonyValidation =
             null;
 
+
         this.search =
             null;
+
 
         this.evidence =
             null;
 
+
         this.correspondence =
             null;
+
 
         this.reasoning =
             null;
 
+
         this.responsibility =
             null;
+
+
+        this.responsibilityModel =
+            null;
+
 
         this.reconstruction =
             null;
 
+
         this.generator =
             null;
+
 
         this.selfCheck =
             null;
 
+
         this.engineRegistry =
             null;
+
+
+        this.testimonyChain =
+            null;
+
+
+        this.verificationBoundary =
+            null;
+
 
         this.runtimeTrace =
             [];
 
+
         this.pipeline =
             [];
+
 
         this.metadata = {
 
@@ -59,7 +88,7 @@ class RuntimeResult {
                 null,
 
             runtimeVersion:
-                "8.0",
+                "9.0",
 
             engineCount:
                 0,
@@ -70,6 +99,8 @@ class RuntimeResult {
         };
 
     }
+
+
 
     setMetadata(metadata = {}) {
 
@@ -85,6 +116,8 @@ class RuntimeResult {
 
     }
 
+
+
     setEngine(name, value) {
 
         this[name] = value;
@@ -93,22 +126,65 @@ class RuntimeResult {
 
     }
 
+
+
     setTrace(trace = []) {
 
-        this.runtimeTrace = trace;
+        this.runtimeTrace =
+            trace;
 
         return this;
 
     }
+
+
 
     setPipeline(pipeline = []) {
 
-        this.pipeline = pipeline;
+        this.pipeline =
+            pipeline;
 
         return this;
 
     }
 
+
+
+    setResponsibilityModel(model = {}) {
+
+        this.responsibilityModel =
+            model;
+
+        return this;
+
+    }
+
+
+
+    setTestimonyChain(chain = {}) {
+
+        this.testimonyChain =
+            chain;
+
+        return this;
+
+    }
+
+
+
+    setVerificationBoundary(boundary = {}) {
+
+        this.verificationBoundary =
+            boundary;
+
+        return this;
+
+    }
+
+
+
 }
+
+
 
 export default RuntimeResult;
