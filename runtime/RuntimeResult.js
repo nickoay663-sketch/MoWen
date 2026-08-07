@@ -3,7 +3,7 @@ class RuntimeResult {
     constructor() {
 
         this.runtimeVersion =
-            "9.0";
+            "10.1";
 
 
         this.generatedAt =
@@ -88,7 +88,7 @@ class RuntimeResult {
                 null,
 
             runtimeVersion:
-                "9.0",
+                "10.1",
 
             engineCount:
                 0,
