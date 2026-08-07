@@ -1,43 +1,44 @@
-class CorrespondenceEngine {
+import EngineBase from "./EngineBase.js";
+
+class CorrespondenceEngine extends EngineBase {
 
     constructor(semanticObject) {
+
+        super(
+            "CorrespondenceEngine",
+            "7.0",
+            "莫问判断定义、证据与表达之间的真实对应关系。"
+        );
 
         this.semanticObject = semanticObject || {};
 
     }
-
 
     run() {
 
         const metadata =
             this.buildMetadata();
 
-
         const correspondences =
             this.buildCorrespondences();
-
 
         return {
 
             engine:
-                "CorrespondenceEngine",
+                this.engine,
 
             version:
-                "7.0",
+                this.version,
 
             semanticObject:
                 this.semanticObject,
 
-
             principle:
-                "莫问判断定义、证据与表达之间的真实对应关系。",
-
+                this.principle,
 
             metadata,
 
-
             correspondences,
-
 
             result: {
 
@@ -47,14 +48,11 @@ class CorrespondenceEngine {
 
             },
 
-
             trace:
                 this.semanticObject.runtimeTrace || [],
 
-
             nextRuntimeState:
                 "ReasoningEngine",
-
 
             status:
 
@@ -63,7 +61,6 @@ class CorrespondenceEngine {
                     ? "correspondence-evaluated"
 
                     : "need-correspondence",
-
 
             questions:
 
