@@ -169,17 +169,17 @@ class HonestRuntime {
 
 
         const correspondence =
-            new CorrespondenceEngine({
+    new CorrespondenceEngine({
 
-                ...semanticObject,
+        ...semanticObject,
 
-                definitions:
-                    definition.definitions || [],
+        definitions:
+            definition.definitions || [],
 
-                evidences:
-                    evidence.evidences || []
+        evidences:
+            evidence.evidences || []
 
-            }).run();
+    }).execute();
 
 
 

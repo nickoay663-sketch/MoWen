@@ -6,107 +6,66 @@ class CorrespondenceEngine extends EngineBase {
 
         super(
             "CorrespondenceEngine",
-            "7.0",
+            "10.2",
             "莫问判断定义、证据与表达之间的真实对应关系。"
         );
 
-        this.semanticObject = semanticObject || {};
+        this.semanticObject =
+            semanticObject || {};
 
     }
 
-    run() {
 
-        const metadata =
-            this.buildMetadata();
+    execute() {
 
         const correspondences =
             this.buildCorrespondences();
 
-        return {
 
-            engine:
-                this.engine,
+        return this.result({
 
-            version:
-                this.version,
+            status:
+                "completed",
 
-            semanticObject:
-                this.semanticObject,
+            metadata:
+                this.metadata({
 
-            principle:
-                this.principle,
+                    correspondenceCount:
+                        correspondences.length
 
-            metadata,
+                }),
 
             correspondences,
 
             result: {
 
-                metadata,
-
                 correspondences
 
             },
 
-            trace:
-                this.semanticObject.runtimeTrace || [],
+            trace: [
+
+                {
+
+                    engine:
+                        "CorrespondenceEngine",
+
+                    action:
+                        "check",
+
+                    status:
+                        "completed"
+
+                }
+
+            ],
+
+            questions: [],
 
             nextRuntimeState:
-                "ReasoningEngine",
+                "ReasoningEngine"
 
-            status:
-
-                correspondences.length > 0
-
-                    ? "correspondence-evaluated"
-
-                    : "need-correspondence",
-
-            questions:
-
-                correspondences.length > 0
-
-                    ? []
-
-                    : [
-                        "当前表达是否获得有效对应支持？"
-                    ]
-
-        };
-
-    }
-
-
-    buildMetadata() {
-
-        return {
-
-            generatedAt:
-                new Date().toISOString(),
-
-
-            runtimeVersion:
-                this.semanticObject.contract?.identity?.runtimeVersion || "",
-
-
-            contractVersion:
-                this.semanticObject.contract?.version || "",
-
-
-            engineCount:
-
-                Object.keys(
-
-                    this.semanticObject.engines || {}
-
-                ).length,
-
-
-            traceCount:
-
-                (this.semanticObject.runtimeTrace || []).length
-
-        };
+        });
 
     }
 
@@ -121,94 +80,35 @@ class CorrespondenceEngine extends EngineBase {
             this.semanticObject.evidences || [];
 
 
-        return definitions.map(definition => {
+        if (
+            definitions.length === 0 &&
+            evidences.length === 0
+        ) {
+
+            return [];
+
+        }
 
 
-            const matched =
+        return [
 
-                evidences.filter(
+            {
 
-                    evidence =>
-
-                        evidence.conceptId === definition.id
-
-                );
-
-
-            return {
-
-                definition,
-
-                evidences:
-                    matched,
-
+                definitionCount:
+                    definitions.length,
 
                 evidenceCount:
-                    matched.length,
+                    evidences.length,
 
+                matched:
+                    definitions.length > 0 &&
+                    evidences.length > 0
 
-                sourceCount:
+            }
 
-                    matched.filter(
-
-                        item => item.sourceAvailable === true
-
-                    ).length,
-
-
-                sourceAvailable:
-
-                    matched.some(
-
-                        item => item.sourceAvailable === true
-
-                    ),
-
-
-                supported:
-                    matched.length > 0,
-
-
-                supportLevel:
-
-                    matched.length === 0
-
-                        ? "none"
-
-                        : matched.length > 3
-
-                            ? "strong"
-
-                            : "medium",
-
-
-                correspondenceType:
-                    "claim-evidence-responsibility",
-
-
-                verificationStatus:
-
-                    matched.length > 0
-
-                        ? "evaluated"
-
-                        : "missing-evidence",
-
-
-                runtimeTrace:
-                    this.semanticObject.runtimeTrace || [],
-
-
-                engineRegistry:
-
-                    this.semanticObject.engineRegistry?.describe?.() || []
-
-            };
-
-        });
+        ];
 
     }
-
 
 }
 
