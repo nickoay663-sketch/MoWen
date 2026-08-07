@@ -1,32 +1,45 @@
-# MoWen Runtime Engine Mapping v3.0
-
-# 莫问运行引擎映射 v3.0
-
----
+# MoWen Runtime Engine Mapping v4.0
+# 莫问运行引擎映射 v4.0
 
 # Purpose
 
-Runtime Mapping defines how Runtime communicates with every Engine.
+Runtime Engine Mapping defines how Honest Runtime communicates with every Runtime Engine.
 
-Every Engine receives a unified Runtime Context.
+Language Runtime establishes the execution environment.
 
-Every Engine returns a unified Runtime Result.
+Semantic Object becomes the unified runtime object.
 
-Runtime does not bypass any Engine.
+Every Runtime Engine receives the same Runtime Context.
 
-运行映射规定 Runtime 如何与每个 Engine 通信。
+Every Runtime Engine returns a standardized Runtime Result.
 
-所有 Engine 接收统一运行上下文。
+Runtime never bypasses any Runtime Engine.
 
-所有 Engine 返回统一运行结果。
+运行引擎映射规定 Honest Runtime 如何与各 Runtime Engine 通信。
 
-Runtime 不允许绕过任何 Engine。
+Language Runtime 建立运行环境。
+
+Semantic Object 成为统一运行对象。
+
+所有 Runtime Engine 接收统一 Runtime Context。
+
+所有 Runtime Engine 返回统一 Runtime Result。
+
+Runtime 不允许绕过任何 Runtime Engine。
 
 ---
 
 # Runtime Flow
 
 Expression
+
+↓
+
+Language Runtime
+
+↓
+
+Semantic Object
 
 ↓
 
@@ -43,6 +56,10 @@ SearchEngine
 ↓
 
 EvidenceEngine
+
+↓
+
+VerificationEngine
 
 ↓
 
@@ -66,80 +83,108 @@ SelfCheckEngine
 
 ↓
 
-Runtime Output
+Runtime Report
 
 ---
 
 # Runtime Context
 
-Runtime passes one Runtime Context to every Engine.
+Every Runtime Engine receives one Runtime Context.
 
 Runtime Context contains:
 
-- originalContent
-- language
-- semanticObject
-- previousRuntimeResult
+- Runtime Identity
+- Original Content
+- Language Environment
+- Semantic Object
+- Previous Runtime Result
+- Runtime Trace
 
-所有 Engine 接收统一 Runtime Context。
+所有 Runtime Engine 接收统一 Runtime Context。
 
 包括：
 
+- Runtime 身份
 - 原始表达
-- 语言
-- 语义对象
+- 语言环境
+- Semantic Object
 - 上一步运行结果
+- Runtime Trace
 
 ---
 
 # Runtime Result
 
-Every Engine returns:
+Every Runtime Engine returns:
 
-- status
+- principle
 - result
 - trace
 - nextRuntimeState
-
-所有 Engine 返回统一结果：
-
 - status
+- questions
+- version
+
+所有 Runtime Engine 返回统一结果：
+
+- principle
 - result
 - trace
 - nextRuntimeState
+- status
+- questions
+- version
 
 ---
 
-# Runtime Rule
+# Runtime Rules
 
-Runtime never changes Engine Result.
+Runtime never modifies Engine Results.
 
 Runtime only transfers Runtime Context.
 
 Runtime never skips Runtime Chain.
 
+Every Runtime transition shall remain traceable.
+
 Runtime 不修改 Engine 输出。
 
-Runtime 只负责传递运行上下文。
+Runtime 只负责传递 Runtime Context。
 
 Runtime 不允许跳过责任链。
+
+所有 Runtime 转换必须保持可追溯。
 
 ---
 
 # Core Principle
 
-One Runtime.
+One Honest Runtime.
 
-One Context.
+One Language Runtime.
 
-One Interface.
+One Semantic Object.
+
+One Runtime Context.
+
+One Runtime Interface.
 
 One Responsibility Chain.
 
-统一 Runtime。
+统一 Honest Runtime。
 
-统一 Context。
+统一 Language Runtime。
 
-统一 Interface。
+统一 Semantic Object。
+
+统一 Runtime Context。
+
+统一 Runtime Interface。
 
 统一责任链。
+
+---
+
+Version
+
+4.0

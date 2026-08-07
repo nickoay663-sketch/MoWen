@@ -1,143 +1,263 @@
-# MoWen Runtime v3.0
+# MoWen Honest Runtime v4.0
+# 莫问诚实运行 v4.0
 
-# 莫问运行系统 v3.0
+## Purpose
 
+Honest Runtime defines the complete execution architecture of MoWen.
+
+Every expression shall enter Honest Runtime.
+
+Every Runtime component shall execute under the same Runtime Principles.
+
+诚实运行定义莫问完整运行体系。
+
+任何表达都必须进入诚实运行。
+
+所有 Runtime 组件均遵循统一运行原则。
+
+## Axiom Foundation
+
+MoWen Honest Runtime operates under MoWen First Axiom.
+
+> 主体不可互相否定。
+
+Honest Runtime verifies whether expressions preserve the ability of subjects to:
+
+- recognize reality
+- make choices
+- assume responsibility
+
+莫问诚实运行遵循莫问第一公理：
+
+> 主体不可互相否定。
+
+诚实运行验证表达是否维护主体：
+
+- 认识现实
+- 进行选择
+- 承担责任
+
+的能力。
 ---
 
-# Runtime Principles
-
-MoWen Runtime is a responsibility operating system.
-
-Its mission is not to generate conclusions.
-
-Its mission is to establish whether an expression can bear responsibility.
-
-莫问运行系统是责任运行系统。
-
-它的使命不是生成结论。
-
-它的使命是检验表达是否能够承担责任。
-
----
-
-# Runtime Principles
-
-Every expression enters the same Runtime.
-
-Every Runtime follows the same responsibility chain.
-
-所有表达，
-
-进入同一套运行。
-
-所有运行，
-
-遵循同一条责任链。
-
----
-
-# The Four Runtime Principles
-
-## Principles 1
+# Runtime Flow
 
 Expression
 
-表达是运行唯一输入。
+↓
 
-Everything entering Runtime is treated as an Expression.
+Language Runtime
 
-任何进入运行系统的对象，
+↓
 
-首先统一成为表达。
+Semantic Object
 
----
+↓
 
-## Principles 2
+Recognition
+
+↓
 
 Definition
 
-没有定义，
+↓
 
-不能建立责任。
+Search
 
-Every expression must first establish its definition.
+↓
 
-任何表达，
+Evidence
 
-首先建立定义。
+↓
 
----
+Verification
 
-## Principles 3
+↓
+
+Correspondence
+
+↓
+
+Reasoning
+
+↓
 
 Responsibility
 
-Definition determines Responsibility.
+↓
 
-定义决定责任。
+Reconstruction
 
-Responsibility cannot exist without Definition.
+↓
+
+Self Check
+
+↓
+
+Runtime Report
+
+---
+
+# Language Runtime
+
+Language Runtime establishes the execution environment.
+
+The execution environment includes:
+
+- Language
+- Script
+- Locale
+- Dictionary
+- Definitions
+- Recognition Rules
+- Search Strategy
+- Report Language
+
+Every Runtime Engine executes inside the established language environment.
+
+语言运行层负责建立整个运行环境。
+
+运行环境包括：
+
+- 语言
+- 文字系统
+- 区域环境
+- 词典
+- 定义库
+- 识别规则
+- 搜索策略
+- 报告语言
+
+所有 Runtime Engine 均在该语言环境下运行。
+
+---
+
+# Semantic Object
+
+Language Runtime converts every expression into one Semantic Object.
+
+Semantic Object becomes the unified Runtime Object.
+
+Language Runtime 将所有表达转换为统一 Semantic Object。
+
+Semantic Object 是 Runtime 的统一运行对象。
+
+---
+
+# Runtime Principles
+
+No Definition,
+
+No Reasoning.
+
+No Evidence,
+
+No Conclusion.
+
+No Verification,
+
+No Responsibility.
+
+No Runtime step may be skipped.
 
 没有定义，
+
+没有推理。
+
+没有证据，
+
+没有结论。
+
+没有验证，
 
 没有责任。
 
----
+任何 Runtime 步骤不得跳过。
 
-## Principles 4
+## Subject Protection Principle
 
-Reconstruction
+Runtime verification must not establish conclusions by denying subjectivity.
 
-Reconstruction is the Runtime output.
+运行验证不得通过否定主体性来建立结论。
 
-重构是运行输出。
+Every Runtime step must preserve:
 
-When responsibility is established,
+- Truth
+- Autonomy
+- Responsibility
 
-Expression may be reconstructed.
+每一个运行步骤必须维护：
 
-When responsibility cannot be established,
-
-MoWen leaves an unavoidable question.
-
-责任建立，
-
-允许重构。
-
-责任不能建立，
-
-留下无法回避的问题。
+- 真实
+- 自主
+- 责任
 
 ---
 
-# Responsibility Chain
+# Honest Runtime Principle
 
-Expression
+MoWen does not only examine the world.
 
-↓
+MoWen shall first examine itself.
 
-Definition
+Every Runtime component,
 
-↓
+every document,
 
-Responsibility
+every Engine,
 
-↓
+every repository change
 
-Reconstruction
+shall enter Honest Runtime.
 
-表达
+No object is exempt from verification.
 
-↓
+No Runtime component is exempt from responsibility.
 
-定义
+莫问不仅检查世界。
 
-↓
+莫问首先检查自己。
 
-责任
+每一个 Runtime 组件、
 
-↓
+每一份文档、
 
-重构
+每一个 Engine、
 
-责任链永远保持一致。
+每一次仓库变更，
+
+都必须进入诚实运行。
+
+任何对象都不能免于验证。
+
+任何 Runtime 组件都不能免于承担责任。
+
+---
+
+# Core Principle
+
+One Honest Runtime.
+
+One Language Runtime.
+
+One Semantic Object.
+
+One Responsibility Chain.
+
+One Runtime Report.
+
+统一 Honest Runtime。
+
+统一 Language Runtime。
+
+统一 Semantic Object。
+
+统一责任链。
+
+统一 Runtime Report。
+
+---
+
+Version
+
+4.0

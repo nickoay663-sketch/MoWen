@@ -1,28 +1,62 @@
-# MoWen Repository Review v3.0
-
-# 莫问仓库总审查 v3.0
-
----
+# MoWen Repository Review v4.0
+# 莫问仓库总审查 v4.0
 
 # Purpose
 
-Repository Review verifies the integrity of the entire MoWen repository.
+Repository Review verifies the integrity, consistency and responsibility of the entire MoWen repository.
 
-The repository itself enters Honest Runtime.
+The repository itself is a Runtime Object.
 
-仓库总审查负责检验整个莫问仓库。
+Therefore the repository shall also enter Honest Runtime.
 
-仓库本身进入诚实运行。
+仓库总审查负责验证整个莫问仓库的完整性、一致性与责任关系。
+
+仓库本身也是运行对象。
+
+因此仓库同样进入诚实运行。
+
+---
+
+# Repository Object
+
+Every repository contains:
+
+- Documentation
+- Runtime
+- Runtime Engines
+- Semantic Objects
+- Knowledge
+- UI
+- Tests
+- Configuration
+- Version
+- Git History
+
+仓库对象包含：
+
+- 文档
+- Runtime
+- Runtime Engine
+- Semantic Object
+- Knowledge
+- UI
+- 测试
+- 配置
+- 版本
+- Git 历史
 
 ---
 
 # Review Scope
 
-Review includes:
+Repository Review includes:
 
-- Documents
-- Runtime
-- Engines
+- Documentation Architecture
+- Runtime Architecture
+- Runtime Engines
+- Runtime Flow
+- Semantic Object
+- Responsibility Chain
 - Knowledge
 - UI
 - Tests
@@ -30,35 +64,38 @@ Review includes:
 
 审查范围包括：
 
-- 文档
-- Runtime
-- Engine
+- 文档架构
+- Runtime 架构
+- Runtime Engine
+- Runtime Flow
+- Semantic Object
+- 责任链
 - Knowledge
 - UI
-- Tests
+- 测试
 - 配置
 
 ---
 
 # Review Questions
 
-Does every module have exactly one responsibility?
-
-Can every Runtime document map to one Engine?
-
-Are names consistent?
-
-Can the repository execute from input to output?
-
-Does every conclusion remain traceable?
+- Does every module have exactly one responsibility?
+- Can every Runtime document map to one Runtime Engine?
+- Does every Runtime Engine belong to Honest Runtime?
+- Is Documentation Architecture consistent?
+- Is Runtime Flow complete?
+- Can every conclusion remain traceable?
+- Is every responsibility preserved?
 
 检查：
 
 - 每个模块是否只有一个职责？
-- 每个 Runtime 是否对应一个 Engine？
-- 命名是否统一？
-- 是否能够从输入运行到输出？
-- 是否保持全程可追溯？
+- 每个 Runtime 文档是否对应一个 Runtime Engine？
+- 每个 Runtime Engine 是否属于 Honest Runtime？
+- 文档架构是否一致？
+- Runtime Flow 是否完整？
+- 是否保持全过程可追溯？
+- 是否保持责任完整？
 
 ---
 
@@ -66,7 +103,7 @@ Does every conclusion remain traceable?
 
 PASS
 
-Repository is consistent.
+Repository Architecture is consistent.
 
 WARN
 
@@ -74,7 +111,7 @@ Repository requires refactoring.
 
 FAIL
 
-Repository violates Runtime Principles.
+Repository violates Honest Runtime Principles.
 
 ---
 
@@ -82,12 +119,30 @@ Repository violates Runtime Principles.
 
 The repository is also an expression.
 
-Therefore,
+The repository shall also bear responsibility.
 
-the repository must bear responsibility.
+Architecture serves responsibility.
+
+Repository evolves through refactoring.
+
+Git preserves historical versions.
+
+Current repository represents the latest architecture.
 
 仓库本身也是一种表达。
 
-因此，
+仓库本身同样承担责任。
 
-仓库本身也必须承担责任。
+架构服务责任。
+
+仓库通过重构演进。
+
+Git 保存历史版本。
+
+当前仓库始终代表最新架构。
+
+---
+
+Version
+
+4.0

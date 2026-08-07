@@ -505,3 +505,19 @@ One official definition.
 一个正式术语。
 
 一个正式定义。
+
+---
+
+# Axiom Reference
+
+MoWen Architecture follows MoWen First Axiom.
+
+莫问系统架构遵循莫问第一公理。
+
+
+> 主体不可互相否定。
+
+
+All Runtime Layers, Engines and Implementation modules must operate under this principle.
+
+所有 Runtime Layer、Engine 和实现模块，都必须在该原则下运行。
