@@ -286,104 +286,104 @@ class HonestRuntime {
             engineRegistry.all();
 
 
-trace.push({
+        trace.push({
 
-    engine:
-        "SearchEngine",
+            engine:
+                "SearchEngine",
 
-    status:
-        search.status,
+            status:
+                search.status,
 
-    version:
-        search.version
+            version:
+                search.version
 
-});
-
-
-trace.push({
-
-    engine:
-        "EvidenceEngine",
-
-    status:
-        evidence.status,
-
-    version:
-        evidence.version
-
-});
+        });
 
 
-trace.push({
+        trace.push({
 
-    engine:
-        "CorrespondenceEngine",
+            engine:
+                "EvidenceEngine",
 
-    status:
-        correspondence.status,
+            status:
+                evidence.status,
 
-    version:
-        correspondence.version
+            version:
+                evidence.version
 
-});
-
-
-trace.push({
-
-    engine:
-        "ReasoningEngine",
-
-    status:
-        reasoning.status,
-
-    version:
-        reasoning.version
-
-});
+        });
 
 
-trace.push({
+        trace.push({
 
-    engine:
-        "ResponsibilityEngine",
+            engine:
+                "CorrespondenceEngine",
 
-    status:
-        responsibility.status,
+            status:
+                correspondence.status,
 
-    version:
-        responsibility.version
+            version:
+                correspondence.version
 
-});
-
-
-trace.push({
-
-    engine:
-        "ReconstructionEngine",
-
-    status:
-        reconstruction.status,
-
-    version:
-        reconstruction.version
-
-});
+        });
 
 
-trace.push({
+        trace.push({
 
-    engine:
-        "GeneratorEngine",
+            engine:
+                "ReasoningEngine",
 
-    status:
-        generator.status,
+            status:
+                reasoning.status,
 
-    version:
-        generator.version
+            version:
+                reasoning.version
 
-});
-        
-            const selfCheck =
+        });
+
+
+        trace.push({
+
+            engine:
+                "ResponsibilityEngine",
+
+            status:
+                responsibility.status,
+
+            version:
+                responsibility.version
+
+        });
+
+
+        trace.push({
+
+            engine:
+                "ReconstructionEngine",
+
+            status:
+                reconstruction.status,
+
+            version:
+                reconstruction.version
+
+        });
+
+
+        trace.push({
+
+            engine:
+                "GeneratorEngine",
+
+            status:
+                generator.status,
+
+            version:
+                generator.version
+
+        });
+
+        const selfCheck =
             new SelfCheckEngine({
 
                 pipeline,
@@ -420,7 +420,7 @@ trace.push({
 
 
         runtimeResult.runtimeVersion =
-            "9.0";
+            runtimeVersion;
 
 
 
@@ -430,8 +430,7 @@ trace.push({
                 RuntimeContract.version,
 
             runtimeVersion:
-                "9.0",
-
+    runtimeVersion,
             engineCount:
                 engineRegistry.list().length
 
