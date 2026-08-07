@@ -13,6 +13,12 @@ class RuntimeResult {
 
         this.definition =
             null;
+     
+            this.testimony =
+            null;
+
+        this.testimonyValidation =
+            null;
 
         this.search =
             null;

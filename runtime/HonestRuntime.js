@@ -13,7 +13,8 @@ import MoWenIdentity from "./MoWenIdentity.js";
 import RuntimeContract from "./RuntimeContract.js";
 import EngineRegistry from "./EngineRegistry.js";
 import RuntimeResult from "./RuntimeResult.js";
-
+import TestimonyBuilder from "./TestimonyBuilder.js";
+import TestimonyValidator from "./TestimonyValidator.js";
 
 class HonestRuntime {
 
@@ -33,6 +34,16 @@ class HonestRuntime {
 
         const runtimeResult =
             new RuntimeResult();
+
+            const testimony =
+    new TestimonyBuilder(
+        this.expression
+    ).run();
+
+const testimonyValidation =
+    new TestimonyValidator(
+        testimony
+    ).run();
 
 
         const pipeline = [
@@ -489,6 +500,12 @@ class HonestRuntime {
 
         runtimeResult.language =
             language;
+
+            runtimeResult.testimony =
+    testimony;
+
+runtimeResult.testimonyValidation =
+    testimonyValidation;
 
         return runtimeResult;
 
