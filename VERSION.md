@@ -2,100 +2,69 @@
 
 MoWen Version History.
 
-莫问版本记录。
-
 ## Current Version
 
-v1.2
+v10.1
 
 ## Runtime Architecture
 
-Completed
+EngineBase v10.1 Migration Complete
 
-Honest Runtime
+All Runtime Engines migrated:
 
-Runtime Flow
-
-Runtime Report
-
-Runtime Engines
-
-Engines:
-
-Recognition Engine
-
-Definition Engine
-
-Search Engine
-
-Evidence Engine
-
-Correspondence Engine
-
-Reasoning Engine
-
-Responsibility Engine
-
-Reconstruction Engine
+- RecognitionEngine
+- DefinitionEngine
+- SearchEngine
+- EvidenceEngine
+- CorrespondenceEngine
+- ReasoningEngine
+- ResponsibilityEngine
+- ReconstructionEngine
+- GeneratorEngine
+- SelfCheckEngine
 
 ## Runtime Capability
 
 Completed:
 
-Runtime Architecture
-
-Runtime Search Capability
-
-Definition Search
-
-User Definition
-
-Recognition Specification
-
-Responsibility Specification
-
-Reconstruction Specification
+- EngineBase Unified Lifecycle
+- Runtime Contract Validation
+- Engine Registry Validation
+- Runtime Trace
+- Responsibility Boundary Check
+- SelfCheck Audit System
 
 ## Documents
 
 Completed:
 
-ARCHITECTURE.md
+- ARCHITECTURE.md
+- RUNTIME.md
+- SPEC.md
+- RuntimeSchema.md
+- SEARCH.md
+- STANDARD.md
+- CORE_DEFINITIONS.md
+- RECOGNITION.md
+- RESPONSIBILITY.md
+- RECONSTRUCTION.md
 
-RUNTIME.md
+## Release
 
-SPEC.md
+v10.1
 
-RuntimeSchema.md
-
-SEARCH.md
-
-STANDARD.md
-
-CORE_DEFINITIONS.md
-
-RECOGNITION.md
-
-RESPONSIBILITY.md
-
-RECONSTRUCTION.md
+EngineBase Architecture Upgrade Complete
 
 ## Next Version
 
-v1.3
+v10.2
 
-## Runtime Knowledge
+## Runtime Focus
 
-Focus:
+Next:
 
-Search Service
-
-Definition Library
-
-Evidence Library
-
-Knowledge Library
-
-Correspondence Rules
-
-Runtime API
+- Runtime Optimization
+- Knowledge Expansion
+- Evidence Enhancement
+- Correspondence Rules Expansion
+- Runtime API
