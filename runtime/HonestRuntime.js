@@ -286,8 +286,104 @@ class HonestRuntime {
             engineRegistry.all();
 
 
+trace.push({
 
-        const selfCheck =
+    engine:
+        "SearchEngine",
+
+    status:
+        search.status,
+
+    version:
+        search.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "EvidenceEngine",
+
+    status:
+        evidence.status,
+
+    version:
+        evidence.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "CorrespondenceEngine",
+
+    status:
+        correspondence.status,
+
+    version:
+        correspondence.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "ReasoningEngine",
+
+    status:
+        reasoning.status,
+
+    version:
+        reasoning.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "ResponsibilityEngine",
+
+    status:
+        responsibility.status,
+
+    version:
+        responsibility.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "ReconstructionEngine",
+
+    status:
+        reconstruction.status,
+
+    version:
+        reconstruction.version
+
+});
+
+
+trace.push({
+
+    engine:
+        "GeneratorEngine",
+
+    status:
+        generator.status,
+
+    version:
+        generator.version
+
+});
+        
+            const selfCheck =
             new SelfCheckEngine({
 
                 pipeline,
