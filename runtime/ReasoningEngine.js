@@ -7,7 +7,7 @@ class ReasoningEngine extends EngineBase {
         super(
             "ReasoningEngine",
             "7.0",
-            "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。"
+         "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。"
         );
 
         this.semanticObject = semanticObject || {};
@@ -15,7 +15,7 @@ class ReasoningEngine extends EngineBase {
     }
 
 
-    run() {
+    execute() {
 
         const metadata =
             this.buildMetadata();
@@ -77,7 +77,7 @@ class ReasoningEngine extends EngineBase {
                     ? []
 
                     : [
-                        "当前推理是否具有有效支持？"
+                        "reasoning support verification required"
                     ],
 
 

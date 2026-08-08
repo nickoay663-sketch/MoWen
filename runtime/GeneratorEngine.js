@@ -7,14 +7,14 @@ class GeneratorEngine extends EngineBase {
         super(
             "GeneratorEngine",
             "7.0",
-            "莫问生成责任链报告，不生成超过验证范围的结论。"
+        "莫问生成责任链报告，不生成超过验证范围的结论。"
         );
 
         this.runtimeObject = runtimeObject || {};
 
     }
 
-    run() {
+    execute() {
 
         const metadata =
             this.buildMetadata();

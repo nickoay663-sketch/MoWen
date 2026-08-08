@@ -72,13 +72,6 @@ class EngineBase {
 
     execute() {
 
-        if (typeof this.run === "function") {
-
-            return this.run();
-
-        }
-
-
         throw new Error(
             `${this.engine} must implement execute()`
         );

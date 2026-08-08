@@ -4,14 +4,18 @@ import EngineBase from "./EngineBase.js";
 class SelfCheckEngine extends EngineBase {
 
 
-   constructor(runtimeObject) {
+    constructor(runtimeObject) {
 
-    super(runtimeObject);
+        super(
+            "SelfCheckEngine",
+            "10.2",
+            "莫问检查自身运行完整性、责任边界和证据边界，不判断表达结果。"
+        );
 
-    this.runtimeObject =
-        runtimeObject || {};
+        this.runtimeObject =
+            runtimeObject || {};
 
-}
+    }
 
 
 
@@ -138,14 +142,17 @@ class SelfCheckEngine extends EngineBase {
 
             version:
 
-                "10.1",
 
+                this.version,
 
 
             principle:
 
                 "莫问检查自身运行完整性、责任边界和证据边界，不判断表达结果。",
 
+            metadata:
+
+                this.metadata(),
 
 
             checks,
@@ -1129,7 +1136,8 @@ class SelfCheckEngine extends EngineBase {
 
             version:
 
-                "10.1",
+
+                this.version,
 
 
 

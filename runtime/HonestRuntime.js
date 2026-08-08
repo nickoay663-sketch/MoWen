@@ -1,4 +1,4 @@
-import LanguageDetector from "./LanguageDetector.js";
+﻿import LanguageDetector from "./LanguageDetector.js";
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
 import SearchEngine from "./SearchEngine.js";
@@ -33,8 +33,9 @@ class HonestRuntime {
         const runtimeResult =
             new RuntimeResult();
 
-        const runtimeVersion =
-            "10.1";
+       const runtimeVersion =
+
+    "10.2";
 
 
         const testimony =
@@ -169,17 +170,17 @@ class HonestRuntime {
 
 
         const correspondence =
-    new CorrespondenceEngine({
+            new CorrespondenceEngine({
 
-        ...semanticObject,
+                ...semanticObject,
 
-        definitions:
-            definition.definitions || [],
+                definitions:
+                    definition.definitions || [],
 
-        evidences:
-            evidence.evidences || []
+                evidences:
+                    evidence.evidences || []
 
-    }).execute();
+            }).execute();
 
 
 
@@ -191,7 +192,7 @@ class HonestRuntime {
                 correspondences:
                     correspondence.correspondences || []
 
-            }).run();
+            }).execute();
 
 
 
@@ -203,7 +204,7 @@ class HonestRuntime {
                 reasonings:
                     reasoning.reasonings || []
 
-            }).run();
+            }).execute();
 
 
 
@@ -214,7 +215,7 @@ class HonestRuntime {
 
                 responsibility
 
-            }).run();
+            }).execute();
 
 
 
@@ -227,7 +228,7 @@ class HonestRuntime {
 
                 responsibility
 
-            }).run();
+            }).execute();
 
 
 

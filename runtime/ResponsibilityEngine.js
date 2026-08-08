@@ -7,7 +7,7 @@ class ResponsibilityEngine extends EngineBase {
         super(
             "ResponsibilityEngine",
             "8.0",
-            "è«é—®åˆ¤æ–­è¡¨è¾¾ä¸»ä½“æ‰¿æ‹…çš„è¯æ˜è´£ä»»ï¼Œä»¥åŠè¯æ®èƒ½åŠ›å…è®¸æ‰¿æ‹…è´£ä»»ä¹‹é—´çš„è¾¹ç•Œã€‚"
+        "MoWen responsibility boundary"
         );
 
         this.semanticObject =
@@ -16,7 +16,7 @@ class ResponsibilityEngine extends EngineBase {
     }
 
 
-    run() {
+    execute() {
 
         const metadata =
             this.buildMetadata();
@@ -83,7 +83,7 @@ class ResponsibilityEngine extends EngineBase {
 
                     : [
 
-                        "å½“å‰è¡¨è¾¾ä¸»ä½“æ˜¯å¦æ˜ç¡®æ‰¿æ‹…å¯¹åº”è¯æ˜è´£ä»»ï¼Ÿ"
+                        "responsibility verification required"
 
                     ],
 
@@ -351,11 +351,11 @@ class ResponsibilityEngine extends EngineBase {
 
         if (
 
-            content.includes("ä¸€å®š") ||
+        content.includes("Ò»¶¨") ||
 
             content.includes("å¿…ç„¶") ||
 
-            content.includes("æ‰€æœ‰") ||
+        content.includes("ËùÓĞ") ||
 
             content.includes("ç»å¯¹")
 
@@ -467,7 +467,7 @@ class ResponsibilityEngine extends EngineBase {
 
                 explanation:
 
-                    "ä¸»ä½“è¡¨è¾¾è¦æ±‚æ‰¿æ‹…çš„è´£ä»»è¶…è¿‡å½“å‰è¯æ®æ”¯æŒèƒ½åŠ›ã€‚"
+                    "Ö÷Ìå±í´ïÒªÇó³Ğµ£µÄÔğÈÎ³¬¹ıµ±Ç°Ö¤¾İÖ§³ÖÄÜÁ¦¡£"
 
             };
 
@@ -484,7 +484,7 @@ class ResponsibilityEngine extends EngineBase {
 
             explanation:
 
-                "ä¸»ä½“è´£ä»»è¦æ±‚ä¸è¯æ®æ”¯æŒèƒ½åŠ›åŸºæœ¬åŒ¹é…ã€‚"
+                "Ö÷ÌåÔğÈÎÒªÇóÓëÖ¤¾İÖ§³ÖÄÜÁ¦»ù±¾Æ¥Åä¡£"
 
         };
 

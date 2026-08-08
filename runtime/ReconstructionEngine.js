@@ -7,7 +7,7 @@ class ReconstructionEngine extends EngineBase {
         super(
             "ReconstructionEngine",
             "7.0",
-            "莫问重构责任链结构，不增加未经验证的信息。"
+         "莫问重构责任链结构，不增加未经验证的信息。"
         );
 
         this.runtimeObject = runtimeObject || {};
@@ -15,7 +15,7 @@ class ReconstructionEngine extends EngineBase {
     }
 
 
-    run() {
+    execute() {
 
 
         const metadata =
