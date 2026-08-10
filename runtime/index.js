@@ -9,9 +9,10 @@ class MoWenRuntime {
             expression || "";
 
         this.version =
-            "7.5";
+            "10.2";
 
     }
+
 
     run() {
 
@@ -31,7 +32,7 @@ class MoWenRuntime {
             metadata: {
 
                 runtimeVersion:
-                    "7.5",
+                    this.version,
 
                 generatedAt:
                     new Date().toISOString()
@@ -40,13 +41,17 @@ class MoWenRuntime {
 
             runtimeResult,
 
-            report
+            report,
+
+            final:
+                runtimeResult.generator?.report || null
 
         };
 
     }
 
 }
+
 
 export {
 

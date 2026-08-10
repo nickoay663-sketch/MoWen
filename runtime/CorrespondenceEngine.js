@@ -60,7 +60,14 @@ class CorrespondenceEngine extends EngineBase {
 
             ],
 
-            questions: [],
+            questions:
+                correspondences.some(
+                    item => item.matched === false
+                )
+                    ? [
+                        "definition-evidence correspondence verification required"
+                    ]
+                    : [],
 
             nextRuntimeState:
                 "ReasoningEngine"
@@ -73,21 +80,42 @@ class CorrespondenceEngine extends EngineBase {
     buildCorrespondences() {
 
         const definitions =
-            this.semanticObject.definitions || [];
+            Array.isArray(
+                this.semanticObject.definitions
+            )
+                ? this.semanticObject.definitions
+                : [];
 
 
         const evidences =
-            this.semanticObject.evidences || [];
+            Array.isArray(
+                this.semanticObject.evidences
+            )
+                ? this.semanticObject.evidences
+                : [];
+
+
+        const independentEvidences =
+            evidences.filter(
+                evidence =>
+                    evidence &&
+                    evidence.independent === true
+            );
 
 
         if (
             definitions.length === 0 &&
-            evidences.length === 0
+            independentEvidences.length === 0
         ) {
 
             return [];
 
         }
+
+
+        const matched =
+            definitions.length > 0 &&
+            independentEvidences.length > 0;
 
 
         return [
@@ -98,11 +126,23 @@ class CorrespondenceEngine extends EngineBase {
                     definitions.length,
 
                 evidenceCount:
-                    evidences.length,
+                    independentEvidences.length,
 
-                matched:
-                    definitions.length > 0 &&
-                    evidences.length > 0
+                matched,
+
+                supported:
+                    matched,
+
+                sourceAvailable:
+                    independentEvidences.length > 0,
+
+                sourceCount:
+                    independentEvidences.length,
+
+                verificationStatus:
+                    matched
+                        ? "supported"
+                        : "insufficient-support"
 
             }
 

@@ -51,7 +51,7 @@ class EvidenceEngine extends EngineBase {
                         "EvidenceEngine",
 
                     action:
-                        "collect",
+                        "validate",
 
                     status:
                         "completed"
@@ -60,7 +60,12 @@ class EvidenceEngine extends EngineBase {
 
             ],
 
-            questions: [],
+            questions:
+                evidences.length > 0
+                    ? []
+                    : [
+                        "evidence verification required"
+                    ],
 
             nextRuntimeState:
                 "CorrespondenceEngine"
@@ -72,30 +77,69 @@ class EvidenceEngine extends EngineBase {
 
     buildEvidence() {
 
-        const content =
-            this.semanticObject.originalContent || "";
+        const suppliedEvidence =
+            this.semanticObject.evidence;
 
 
-        if (!content) {
+        if (!Array.isArray(suppliedEvidence)) {
 
             return [];
 
         }
 
 
-        return [
+        return suppliedEvidence
+            .filter(item => {
 
-            {
+                if (
+                    !item ||
+                    typeof item !== "object"
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    !item.source &&
+                    !item.content
+                ) {
+
+                    return false;
+
+                }
+
+
+                const source =
+                    item.source ||
+                    item.content ||
+                    "";
+
+                const expression =
+                    this.semanticObject.originalContent ||
+                    "";
+
+
+                return (
+                    source !== expression
+                );
+
+            })
+            .map(item => ({
 
                 type:
-                    "expression",
+                    item.type ||
+                    "external",
 
                 source:
-                    content
+                    item.source ||
+                    item.content,
 
-            }
+                independent:
+                    true
 
-        ];
+            }));
 
     }
 
