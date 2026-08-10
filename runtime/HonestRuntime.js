@@ -1,4 +1,4 @@
-﻿import LanguageDetector from "./LanguageDetector.js";
+import LanguageDetector from "./LanguageDetector.js";
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
 import SearchEngine from "./SearchEngine.js";
@@ -33,9 +33,8 @@ class HonestRuntime {
         const runtimeResult =
             new RuntimeResult();
 
-       const runtimeVersion =
-
-    "10.2";
+        const runtimeVersion =
+            "10.2";
 
 
         const testimony =
@@ -50,36 +49,33 @@ class HonestRuntime {
             ).run();
 
 
-
         const pipeline = [
 
-            "Recognition",
+            "RecognitionEngine",
 
-            "Definition",
+            "DefinitionEngine",
 
-            "Search",
+            "SearchEngine",
 
-            "Evidence",
+            "EvidenceEngine",
 
-            "Correspondence",
+            "CorrespondenceEngine",
 
-            "Reasoning",
+            "ReasoningEngine",
 
-            "Responsibility",
+            "ResponsibilityEngine",
 
-            "Reconstruction",
+            "ReconstructionEngine",
 
-            "Generator",
+            "GeneratorEngine",
 
-            "SelfCheck"
+            "SelfCheckEngine"
 
         ];
 
 
-
         const identity =
             new MoWenIdentity().run();
-
 
 
         const language =
@@ -88,12 +84,10 @@ class HonestRuntime {
             ).run();
 
 
-
         const recognition =
             new RecognitionEngine(
                 this.expression
             ).execute();
-
 
 
         trace.push({
@@ -108,7 +102,6 @@ class HonestRuntime {
                 recognition.version
 
         });
-
 
 
         const semanticObject = {
@@ -136,7 +129,6 @@ class HonestRuntime {
             new DefinitionEngine(
                 semanticObject
             ).execute();
-
 
 
         trace.push({
@@ -183,7 +175,6 @@ class HonestRuntime {
             }).execute();
 
 
-
         const reasoning =
             new ReasoningEngine({
 
@@ -193,7 +184,6 @@ class HonestRuntime {
                     correspondence.correspondences || []
 
             }).execute();
-
 
 
         const responsibility =
@@ -207,7 +197,6 @@ class HonestRuntime {
             }).execute();
 
 
-
         const reconstruction =
             new ReconstructionEngine({
 
@@ -216,7 +205,6 @@ class HonestRuntime {
                 responsibility
 
             }).execute();
-
 
 
         const generator =
@@ -229,7 +217,6 @@ class HonestRuntime {
                 responsibility
 
             }).execute();
-
 
 
         const engineRegistry =
@@ -282,9 +269,27 @@ class HonestRuntime {
         );
 
 
+        const engines = {
 
-        const engines =
-            engineRegistry.all();
+            recognition,
+
+            definition,
+
+            search,
+
+            evidence,
+
+            correspondence,
+
+            reasoning,
+
+            responsibility,
+
+            reconstruction,
+
+            generator
+
+        };
 
 
         trace.push({
@@ -384,45 +389,14 @@ class HonestRuntime {
 
         });
 
-        const selfCheck =
-            new SelfCheckEngine({
 
-                pipeline,
-
-                contract:
-                    RuntimeContract,
-
-                engines,
-
-                engineRegistry,
-
-                semanticObject,
-
-                runtimeTrace:
-                    trace
-
-            }).execute();
-
-
-
-        trace.push({
-
-            engine:
-                "SelfCheckEngine",
-
-            status:
-                selfCheck.status,
-
-            version:
-                selfCheck.version
-
-        });
-
-
+        /*
+         * Prepare RuntimeResult before SelfCheck.
+         * SelfCheck must inspect the actual RuntimeResult contract.
+         */
 
         runtimeResult.runtimeVersion =
             runtimeVersion;
-
 
 
         runtimeResult.setMetadata({
@@ -437,7 +411,6 @@ class HonestRuntime {
                 engineRegistry.list().length
 
         });
-
 
 
         runtimeResult.recognition =
@@ -480,7 +453,6 @@ class HonestRuntime {
             responsibility.responsibilities || [];
 
 
-
         runtimeResult.reconstruction =
             reconstruction;
 
@@ -489,13 +461,8 @@ class HonestRuntime {
             generator;
 
 
-        runtimeResult.selfCheck =
-            selfCheck;
-
-
         runtimeResult.engineRegistry =
             engineRegistry;
-
 
 
         runtimeResult.testimonyChain = {
@@ -507,7 +474,6 @@ class HonestRuntime {
             responsibility
 
         };
-
 
 
         runtimeResult.verificationBoundary = {
@@ -522,7 +488,6 @@ class HonestRuntime {
                 reconstruction.reconstruction?.responsibilityBoundary
 
         };
-
 
 
         runtimeResult.setPipeline(
@@ -546,6 +511,50 @@ class HonestRuntime {
         runtimeResult.semanticObject =
             semanticObject;
 
+
+        const selfCheck =
+            new SelfCheckEngine({
+
+                pipeline,
+
+                contract:
+                    RuntimeContract,
+
+                engines,
+
+                engineRegistry,
+
+                semanticObject,
+
+                runtimeResult,
+
+                runtimeTrace:
+                    trace
+
+            }).execute();
+
+
+        trace.push({
+
+            engine:
+                "SelfCheckEngine",
+
+            status:
+                selfCheck.status,
+
+            version:
+                selfCheck.version
+
+        });
+
+
+        runtimeResult.selfCheck =
+            selfCheck;
+
+
+        runtimeResult.setTrace(
+            trace
+        );
 
 
         return runtimeResult;
