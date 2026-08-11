@@ -351,13 +351,13 @@ class ResponsibilityEngine extends EngineBase {
 
         if (
 
-        content.includes("Ò»¶¨") ||
+        content.includes("ä¸€å®š") ||
 
-            content.includes("å¿…ç„¶") ||
+            content.includes("Ã¥Â¿Â…Ã§Â„Â¶") ||
 
-        content.includes("ËùÓĞ") ||
+        content.includes("æ‰€æœ‰") ||
 
-            content.includes("ç»å¯¹")
+            content.includes("Ã§Â»ÂÃ¥Â¯Â¹")
 
         ) {
 
@@ -467,7 +467,7 @@ class ResponsibilityEngine extends EngineBase {
 
                 explanation:
 
-                    "Ö÷Ìå±í´ïÒªÇó³Ğµ£µÄÔğÈÎ³¬¹ıµ±Ç°Ö¤¾İÖ§³ÖÄÜÁ¦¡£"
+                    "ä¸»ä½“è¡¨è¾¾è¦æ±‚æ‰¿æ‹…çš„è´£ä»»è¶…è¿‡å½“å‰è¯æ®æ”¯æŒèƒ½åŠ›ã€‚"
 
             };
 
@@ -484,7 +484,7 @@ class ResponsibilityEngine extends EngineBase {
 
             explanation:
 
-                "Ö÷ÌåÔğÈÎÒªÇóÓëÖ¤¾İÖ§³ÖÄÜÁ¦»ù±¾Æ¥Åä¡£"
+                "ä¸»ä½“è´£ä»»è¦æ±‚ä¸è¯æ®æ”¯æŒèƒ½åŠ›åŸºæœ¬åŒ¹é…ã€‚"
 
         };
 
