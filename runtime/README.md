@@ -60,9 +60,9 @@ No definition.
 
 No reasoning.
 
-No evidence.
+The Runtime does not create evidence outside the available evidence chain.
 
-No conclusion.
+The Runtime does not create conclusions outside the verified responsibility chain.
 
 ---
 
