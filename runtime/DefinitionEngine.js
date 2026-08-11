@@ -1,4 +1,5 @@
 import EngineBase from "./EngineBase.js";
+import LanguageManager from "./LanguageManager.js";
 
 class DefinitionEngine extends EngineBase {
 
@@ -6,8 +7,8 @@ class DefinitionEngine extends EngineBase {
 
         super(
             "DefinitionEngine",
-            "10.2",
-            "莫问定义表达对象的明确含义与边界。"
+            "11.0",
+            "莫问定义表达对象的明确含义与边界，不负责证据与推理。"
         );
 
         this.semanticObject =
@@ -31,7 +32,10 @@ class DefinitionEngine extends EngineBase {
                 this.metadata({
 
                     definitionCount:
-                        definitions.length
+                        definitions.length,
+
+                    language:
+                        this.semanticObject.language || "unknown"
 
                 }),
 
@@ -75,31 +79,154 @@ class DefinitionEngine extends EngineBase {
         const content =
             this.semanticObject.originalContent || "";
 
-
         if (!content) {
 
             return [];
 
         }
 
+        const language =
+            this.semanticObject.language || "zh-CN";
 
-        return [
+        const resources =
+            LanguageManager.getResources(language);
 
-            {
+        const dictionary =
+            resources.dictionary || {};
+
+        const definitions =
+            resources.definitions || {};
+
+        const concepts =
+            this.semanticObject.concepts || [];
+
+        const results = [];
+
+        for (const concept of concepts) {
+
+            const aliases =
+                Array.isArray(concept.aliases)
+                    ? concept.aliases
+                    : [concept.word];
+
+            let definition = null;
+
+            for (const alias of aliases) {
+
+                const key =
+                    this.normalizeKey(alias);
+
+                if (
+                    definitions &&
+                    Object.prototype.hasOwnProperty.call(
+                        definitions,
+                        key
+                    )
+                ) {
+
+                    definition =
+                        definitions[key];
+
+                    break;
+
+                }
+
+            }
+
+            if (!definition) {
+
+                const key =
+                    this.normalizeKey(concept.word);
+
+                if (
+                    definitions &&
+                    Object.prototype.hasOwnProperty.call(
+                        definitions,
+                        key
+                    )
+                ) {
+
+                    definition =
+                        definitions[key];
+
+                }
+
+            }
+
+            if (definition) {
+
+                results.push({
+
+                    expression:
+                        content,
+
+                    concept: {
+                        id:
+                            concept.id,
+
+                        word:
+                            concept.word,
+
+                        category:
+                            concept.category
+                    },
+
+                    definition,
+
+                    language,
+
+                    dictionaryVersion:
+                        dictionary.version || null,
+
+                    fallback:
+                        resources.fallback === true
+
+                });
+
+            }
+
+        }
+
+        if (results.length === 0) {
+
+            results.push({
 
                 expression:
                     content,
 
                 definition:
-                    "Expression entering MoWen Runtime"
+                    "Expression entering MoWen Runtime",
 
-            }
+                language,
 
-        ];
+                dictionaryVersion:
+                    dictionary.version || null,
+
+                fallback:
+                    resources.fallback === true
+
+            });
+
+        }
+
+        return results;
+
+    }
+
+
+    normalizeKey(value) {
+
+        return String(value || "")
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
 
     }
 
 }
-
 
 export default DefinitionEngine;

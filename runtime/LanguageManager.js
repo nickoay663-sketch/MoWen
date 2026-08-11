@@ -8,27 +8,91 @@ class LanguageManager {
 
     static getResources(language) {
 
-        switch (language) {
+        const normalizedLanguage =
+            String(language || "")
+                .trim()
+                .toLowerCase();
 
-            case "es-ES":
+        switch (normalizedLanguage) {
+
+            case "es-es":
 
                 return {
 
-                    dictionary: SpanishDictionary,
+                    language:
+                        "es-ES",
 
-                    definitions: SpanishDefinitions
+                    dictionary:
+                        SpanishDictionary,
+
+                    definitions:
+                        SpanishDefinitions,
+
+                    fallback:
+                        false
 
                 };
 
-            case "zh-CN":
+            case "zh-cn":
+
+                return {
+
+                    language:
+                        "zh-CN",
+
+                    dictionary:
+                        Dictionary,
+
+                    definitions:
+                        Definitions,
+
+                    fallback:
+                        false
+
+                };
+
+            case "en-us":
+            case "fr-fr":
+            case "de-de":
+            case "it-it":
+            case "pt-pt":
+
+                return {
+
+                    language:
+                        normalizedLanguage
+                            .replace(
+                                /^([a-z]{2})-([a-z]{2})$/,
+                                (_, languageCode, countryCode) =>
+                                    `${languageCode}-${countryCode.toUpperCase()}`
+                            ),
+
+                    dictionary:
+                        Dictionary,
+
+                    definitions:
+                        Definitions,
+
+                    fallback:
+                        true
+
+                };
 
             default:
 
                 return {
 
-                    dictionary: Dictionary,
+                    language:
+                        "zh-CN",
 
-                    definitions: Definitions
+                    dictionary:
+                        Dictionary,
+
+                    definitions:
+                        Definitions,
+
+                    fallback:
+                        true
 
                 };
 
