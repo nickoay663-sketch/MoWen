@@ -162,6 +162,10 @@ const RuntimeContract = {
 
             "definition",
 
+            "testimony",
+
+            "testimonyValidation",
+
             "search",
 
             "evidence",
@@ -172,17 +176,29 @@ const RuntimeContract = {
 
             "responsibility",
 
+            "responsibilityModel",
+
             "reconstruction",
 
             "generator",
 
             "selfCheck",
 
+            "engineRegistry",
+
+            "testimonyChain",
+
+            "verificationBoundary",
+
+            "identity",
+
+            "contract",
+
+            "semanticObject",
+
             "runtimeTrace",
 
-            "pipeline",
-
-            "engineRegistry"
+            "pipeline"
 
         ]
 
@@ -238,7 +254,6 @@ const RuntimeContract = {
         principle:
 
             "Every Engine must provide a unified execution capability."
-
 
     }
 
