@@ -1,4 +1,4 @@
-class RuntimeResult {
+﻿class RuntimeResult {
 
     constructor() {
 
@@ -8,6 +8,23 @@ class RuntimeResult {
 
         this.generatedAt =
             new Date().toISOString();
+
+
+        this.metadata = {
+
+            contractVersion:
+                "10.2",
+
+            runtimeVersion:
+                "10.2",
+
+            engineCount:
+                0,
+
+            generatedAt:
+                this.generatedAt
+
+        };
 
 
         this.recognition =
@@ -74,6 +91,18 @@ class RuntimeResult {
             null;
 
 
+        this.identity =
+            null;
+
+
+        this.contract =
+            null;
+
+
+        this.semanticObject =
+            null;
+
+
         this.runtimeTrace =
             [];
 
@@ -81,28 +110,7 @@ class RuntimeResult {
         this.pipeline =
             [];
 
-
-        this.metadata = {
-
-            contractVersion:
-                "10.2",
-
-
-            runtimeVersion:
-                "10.2",
-
-
-            engineCount:
-                0,
-
-
-            generatedAt:
-                this.generatedAt
-
-        };
-
     }
-
 
 
     setMetadata(metadata = {}) {
@@ -111,7 +119,15 @@ class RuntimeResult {
 
             ...this.metadata,
 
-            ...metadata
+            ...metadata,
+
+            runtimeVersion:
+                metadata.runtimeVersion ||
+                this.runtimeVersion,
+
+            contractVersion:
+                metadata.contractVersion ||
+                this.metadata.contractVersion
 
         };
 
@@ -121,35 +137,43 @@ class RuntimeResult {
     }
 
 
-
     setEngine(name, value) {
 
-        this[name] =
-            value;
+        if (
+            typeof name === "string" &&
+            name.length > 0
+        ) {
+
+            this[name] =
+                value;
+
+        }
 
 
         return this;
 
     }
-
 
 
     setTrace(trace = []) {
 
         this.runtimeTrace =
-            trace;
+            Array.isArray(trace)
+                ? trace
+                : [];
 
 
         return this;
 
     }
-
 
 
     setPipeline(pipeline = []) {
 
         this.pipeline =
-            pipeline;
+            Array.isArray(pipeline)
+                ? pipeline
+                : [];
 
 
         return this;
@@ -157,8 +181,7 @@ class RuntimeResult {
     }
 
 
-
-    setResponsibilityModel(model = {}) {
+    setResponsibilityModel(model = []) {
 
         this.responsibilityModel =
             model;
@@ -167,7 +190,6 @@ class RuntimeResult {
         return this;
 
     }
-
 
 
     setTestimonyChain(chain = {}) {
@@ -181,7 +203,6 @@ class RuntimeResult {
     }
 
 
-
     setVerificationBoundary(boundary = {}) {
 
         this.verificationBoundary =
@@ -193,7 +214,6 @@ class RuntimeResult {
     }
 
 
-
     complete() {
 
         return {
@@ -201,14 +221,74 @@ class RuntimeResult {
             runtimeVersion:
                 this.runtimeVersion,
 
-
             generatedAt:
                 this.generatedAt,
-
 
             metadata:
                 this.metadata,
 
+            recognition:
+                this.recognition,
+
+            definition:
+                this.definition,
+
+            testimony:
+                this.testimony,
+
+            testimonyValidation:
+                this.testimonyValidation,
+
+            search:
+                this.search,
+
+            evidence:
+                this.evidence,
+
+            correspondence:
+                this.correspondence,
+
+            reasoning:
+                this.reasoning,
+
+            responsibility:
+                this.responsibility,
+
+            responsibilityModel:
+                this.responsibilityModel,
+
+            reconstruction:
+                this.reconstruction,
+
+            generator:
+                this.generator,
+
+            selfCheck:
+                this.selfCheck,
+
+            engineRegistry:
+                this.engineRegistry,
+
+            testimonyChain:
+                this.testimonyChain,
+
+            verificationBoundary:
+                this.verificationBoundary,
+
+            identity:
+                this.identity,
+
+            contract:
+                this.contract,
+
+            semanticObject:
+                this.semanticObject,
+
+            runtimeTrace:
+                this.runtimeTrace,
+
+            pipeline:
+                this.pipeline,
 
             result:
                 this
@@ -216,7 +296,6 @@ class RuntimeResult {
         };
 
     }
-
 
 }
 
