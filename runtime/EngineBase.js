@@ -15,6 +15,15 @@ class EngineBase {
         this.principle =
             principle;
 
+        this.status =
+            "ready";
+
+        this.capabilities =
+            [];
+
+        this.nextRuntimeState =
+            null;
+
     }
 
 
@@ -27,6 +36,24 @@ class EngineBase {
 
             runtimeVersion:
                 this.version,
+
+            engine:
+                this.engine,
+
+            version:
+                this.version,
+
+            status:
+                this.status,
+
+            principle:
+                this.principle,
+
+            capabilities:
+                this.capabilities,
+
+            nextRuntimeState:
+                this.nextRuntimeState,
 
             ...extra
 
@@ -49,7 +76,7 @@ class EngineBase {
                 this.principle,
 
             status:
-                "completed",
+                this.status,
 
             trace:
                 [],
@@ -58,7 +85,7 @@ class EngineBase {
                 [],
 
             nextRuntimeState:
-                null,
+                this.nextRuntimeState,
 
             metadata:
                 this.metadata(),
@@ -66,6 +93,45 @@ class EngineBase {
             ...data
 
         };
+
+    }
+
+
+    setStatus(status) {
+
+        if (
+            typeof status === "string" &&
+            status.length > 0
+        ) {
+
+            this.status =
+                status;
+
+        }
+
+        return this;
+
+    }
+
+
+    setCapabilities(capabilities = []) {
+
+        this.capabilities =
+            Array.isArray(capabilities)
+                ? capabilities
+                : [];
+
+        return this;
+
+    }
+
+
+    setNextRuntimeState(nextRuntimeState) {
+
+        this.nextRuntimeState =
+            nextRuntimeState;
+
+        return this;
 
     }
 
