@@ -6,8 +6,8 @@ class SearchEngine extends EngineBase {
 
         super(
             "SearchEngine",
-            "10.2",
-            "莫问搜索运行所需的信息来源。"
+            "11.0",
+            "莫问搜索运行所需的信息来源。搜索可以扩大所见，但不能扩大所证。"
         );
 
         this.semanticObject =
@@ -18,28 +18,56 @@ class SearchEngine extends EngineBase {
 
     execute() {
 
-        const sources =
+        const searchResult =
             this.search();
 
 
         return this.result({
 
             status:
-                "completed",
+                searchResult.sources.length > 0
+                    ? "search-completed"
+                    : "search-empty",
 
             metadata:
                 this.metadata({
 
                     sourceCount:
-                        sources.length
+                        searchResult.sources.length,
+
+                    outputState:
+                        searchResult.outputState,
+
+                    verificationState:
+                        searchResult.verificationState,
+
+                    knowledgeExpanded:
+                        searchResult.knowledgeExpanded,
+
+                    evidenceExpanded:
+                        searchResult.evidenceExpanded
 
                 }),
 
-            sources,
+            sources:
+                searchResult.sources,
 
             result: {
 
-                sources
+                sources:
+                    searchResult.sources,
+
+                outputState:
+                    searchResult.outputState,
+
+                verificationState:
+                    searchResult.verificationState,
+
+                knowledgeExpanded:
+                    searchResult.knowledgeExpanded,
+
+                evidenceExpanded:
+                    searchResult.evidenceExpanded
 
             },
 
@@ -54,13 +82,24 @@ class SearchEngine extends EngineBase {
                         "search",
 
                     status:
-                        "completed"
+                        "completed",
+
+                    outputState:
+                        searchResult.outputState,
+
+                    verificationState:
+                        searchResult.verificationState
 
                 }
 
             ],
 
-            questions: [],
+            questions:
+                searchResult.sources.length > 0
+                    ? []
+                    : [
+                        "没有发现新的搜索来源。"
+                    ],
 
             nextRuntimeState:
                 "EvidenceEngine"
@@ -78,23 +117,152 @@ class SearchEngine extends EngineBase {
 
         if (!content) {
 
-            return [];
+            return {
+
+                sources: [],
+
+                outputState:
+                    "DISCOVERED",
+
+                verificationState:
+                    "UNVERIFIED",
+
+                knowledgeExpanded:
+                    false,
+
+                evidenceExpanded:
+                    false
+
+            };
 
         }
 
 
-        return [
+        const suppliedSources =
+            this.getSuppliedSources();
 
+
+        const runtimeInput =
             {
 
                 source:
                     "RuntimeInput",
 
-                content
+                content,
 
-            }
+                type:
+                    "input",
+
+                state:
+                    "DISCOVERED",
+
+                verificationStatus:
+                    "UNVERIFIED",
+
+                independent:
+                    false
+
+            };
+
+
+        const sources = [
+
+            runtimeInput,
+
+            ...suppliedSources
 
         ];
+
+
+        return {
+
+            sources,
+
+            outputState:
+                "DISCOVERED",
+
+            verificationState:
+                "UNVERIFIED",
+
+            knowledgeExpanded:
+                sources.length > 1,
+
+            evidenceExpanded:
+                false
+
+        };
+
+    }
+
+
+    getSuppliedSources() {
+
+        const supplied =
+            this.semanticObject.searchResults;
+
+
+        if (!Array.isArray(supplied)) {
+
+            return [];
+
+        }
+
+
+        return supplied
+            .filter(item => {
+
+                return (
+
+                    item &&
+
+                    typeof item === "object" &&
+
+                    (
+
+                        item.source ||
+
+                        item.url ||
+
+                        item.content
+
+                    )
+
+                );
+
+            })
+            .map(item => {
+
+                return {
+
+                    source:
+                        item.source ||
+                        item.url ||
+                        "ExternalSearchResult",
+
+                    url:
+                        item.url || null,
+
+                    title:
+                        item.title || null,
+
+                    content:
+                        item.content || "",
+
+                    type:
+                        item.type || "external",
+
+                    state:
+                        "DISCOVERED",
+
+                    verificationStatus:
+                        "UNVERIFIED",
+
+                    independent:
+                        item.independent === true
+
+                };
+
+            });
 
     }
 

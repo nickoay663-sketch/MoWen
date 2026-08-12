@@ -7,7 +7,7 @@ class EvidenceEngine extends EngineBase {
         super(
             "EvidenceEngine",
             "10.2",
-            "莫问记录并验证表达相关证据。"
+            "莫问记录并验证表达相关证据，不把发现扩大为证明。"
         );
 
         this.semanticObject =
@@ -21,17 +21,43 @@ class EvidenceEngine extends EngineBase {
         const evidences =
             this.buildEvidence();
 
+        const verifiedCount =
+            evidences.filter(
+                item =>
+                    item.verificationStatus === "VERIFIED"
+            ).length;
+
+        const unverifiedCount =
+            evidences.filter(
+                item =>
+                    item.verificationStatus === "UNVERIFIED"
+            ).length;
+
+        const discoveredCount =
+            evidences.filter(
+                item =>
+                    item.epistemicState === "DISCOVERED"
+            ).length;
+
 
         return this.result({
 
             status:
-                "completed",
+                evidences.length > 0
+                    ? "evidence-evaluated"
+                    : "need-evidence",
 
             metadata:
                 this.metadata({
 
                     evidenceCount:
-                        evidences.length
+                        evidences.length,
+
+                    verifiedCount,
+
+                    unverifiedCount,
+
+                    discoveredCount
 
                 }),
 
@@ -39,7 +65,17 @@ class EvidenceEngine extends EngineBase {
 
             result: {
 
-                evidences
+                evidences,
+
+                evidenceState: {
+
+                    verifiedCount,
+
+                    unverifiedCount,
+
+                    discoveredCount
+
+                }
 
             },
 
@@ -54,7 +90,9 @@ class EvidenceEngine extends EngineBase {
                         "validate",
 
                     status:
-                        "completed"
+                        evidences.length > 0
+                            ? "completed"
+                            : "no-evidence"
 
                 }
 
@@ -80,66 +118,167 @@ class EvidenceEngine extends EngineBase {
         const suppliedEvidence =
             this.semanticObject.evidence;
 
+        const searchedSources =
+            Array.isArray(
+                this.semanticObject.search?.sources
+            )
+                ? this.semanticObject.search.sources
+                : [];
 
-        if (!Array.isArray(suppliedEvidence)) {
 
-            return [];
+        const candidates = [];
+
+
+        if (Array.isArray(suppliedEvidence)) {
+
+            for (const item of suppliedEvidence) {
+
+                candidates.push({
+
+                    ...item,
+
+                    origin:
+                        "supplied"
+
+                });
+
+            }
 
         }
 
 
-        return suppliedEvidence
-            .filter(item => {
+        for (const source of searchedSources) {
 
-                if (
-                    !item ||
-                    typeof item !== "object"
-                ) {
+            if (
+                source &&
+                typeof source === "object"
+            ) {
 
-                    return false;
+                candidates.push({
 
-                }
+                    ...source,
 
+                    origin:
+                        source.origin || "search"
 
-                if (
-                    !item.source &&
-                    !item.content
-                ) {
+                });
 
-                    return false;
+            }
 
-                }
+        }
 
 
-                const source =
-                    item.source ||
-                    item.content ||
-                    "";
+        return candidates
+            .filter(
+                item =>
+                    item &&
+                    typeof item === "object"
+            )
+            .map(
+                item =>
+                    this.normalizeEvidence(item)
+            )
+            .filter(
+                item =>
+                    item !== null
+            );
 
-                const expression =
-                    this.semanticObject.originalContent ||
-                    "";
+    }
 
 
-                return (
-                    source !== expression
-                );
+    normalizeEvidence(item) {
 
-            })
-            .map(item => ({
+        const source =
+            item.source ||
+            item.url ||
+            item.content ||
+            "";
 
-                type:
-                    item.type ||
-                    "external",
+        const content =
+            item.content ||
+            "";
 
-                source:
-                    item.source ||
-                    item.content,
 
-                independent:
-                    true
+        if (!source && !content) {
 
-            }));
+            return null;
+
+        }
+
+
+        const expression =
+            this.semanticObject.originalContent ||
+            "";
+
+
+        if (
+            source === expression &&
+            content === expression
+        ) {
+
+            return null;
+
+        }
+
+
+        const explicitVerified =
+            item.verified === true ||
+            item.verificationStatus === "VERIFIED";
+
+
+        const verificationBasis =
+            item.verificationBasis ||
+            item.verificationSource ||
+            item.verifier ||
+            null;
+
+
+        const verified =
+            explicitVerified &&
+            !!verificationBasis;
+
+
+        return {
+
+            type:
+                item.type ||
+                "external",
+
+            source,
+
+            content,
+
+            origin:
+                item.origin ||
+                "supplied",
+
+            epistemicState:
+                verified
+                    ? "VERIFIED"
+                    : "DISCOVERED",
+
+            verificationStatus:
+                verified
+                    ? "VERIFIED"
+                    : "UNVERIFIED",
+
+            verificationBasis,
+
+            independent:
+                item.independent === true,
+
+            supportsClaim:
+                item.supportsClaim === true,
+
+            sourceAvailable:
+                !!source,
+
+            evidenceBoundary:
+                verified
+                    ? "VERIFIED"
+                    : "UNVERIFIED"
+
+        };
 
     }
 

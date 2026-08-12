@@ -7,7 +7,7 @@ class ReasoningEngine extends EngineBase {
         super(
             "ReasoningEngine",
             "10.2",
-            "莫问分析证据对应关系中的推理边界，不让结论超过前提支持范围。"
+            "莫问分析已验证对应关系中的推理边界，不把发现、未验证或未知扩大为结论。"
         );
 
         this.semanticObject =
@@ -55,11 +55,14 @@ class ReasoningEngine extends EngineBase {
                 this.semanticObject.runtimeTrace || [],
 
             questions:
-                reasonings.length > 0
-                    ? []
-                    : [
+                reasonings.some(
+                    item =>
+                        item.verificationStatus !== "SUPPORTED"
+                )
+                    ? [
                         "reasoning support verification required"
-                    ],
+                    ]
+                    : [],
 
             nextRuntimeState:
                 "ResponsibilityEngine",
@@ -72,6 +75,31 @@ class ReasoningEngine extends EngineBase {
 
 
     buildMetadata() {
+
+        const reasonings =
+            Array.isArray(
+                this.semanticObject.correspondences
+            )
+                ? this.semanticObject.correspondences
+                : [];
+
+        const supportedCount =
+            reasonings.filter(
+                item =>
+                    item.verificationStatus === "SUPPORTED"
+            ).length;
+
+        const unverifiedCount =
+            reasonings.filter(
+                item =>
+                    item.verificationStatus === "UNVERIFIED"
+            ).length;
+
+        const unknownCount =
+            reasonings.filter(
+                item =>
+                    item.verificationStatus === "UNKNOWN"
+            ).length;
 
         return this.metadata({
 
@@ -91,7 +119,13 @@ class ReasoningEngine extends EngineBase {
             traceCount:
                 (
                     this.semanticObject.runtimeTrace || []
-                ).length
+                ).length,
+
+            supportedCount,
+
+            unverifiedCount,
+
+            unknownCount
 
         });
 
@@ -112,6 +146,11 @@ class ReasoningEngine extends EngineBase {
             const evidenceCount =
                 Number(item.evidenceCount || 0);
 
+            const verifiedEvidenceCount =
+                Number(
+                    item.verifiedEvidenceCount || 0
+                );
+
             const sourceCount =
                 Number(item.sourceCount || 0);
 
@@ -119,37 +158,72 @@ class ReasoningEngine extends EngineBase {
                 item.sourceAvailable === true &&
                 sourceCount > 0;
 
+            const verificationStatus =
+                item.verificationStatus ||
+                "UNKNOWN";
+
             const supported =
+                verificationStatus === "SUPPORTED" &&
                 item.supported === true &&
                 item.matched === true &&
-                evidenceCount > 0 &&
+                verifiedEvidenceCount > 0 &&
                 sourceAvailable;
 
             const assumptions =
                 this.detectAssumptions({
+
                     ...item,
+
                     evidenceCount,
+
+                    verifiedEvidenceCount,
+
                     sourceCount,
+
                     sourceAvailable,
+
+                    verificationStatus,
+
                     supported
+
                 });
 
             const leap =
                 this.detectReasoningLeap({
+
                     ...item,
+
                     evidenceCount,
+
+                    verifiedEvidenceCount,
+
                     sourceCount,
+
                     sourceAvailable,
+
+                    verificationStatus,
+
                     supported
+
                 });
 
             const strength =
                 this.evaluateStrength({
+
                     ...item,
+
                     evidenceCount,
+
+                    verifiedEvidenceCount,
+
                     sourceCount,
+
                     sourceAvailable,
+
+                    verificationStatus,
+
                     supported
+
                 });
 
             return {
@@ -162,13 +236,28 @@ class ReasoningEngine extends EngineBase {
                         ? item.evidences
                         : [],
 
+                verifiedEvidences:
+                    Array.isArray(item.verifiedEvidences)
+                        ? item.verifiedEvidences
+                        : [],
+
+                unverifiedEvidences:
+                    Array.isArray(item.unverifiedEvidences)
+                        ? item.unverifiedEvidences
+                        : [],
+
                 evidenceCount,
+
+                verifiedEvidenceCount,
 
                 sourceAvailable,
 
                 sourceCount,
 
                 supported,
+
+                epistemicState:
+                    verificationStatus,
 
                 reasoningStrength:
                     strength,
@@ -184,8 +273,13 @@ class ReasoningEngine extends EngineBase {
 
                 verificationStatus:
                     supported
-                        ? "evaluated"
-                        : "insufficient-support",
+                        ? "SUPPORTED"
+                        : verificationStatus,
+
+                conclusionBoundary:
+                    supported
+                        ? "SUPPORTED"
+                        : "UNKNOWN",
 
                 runtimeTrace:
                     this.semanticObject.runtimeTrace || [],
@@ -218,22 +312,33 @@ class ReasoningEngine extends EngineBase {
 
         if (
             item.definition &&
-            item.evidenceCount === 0
+            item.verifiedEvidenceCount === 0 &&
+            item.verificationStatus !== "SUPPORTED"
         ) {
 
             assumptions.push(
-                "当前定义缺少独立证据支持"
+                "当前定义没有已验证的独立证据支持"
             );
 
         }
 
         if (
             item.evidenceCount > 0 &&
-            !item.sourceAvailable
+            item.verifiedEvidenceCount === 0
         ) {
 
             assumptions.push(
-                "存在证据记录，但没有可验证来源"
+                "存在信息或证据记录，但尚未形成已验证支持"
+            );
+
+        }
+
+        if (
+            item.verificationStatus === "VERIFIED_BUT_NOT_LINKED"
+        ) {
+
+            assumptions.push(
+                "来源已经验证，但尚未证明其支持当前定义"
             );
 
         }
@@ -250,16 +355,41 @@ class ReasoningEngine extends EngineBase {
 
         const detected =
             overreach.detected === true ||
-            (
-                item.supported !== true &&
-                (
-                    Number(item.evidenceCount || 0) === 0 ||
-                    item.sourceAvailable !== true
-                )
-            );
+            item.verificationStatus !== "SUPPORTED" ||
+            item.supported !== true;
 
         let reason =
             overreach.reason || "";
+
+        if (
+            !reason &&
+            item.verificationStatus === "UNVERIFIED"
+        ) {
+
+            reason =
+                "证据尚未验证，不能进入已支持结论";
+
+        }
+
+        if (
+            !reason &&
+            item.verificationStatus === "UNKNOWN"
+        ) {
+
+            reason =
+                "当前证据关系未知，不能形成支持性结论";
+
+        }
+
+        if (
+            !reason &&
+            item.verificationStatus === "VERIFIED_BUT_NOT_LINKED"
+        ) {
+
+            reason =
+                "来源已经验证，但尚未证明与当前定义对应";
+
+        }
 
         if (
             !reason &&
@@ -267,7 +397,7 @@ class ReasoningEngine extends EngineBase {
         ) {
 
             reason =
-                "结论缺少足够的独立证据或来源支持";
+                "结论超过当前已验证证据支持范围";
 
         }
 
@@ -285,9 +415,17 @@ class ReasoningEngine extends EngineBase {
     evaluateStrength(item) {
 
         if (
-            item.supported === true &&
-            item.sourceAvailable === true &&
-            item.evidenceCount > 3
+            item.verificationStatus !== "SUPPORTED" ||
+            item.supported !== true
+        ) {
+
+            return "none";
+
+        }
+
+        if (
+            item.verifiedEvidenceCount > 3 &&
+            item.sourceAvailable
         ) {
 
             return "strong";
@@ -295,8 +433,8 @@ class ReasoningEngine extends EngineBase {
         }
 
         if (
-            item.supported === true &&
-            item.sourceAvailable === true
+            item.verifiedEvidenceCount > 0 &&
+            item.sourceAvailable
         ) {
 
             return "medium";
@@ -308,6 +446,5 @@ class ReasoningEngine extends EngineBase {
     }
 
 }
-
 
 export default ReasoningEngine;

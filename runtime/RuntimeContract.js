@@ -19,7 +19,31 @@ const RuntimeContract = {
 
 
         result:
-            "没有 RuntimeResult，就没有统一运行结果。"
+            "没有 RuntimeResult，就没有统一运行结果。",
+
+
+        epistemicBoundary:
+            "搜索可以扩大所见，但不能扩大所证。",
+
+
+        evidenceBoundary:
+            "所见信息不得自动成为已验证证据。",
+
+
+        correspondenceBoundary:
+            "证据存在不得自动等于证据支持表达。",
+
+
+        reasoningBoundary:
+            "推理不得超过已经验证的对应关系和证据支持范围。",
+
+
+        responsibilityBoundary:
+            "责任要求不得超过当前责任链能够承担的范围。",
+
+
+        ignoranceBoundary:
+            "证据不足时必须允许 UNKNOWN，不得将未知强制解释为错误。"
 
     },
 
@@ -36,6 +60,249 @@ const RuntimeContract = {
 
         contractVersion:
             "10.2"
+
+    },
+
+
+    epistemicStates: {
+
+        discovered:
+            "DISCOVERED",
+
+        unverified:
+            "UNVERIFIED",
+
+        verified:
+            "VERIFIED",
+
+        supported:
+            "SUPPORTED",
+
+        contradicted:
+            "CONTRADICTED",
+
+        unknown:
+            "UNKNOWN",
+
+        partial:
+            "PARTIAL",
+
+        unresolved:
+            "UNRESOLVED",
+
+        outOfDomain:
+            "OUT_OF_DOMAIN"
+
+    },
+
+
+    epistemicRules: {
+
+        discoveredIsNotVerified:
+            true,
+
+
+        verifiedIsNotAutomaticallySupported:
+            true,
+
+
+        supportRequiresVerifiedEvidence:
+            true,
+
+
+        supportRequiresCorrespondence:
+            true,
+
+
+        contradictionRequiresSufficientCounterEvidence:
+            true,
+
+
+        insufficientEvidenceAllowsUnknown:
+            true,
+
+
+        unknownIsNotFalse:
+            true,
+
+
+        unknownIsNotTrue:
+            true,
+
+
+        searchCannotExpandProof:
+            true,
+
+
+        searchCannotCreateEvidence:
+            true,
+
+
+        reasoningCannotExceedEvidence:
+            true,
+
+
+        responsibilityCannotExceedSupport:
+            true
+
+    },
+
+
+    boundaryTransitions: {
+
+        search:
+
+        {
+
+            input:
+                "Expression",
+
+            output:
+                "DISCOVERED",
+
+            mayBecome:
+                [
+                    "UNVERIFIED"
+                ],
+
+            prohibited:
+                [
+                    "VERIFIED",
+                    "SUPPORTED",
+                    "CONTRADICTED"
+                ]
+
+        },
+
+
+        evidence:
+
+        {
+
+            input:
+                "DISCOVERED",
+
+            output:
+                "UNVERIFIED",
+
+            verifiedRequires:
+                "explicit-verification",
+
+            prohibitedAutomaticPromotion:
+                [
+                    "SUPPORTED",
+                    "CONTRADICTED"
+                ]
+
+        },
+
+
+        correspondence:
+
+        {
+
+            requires:
+                [
+                    "VERIFIED"
+                ],
+
+            output:
+                [
+                    "SUPPORTED",
+                    "UNRESOLVED"
+                ],
+
+            supportedRequires:
+                "verified-correspondence"
+
+        },
+
+
+        reasoning:
+
+        {
+
+            requires:
+                [
+                    "VERIFIED",
+                    "SUPPORTED"
+                ],
+
+            allowedOutput:
+                [
+                    "SUPPORTED",
+                    "CONTRADICTED",
+                    "UNKNOWN",
+                    "PARTIAL",
+                    "UNRESOLVED"
+                ]
+
+        },
+
+
+        responsibility:
+
+        {
+
+            requires:
+                "reasoning-result",
+
+            allowedOutput:
+                [
+                    "SUPPORTED",
+                    "CONTRADICTED",
+                    "UNKNOWN",
+                    "PARTIAL",
+                    "UNRESOLVED"
+                ],
+
+            prohibitedPromotion:
+                [
+                    "UNKNOWN->FALSE",
+                    "UNKNOWN->TRUE"
+                ]
+
+        }
+
+    },
+
+
+    domainKnowledgeContract: {
+
+        purpose:
+            "为专业领域提供相关定义、规则、标准、关系和来源，不直接替 Runtime 制造结论。",
+
+
+        allowedFunctions: [
+
+            "definition",
+
+            "terminology",
+
+            "rule",
+
+            "standard",
+
+            "relationship",
+
+            "source-discovery",
+
+            "domain-context"
+
+        ],
+
+
+        prohibitedFunctions: [
+
+            "automatic-certainty",
+
+            "automatic-support",
+
+            "automatic-conclusion",
+
+            "automatic-contradiction"
+
+        ]
 
     },
 
@@ -148,6 +415,202 @@ const RuntimeContract = {
     },
 
 
+    searchContract: {
+
+        outputState:
+            "DISCOVERED",
+
+
+        requiredFields: [
+
+            "source",
+
+            "content"
+
+        ],
+
+
+        verificationStatus:
+            "UNVERIFIED",
+
+
+        rules: {
+
+            mayExpandInformation:
+                true,
+
+            mayCreateEvidence:
+                false,
+
+            mayCreateConclusion:
+                false,
+
+            mayPromoteToVerified:
+                false
+
+        }
+
+    },
+
+
+    evidenceContract: {
+
+        allowedStates: [
+
+            "UNVERIFIED",
+
+            "VERIFIED"
+
+        ],
+
+
+        requiredFields: [
+
+            "source",
+
+            "content",
+
+            "verificationStatus"
+
+        ],
+
+
+        verifiedRequires:
+            "explicit-verification",
+
+
+        rules: {
+
+            searchResultIsNotAutomaticallyVerified:
+                true,
+
+            sourceRequired:
+                true,
+
+            contentRequired:
+                true
+
+        }
+
+    },
+
+
+    correspondenceContract: {
+
+        requiredInputs: [
+
+            "definition",
+
+            "verifiedEvidence"
+
+        ],
+
+
+        requiredFields: [
+
+            "matched",
+
+            "supported",
+
+            "verificationStatus"
+
+        ],
+
+
+        rules: {
+
+            existenceDoesNotEqualSupport:
+                true,
+
+            supportRequiresSpecificCorrespondence:
+                true,
+
+            unsupportedCorrespondenceMustRemainUnresolved:
+                true
+
+        }
+
+    },
+
+
+    reasoningContract: {
+
+        allowedStates: [
+
+            "SUPPORTED",
+
+            "CONTRADICTED",
+
+            "UNKNOWN",
+
+            "PARTIAL",
+
+            "UNRESOLVED"
+
+        ],
+
+
+        rules: {
+
+            evidenceRequiredForSupport:
+                true,
+
+            correspondenceRequiredForSupport:
+                true,
+
+            insufficientSupportMeansUnknown:
+                true,
+
+            noEvidenceDoesNotMeanFalse:
+                true,
+
+            reasoningCannotExceedEvidence:
+                true
+
+        }
+
+    },
+
+
+    responsibilityContract: {
+
+        allowedStates: [
+
+            "SUPPORTED",
+
+            "CONTRADICTED",
+
+            "UNKNOWN",
+
+            "PARTIAL",
+
+            "UNRESOLVED"
+
+        ],
+
+
+        rules: {
+
+            demandCannotExceedCapacity:
+                true,
+
+            evidenceQualityMatters:
+                true,
+
+            evidenceQuantityAloneIsInsufficient:
+                true,
+
+            unknownMustRemainUnknown:
+                true,
+
+            unsupportedConclusionCannotBePromoted:
+                true
+
+        }
+
+    },
+
+
     runtimeResultContract: {
 
         requiredFields: [
@@ -252,7 +715,6 @@ const RuntimeContract = {
 
 
         principle:
-
             "Every Engine must provide a unified execution capability."
 
     }

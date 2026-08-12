@@ -5,10 +5,8 @@
         this.runtimeVersion =
             "10.2";
 
-
         this.generatedAt =
             new Date().toISOString();
-
 
         this.metadata = {
 
@@ -26,89 +24,90 @@
 
         };
 
-
         this.recognition =
             null;
-
 
         this.definition =
             null;
 
-
         this.testimony =
             null;
-
 
         this.testimonyValidation =
             null;
 
-
         this.search =
             null;
-
 
         this.evidence =
             null;
 
-
         this.correspondence =
             null;
-
 
         this.reasoning =
             null;
 
-
         this.responsibility =
             null;
-
 
         this.responsibilityModel =
             null;
 
-
         this.reconstruction =
             null;
-
 
         this.generator =
             null;
 
-
         this.selfCheck =
             null;
-
 
         this.engineRegistry =
             null;
 
-
         this.testimonyChain =
             null;
-
 
         this.verificationBoundary =
             null;
 
-
         this.identity =
             null;
-
 
         this.contract =
             null;
 
-
         this.semanticObject =
             null;
-
 
         this.runtimeTrace =
             [];
 
-
         this.pipeline =
             [];
+
+        this.epistemicState =
+            "UNKNOWN";
+
+        this.epistemicBoundary = {
+
+            discovered:
+                0,
+
+            unverified:
+                0,
+
+            verified:
+                0,
+
+            supported:
+                0,
+
+            unknown:
+                0
+
+        };
 
     }
 
@@ -131,7 +130,6 @@
 
         };
 
-
         return this;
 
     }
@@ -149,7 +147,6 @@
 
         }
 
-
         return this;
 
     }
@@ -161,7 +158,6 @@
             Array.isArray(trace)
                 ? trace
                 : [];
-
 
         return this;
 
@@ -175,7 +171,6 @@
                 ? pipeline
                 : [];
 
-
         return this;
 
     }
@@ -185,7 +180,6 @@
 
         this.responsibilityModel =
             model;
-
 
         return this;
 
@@ -197,7 +191,6 @@
         this.testimonyChain =
             chain;
 
-
         return this;
 
     }
@@ -208,13 +201,134 @@
         this.verificationBoundary =
             boundary;
 
+        return this;
+
+    }
+
+
+    setEpistemicState(state = "UNKNOWN") {
+
+        const allowedStates = [
+
+            "DISCOVERED",
+
+            "UNVERIFIED",
+
+            "VERIFIED",
+
+            "SUPPORTED",
+
+            "UNKNOWN"
+
+        ];
+
+        this.epistemicState =
+            allowedStates.includes(state)
+                ? state
+                : "UNKNOWN";
 
         return this;
 
     }
 
 
+    setEpistemicBoundary(boundary = {}) {
+
+        this.epistemicBoundary = {
+
+            ...this.epistemicBoundary,
+
+            ...boundary
+
+        };
+
+        return this;
+
+    }
+
+
+    buildEpistemicBoundary() {
+
+        const correspondence =
+            this.correspondence || {};
+
+        const reasoning =
+            this.reasoning || {};
+
+        const evidences =
+            Array.isArray(
+                correspondence.evidences
+            )
+                ? correspondence.evidences
+                : [];
+
+        const verifiedEvidenceCount =
+            Number(
+                correspondence.verifiedEvidenceCount || 0
+            );
+
+        const unverifiedEvidenceCount =
+            Number(
+                correspondence.unverifiedEvidenceCount || 0
+            );
+
+        const evidenceCount =
+            Number(
+                correspondence.evidenceCount ||
+                evidences.length ||
+                0
+            );
+
+        const supportedCount =
+            correspondence.supported === true
+                ? 1
+                : 0;
+
+        const unknownCount =
+            correspondence.verificationStatus ===
+            "UNKNOWN"
+                ? 1
+                : 0;
+
+        this.epistemicBoundary = {
+
+            discovered:
+                Number(
+                    this.search?.metadata?.sourceCount ||
+                    0
+                ),
+
+            unverified:
+                unverifiedEvidenceCount,
+
+            verified:
+                verifiedEvidenceCount,
+
+            supported:
+                supportedCount,
+
+            unknown:
+                unknownCount,
+
+            evidenceCount,
+
+            reasoningEvaluated:
+                Array.isArray(
+                    reasoning.reasonings
+                )
+                    ? reasoning.reasonings.length
+                    : 0
+
+        };
+
+        return this.epistemicBoundary;
+
+    }
+
+
     complete() {
+
+        this.buildEpistemicBoundary();
 
         return {
 
@@ -290,6 +404,12 @@
             pipeline:
                 this.pipeline,
 
+            epistemicState:
+                this.epistemicState,
+
+            epistemicBoundary:
+                this.epistemicBoundary,
+
             result:
                 this
 
@@ -298,6 +418,5 @@
     }
 
 }
-
 
 export default RuntimeResult;

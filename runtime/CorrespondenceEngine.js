@@ -7,7 +7,7 @@ class CorrespondenceEngine extends EngineBase {
         super(
             "CorrespondenceEngine",
             "10.2",
-            "莫问判断定义、证据与表达之间的真实对应关系。"
+            "莫问判断定义、证据与表达之间的真实对应关系，不把发现或未验证证据扩大为支持。"
         );
 
         this.semanticObject =
@@ -21,17 +21,43 @@ class CorrespondenceEngine extends EngineBase {
         const correspondences =
             this.buildCorrespondences();
 
+        const supportedCount =
+            correspondences.filter(
+                item =>
+                    item.supported === true
+            ).length;
+
+        const unverifiedCount =
+            correspondences.filter(
+                item =>
+                    item.verificationStatus === "UNVERIFIED"
+            ).length;
+
+        const unknownCount =
+            correspondences.filter(
+                item =>
+                    item.verificationStatus === "UNKNOWN"
+            ).length;
+
 
         return this.result({
 
             status:
-                "completed",
+                correspondences.length > 0
+                    ? "correspondence-evaluated"
+                    : "need-correspondence",
 
             metadata:
                 this.metadata({
 
                     correspondenceCount:
-                        correspondences.length
+                        correspondences.length,
+
+                    supportedCount,
+
+                    unverifiedCount,
+
+                    unknownCount
 
                 }),
 
@@ -39,7 +65,17 @@ class CorrespondenceEngine extends EngineBase {
 
             result: {
 
-                correspondences
+                correspondences,
+
+                epistemicBoundary: {
+
+                    supportedCount,
+
+                    unverifiedCount,
+
+                    unknownCount
+
+                }
 
             },
 
@@ -62,7 +98,8 @@ class CorrespondenceEngine extends EngineBase {
 
             questions:
                 correspondences.some(
-                    item => item.matched === false
+                    item =>
+                        item.verificationStatus !== "SUPPORTED"
                 )
                     ? [
                         "definition-evidence correspondence verification required"
@@ -95,6 +132,31 @@ class CorrespondenceEngine extends EngineBase {
                 : [];
 
 
+        if (
+            definitions.length === 0
+        ) {
+
+            return [];
+
+        }
+
+
+        return definitions.map(
+            definition =>
+                this.buildCorrespondence(
+                    definition,
+                    evidences
+                )
+        );
+
+    }
+
+
+    buildCorrespondence(
+        definition,
+        evidences
+    ) {
+
         const independentEvidences =
             evidences.filter(
                 evidence =>
@@ -103,50 +165,133 @@ class CorrespondenceEngine extends EngineBase {
             );
 
 
+        const verifiedEvidences =
+            independentEvidences.filter(
+                evidence =>
+                    evidence.verificationStatus === "VERIFIED" &&
+                    evidence.epistemicState === "VERIFIED"
+            );
+
+
+        const unverifiedEvidences =
+            independentEvidences.filter(
+                evidence =>
+                    evidence.verificationStatus === "UNVERIFIED" ||
+                    evidence.epistemicState === "DISCOVERED"
+            );
+
+
+        const sourceAvailable =
+            independentEvidences.length > 0;
+
+
+        const verifiedSourceAvailable =
+            verifiedEvidences.length > 0;
+
+
+        /*
+         * 核心边界：
+         *
+         * 有搜索结果 ≠ 有证据
+         * 有未验证证据 ≠ 已证明
+         * 有已验证来源 ≠ 自动证明当前定义
+         *
+         * 只有明确存在：
+         * 1. 定义
+         * 2. 独立证据
+         * 3. VERIFIED 状态
+         * 4. 明确支持当前主张
+         *
+         * 才允许进入 SUPPORTED。
+         */
+
+        const supported =
+            verifiedSourceAvailable &&
+            verifiedEvidences.some(
+                evidence =>
+                    evidence.supportsClaim === true
+            );
+
+
+        let verificationStatus =
+            "UNKNOWN";
+
+
         if (
-            definitions.length === 0 &&
-            independentEvidences.length === 0
+            supported
         ) {
 
-            return [];
+            verificationStatus =
+                "SUPPORTED";
+
+        } else if (
+            unverifiedEvidences.length > 0
+        ) {
+
+            verificationStatus =
+                "UNVERIFIED";
+
+        } else if (
+            independentEvidences.length > 0
+        ) {
+
+            verificationStatus =
+                "VERIFIED_BUT_NOT_LINKED";
 
         }
 
 
-        const matched =
-            definitions.length > 0 &&
-            independentEvidences.length > 0;
+        return {
 
+            definitionCount:
+                1,
 
-        return [
+            evidenceCount:
+                independentEvidences.length,
 
-            {
+            verifiedEvidenceCount:
+                verifiedEvidences.length,
 
-                definitionCount:
-                    definitions.length,
+            unverifiedEvidenceCount:
+                unverifiedEvidences.length,
 
-                evidenceCount:
-                    independentEvidences.length,
+            matched:
+                supported,
 
-                matched,
+            supported,
 
-                supported:
-                    matched,
+            sourceAvailable,
 
-                sourceAvailable:
-                    independentEvidences.length > 0,
+            verifiedSourceAvailable,
 
-                sourceCount:
-                    independentEvidences.length,
+            sourceCount:
+                independentEvidences.length,
 
-                verificationStatus:
-                    matched
-                        ? "supported"
-                        : "insufficient-support"
+            verificationStatus,
 
-            }
+            epistemicState:
+                verificationStatus,
 
-        ];
+            definition,
+
+            evidences:
+                independentEvidences,
+
+            verifiedEvidences,
+
+            unverifiedEvidences,
+
+            responsibilityBoundary:
+                supported
+                    ? "SUPPORTED"
+                    : "NOT_SUPPORTED",
+
+            knowledgeBoundary:
+                supported
+                    ? "VERIFIED_SUPPORT"
+                    : "UNKNOWN_OR_UNVERIFIED"
+
+        };
 
     }
 
