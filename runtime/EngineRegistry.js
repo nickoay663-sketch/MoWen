@@ -9,7 +9,11 @@ class EngineRegistry {
 
     register(name, engine) {
 
-        if (!name || !engine) {
+        if (
+            typeof name !== "string" ||
+            name.length === 0 ||
+            !engine
+        ) {
 
             return false;
 
@@ -32,12 +36,15 @@ class EngineRegistry {
                 engine.nextRuntimeState || "",
 
             capabilities:
-                engine.capabilities || [],
+                Array.isArray(engine.capabilities)
+                    ? engine.capabilities
+                    : [],
 
             registeredAt:
                 new Date().toISOString()
 
         };
+
 
         return true;
 
@@ -78,6 +85,7 @@ class EngineRegistry {
 
     }
 
+
     validateVersions(contractVersion) {
 
         const report = {
@@ -92,7 +100,10 @@ class EngineRegistry {
         };
 
 
-        for (const [name, item] of Object.entries(this.engines)) {
+        for (
+            const [name, item]
+            of Object.entries(this.engines)
+        ) {
 
             const version =
                 item.version || "unknown";
@@ -108,9 +119,12 @@ class EngineRegistry {
             };
 
 
-            if (version === "unknown") {
+            if (
+                version === "unknown"
+            ) {
 
-                report.passed = false;
+                report.passed =
+                    false;
 
             }
 
@@ -120,7 +134,6 @@ class EngineRegistry {
         return report;
 
     }
-
 
 
     statistics() {
@@ -135,15 +148,11 @@ class EngineRegistry {
                 engines.length,
 
             versions:
-
                 engines.map(
-
                     item => item.version
-
                 ),
 
             capabilities:
-
                 engines.reduce(
 
                     (count, item) =>
@@ -159,6 +168,7 @@ class EngineRegistry {
         };
 
     }
+
 
     describe() {
 
@@ -195,7 +205,6 @@ class EngineRegistry {
     }
 
 
-
     validate() {
 
         const result = {
@@ -208,7 +217,10 @@ class EngineRegistry {
         };
 
 
-        for (const [name, item] of Object.entries(this.engines)) {
+        for (
+            const [name, item]
+            of Object.entries(this.engines)
+        ) {
 
             const missing = [];
 
@@ -242,7 +254,9 @@ class EngineRegistry {
                     item.version,
 
                 capabilityCount:
-                    item.capabilities.length,
+                    Array.isArray(item.capabilities)
+                        ? item.capabilities.length
+                        : 0,
 
                 registeredAt:
                     item.registeredAt
@@ -250,9 +264,12 @@ class EngineRegistry {
             };
 
 
-            if (missing.length > 0) {
+            if (
+                missing.length > 0
+            ) {
 
-                result.passed = false;
+                result.passed =
+                    false;
 
             }
 
@@ -264,5 +281,6 @@ class EngineRegistry {
     }
 
 }
+
 
 export default EngineRegistry;
