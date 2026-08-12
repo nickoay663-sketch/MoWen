@@ -404,18 +404,18 @@ class HonestRuntime {
         };
 
 
-        runtimeResult.verificationBoundary = {
+      runtimeResult.verificationBoundary = {
 
-            evidenceBoundary:
-                reconstruction.reconstruction?.evidenceBoundary,
+    evidenceBoundary:
+        reconstruction.reconstruction?.boundaries?.evidence || null,
 
-            sourceBoundary:
-                reconstruction.reconstruction?.sourceBoundary,
+    sourceBoundary:
+        reconstruction.reconstruction?.boundaries?.source || null,
 
-            responsibilityBoundary:
-                reconstruction.reconstruction?.responsibilityBoundary
+    responsibilityBoundary:
+        reconstruction.reconstruction?.boundaries?.responsibility || null
 
-        };
+};
 
 
         runtimeResult.setPipeline(
