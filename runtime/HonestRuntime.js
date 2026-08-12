@@ -16,7 +16,6 @@ import RuntimeResult from "./RuntimeResult.js";
 import TestimonyBuilder from "./TestimonyBuilder.js";
 import TestimonyValidator from "./TestimonyValidator.js";
 
-
 class HonestRuntime {
 
     constructor(expression) {
@@ -297,7 +296,10 @@ class HonestRuntime {
         };
 
 
-        for (const [name, result] of Object.entries(engines)) {
+        for (
+            const [name, result]
+            of Object.entries(engines)
+        ) {
 
             engineRegistry.register(
                 name,
@@ -305,6 +307,16 @@ class HonestRuntime {
             );
 
         }
+
+
+        const registryValidation =
+            engineRegistry.validate();
+
+
+        const registryVersionValidation =
+            engineRegistry.validateVersions(
+                RuntimeContract.version
+            );
 
 
         runtimeResult.runtimeVersion =
@@ -320,7 +332,11 @@ class HonestRuntime {
                 runtimeVersion,
 
             engineCount:
-                engineRegistry.list().length
+                engineRegistry.list().length,
+
+            registryValidation,
+
+            registryVersionValidation
 
         });
 
@@ -467,6 +483,13 @@ class HonestRuntime {
 
 
     recordTrace(trace, result) {
+
+        if (!result) {
+
+            return;
+
+        }
+
 
         trace.push({
 
