@@ -1,3 +1,5 @@
+﻿import RuntimeContract from "./RuntimeContract.js";
+
 class EngineRegistry {
 
     constructor() {
@@ -109,19 +111,22 @@ class EngineRegistry {
                 item.version || "unknown";
 
 
+            const valid =
+                typeof version === "string" &&
+                version.length > 0 &&
+                version !== "unknown";
+
+
             report.versions[name] = {
 
                 version,
 
-                valid:
-                    version !== "unknown"
+                valid
 
             };
 
 
-            if (
-                version === "unknown"
-            ) {
+            if (!valid) {
 
                 report.passed =
                     false;
@@ -207,10 +212,34 @@ class EngineRegistry {
 
     validate() {
 
+        const registryContract =
+            RuntimeContract
+                ?.registryContract || {};
+
+
+        const requiredFields =
+            Array.isArray(
+                registryContract.requiredMetadataFields
+            )
+                ? registryContract.requiredMetadataFields
+                : [
+                    "name",
+                    "version",
+                    "status",
+                    "nextRuntimeState",
+                    "capabilities"
+                ];
+
+
         const result = {
 
             passed:
                 true,
+
+            contractVersion:
+                RuntimeContract?.version,
+
+            requiredFields,
 
             engines: {}
 
@@ -224,37 +253,83 @@ class EngineRegistry {
 
             const missing = [];
 
+            const invalid = [];
 
-            if (!item.name) {
 
-                missing.push("name");
+            for (
+                const field
+                of requiredFields
+            ) {
+
+                if (
+                    item[field] === undefined ||
+                    item[field] === null ||
+                    item[field] === ""
+                ) {
+
+                    missing.push(field);
+
+                    continue;
+
+                }
+
+
+                if (
+                    field === "capabilities" &&
+                    !Array.isArray(
+                        item[field]
+                    )
+                ) {
+
+                    invalid.push(field);
+
+                }
+
+
+                if (
+                    [
+                        "name",
+                        "version",
+                        "status",
+                        "nextRuntimeState"
+                    ].includes(field) &&
+                    typeof item[field] !== "string"
+                ) {
+
+                    invalid.push(field);
+
+                }
 
             }
 
 
-            if (!item.version) {
-
-                missing.push("version");
-
-            }
-
-
-            if (!Array.isArray(item.capabilities)) {
-
-                missing.push("capabilities");
-
-            }
+            const compliant =
+                missing.length === 0 &&
+                invalid.length === 0;
 
 
             result.engines[name] = {
 
+                compliance:
+                    compliant,
+
                 missing,
+
+                invalid,
 
                 version:
                     item.version,
 
+                status:
+                    item.status,
+
+                nextRuntimeState:
+                    item.nextRuntimeState,
+
                 capabilityCount:
-                    Array.isArray(item.capabilities)
+                    Array.isArray(
+                        item.capabilities
+                    )
                         ? item.capabilities.length
                         : 0,
 
@@ -264,9 +339,7 @@ class EngineRegistry {
             };
 
 
-            if (
-                missing.length > 0
-            ) {
+            if (!compliant) {
 
                 result.passed =
                     false;
