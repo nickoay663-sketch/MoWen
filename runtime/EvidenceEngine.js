@@ -265,7 +265,7 @@ class EvidenceEngine extends EngineBase {
             verificationBasis,
 
             independent:
-                item.independent === true,
+                item.independent !== false,
 
             supportsClaim:
                 item.supportsClaim === true,
