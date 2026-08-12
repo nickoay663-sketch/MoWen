@@ -45,7 +45,6 @@ class UniversalExpression {
 
     }
 
-
     static from(data = {}) {
 
         return new UniversalExpression(
@@ -53,7 +52,6 @@ class UniversalExpression {
         );
 
     }
-
 
     toJSON() {
 
@@ -96,13 +94,11 @@ class UniversalExpression {
 
     }
 
-
     hasSubject() {
 
         return this.subject !== null;
 
     }
-
 
     hasPredicate() {
 
@@ -110,13 +106,11 @@ class UniversalExpression {
 
     }
 
-
     hasObject() {
 
         return this.object !== null;
 
     }
-
 
     hasOriginalExpression() {
 
@@ -126,7 +120,6 @@ class UniversalExpression {
 
     }
 
-
     hasSourceLanguage() {
 
         return (
@@ -134,8 +127,6 @@ class UniversalExpression {
         );
 
     }
-      }
-
 
     isComplete() {
 
@@ -145,7 +136,6 @@ class UniversalExpression {
         );
 
     }
-
 
     isEmpty() {
 
@@ -164,7 +154,6 @@ class UniversalExpression {
 
     }
 
-
     clone() {
 
         return UniversalExpression.from(
@@ -172,7 +161,6 @@ class UniversalExpression {
         );
 
     }
-
 
     withOriginalExpression(
         expression
@@ -191,7 +179,6 @@ class UniversalExpression {
 
     }
 
-
     withSourceLanguage(
         language
     ) {
@@ -209,7 +196,6 @@ class UniversalExpression {
 
     }
 
-
     static empty(
         originalExpression = "",
         sourceLanguage = "unknown"
@@ -226,6 +212,5 @@ class UniversalExpression {
     }
 
 }
-
 
 export default UniversalExpression;
