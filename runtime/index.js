@@ -3,10 +3,16 @@ import ReportFormatter from "./ReportFormatter.js";
 
 class MoWenRuntime {
 
-    constructor(expression) {
+    constructor(
+        expression,
+        options = {}
+    ) {
 
         this.expression =
             expression || "";
+
+        this.options =
+            options || {};
 
         this.version =
             "10.2";
@@ -17,12 +23,15 @@ class MoWenRuntime {
     run() {
 
         const runtimeResult =
-            new HonestRuntime(this.expression)
-                .run();
+            new HonestRuntime(
+                this.expression,
+                this.options
+            ).run();
 
         const report =
-            new ReportFormatter(runtimeResult)
-                .run();
+            new ReportFormatter(
+                runtimeResult
+            ).run();
 
         return {
 
@@ -56,9 +65,9 @@ class MoWenRuntime {
 export {
 
     HonestRuntime,
-
     ReportFormatter
 
 };
+
 
 export default MoWenRuntime;
