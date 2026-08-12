@@ -1,3 +1,5 @@
+﻿import UniversalExpression from "./UniversalExpression.js";
+
 class Testimony {
 
     constructor(input = null) {
@@ -6,7 +8,7 @@ class Testimony {
             "Testimony";
 
         this.version =
-            "1.0";
+            "2.0";
 
         this.createdAt =
             new Date().toISOString();
@@ -31,6 +33,11 @@ class Testimony {
 
         this.metadata =
             {};
+
+        this.universalExpression =
+            input instanceof UniversalExpression
+                ? input
+                : null;
 
     }
 

@@ -1,4 +1,5 @@
-import Testimony from "./Testimony.js";
+﻿import Testimony from "./Testimony.js";
+import UniversalExpression from "./UniversalExpression.js";
 
 class TestimonyBuilder {
 
@@ -11,11 +12,41 @@ class TestimonyBuilder {
 
     run() {
 
-        return new Testimony(
+        const universalExpression =
+            this.input instanceof UniversalExpression
+                ? this.input
+                : null;
 
-            this.input
+        const testimony =
+            new Testimony(
+                universalExpression
+                    || this.input
+            );
 
-        );
+        if (universalExpression) {
+
+            testimony.language =
+                universalExpression.sourceLanguage;
+
+            testimony.expressionType =
+                "UniversalExpression";
+
+            testimony.universalExpression =
+                universalExpression;
+
+            testimony.metadata = {
+
+                sourceLanguage:
+                    universalExpression.sourceLanguage,
+
+                originalExpression:
+                    universalExpression.originalExpression
+
+            };
+
+        }
+
+        return testimony;
 
     }
 

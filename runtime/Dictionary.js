@@ -1,6 +1,6 @@
 const Dictionary = {
 
-    version: "5.0",
+    version: "6.0",
 
     categories: [
 
@@ -113,7 +113,6 @@ const Dictionary = {
                 "Arzt",
                 "Ärztin",
                 "medico",
-                "médica",
                 "médico"
             ],
             category: "profession"
@@ -148,7 +147,6 @@ const Dictionary = {
                 "padre",
                 "père",
                 "Vater",
-                "padre",
                 "pai"
             ],
             category: "family"
@@ -165,7 +163,6 @@ const Dictionary = {
                 "madre",
                 "mère",
                 "Mutter",
-                "madre",
                 "mãe"
             ],
             category: "family"
@@ -181,8 +178,7 @@ const Dictionary = {
                 "país",
                 "pays",
                 "Land",
-                "paese",
-                "país"
+                "paese"
             ],
             category: "organization"
         },

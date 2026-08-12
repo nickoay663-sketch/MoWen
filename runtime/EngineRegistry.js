@@ -1,4 +1,5 @@
 ﻿import RuntimeContract from "./RuntimeContract.js";
+import EngineBase from "./EngineBase.js";
 
 class EngineRegistry {
 
@@ -9,12 +10,15 @@ class EngineRegistry {
     }
 
 
-    register(name, engine) {
+    register(
+        name,
+        engine
+    ) {
 
         if (
             typeof name !== "string" ||
             name.length === 0 ||
-            !engine
+            !(engine instanceof EngineBase)
         ) {
 
             return false;
@@ -88,7 +92,84 @@ class EngineRegistry {
     }
 
 
-    validateVersions(contractVersion) {
+    execute(
+        name,
+        context = {}
+    ) {
+
+        const item =
+            this.engines[name];
+
+        if (!item) {
+
+            throw new Error(
+                `EngineRegistry: unknown engine "${name}"`
+            );
+
+        }
+
+
+        const engine =
+            item.engine;
+
+        if (
+            !(engine instanceof EngineBase)
+        ) {
+
+            throw new Error(
+                `EngineRegistry: "${name}" is not a valid EngineBase instance`
+            );
+
+        }
+
+
+        if (
+            typeof engine.execute !==
+            "function"
+        ) {
+
+            throw new Error(
+                `EngineRegistry: "${name}" must implement execute()`
+            );
+
+        }
+
+
+        if (
+            context !== null &&
+            typeof context === "object"
+        ) {
+
+            engine.runtimeContext =
+                context;
+
+        }
+
+
+        const result =
+            engine.execute();
+
+
+        if (
+            !result ||
+            typeof result !== "object"
+        ) {
+
+            throw new Error(
+                `EngineRegistry: "${name}" returned an invalid execution result`
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+    validateVersions(
+        contractVersion
+    ) {
 
         const report = {
 
@@ -104,11 +185,14 @@ class EngineRegistry {
 
         for (
             const [name, item]
-            of Object.entries(this.engines)
+            of Object.entries(
+                this.engines
+            )
         ) {
 
             const version =
-                item.version || "unknown";
+                item.version ||
+                "unknown";
 
 
             const valid =
@@ -144,7 +228,9 @@ class EngineRegistry {
     statistics() {
 
         const engines =
-            Object.values(this.engines);
+            Object.values(
+                this.engines
+            );
 
 
         return {
@@ -154,16 +240,15 @@ class EngineRegistry {
 
             versions:
                 engines.map(
-                    item => item.version
+                    item =>
+                        item.version
                 ),
 
             capabilities:
                 engines.reduce(
 
                     (count, item) =>
-
                         count +
-
                         item.capabilities.length,
 
                     0
@@ -178,34 +263,34 @@ class EngineRegistry {
     describe() {
 
         return Object.values(
-
             this.engines
+        ).map(
+            item => {
 
-        ).map(item => {
+                return {
 
-            return {
+                    name:
+                        item.name,
 
-                name:
-                    item.name,
+                    version:
+                        item.version,
 
-                version:
-                    item.version,
+                    status:
+                        item.status,
 
-                status:
-                    item.status,
+                    nextRuntimeState:
+                        item.nextRuntimeState,
 
-                nextRuntimeState:
-                    item.nextRuntimeState,
+                    capabilities:
+                        item.capabilities,
 
-                capabilities:
-                    item.capabilities,
+                    registeredAt:
+                        item.registeredAt
 
-                registeredAt:
-                    item.registeredAt
+                };
 
-            };
-
-        });
+            }
+        );
 
     }
 
@@ -219,9 +304,11 @@ class EngineRegistry {
 
         const requiredFields =
             Array.isArray(
-                registryContract.requiredMetadataFields
+                registryContract
+                    .requiredMetadataFields
             )
-                ? registryContract.requiredMetadataFields
+                ? registryContract
+                    .requiredMetadataFields
                 : [
                     "name",
                     "version",
@@ -248,11 +335,12 @@ class EngineRegistry {
 
         for (
             const [name, item]
-            of Object.entries(this.engines)
+            of Object.entries(
+                this.engines
+            )
         ) {
 
             const missing = [];
-
             const invalid = [];
 
 
@@ -262,8 +350,10 @@ class EngineRegistry {
             ) {
 
                 if (
-                    item[field] === undefined ||
-                    item[field] === null ||
+                    item[field] ===
+                        undefined ||
+                    item[field] ===
+                        null ||
                     item[field] === ""
                 ) {
 
@@ -275,7 +365,8 @@ class EngineRegistry {
 
 
                 if (
-                    field === "capabilities" &&
+                    field ===
+                        "capabilities" &&
                     !Array.isArray(
                         item[field]
                     )
@@ -293,12 +384,29 @@ class EngineRegistry {
                         "status",
                         "nextRuntimeState"
                     ].includes(field) &&
-                    typeof item[field] !== "string"
+                    typeof item[field] !==
+                        "string"
                 ) {
 
                     invalid.push(field);
 
                 }
+
+            }
+
+
+            const executionValid =
+                item.engine instanceof
+                    EngineBase &&
+                typeof item.engine.execute ===
+                    "function";
+
+
+            if (!executionValid) {
+
+                invalid.push(
+                    "execution"
+                );
 
             }
 
@@ -332,6 +440,8 @@ class EngineRegistry {
                     )
                         ? item.capabilities.length
                         : 0,
+
+                executionValid,
 
                 registeredAt:
                     item.registeredAt

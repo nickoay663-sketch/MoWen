@@ -1,6 +1,8 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 import Dictionary from "./Dictionary.js";
 import LanguageManager from "./LanguageManager.js";
+import UniversalExpression from "./UniversalExpression.js";
+import PredicateRegistry from "./PredicateRegistry.js";
 
 class RecognitionEngine extends EngineBase {
 
@@ -8,8 +10,8 @@ class RecognitionEngine extends EngineBase {
 
         super(
             "RecognitionEngine",
-            "15.0",
-            "莫问识别表达中的主体、对象与概念，不负责定义、证据与推理。"
+            "17.0",
+            "MoWen Recognition recognizes expression structure and maps language-specific forms into Universal Expression Model."
         );
 
         this.expression =
@@ -40,6 +42,16 @@ class RecognitionEngine extends EngineBase {
         const concepts =
             this.extractConcepts();
 
+        const predicate =
+            this.extractPredicate();
+
+        const universalExpression =
+            this.buildUniversalExpression(
+                objects,
+                concepts,
+                predicate
+            );
+
         return this.result({
 
             status:
@@ -64,7 +76,12 @@ class RecognitionEngine extends EngineBase {
                         this.fallback,
 
                     dictionaryVersion:
-                        this.dictionary.version || null
+                        this.dictionary.version || null,
+
+                    predicate:
+                        predicate
+                            ? predicate.id
+                            : null
 
                 }),
 
@@ -72,11 +89,19 @@ class RecognitionEngine extends EngineBase {
 
             concepts,
 
+            predicate,
+
+            universalExpression,
+
             result: {
 
                 objects,
 
-                concepts
+                concepts,
+
+                predicate,
+
+                universalExpression
 
             },
 
@@ -116,7 +141,9 @@ class RecognitionEngine extends EngineBase {
         }
 
         const text =
-            this.normalize(this.expression);
+            this.normalize(
+                this.expression
+            );
 
         const objects = [];
 
@@ -163,7 +190,9 @@ class RecognitionEngine extends EngineBase {
         }
 
         const text =
-            this.normalize(this.expression);
+            this.normalize(
+                this.expression
+            );
 
         const concepts = [];
 
@@ -208,7 +237,189 @@ class RecognitionEngine extends EngineBase {
     }
 
 
-    matchEntry(text, entry) {
+    extractPredicate() {
+
+        if (!this.expression) {
+
+            return null;
+
+        }
+
+        return PredicateRegistry.findByLanguage(
+
+            this.language,
+
+            this.expression,
+
+            (
+                text,
+                form
+            ) =>
+                this.containsWord(
+                    this.normalize(text),
+                    form
+                )
+
+        );
+
+    }
+
+
+    buildUniversalExpression(
+        objects,
+        concepts,
+        predicate
+    ) {
+
+        let subject = null;
+
+        let object = null;
+
+        if (objects.length > 0) {
+
+            subject =
+                objects[0].id;
+
+        }
+
+        if (
+            predicate &&
+            predicate.id === "identity"
+        ) {
+
+            if (
+                !subject &&
+                this.isFirstPersonIdentity()
+            ) {
+
+                subject =
+                    "object.self";
+
+            }
+
+            if (concepts.length > 0) {
+
+                object =
+                    concepts[0].id;
+
+            }
+
+        }
+
+        return UniversalExpression.from({
+
+            subject,
+
+            predicate:
+                predicate
+                    ? predicate.id
+                    : null,
+
+            object,
+
+            attributes: [],
+
+            relation: [],
+
+            modality: null,
+
+            quantity: null,
+
+            time: null,
+
+            condition: null,
+
+            originalExpression:
+                this.expression,
+
+            sourceLanguage:
+                this.language
+
+        });
+
+    }
+
+
+    isFirstPersonIdentity() {
+
+        const language =
+            String(
+                this.language || ""
+            )
+                .trim();
+
+        const text =
+            this.normalize(
+                this.expression
+            );
+
+        const firstPersonForms = {
+
+            "zh-CN": [
+                "我"
+            ],
+
+            "en-US": [
+                "i"
+            ],
+
+            "es-ES": [
+                "soy"
+            ],
+
+            "fr-FR": [
+                "je",
+                "suis"
+            ],
+
+            "de-DE": [
+                "ich",
+                "bin"
+            ],
+
+            "it-IT": [
+                "io",
+                "sono"
+            ],
+
+            "pt-PT": [
+                "eu",
+                "sou"
+            ]
+
+        };
+
+        const forms =
+            firstPersonForms[language]
+            || [];
+
+        for (
+            const form
+            of forms
+        ) {
+
+            if (
+                this.containsWord(
+                    text,
+                    form
+                )
+            ) {
+
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+    matchEntry(
+        text,
+        entry
+    ) {
 
         const aliases =
             Array.isArray(entry.aliases)
@@ -243,10 +454,13 @@ class RecognitionEngine extends EngineBase {
         return String(text || "")
             .toLowerCase()
             .replace(
-                /[.,!?;:()[\]{}"'“”‘’。！？；：，（）【】《》]/g,
+                /[.,!?;:()[\]{}"'“”‘’、！？；：，（）【】《》]/g,
                 " "
             )
-            .replace(/\s+/g, " ")
+            .replace(
+                /\s+/g,
+                " "
+            )
             .trim();
 
     }
@@ -258,7 +472,9 @@ class RecognitionEngine extends EngineBase {
     ) {
 
         const normalizedWord =
-            this.normalize(word);
+            this.normalize(
+                word
+            );
 
         if (!normalizedWord) {
 
