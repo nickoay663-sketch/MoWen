@@ -16,6 +16,7 @@ import RuntimeResult from "./RuntimeResult.js";
 import TestimonyBuilder from "./TestimonyBuilder.js";
 import TestimonyValidator from "./TestimonyValidator.js";
 
+
 class HonestRuntime {
 
     constructor(expression) {
@@ -34,19 +35,7 @@ class HonestRuntime {
             new RuntimeResult();
 
         const runtimeVersion =
-            "10.2";
-
-
-        const testimony =
-            new TestimonyBuilder(
-                this.expression
-            ).run();
-
-
-        const testimonyValidation =
-            new TestimonyValidator(
-                testimony
-            ).run();
+            RuntimeContract.identity.runtimeVersion;
 
 
         const pipeline = [
@@ -78,6 +67,18 @@ class HonestRuntime {
             new MoWenIdentity().run();
 
 
+        const testimony =
+            new TestimonyBuilder(
+                this.expression
+            ).run();
+
+
+        const testimonyValidation =
+            new TestimonyValidator(
+                testimony
+            ).run();
+
+
         const language =
             new LanguageDetector(
                 this.expression
@@ -90,18 +91,10 @@ class HonestRuntime {
             ).execute();
 
 
-        trace.push({
-
-            engine:
-                "RecognitionEngine",
-
-            status:
-                recognition.status,
-
-            version:
-                recognition.version
-
-        });
+        this.recordTrace(
+            trace,
+            recognition
+        );
 
 
         const semanticObject = {
@@ -120,7 +113,12 @@ class HonestRuntime {
 
             testimony,
 
-            testimonyValidation
+            testimonyValidation,
+
+            identity,
+
+            contract:
+                RuntimeContract
 
         };
 
@@ -131,24 +129,22 @@ class HonestRuntime {
             ).execute();
 
 
-        trace.push({
-
-            engine:
-                "DefinitionEngine",
-
-            status:
-                definition.status,
-
-            version:
-                definition.version
-
-        });
+        this.recordTrace(
+            trace,
+            definition
+        );
 
 
         const search =
             new SearchEngine(
                 semanticObject
             ).execute();
+
+
+        this.recordTrace(
+            trace,
+            search
+        );
 
 
         const evidence =
@@ -159,6 +155,12 @@ class HonestRuntime {
                 search
 
             }).execute();
+
+
+        this.recordTrace(
+            trace,
+            evidence
+        );
 
 
         const correspondence =
@@ -175,6 +177,12 @@ class HonestRuntime {
             }).execute();
 
 
+        this.recordTrace(
+            trace,
+            correspondence
+        );
+
+
         const reasoning =
             new ReasoningEngine({
 
@@ -186,15 +194,30 @@ class HonestRuntime {
             }).execute();
 
 
+        this.recordTrace(
+            trace,
+            reasoning
+        );
+
+
         const responsibility =
             new ResponsibilityEngine({
 
                 ...semanticObject,
 
                 reasonings:
-                    reasoning.reasonings || []
+                    reasoning.reasonings || [],
+
+                contract:
+                    RuntimeContract
 
             }).execute();
+
+
+        this.recordTrace(
+            trace,
+            responsibility
+        );
 
 
         const reconstruction =
@@ -202,9 +225,23 @@ class HonestRuntime {
 
                 semanticObject,
 
-                responsibility
+                responsibility,
+
+                contract:
+                    RuntimeContract,
+
+                pipeline,
+
+                runtimeTrace:
+                    trace
 
             }).execute();
+
+
+        this.recordTrace(
+            trace,
+            reconstruction
+        );
 
 
         const generator =
@@ -212,61 +249,29 @@ class HonestRuntime {
 
                 semanticObject,
 
+                responsibility,
+
                 reconstruction,
 
-                responsibility
+                contract:
+                    RuntimeContract,
+
+                pipeline,
+
+                runtimeTrace:
+                    trace
 
             }).execute();
 
 
-        const engineRegistry =
-            new EngineRegistry();
-
-
-        engineRegistry.register(
-            "recognition",
-            recognition
-        );
-
-        engineRegistry.register(
-            "definition",
-            definition
-        );
-
-        engineRegistry.register(
-            "search",
-            search
-        );
-
-        engineRegistry.register(
-            "evidence",
-            evidence
-        );
-
-        engineRegistry.register(
-            "correspondence",
-            correspondence
-        );
-
-        engineRegistry.register(
-            "reasoning",
-            reasoning
-        );
-
-        engineRegistry.register(
-            "responsibility",
-            responsibility
-        );
-
-        engineRegistry.register(
-            "reconstruction",
-            reconstruction
-        );
-
-        engineRegistry.register(
-            "generator",
+        this.recordTrace(
+            trace,
             generator
         );
+
+
+        const engineRegistry =
+            new EngineRegistry();
 
 
         const engines = {
@@ -292,108 +297,15 @@ class HonestRuntime {
         };
 
 
-        trace.push({
+        for (const [name, result] of Object.entries(engines)) {
 
-            engine:
-                "SearchEngine",
+            engineRegistry.register(
+                name,
+                result
+            );
 
-            status:
-                search.status,
+        }
 
-            version:
-                search.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "EvidenceEngine",
-
-            status:
-                evidence.status,
-
-            version:
-                evidence.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "CorrespondenceEngine",
-
-            status:
-                correspondence.status,
-
-            version:
-                correspondence.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "ReasoningEngine",
-
-            status:
-                reasoning.status,
-
-            version:
-                reasoning.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "ResponsibilityEngine",
-
-            status:
-                responsibility.status,
-
-            version:
-                responsibility.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "ReconstructionEngine",
-
-            status:
-                reconstruction.status,
-
-            version:
-                reconstruction.version
-
-        });
-
-
-        trace.push({
-
-            engine:
-                "GeneratorEngine",
-
-            status:
-                generator.status,
-
-            version:
-                generator.version
-
-        });
-
-
-        /*
-         * Prepare RuntimeResult before SelfCheck.
-         * SelfCheck must inspect the actual RuntimeResult contract.
-         */
 
         runtimeResult.runtimeVersion =
             runtimeVersion;
@@ -534,18 +446,10 @@ class HonestRuntime {
             }).execute();
 
 
-        trace.push({
-
-            engine:
-                "SelfCheckEngine",
-
-            status:
-                selfCheck.status,
-
-            version:
-                selfCheck.version
-
-        });
+        this.recordTrace(
+            trace,
+            selfCheck
+        );
 
 
         runtimeResult.selfCheck =
@@ -558,6 +462,24 @@ class HonestRuntime {
 
 
         return runtimeResult;
+
+    }
+
+
+    recordTrace(trace, result) {
+
+        trace.push({
+
+            engine:
+                result.engine,
+
+            status:
+                result.status,
+
+            version:
+                result.version
+
+        });
 
     }
 
