@@ -1,4 +1,4 @@
-﻿import LanguageDetector from "./LanguageDetector.js";
+﻿import LanguageAdapter from "./LanguageAdapter.js";
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
 import SearchEngine from "./SearchEngine.js";
@@ -78,10 +78,14 @@ class HonestRuntime {
             ).run();
 
 
+        const languageAdapter =
+            new LanguageAdapter();
+
+
         const language =
-            new LanguageDetector(
+            languageAdapter.adapt(
                 this.expression
-            ).run();
+            );
 
 
         const recognitionEngine =
@@ -106,6 +110,9 @@ class HonestRuntime {
 
             language:
                 language.language,
+
+            languageAdapter:
+                language,
 
             objects:
                 recognition.objects || [],
