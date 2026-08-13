@@ -18,16 +18,10 @@ import TestimonyValidator from "./TestimonyValidator.js";
 
 class HonestRuntime {
 
-    constructor(
-        expression,
-        options = {}
-    ) {
+    constructor(expression) {
 
         this.expression =
             expression || "";
-
-        this.options =
-            options || {};
 
     }
 
@@ -41,6 +35,7 @@ class HonestRuntime {
 
         const runtimeVersion =
             RuntimeContract.identity.runtimeVersion;
+
 
         const pipeline = [
 
@@ -122,14 +117,7 @@ class HonestRuntime {
             identity,
 
             contract:
-                RuntimeContract,
-
-            evidence:
-                Array.isArray(
-                    this.options.evidence
-                )
-                    ? this.options.evidence
-                    : []
+                RuntimeContract
 
         };
 
@@ -160,8 +148,11 @@ class HonestRuntime {
 
         const evidence =
             new EvidenceEngine({
+
                 ...semanticObject,
+
                 search
+
             }).execute();
 
 
@@ -214,7 +205,10 @@ class HonestRuntime {
                 ...semanticObject,
 
                 reasonings:
-                    reasoning.reasonings || []
+                    reasoning.reasonings || [],
+
+                contract:
+                    RuntimeContract
 
             }).execute();
 
@@ -350,38 +344,50 @@ class HonestRuntime {
         runtimeResult.recognition =
             recognition;
 
+
         runtimeResult.definition =
             definition;
+
 
         runtimeResult.testimony =
             testimony;
 
+
         runtimeResult.testimonyValidation =
             testimonyValidation;
+
 
         runtimeResult.search =
             search;
 
+
         runtimeResult.evidence =
             evidence;
+
 
         runtimeResult.correspondence =
             correspondence;
 
+
         runtimeResult.reasoning =
             reasoning;
+
 
         runtimeResult.responsibility =
             responsibility;
 
+
         runtimeResult.responsibilityModel =
             responsibility.responsibilities || [];
+
 
         runtimeResult.reconstruction =
             reconstruction;
 
+
         runtimeResult.generator =
             generator;
+
 
         runtimeResult.engineRegistry =
             engineRegistry;
@@ -401,22 +407,13 @@ class HonestRuntime {
         runtimeResult.verificationBoundary = {
 
             evidenceBoundary:
-                reconstruction
-                    .reconstruction
-                    ?.boundaries
-                    ?.evidence || null,
+                reconstruction.reconstruction?.boundaries?.evidence || null,
 
             sourceBoundary:
-                reconstruction
-                    .reconstruction
-                    ?.boundaries
-                    ?.source || null,
+                reconstruction.reconstruction?.boundaries?.source || null,
 
             responsibilityBoundary:
-                reconstruction
-                    .reconstruction
-                    ?.boundaries
-                    ?.responsibility || null
+                reconstruction.reconstruction?.boundaries?.responsibility || null
 
         };
 
@@ -485,10 +482,7 @@ class HonestRuntime {
     }
 
 
-    recordTrace(
-        trace,
-        result
-    ) {
+    recordTrace(trace, result) {
 
         if (!result) {
 

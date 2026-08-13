@@ -30,10 +30,17 @@ class RecognitionEngine extends EngineBase {
 
     execute() {
 
-        const objects = this.extractObjects();
-        const concepts = this.extractConcepts();
-        const predicate = this.extractPredicate();
-        const structures = this.extractStructures();
+        const objects =
+            this.extractObjects();
+
+        const concepts =
+            this.extractConcepts();
+
+        const predicate =
+            this.extractPredicate();
+
+        const structures =
+            this.extractStructures();
 
         const universalExpression =
             this.buildUniversalExpression(
@@ -45,64 +52,86 @@ class RecognitionEngine extends EngineBase {
 
         return this.result({
 
-            status: "completed",
+            status:
+                "completed",
 
-            metadata: this.metadata({
+            metadata:
+                this.metadata({
 
-                expressionLength:
-                    this.expression.length,
+                    expressionLength:
+                        this.expression.length,
 
-                objectCount:
-                    objects.length,
+                    objectCount:
+                        objects.length,
 
-                conceptCount:
-                    concepts.length,
+                    conceptCount:
+                        concepts.length,
 
-                structureCount:
-                    structures.length,
+                    structureCount:
+                        structures.length,
 
-                language:
-                    this.language,
+                    language:
+                        this.language,
 
-                fallback:
-                    this.fallback,
+                    fallback:
+                        this.fallback,
 
-                dictionaryVersion:
-                    this.dictionary.version || null,
+                    dictionaryVersion:
+                        this.dictionary.version || null,
 
-                predicate:
-                    predicate
-                        ? predicate.id
-                        : null
+                    predicate:
+                        predicate
+                            ? predicate.id
+                            : null
 
-            }),
+                }),
 
             objects,
+
             concepts,
+
             predicate,
+
             structures,
+
             universalExpression,
 
             result: {
+
                 objects,
+
                 concepts,
+
                 predicate,
+
                 structures,
+
                 universalExpression
+
             },
 
             trace: [
+
                 {
-                    engine: "RecognitionEngine",
-                    action: "recognize",
-                    status: "completed"
+
+                    engine:
+                        "RecognitionEngine",
+
+                    action:
+                        "recognize",
+
+                    status:
+                        "completed"
+
                 }
+
             ],
 
             questions: [],
 
             nextRuntimeState:
                 "DefinitionEngine"
+
         });
 
     }
@@ -302,6 +331,9 @@ class RecognitionEngine extends EngineBase {
                         "从那时起",
                         "当",
                         "同时",
+                        "一年前",
+                        "去年",
+                        "以前",
                         "在...的时候"
                     ]
                 },
@@ -316,6 +348,7 @@ class RecognitionEngine extends EngineBase {
                     forms: [
                         "本来",
                         "早知道",
+                        "不会",
                         "就不会",
                         "就不"
                     ]
@@ -383,7 +416,16 @@ class RecognitionEngine extends EngineBase {
                         "while",
                         "when",
                         "after",
-                        "before"
+                        "before",
+                        "a year ago",
+                        "years ago",
+                        "last year",
+                        "a month ago",
+                        "months ago",
+                        "last month",
+                        "a week ago",
+                        "weeks ago",
+                        "last week"
                     ]
                 },
 
@@ -463,7 +505,16 @@ class RecognitionEngine extends EngineBase {
                         "mientras",
                         "cuando",
                         "después de",
-                        "antes de"
+                        "antes de",
+                        "hace un año",
+                        "hace años",
+                        "el año pasado",
+                        "hace un mes",
+                        "hace meses",
+                        "el mes pasado",
+                        "hace una semana",
+                        "hace semanas",
+                        "la semana pasada"
                     ]
                 },
 

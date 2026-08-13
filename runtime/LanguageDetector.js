@@ -8,253 +8,276 @@
     }
 
     detect() {
-    if (!this.text) {
-        return {
-            language: "unknown",
-            languages: [],
-            mixed: false,
-            confidence: 0
-        };
-    }
-
-    const scores = {
-        "zh-CN": this.scoreChinese(),
-        "en-US": this.scoreEnglish(),
-        "es-ES": this.scoreSpanish(),
-        "fr-FR": this.scoreFrench(),
-        "de-DE": this.scoreGerman(),
-        "it-IT": this.scoreItalian(),
-        "pt-PT": this.scorePortuguese()
-    };
-
-    const ranked = Object.entries(scores)
-        .sort((a, b) => b[1] - a[1]);
-
-    const detected = ranked
-        .filter(([, score]) => score > 0)
-        .map(([language]) => language);
-
-    if (detected.length === 0) {
-        return {
-            language: "unknown",
-            languages: [],
-            mixed: false,
-            confidence: 0
-        };
-    }
-
-    const best = ranked[0];
-    const second = ranked[1] || ["unknown", 0];
-
-    const bestLanguage = best[0];
-    const bestScore = best[1];
-    const secondLanguage = second[0];
-    const secondScore = second[1];
-
-    const lowerText = this.text
-        .toLowerCase()
-        .normalize("NFC");
-
-    const nativeAnchors = [
-        ["es-ES", [
-            "soy ",
-            "el ",
-            "la ",
-            "mi ",
-            "tengo ",
-            "gobierno ",
-            "libertad",
-            "evidencia",
-            "responsabilidad",
-            "médico",
-            "médica"
-        ]],
-        ["fr-FR", [
-            "je ",
-            "suis ",
-            "le ",
-            "la ",
-            "gouvernement ",
-            "liberté",
-            "médecin",
-            "preuve"
-        ]],
-        ["de-DE", [
-            "ich ",
-            "bin ",
-            "der ",
-            "die ",
-            "das ",
-            "regierung ",
-            "freiheit",
-            "arzt"
-        ]],
-        ["it-IT", [
-            "sono ",
-            "il ",
-            "lo ",
-            "la ",
-            "governo ",
-            "libertà",
-            "medico"
-        ]],
-        ["pt-PT", [
-            "sou ",
-            "o ",
-            "a ",
-            "governo ",
-            "liberdade",
-            "médico"
-        ]]
-    ];
-
-    let anchoredLanguage = null;
-    let anchorScore = 0;
-
-    for (const [language, anchors] of nativeAnchors) {
-        const score = anchors.filter(anchor =>
-            lowerText.includes(anchor)
-        ).length;
-
-        if (score > anchorScore) {
-            anchorScore = score;
-            anchoredLanguage = language;
+        if (!this.text) {
+            return {
+                language: "unknown",
+                languages: [],
+                mixed: false,
+                confidence: 0
+            };
         }
-    }
 
-    const hasEnglishConnector =
-        lowerText.includes(" and ") ||
-        lowerText.includes(" this ") ||
-        lowerText.includes(" that ") ||
-        lowerText.includes(" evidence ") ||
-        lowerText.includes(" teacher ") ||
-        lowerText.includes(" doctor ");
+        const scores = {
+            "zh-CN": this.scoreChinese(),
+            "en-US": this.scoreEnglish(),
+            "es-ES": this.scoreSpanish(),
+            "fr-FR": this.scoreFrench(),
+            "de-DE": this.scoreGerman(),
+            "it-IT": this.scoreItalian(),
+            "pt-PT": this.scorePortuguese()
+        };
 
-    const hasFrenchStructure =
-        lowerText.includes("je ") &&
-        lowerText.includes("suis ");
+        const ranked = Object.entries(scores)
+            .sort((a, b) => b[1] - a[1]);
 
-    const hasGermanStructure =
-        lowerText.includes("ich ") &&
-        lowerText.includes("bin ");
+        const detected = ranked
+            .filter(([, score]) => score > 0)
+            .map(([language]) => language);
 
-    const hasItalianStructure =
-        lowerText.includes("sono ") &&
-        lowerText.includes("medico");
+        if (detected.length === 0) {
+            return {
+                language: "unknown",
+                languages: [],
+                mixed: false,
+                confidence: 0
+            };
+        }
 
-    const hasPortugueseStructure =
-        lowerText.includes("sou ") &&
-        lowerText.includes("médico");
+        const best = ranked[0];
+        const second = ranked[1] || ["unknown", 0];
 
-    const hasSpanishStructure =
-        lowerText.includes("soy ") &&
-        lowerText.includes("doctor");
+        const bestLanguage = best[0];
+        const bestScore = best[1];
+        const secondLanguage = second[0];
+        const secondScore = second[1];
 
-    const foreignLanguages = detected.filter(
-        language => language !== "en-US"
-    );
+        const lowerText = this.text
+            .toLowerCase()
+            .normalize("NFC");
 
-    const explicitEnglishMixed =
-        foreignLanguages.length > 0 &&
-        hasEnglishConnector;
+        const strongAnchors = {
+            "es-ES": [
+                "soy ",
+                "tengo ",
+                "gobierno ",
+                "libertad",
+                "evidencia",
+                "responsabilidad",
+                "médico",
+                "médica",
+                "hubieras",
+                "habría",
+                "creído",
+                "hace un año"
+            ],
+            "fr-FR": [
+                "je ",
+                "suis ",
+                "gouvernement ",
+                "liberté",
+                "médecin",
+                "preuve",
+                "responsabilité"
+            ],
+            "de-DE": [
+                "ich ",
+                "bin ",
+                "regierung ",
+                "freiheit",
+                "arzt",
+                "beweis",
+                "verantwortung"
+            ],
+            "it-IT": [
+                "sono ",
+                "governo ",
+                "libertà",
+                "medico",
+                "responsabilità"
+            ],
+            "pt-PT": [
+                "sou ",
+                "governo ",
+                "liberdade",
+                "médico",
+                "evidência",
+                "responsabilidade"
+            ]
+        };
 
-    const scoreMixed =
-        secondScore >= 4 &&
-        secondScore >= bestScore * 0.45 &&
-        bestScore - secondScore <= 2;
+        let anchoredLanguage = null;
+        let anchorScore = 0;
 
-    const structuralMixed =
-        (
-            hasFrenchStructure ||
-            hasGermanStructure ||
-            hasItalianStructure ||
-            hasPortugueseStructure ||
+        for (const [language, anchors] of Object.entries(strongAnchors)) {
+            const score = anchors.filter(anchor =>
+                lowerText.includes(anchor)
+            ).length;
+
+            if (score > anchorScore) {
+                anchorScore = score;
+                anchoredLanguage = language;
+            }
+        }
+
+        const hasEnglishConnector =
+            this.hasAnyToken([
+                "and",
+                "this",
+                "that",
+                "these",
+                "those",
+                "evidence",
+                "teacher",
+                "doctor",
+                "would",
+                "have",
+                "had",
+                "you",
+                "your"
+            ]);
+
+        const hasFrenchStructure =
+            lowerText.includes("je ") &&
+            lowerText.includes("suis ");
+
+        const hasGermanStructure =
+            lowerText.includes("ich ") &&
+            lowerText.includes("bin ");
+
+        const hasItalianStructure =
+            lowerText.includes("sono ");
+
+        const hasPortugueseStructure =
+            lowerText.includes("sou ");
+
+        const hasSpanishStructure =
+            lowerText.includes("soy ") ||
+            lowerText.includes("hubieras ") ||
+            lowerText.includes("habría ") ||
+            lowerText.includes("creído ");
+
+        const foreignLanguages = detected.filter(
+            language => language !== "en-US"
+        );
+
+        const strongForeignEvidence =
+            foreignLanguages.some(language => {
+                const score = scores[language] || 0;
+                return score >= 4;
+            });
+
+        const explicitEnglishMixed =
+            strongForeignEvidence &&
+            hasEnglishConnector;
+
+        const scoreMixed =
+            secondScore >= 6 &&
+            secondScore >= bestScore * 0.55 &&
+            bestScore - secondScore <= 4;
+
+        const structuralMixed =
+            (
+                hasFrenchStructure ||
+                hasGermanStructure ||
+                hasItalianStructure ||
+                hasPortugueseStructure ||
+                hasSpanishStructure
+            ) &&
+            hasEnglishConnector &&
+            detected.includes("en-US");
+
+        const mixed = Boolean(
+            explicitEnglishMixed ||
+            scoreMixed ||
+            structuralMixed
+        );
+
+        let finalLanguage = bestLanguage;
+
+        if (mixed && anchoredLanguage) {
+            finalLanguage = anchoredLanguage;
+        }
+
+        if (
+            structuralMixed &&
+            hasFrenchStructure
+        ) {
+            finalLanguage = "fr-FR";
+        }
+
+        if (
+            structuralMixed &&
+            hasGermanStructure
+        ) {
+            finalLanguage = "de-DE";
+        }
+
+        if (
+            structuralMixed &&
+            hasItalianStructure
+        ) {
+            finalLanguage = "it-IT";
+        }
+
+        if (
+            structuralMixed &&
+            hasPortugueseStructure
+        ) {
+            finalLanguage = "pt-PT";
+        }
+
+        if (
+            structuralMixed &&
             hasSpanishStructure
-        ) &&
-        hasEnglishConnector &&
-        detected.includes("en-US");
+        ) {
+            finalLanguage = "es-ES";
+        }
 
-    const mixed = Boolean(
-        explicitEnglishMixed ||
-        scoreMixed ||
-        structuralMixed
-    );
-
-    let finalLanguage = bestLanguage;
-
-    if (mixed && anchoredLanguage) {
-        finalLanguage = anchoredLanguage;
-    }
-
-    if (
-        structuralMixed &&
-        hasFrenchStructure
-    ) {
-        finalLanguage = "fr-FR";
-    }
-
-    if (
-        structuralMixed &&
-        hasGermanStructure
-    ) {
-        finalLanguage = "de-DE";
-    }
-
-    if (
-        structuralMixed &&
-        hasItalianStructure
-    ) {
-        finalLanguage = "it-IT";
-    }
-
-    if (
-        structuralMixed &&
-        hasPortugueseStructure
-    ) {
-        finalLanguage = "pt-PT";
-    }
-
-    if (
-        structuralMixed &&
-        hasSpanishStructure &&
-        !(
-            bestLanguage === "en-US" &&
-            lowerText.includes("this ") &&
-            lowerText.includes(" evidence")
-        )
-    ) {
-        finalLanguage = "es-ES";
-    }
-
-    if (
-        bestLanguage === "en-US" &&
-        hasSpanishStructure &&
-        lowerText.includes("this ") &&
-        lowerText.includes(" evidence")
-    ) {
-        finalLanguage = "en-US";
-    }
-
-    const languages = mixed
-        ? [
-            finalLanguage,
-            ...detected.filter(
-                language => language !== finalLanguage
+        return {
+            language: finalLanguage,
+            languages: mixed
+                ? [
+                    finalLanguage,
+                    ...detected.filter(
+                        language => language !== finalLanguage
+                    )
+                ]
+                : [finalLanguage],
+            mixed,
+            confidence: Math.min(
+                1,
+                bestScore / 10
             )
-        ]
-        : [finalLanguage];
+        };
+    }
 
-    return {
-        language: finalLanguage,
-        languages,
-        mixed,
-        confidence: Math.min(1, bestScore / 10)
-    };
-}
+    hasAnyToken(words) {
+        const tokens = this.tokenize();
+
+        return words.some(
+            word => tokens.includes(word)
+        );
+    }
+
+    tokenize() {
+        return this.text
+            .toLowerCase()
+            .normalize("NFC")
+            .replace(
+                /[.,!?;:()[\]{}"'“”‘’。，！？；：（）【】《》、]/g,
+                " "
+            )
+            .split(/\s+/)
+            .filter(Boolean);
+    }
 
     scoreChinese() {
-        const matches = this.text.match(/[\u4e00-\u9fff]/g);
-        return matches ? matches.length * 2 : 0;
+        const matches =
+            this.text.match(/[\u4e00-\u9fff]/g);
+
+        return matches
+            ? matches.length * 2
+            : 0;
     }
 
     scoreEnglish() {
@@ -280,6 +303,19 @@
             "for",
             "with",
             "from",
+            "if",
+            "you",
+            "your",
+            "would",
+            "have",
+            "had",
+            "not",
+            "year",
+            "ago",
+            "told",
+            "believed",
+            "standing",
+            "here",
             "truth",
             "evidence",
             "responsibility",
@@ -328,8 +364,15 @@
             "protege",
             "libertad",
             "padre",
-            "tengo"
-        ]) + this.scorePattern(/[áéíóúñü¿¡]/gi);
+            "tengo",
+            "hubieras",
+            "habría",
+            "creído",
+            "hace",
+            "año"
+        ]) + this.scorePattern(
+            /[áéíóúñü¿¡]/gi
+        );
     }
 
     scoreFrench() {
@@ -432,8 +475,6 @@
 
     scorePortuguese() {
         return this.scoreWords([
-            "o",
-            "a",
             "os",
             "as",
             "um",
@@ -445,8 +486,6 @@
             "é",
             "sou",
             "são",
-            "e",
-            "ou",
             "para",
             "com",
             "verdade",
@@ -465,17 +504,7 @@
     }
 
     scoreWords(words) {
-        const lower = this.text
-            .toLowerCase()
-            .normalize("NFC")
-            .replace(
-                /[.,!?;:()[\]{}"'“”‘’。，！？；：（）【】《》、]/g,
-                " "
-            );
-
-        const tokens = lower
-            .split(/\s+/)
-            .filter(Boolean);
+        const tokens = this.tokenize();
 
         let score = 0;
 
@@ -489,8 +518,13 @@
     }
 
     scorePattern(pattern) {
-        const matches = this.text.match(pattern);
-        return matches ? matches.length : 0;
+        const matches =
+            this.text.match(pattern);
+
+        return matches
+            ? matches.length
+            : 0;
     }
 }
+
 export default LanguageDetector;
