@@ -1,4 +1,4 @@
-import LanguageDetector from "./LanguageDetector.js";
+﻿import LanguageDetector from "./LanguageDetector.js";
 import RecognitionEngine from "./RecognitionEngine.js";
 import DefinitionEngine from "./DefinitionEngine.js";
 import SearchEngine from "./SearchEngine.js";
@@ -84,10 +84,13 @@ class HonestRuntime {
             ).run();
 
 
-        const recognition =
+        const recognitionEngine =
             new RecognitionEngine(
                 this.expression
-            ).execute();
+            );
+
+        const recognition =
+            recognitionEngine.execute();
 
 
         this.recordTrace(
@@ -122,10 +125,13 @@ class HonestRuntime {
         };
 
 
-        const definition =
+        const definitionEngine =
             new DefinitionEngine(
                 semanticObject
-            ).execute();
+            );
+
+        const definition =
+            definitionEngine.execute();
 
 
         this.recordTrace(
@@ -134,10 +140,13 @@ class HonestRuntime {
         );
 
 
-        const search =
+        const searchEngine =
             new SearchEngine(
                 semanticObject
-            ).execute();
+            );
+
+        const search =
+            searchEngine.execute();
 
 
         this.recordTrace(
@@ -146,14 +155,17 @@ class HonestRuntime {
         );
 
 
-        const evidence =
+        const evidenceEngine =
             new EvidenceEngine({
 
                 ...semanticObject,
 
                 search
 
-            }).execute();
+            });
+
+        const evidence =
+            evidenceEngine.execute();
 
 
         this.recordTrace(
@@ -162,7 +174,7 @@ class HonestRuntime {
         );
 
 
-        const correspondence =
+        const correspondenceEngine =
             new CorrespondenceEngine({
 
                 ...semanticObject,
@@ -173,7 +185,10 @@ class HonestRuntime {
                 evidences:
                     evidence.evidences || []
 
-            }).execute();
+            });
+
+        const correspondence =
+            correspondenceEngine.execute();
 
 
         this.recordTrace(
@@ -182,7 +197,7 @@ class HonestRuntime {
         );
 
 
-        const reasoning =
+        const reasoningEngine =
             new ReasoningEngine({
 
                 ...semanticObject,
@@ -190,7 +205,10 @@ class HonestRuntime {
                 correspondences:
                     correspondence.correspondences || []
 
-            }).execute();
+            });
+
+        const reasoning =
+            reasoningEngine.execute();
 
 
         this.recordTrace(
@@ -199,7 +217,7 @@ class HonestRuntime {
         );
 
 
-        const responsibility =
+        const responsibilityEngine =
             new ResponsibilityEngine({
 
                 ...semanticObject,
@@ -210,7 +228,10 @@ class HonestRuntime {
                 contract:
                     RuntimeContract
 
-            }).execute();
+            });
+
+        const responsibility =
+            responsibilityEngine.execute();
 
 
         this.recordTrace(
@@ -219,7 +240,7 @@ class HonestRuntime {
         );
 
 
-        const reconstruction =
+        const reconstructionEngine =
             new ReconstructionEngine({
 
                 semanticObject,
@@ -234,7 +255,10 @@ class HonestRuntime {
                 runtimeTrace:
                     trace
 
-            }).execute();
+            });
+
+        const reconstruction =
+            reconstructionEngine.execute();
 
 
         this.recordTrace(
@@ -243,7 +267,7 @@ class HonestRuntime {
         );
 
 
-        const generator =
+        const generatorEngine =
             new GeneratorEngine({
 
                 semanticObject,
@@ -260,7 +284,10 @@ class HonestRuntime {
                 runtimeTrace:
                     trace
 
-            }).execute();
+            });
+
+        const generator =
+            generatorEngine.execute();
 
 
         this.recordTrace(
@@ -271,6 +298,51 @@ class HonestRuntime {
 
         const engineRegistry =
             new EngineRegistry();
+
+
+        const engineInstances = {
+
+            recognition:
+                recognitionEngine,
+
+            definition:
+                definitionEngine,
+
+            search:
+                searchEngine,
+
+            evidence:
+                evidenceEngine,
+
+            correspondence:
+                correspondenceEngine,
+
+            reasoning:
+                reasoningEngine,
+
+            responsibility:
+                responsibilityEngine,
+
+            reconstruction:
+                reconstructionEngine,
+
+            generator:
+                generatorEngine
+
+        };
+
+
+        for (
+            const [name, engine]
+            of Object.entries(engineInstances)
+        ) {
+
+            engineRegistry.register(
+                name,
+                engine
+            );
+
+        }
 
 
         const engines = {
@@ -294,19 +366,6 @@ class HonestRuntime {
             generator
 
         };
-
-
-        for (
-            const [name, result]
-            of Object.entries(engines)
-        ) {
-
-            engineRegistry.register(
-                name,
-                result
-            );
-
-        }
 
 
         const registryValidation =
