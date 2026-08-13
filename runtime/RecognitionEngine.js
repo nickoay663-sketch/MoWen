@@ -3,6 +3,7 @@ import Dictionary from "./Dictionary.js";
 import LanguageManager from "./LanguageManager.js";
 import UniversalExpression from "./UniversalExpression.js";
 import PredicateRegistry from "./PredicateRegistry.js";
+import UniversalSemanticRecognition from "./UniversalSemanticRecognition.js";
 
 class RecognitionEngine extends EngineBase {
 
@@ -10,8 +11,8 @@ class RecognitionEngine extends EngineBase {
 
         super(
             "RecognitionEngine",
-            "19.0",
-            "MoWen Recognition recognizes language-native expression structures and maps verified structural relations into Universal Expression Model."
+            "20.0",
+            "MoWen Recognition recognizes language-native expression structures, preserves universal semantic structures, and maps verified relations into Universal Expression Model."
         );
 
         this.expression = expression || "";
@@ -25,6 +26,7 @@ class RecognitionEngine extends EngineBase {
 
         this.fallback =
             resources.fallback === true;
+
     }
 
 
@@ -42,12 +44,30 @@ class RecognitionEngine extends EngineBase {
         const structures =
             this.extractStructures();
 
+        const universalSemanticRecognition =
+            new UniversalSemanticRecognition(
+                this.expression,
+                this.language
+            ).execute();
+
+        const universalStructures =
+            universalSemanticRecognition.structures || [];
+
+        const semanticSignals =
+            universalSemanticRecognition.semanticSignals || [];
+
+        const mergedStructures =
+            this.mergeStructures(
+                structures,
+                universalStructures
+            );
+
         const universalExpression =
             this.buildUniversalExpression(
                 objects,
                 concepts,
                 predicate,
-                structures
+                mergedStructures
             );
 
         return this.result({
@@ -68,7 +88,16 @@ class RecognitionEngine extends EngineBase {
                         concepts.length,
 
                     structureCount:
+                        mergedStructures.length,
+
+                    nativeStructureCount:
                         structures.length,
+
+                    universalStructureCount:
+                        universalStructures.length,
+
+                    semanticSignalCount:
+                        semanticSignals.length,
 
                     language:
                         this.language,
@@ -92,7 +121,17 @@ class RecognitionEngine extends EngineBase {
 
             predicate,
 
-            structures,
+            structures:
+                mergedStructures,
+
+            nativeStructures:
+                structures,
+
+            universalStructures,
+
+            semanticSignals,
+
+            universalSemanticRecognition,
 
             universalExpression,
 
@@ -104,7 +143,17 @@ class RecognitionEngine extends EngineBase {
 
                 predicate,
 
-                structures,
+                structures:
+                    mergedStructures,
+
+                nativeStructures:
+                    structures,
+
+                universalStructures,
+
+                semanticSignals,
+
+                universalSemanticRecognition,
 
                 universalExpression
 
@@ -123,6 +172,19 @@ class RecognitionEngine extends EngineBase {
                     status:
                         "completed"
 
+                },
+
+                {
+
+                    engine:
+                        "UniversalSemanticRecognition",
+
+                    action:
+                        "universal-semantic-recognition",
+
+                    status:
+                        universalSemanticRecognition.status
+
                 }
 
             ],
@@ -133,6 +195,63 @@ class RecognitionEngine extends EngineBase {
                 "DefinitionEngine"
 
         });
+
+    }
+
+
+    mergeStructures(
+        nativeStructures,
+        universalStructures
+    ) {
+
+        const merged = [];
+
+        for (
+            const structure
+            of nativeStructures || []
+        ) {
+
+            merged.push(
+                structure
+            );
+
+        }
+
+        for (
+            const structure
+            of universalStructures || []
+        ) {
+
+            const exists =
+                merged.some(
+                    existing =>
+                        existing.type ===
+                        structure.type
+                );
+
+            if (!exists) {
+
+                merged.push({
+
+                    type:
+                        structure.type,
+
+                    language:
+                        this.language,
+
+                    source:
+                        "UniversalSemanticRecognition",
+
+                    confidence:
+                        structure.confidence || "structural"
+
+                });
+
+            }
+
+        }
+
+        return merged;
 
     }
 
@@ -161,9 +280,16 @@ class RecognitionEngine extends EngineBase {
             ) {
 
                 objects.push({
-                    id: object.id,
-                    word: object.word,
-                    type: object.type
+
+                    id:
+                        object.id,
+
+                    word:
+                        object.word,
+
+                    type:
+                        object.type
+
                 });
 
             }
@@ -171,6 +297,7 @@ class RecognitionEngine extends EngineBase {
         }
 
         return objects;
+
     }
 
 
@@ -198,13 +325,23 @@ class RecognitionEngine extends EngineBase {
             ) {
 
                 concepts.push({
-                    id: concept.id,
-                    word: concept.word,
-                    category: concept.category,
+
+                    id:
+                        concept.id,
+
+                    word:
+                        concept.word,
+
+                    category:
+                        concept.category,
+
                     aliases:
-                        Array.isArray(concept.aliases)
+                        Array.isArray(
+                            concept.aliases
+                        )
                             ? concept.aliases
                             : undefined
+
                 });
 
             }
@@ -212,6 +349,7 @@ class RecognitionEngine extends EngineBase {
         }
 
         return concepts;
+
     }
 
 
@@ -230,6 +368,7 @@ class RecognitionEngine extends EngineBase {
                     form
                 )
         );
+
     }
 
 
@@ -311,6 +450,7 @@ class RecognitionEngine extends EngineBase {
         }
 
         return structures;
+
     }
 
 
@@ -576,316 +716,12 @@ class RecognitionEngine extends EngineBase {
                     ]
                 }
 
-            ],
-
-            "fr-FR": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "pour que",
-                        "afin que"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "depuis que",
-                        "pendant que",
-                        "lorsque"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "si"
-                    ],
-                    forms: [
-                        "avait",
-                        "aurait",
-                        "serait"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "bien que",
-                        "quoique",
-                        "même si"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "on dit",
-                        "il est dit",
-                        "on sait"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "ceux qui",
-                        "qui",
-                        "que"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "demain",
-                        "sera",
-                        "ferons"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "allons",
-                        "faisons"
-                    ]
-                }
-
-            ],
-
-            "de-DE": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "damit",
-                        "um ... zu"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "seit",
-                        "während",
-                        "wenn",
-                        "als"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "wenn"
-                    ],
-                    forms: [
-                        "hätte",
-                        "wäre",
-                        "würde"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "obwohl",
-                        "auch wenn"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "man sagt",
-                        "es heißt",
-                        "man weiß"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "diejenigen, die",
-                        "die",
-                        "welche"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "morgen",
-                        "werden"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "lasst uns"
-                    ]
-                }
-
-            ],
-
-            "it-IT": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "affinché",
-                        "perché"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "da quando",
-                        "mentre",
-                        "quando"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "se"
-                    ],
-                    forms: [
-                        "avessi",
-                        "avesse",
-                        "avremmo",
-                        "sarebbe"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "sebbene",
-                        "benché",
-                        "anche se"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "si dice",
-                        "si sa",
-                        "si crede"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "coloro che",
-                        "chi",
-                        "che"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "domani",
-                        "sarà",
-                        "continueremo"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "facciamo",
-                        "andiamo"
-                    ]
-                }
-
-            ],
-
-            "pt-PT": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "para que"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "desde que",
-                        "enquanto",
-                        "quando"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "se"
-                    ],
-                    forms: [
-                        "tivesse",
-                        "teria",
-                        "seria"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "embora",
-                        "mesmo que"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "diz-se",
-                        "sabe-se",
-                        "acredita-se"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "aqueles que",
-                        "quem",
-                        "que"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "amanhã",
-                        "será",
-                        "continuaremos"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "façamos",
-                        "vamos"
-                    ]
-                }
-
             ]
 
         };
 
         return rules[language] || [];
+
     }
 
 
@@ -914,6 +750,7 @@ class RecognitionEngine extends EngineBase {
             ) {
 
                 subject = "object.self";
+
             }
 
             if (concepts.length > 0) {
@@ -946,7 +783,8 @@ class RecognitionEngine extends EngineBase {
 
             attributes: [],
 
-            relation: structures,
+            relation:
+                structures,
 
             modality: null,
 
@@ -1044,12 +882,15 @@ class RecognitionEngine extends EngineBase {
                     form
                 )
             ) {
+
                 return true;
+
             }
 
         }
 
         return false;
+
     }
 
 
@@ -1071,12 +912,15 @@ class RecognitionEngine extends EngineBase {
                     alias
                 )
             ) {
+
                 return true;
+
             }
 
         }
 
         return false;
+
     }
 
 
@@ -1093,6 +937,7 @@ class RecognitionEngine extends EngineBase {
                 " "
             )
             .trim();
+
     }
 
 
@@ -1117,6 +962,7 @@ class RecognitionEngine extends EngineBase {
             return text.includes(
                 normalizedWord
             );
+
         }
 
         const escaped =
@@ -1129,6 +975,7 @@ class RecognitionEngine extends EngineBase {
             `(?:^|\\s)${escaped}(?:\\s|$)`,
             "i"
         ).test(text);
+
     }
 
 }
