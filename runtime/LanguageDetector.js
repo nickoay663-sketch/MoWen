@@ -24,7 +24,8 @@
             "fr-FR": this.scoreFrench(),
             "de-DE": this.scoreGerman(),
             "it-IT": this.scoreItalian(),
-            "pt-PT": this.scorePortuguese()
+            "pt-PT": this.scorePortuguese(),
+            "ja-JP": this.scoreJapanese()
         };
 
         const ranked = Object.entries(scores)
@@ -156,6 +157,9 @@
             lowerText.includes("habría ") ||
             lowerText.includes("creído ");
 
+        const hasJapaneseScript =
+            this.hasJapaneseScript();
+
         const foreignLanguages = detected.filter(
             language => language !== "en-US"
         );
@@ -194,48 +198,57 @@
 
         let finalLanguage = bestLanguage;
 
-        if (mixed && anchoredLanguage) {
+        if (hasJapaneseScript) {
+            finalLanguage = "ja-JP";
+        }
+
+        if (mixed && anchoredLanguage && !hasJapaneseScript) {
             finalLanguage = anchoredLanguage;
         }
 
         if (
             structuralMixed &&
-            hasFrenchStructure
+            hasFrenchStructure &&
+            !hasJapaneseScript
         ) {
             finalLanguage = "fr-FR";
         }
 
         if (
             structuralMixed &&
-            hasGermanStructure
+            hasGermanStructure &&
+            !hasJapaneseScript
         ) {
             finalLanguage = "de-DE";
         }
 
         if (
             structuralMixed &&
-            hasItalianStructure
+            hasItalianStructure &&
+            !hasJapaneseScript
         ) {
             finalLanguage = "it-IT";
         }
 
         if (
             structuralMixed &&
-            hasPortugueseStructure
+            hasPortugueseStructure &&
+            !hasJapaneseScript
         ) {
             finalLanguage = "pt-PT";
         }
 
         if (
             structuralMixed &&
-            hasSpanishStructure
+            hasSpanishStructure &&
+            !hasJapaneseScript
         ) {
             finalLanguage = "es-ES";
         }
 
         return {
             language: finalLanguage,
-            languages: mixed
+            languages: mixed && !hasJapaneseScript
                 ? [
                     finalLanguage,
                     ...detected.filter(
@@ -243,7 +256,9 @@
                     )
                 ]
                 : [finalLanguage],
-            mixed,
+            mixed: hasJapaneseScript
+                ? false
+                : mixed,
             confidence: Math.min(
                 1,
                 bestScore / 10
@@ -264,11 +279,17 @@
             .toLowerCase()
             .normalize("NFC")
             .replace(
-                /[.,!?;:()[\]{}"'“”‘’。，！？；：（）【】《》、]/g,
+                /[.,!?;:()[\]{}"'“”‘’。，！？；：（）【】《》、「」『』]/g,
                 " "
             )
             .split(/\s+/)
             .filter(Boolean);
+    }
+
+    hasJapaneseScript() {
+        return /[\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff]/.test(
+            this.text
+        );
     }
 
     scoreChinese() {
@@ -500,6 +521,48 @@
             "liberdade"
         ]) + this.scorePattern(
             /[áàâãéêíóôõúç]/gi
+        );
+    }
+
+    scoreJapanese() {
+        const hiragana =
+            this.text.match(/[\u3040-\u309f]/g) || [];
+
+        const katakana =
+            this.text.match(/[\u30a0-\u30ff]/g) || [];
+
+        const japaneseWords = [
+            "皆様",
+            "私",
+            "話",
+            "聞",
+            "幸い",
+            "疑問",
+            "最も",
+            "良い",
+            "決定",
+            "チーム",
+            "若かった",
+            "頃",
+            "父",
+            "信じる",
+            "成功",
+            "作業",
+            "終わらせて",
+            "次第",
+            "一緒に",
+            "祝う",
+            "誇り",
+            "我々",
+            "挑まなかった",
+            "未来",
+            "素晴らしい"
+        ];
+
+        return (
+            hiragana.length * 2 +
+            katakana.length * 2 +
+            this.scoreWords(japaneseWords) * 2
         );
     }
 
