@@ -18,10 +18,16 @@ import TestimonyValidator from "./TestimonyValidator.js";
 
 class HonestRuntime {
 
-    constructor(expression) {
+    constructor(
+        expression,
+        options = {}
+    ) {
 
         this.expression =
             expression || "";
+
+        this.options =
+            options || {};
 
     }
 
@@ -79,7 +85,9 @@ class HonestRuntime {
 
 
         const languageAdapter =
-            new LanguageAdapter();
+            new LanguageAdapter(
+                this.options.language || "unknown"
+            );
 
 
         const language =
@@ -90,8 +98,10 @@ class HonestRuntime {
 
         const recognitionEngine =
             new RecognitionEngine(
-                this.expression
+                this.expression,
+                language.language
             );
+
 
         const recognition =
             recognitionEngine.execute();
@@ -137,6 +147,7 @@ class HonestRuntime {
                 semanticObject
             );
 
+
         const definition =
             definitionEngine.execute();
 
@@ -151,6 +162,7 @@ class HonestRuntime {
             new SearchEngine(
                 semanticObject
             );
+
 
         const search =
             searchEngine.execute();
@@ -170,6 +182,7 @@ class HonestRuntime {
                 search
 
             });
+
 
         const evidence =
             evidenceEngine.execute();
@@ -194,6 +207,7 @@ class HonestRuntime {
 
             });
 
+
         const correspondence =
             correspondenceEngine.execute();
 
@@ -213,6 +227,7 @@ class HonestRuntime {
                     correspondence.correspondences || []
 
             });
+
 
         const reasoning =
             reasoningEngine.execute();
@@ -236,6 +251,7 @@ class HonestRuntime {
                     RuntimeContract
 
             });
+
 
         const responsibility =
             responsibilityEngine.execute();
@@ -263,6 +279,7 @@ class HonestRuntime {
                     trace
 
             });
+
 
         const reconstruction =
             reconstructionEngine.execute();
@@ -292,6 +309,7 @@ class HonestRuntime {
                     trace
 
             });
+
 
         const generator =
             generatorEngine.execute();
@@ -551,9 +569,7 @@ class HonestRuntime {
     recordTrace(trace, result) {
 
         if (!result) {
-
             return;
-
         }
 
 
