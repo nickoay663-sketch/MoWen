@@ -1,9 +1,21 @@
-const Definitions = {
+﻿const Definitions = {
 
     profesor:
-        "Persona que enseña conocimientos o habilidades.",
+        "Persona que ensena conocimientos o habilidades.",
+
+    profesora:
+        "Persona que ensena conocimientos o habilidades.",
+
+    docente:
+        "Persona que ensena conocimientos o habilidades.",
 
     estudiante:
+        "Persona que aprende conocimientos o habilidades.",
+
+    alumno:
+        "Persona que aprende conocimientos o habilidades.",
+
+    alumna:
         "Persona que aprende conocimientos o habilidades.",
 
     medico:
@@ -12,14 +24,35 @@ const Definitions = {
     medica:
         "Persona que ejerce la medicina.",
 
+    doctor:
+        "Persona que ejerce la medicina.",
+
+    doctora:
+        "Persona que ejerce la medicina.",
+
+    padre:
+        "Persona que tiene una relacion de filiacion como progenitor.",
+
+    madre:
+        "Persona que tiene una relacion de filiacion como progenitora.",
+
     verdad:
-        "Correspondencia entre una afirmación y los hechos.",
+        "Correspondencia entre una afirmacion y los hechos.",
 
     evidencia:
-        "Información que permite verificar una afirmación.",
+        "Informacion que permite verificar una afirmacion.",
+
+    prueba:
+        "Elemento que permite verificar una afirmacion.",
+
+    testimonio:
+        "Declaracion que puede ser sometida a verificacion.",
+
+    declaracion:
+        "Manifestacion expresada por una persona.",
 
     responsabilidad:
-        "Obligación de responder por una acción o afirmación.",
+        "Obligacion de responder por una accion o afirmacion.",
 
     libertad:
         "Capacidad de actuar dentro de un marco de responsabilidad.",
@@ -27,14 +60,23 @@ const Definitions = {
     justicia:
         "Principio de dar a cada persona lo que corresponde.",
 
+    ley:
+        "Regla juridica que establece obligaciones o permisos.",
+
+    leyes:
+        "Conjunto de reglas juridicas aplicables dentro de un ordenamiento.",
+
     persona:
         "Ser humano considerado como sujeto.",
 
     gobierno:
-        "Institución encargada de dirigir y administrar un Estado.",
+        "Institucion encargada de dirigir y administrar un Estado.",
 
     pais:
-        "Territorio y comunidad política organizada como Estado."
+        "Territorio y comunidad politica organizada como Estado.",
+
+    nacion:
+        "Comunidad humana organizada con identidad politica o cultural."
 
 };
 
