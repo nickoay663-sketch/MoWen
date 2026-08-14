@@ -6,7 +6,7 @@ class CorrespondenceEngine extends EngineBase {
 
         super(
             "CorrespondenceEngine",
-            "10.2",
+            "10.3",
             "莫问判断定义、证据与表达之间的真实对应关系，不把发现或未验证证据扩大为支持。"
         );
 

@@ -3,7 +3,7 @@
     constructor() {
 
         this.runtimeVersion =
-            "10.2";
+            "10.3";
 
         this.generatedAt =
             new Date().toISOString();
@@ -11,10 +11,10 @@
         this.metadata = {
 
             contractVersion:
-                "10.2",
+                "10.3",
 
             runtimeVersion:
-                "10.2",
+                "10.3",
 
             engineCount:
                 0,

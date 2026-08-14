@@ -33,6 +33,7 @@ class HonestRuntime {
 
     }
 
+
     run() {
 
         const trace = [];
@@ -58,33 +59,40 @@ class HonestRuntime {
 
         ];
 
+
         const identity =
             new MoWenIdentity().run();
+
 
         const testimony =
             new TestimonyBuilder(
                 this.expression
             ).run();
 
+
         const testimonyValidation =
             new TestimonyValidator(
                 testimony
             ).run();
+
 
         const languageSystem =
             this.options.languageSystem ??
             this.options.language ??
             null;
 
+
         const languageAdapter =
             new LanguageAdapter(
                 languageSystem
             );
 
+
         const languageConnection =
             languageAdapter.connect(
                 this.expression
             );
+
 
         const recognitionEngine =
             new RecognitionEngine(
@@ -92,13 +100,16 @@ class HonestRuntime {
                 languageConnection.languageSystem
             );
 
+
         const recognition =
             recognitionEngine.execute();
+
 
         this.recordTrace(
             trace,
             recognition
         );
+
 
         const semanticObject = {
 
@@ -128,31 +139,38 @@ class HonestRuntime {
 
         };
 
+
         const definitionEngine =
             new DefinitionEngine(
                 semanticObject
             );
 
+
         const definition =
             definitionEngine.execute();
+
 
         this.recordTrace(
             trace,
             definition
         );
 
+
         const searchEngine =
             new SearchEngine(
                 semanticObject
             );
 
+
         const search =
             searchEngine.execute();
+
 
         this.recordTrace(
             trace,
             search
         );
+
 
         const evidenceEngine =
             new EvidenceEngine({
@@ -163,13 +181,16 @@ class HonestRuntime {
 
             });
 
+
         const evidence =
             evidenceEngine.execute();
+
 
         this.recordTrace(
             trace,
             evidence
         );
+
 
         const correspondenceEngine =
             new CorrespondenceEngine({
@@ -184,13 +205,16 @@ class HonestRuntime {
 
             });
 
+
         const correspondence =
             correspondenceEngine.execute();
+
 
         this.recordTrace(
             trace,
             correspondence
         );
+
 
         const reasoningEngine =
             new ReasoningEngine({
@@ -202,13 +226,16 @@ class HonestRuntime {
 
             });
 
+
         const reasoning =
             reasoningEngine.execute();
+
 
         this.recordTrace(
             trace,
             reasoning
         );
+
 
         const responsibilityEngine =
             new ResponsibilityEngine({
@@ -223,13 +250,16 @@ class HonestRuntime {
 
             });
 
+
         const responsibility =
             responsibilityEngine.execute();
+
 
         this.recordTrace(
             trace,
             responsibility
         );
+
 
         const reconstructionEngine =
             new ReconstructionEngine({
@@ -248,13 +278,16 @@ class HonestRuntime {
 
             });
 
+
         const reconstruction =
             reconstructionEngine.execute();
+
 
         this.recordTrace(
             trace,
             reconstruction
         );
+
 
         const generatorEngine =
             new GeneratorEngine({
@@ -275,16 +308,28 @@ class HonestRuntime {
 
             });
 
+
         const generator =
             generatorEngine.execute();
+
 
         this.recordTrace(
             trace,
             generator
         );
 
+
+        /*
+         * EngineRegistry
+         *
+         * SelfCheckEngine must be included in the registry,
+         * but it must NOT be executed before its runtime inputs
+         * are completely assembled.
+         */
+
         const engineRegistry =
             new EngineRegistry();
+
 
         const engineInstances = {
 
@@ -317,6 +362,7 @@ class HonestRuntime {
 
         };
 
+
         const executionResults = {
 
             recognition,
@@ -331,18 +377,29 @@ class HonestRuntime {
 
         };
 
+
         for (
             const [name, engine]
-            of Object.entries(engineInstances)
+            of Object.entries(
+                engineInstances
+            )
         ) {
 
             engineRegistry.register(
                 name,
                 engine,
-                executionResults[name]
+                executionResults[name] || {}
             );
 
         }
+
+
+        /*
+         * The complete engine execution result set.
+         *
+         * SelfCheckEngine is not yet executed, therefore
+         * its result is intentionally absent at this stage.
+         */
 
         const engines = {
 
@@ -358,16 +415,20 @@ class HonestRuntime {
 
         };
 
+
         const registryValidation =
             engineRegistry.validate();
+
 
         const registryVersionValidation =
             engineRegistry.validateVersions(
                 RuntimeContract.version
             );
 
+
         runtimeResult.runtimeVersion =
             runtimeVersion;
+
 
         runtimeResult.setMetadata({
 
@@ -384,6 +445,7 @@ class HonestRuntime {
             registryVersionValidation
 
         });
+
 
         runtimeResult.recognition =
             recognition;
@@ -424,6 +486,7 @@ class HonestRuntime {
         runtimeResult.engineRegistry =
             engineRegistry;
 
+
         runtimeResult.testimonyChain = {
 
             testimony,
@@ -432,37 +495,62 @@ class HonestRuntime {
 
         };
 
+
         runtimeResult.verificationBoundary = {
 
             evidenceBoundary:
-                reconstruction.reconstruction?.boundaries?.evidence || null,
+                reconstruction
+                    .reconstruction
+                    ?.boundaries
+                    ?.evidence || null,
 
             sourceBoundary:
-                reconstruction.reconstruction?.boundaries?.source || null,
+                reconstruction
+                    .reconstruction
+                    ?.boundaries
+                    ?.source || null,
 
             responsibilityBoundary:
-                reconstruction.reconstruction?.boundaries?.responsibility || null
+                reconstruction
+                    .reconstruction
+                    ?.boundaries
+                    ?.responsibility || null
 
         };
+
 
         runtimeResult.setPipeline(
             pipeline
         );
 
+
         runtimeResult.setTrace(
             trace
         );
 
+
         runtimeResult.identity =
             identity;
+
 
         runtimeResult.contract =
             RuntimeContract;
 
+
         runtimeResult.semanticObject =
             semanticObject;
 
-        const selfCheck =
+
+        /*
+         * SelfCheck receives the COMPLETE runtime state.
+         *
+         * This is the critical v10.3 correction:
+         *
+         * engines must contain the nine already executed
+         * engine results, rather than null.
+         */
+
+        const selfCheckEngine =
             new SelfCheckEngine({
 
                 pipeline,
@@ -481,23 +569,90 @@ class HonestRuntime {
                 runtimeTrace:
                     trace
 
-            }).execute();
+            });
+
+
+        const selfCheck =
+            selfCheckEngine.execute();
+
 
         this.recordTrace(
             trace,
             selfCheck
         );
 
+
+        /*
+         * Register SelfCheck only after execution.
+         *
+         * This preserves the actual execution order while
+         * allowing the final RuntimeResult registry to contain
+         * all ten pipeline engines.
+         */
+
+        engineRegistry.register(
+            "selfCheck",
+            selfCheckEngine,
+            selfCheck
+        );
+
+
+        const completeEngines = {
+
+            ...engines,
+
+            selfCheck
+
+        };
+
+
+        runtimeResult.engineRegistry =
+            engineRegistry;
+
+
         runtimeResult.selfCheck =
             selfCheck;
+
 
         runtimeResult.setTrace(
             trace
         );
 
+
+        runtimeResult.setMetadata({
+
+            contractVersion:
+                RuntimeContract.version,
+
+            runtimeVersion,
+
+            engineCount:
+                engineRegistry.list().length,
+
+            registryValidation:
+                engineRegistry.validate(),
+
+            registryVersionValidation:
+                engineRegistry.validateVersions(
+                    RuntimeContract.version
+                )
+
+        });
+
+
+        /*
+         * Preserve the complete engine result map as a runtime
+         * property for downstream consumers and SelfCheck audit.
+         */
+
+        runtimeResult.engines =
+            completeEngines;
+
+
         return runtimeResult;
 
     }
+
 
     recordTrace(
         trace,
@@ -507,6 +662,7 @@ class HonestRuntime {
         if (!result) {
             return;
         }
+
 
         trace.push({
 
@@ -524,5 +680,6 @@ class HonestRuntime {
     }
 
 }
+
 
 export default HonestRuntime;

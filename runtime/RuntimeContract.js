@@ -1,7 +1,7 @@
-﻿const RuntimeContract = {
+const RuntimeContract = {
 
     version:
-        "10.2",
+        "10.3",
 
     principles: {
 
@@ -89,10 +89,10 @@
             "MoWen Runtime",
 
         runtimeVersion:
-            "10.2",
+            "10.3",
 
         contractVersion:
-            "10.2"
+            "10.3"
 
     },
 
@@ -551,7 +551,9 @@
             "contract",
             "semanticObject",
             "runtimeTrace",
-            "pipeline"
+            "pipeline",
+            "epistemicState",
+            "epistemicBoundary"
 
         ]
 
