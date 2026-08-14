@@ -20,10 +20,18 @@ class DefinitionEngine extends EngineBase {
         const definitions =
             this.buildDefinitions();
 
+        const languageSystem =
+            this.semanticObject.languageSystem || null;
+
         return this.result({
 
             status:
                 "completed",
+
+            languageSystem,
+
+            languageOwnedByRuntime:
+                false,
 
             metadata:
                 this.metadata({
@@ -31,8 +39,7 @@ class DefinitionEngine extends EngineBase {
                     definitionCount:
                         definitions.length,
 
-                    languageSystem:
-                        this.semanticObject.languageSystem || null,
+                    languageSystem,
 
                     languageOwnedByRuntime:
                         false
@@ -43,7 +50,12 @@ class DefinitionEngine extends EngineBase {
 
             result: {
 
-                definitions
+                definitions,
+
+                languageSystem,
+
+                languageOwnedByRuntime:
+                    false
 
             },
 
@@ -94,6 +106,9 @@ class DefinitionEngine extends EngineBase {
 
                 languageSystem:
                     this.semanticObject.languageSystem || null,
+
+                languageOwnedByRuntime:
+                    false,
 
                 fallback:
                     false
