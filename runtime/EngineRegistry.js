@@ -12,7 +12,8 @@ class EngineRegistry {
 
     register(
         name,
-        engine
+        engine,
+        executionResult = {}
     ) {
 
         if (
@@ -25,6 +26,11 @@ class EngineRegistry {
 
         }
 
+        const result =
+            executionResult &&
+            typeof executionResult === "object"
+                ? executionResult
+                : {};
 
         this.engines[name] = {
 
@@ -33,13 +39,19 @@ class EngineRegistry {
             engine,
 
             version:
-                engine.version || "",
+                result.version ||
+                engine.version ||
+                "",
 
             status:
-                engine.status || "",
+                result.status ||
+                engine.status ||
+                "",
 
             nextRuntimeState:
-                engine.nextRuntimeState || "",
+                result.nextRuntimeState ||
+                engine.nextRuntimeState ||
+                "",
 
             capabilities:
                 Array.isArray(engine.capabilities)
@@ -50,7 +62,6 @@ class EngineRegistry {
                 new Date().toISOString()
 
         };
-
 
         return true;
 
@@ -108,7 +119,6 @@ class EngineRegistry {
 
         }
 
-
         const engine =
             item.engine;
 
@@ -122,7 +132,6 @@ class EngineRegistry {
 
         }
 
-
         if (
             typeof engine.execute !==
             "function"
@@ -134,7 +143,6 @@ class EngineRegistry {
 
         }
 
-
         if (
             context !== null &&
             typeof context === "object"
@@ -145,10 +153,8 @@ class EngineRegistry {
 
         }
 
-
         const result =
             engine.execute();
-
 
         if (
             !result ||
@@ -160,7 +166,6 @@ class EngineRegistry {
             );
 
         }
-
 
         return result;
 
@@ -182,7 +187,6 @@ class EngineRegistry {
 
         };
 
-
         for (
             const [name, item]
             of Object.entries(
@@ -194,12 +198,10 @@ class EngineRegistry {
                 item.version ||
                 "unknown";
 
-
             const valid =
                 typeof version === "string" &&
                 version.length > 0 &&
                 version !== "unknown";
-
 
             report.versions[name] = {
 
@@ -209,7 +211,6 @@ class EngineRegistry {
 
             };
 
-
             if (!valid) {
 
                 report.passed =
@@ -218,7 +219,6 @@ class EngineRegistry {
             }
 
         }
-
 
         return report;
 
@@ -231,7 +231,6 @@ class EngineRegistry {
             Object.values(
                 this.engines
             );
-
 
         return {
 
@@ -301,7 +300,6 @@ class EngineRegistry {
             RuntimeContract
                 ?.registryContract || {};
 
-
         const requiredFields =
             Array.isArray(
                 registryContract
@@ -317,7 +315,6 @@ class EngineRegistry {
                     "capabilities"
                 ];
 
-
         const result = {
 
             passed:
@@ -332,7 +329,6 @@ class EngineRegistry {
 
         };
 
-
         for (
             const [name, item]
             of Object.entries(
@@ -342,7 +338,6 @@ class EngineRegistry {
 
             const missing = [];
             const invalid = [];
-
 
             for (
                 const field
@@ -363,7 +358,6 @@ class EngineRegistry {
 
                 }
 
-
                 if (
                     field ===
                         "capabilities" &&
@@ -375,7 +369,6 @@ class EngineRegistry {
                     invalid.push(field);
 
                 }
-
 
                 if (
                     [
@@ -394,13 +387,11 @@ class EngineRegistry {
 
             }
 
-
             const executionValid =
                 item.engine instanceof
                     EngineBase &&
                 typeof item.engine.execute ===
                     "function";
-
 
             if (!executionValid) {
 
@@ -410,11 +401,9 @@ class EngineRegistry {
 
             }
 
-
             const compliant =
                 missing.length === 0 &&
                 invalid.length === 0;
-
 
             result.engines[name] = {
 
@@ -448,7 +437,6 @@ class EngineRegistry {
 
             };
 
-
             if (!compliant) {
 
                 result.passed =
@@ -457,7 +445,6 @@ class EngineRegistry {
             }
 
         }
-
 
         return result;
 

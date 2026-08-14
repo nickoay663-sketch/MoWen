@@ -317,6 +317,20 @@ class HonestRuntime {
 
         };
 
+        const executionResults = {
+
+            recognition,
+            definition,
+            search,
+            evidence,
+            correspondence,
+            reasoning,
+            responsibility,
+            reconstruction,
+            generator
+
+        };
+
         for (
             const [name, engine]
             of Object.entries(engineInstances)
@@ -324,7 +338,8 @@ class HonestRuntime {
 
             engineRegistry.register(
                 name,
-                engine
+                engine,
+                executionResults[name]
             );
 
         }
