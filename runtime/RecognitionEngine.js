@@ -1,74 +1,41 @@
 ﻿import EngineBase from "./EngineBase.js";
-import Dictionary from "./Dictionary.js";
-import LanguageManager from "./LanguageManager.js";
 import UniversalExpression from "./UniversalExpression.js";
-import PredicateRegistry from "./PredicateRegistry.js";
-import UniversalSemanticRecognition from "./UniversalSemanticRecognition.js";
 
 class RecognitionEngine extends EngineBase {
 
-    constructor(expression, language) {
+    constructor(
+        expression,
+        languageSystem = null
+    ) {
 
         super(
             "RecognitionEngine",
-            "20.0",
-            "MoWen Recognition recognizes language-native expression structures, preserves universal semantic structures, and maps verified relations into Universal Expression Model."
+            "22.0",
+            "Recognition receives an externally supplied expression system and preserves the expression without owning a language."
         );
 
-        this.expression = expression || "";
-        this.language = language || "zh-CN";
+        this.expression =
+            typeof expression === "string"
+                ? expression.trim()
+                : String(expression ?? "").trim();
 
-        const resources =
-            LanguageManager.getResources(this.language);
-
-        this.dictionary =
-            resources.dictionary || Dictionary;
-
-        this.fallback =
-            resources.fallback === true;
+        this.languageSystem =
+            languageSystem || null;
 
     }
 
-
     execute() {
 
-        const objects =
-            this.extractObjects();
+        const expression =
+            UniversalExpression.from({
 
-        const concepts =
-            this.extractConcepts();
+                originalExpression:
+                    this.expression,
 
-        const predicate =
-            this.extractPredicate();
+                sourceLanguage:
+                    this.languageSystem
 
-        const structures =
-            this.extractStructures();
-
-        const universalSemanticRecognition =
-            new UniversalSemanticRecognition(
-                this.expression,
-                this.language
-            ).execute();
-
-        const universalStructures =
-            universalSemanticRecognition.structures || [];
-
-        const semanticSignals =
-            universalSemanticRecognition.semanticSignals || [];
-
-        const mergedStructures =
-            this.mergeStructures(
-                structures,
-                universalStructures
-            );
-
-        const universalExpression =
-            this.buildUniversalExpression(
-                objects,
-                concepts,
-                predicate,
-                mergedStructures
-            );
+            });
 
         return this.result({
 
@@ -81,81 +48,58 @@ class RecognitionEngine extends EngineBase {
                     expressionLength:
                         this.expression.length,
 
+                    languageSystem:
+                        this.languageSystem,
+
+                    languageOwnedByRuntime:
+                        false,
+
                     objectCount:
-                        objects.length,
+                        0,
 
                     conceptCount:
-                        concepts.length,
+                        0,
 
                     structureCount:
-                        mergedStructures.length,
-
-                    nativeStructureCount:
-                        structures.length,
-
-                    universalStructureCount:
-                        universalStructures.length,
-
-                    semanticSignalCount:
-                        semanticSignals.length,
-
-                    language:
-                        this.language,
-
-                    fallback:
-                        this.fallback,
-
-                    dictionaryVersion:
-                        this.dictionary.version || null,
-
-                    predicate:
-                        predicate
-                            ? predicate.id
-                            : null
+                        0
 
                 }),
 
-            objects,
+            objects: [],
 
-            concepts,
+            concepts: [],
 
-            predicate,
+            predicate: null,
 
-            structures:
-                mergedStructures,
+            structures: [],
 
-            nativeStructures:
-                structures,
+            nativeStructures: [],
 
-            universalStructures,
+            universalStructures: [],
 
-            semanticSignals,
+            semanticSignals: [],
 
-            universalSemanticRecognition,
-
-            universalExpression,
+            universalExpression:
+                expression,
 
             result: {
 
-                objects,
+                objects: [],
 
-                concepts,
+                concepts: [],
 
-                predicate,
+                predicate: null,
 
-                structures:
-                    mergedStructures,
+                structures: [],
 
-                nativeStructures:
-                    structures,
+                nativeStructures: [],
 
-                universalStructures,
+                universalStructures: [],
 
-                semanticSignals,
+                semanticSignals: [],
 
-                universalSemanticRecognition,
-
-                universalExpression
+                universalExpression:
+                    expression
 
             },
 
@@ -167,23 +111,10 @@ class RecognitionEngine extends EngineBase {
                         "RecognitionEngine",
 
                     action:
-                        "recognize",
+                        "receive-expression",
 
                     status:
                         "completed"
-
-                },
-
-                {
-
-                    engine:
-                        "UniversalSemanticRecognition",
-
-                    action:
-                        "universal-semantic-recognition",
-
-                    status:
-                        universalSemanticRecognition.status
 
                 }
 
@@ -195,786 +126,6 @@ class RecognitionEngine extends EngineBase {
                 "DefinitionEngine"
 
         });
-
-    }
-
-
-    mergeStructures(
-        nativeStructures,
-        universalStructures
-    ) {
-
-        const merged = [];
-
-        for (
-            const structure
-            of nativeStructures || []
-        ) {
-
-            merged.push(
-                structure
-            );
-
-        }
-
-        for (
-            const structure
-            of universalStructures || []
-        ) {
-
-            const exists =
-                merged.some(
-                    existing =>
-                        existing.type ===
-                        structure.type
-                );
-
-            if (!exists) {
-
-                merged.push({
-
-                    type:
-                        structure.type,
-
-                    language:
-                        this.language,
-
-                    source:
-                        "UniversalSemanticRecognition",
-
-                    confidence:
-                        structure.confidence || "structural"
-
-                });
-
-            }
-
-        }
-
-        return merged;
-
-    }
-
-
-    extractObjects() {
-
-        if (!this.expression) {
-            return [];
-        }
-
-        const text =
-            this.normalize(this.expression);
-
-        const objects = [];
-
-        for (
-            const object
-            of this.dictionary.objects || []
-        ) {
-
-            if (
-                this.matchEntry(
-                    text,
-                    object
-                )
-            ) {
-
-                objects.push({
-
-                    id:
-                        object.id,
-
-                    word:
-                        object.word,
-
-                    type:
-                        object.type
-
-                });
-
-            }
-
-        }
-
-        return objects;
-
-    }
-
-
-    extractConcepts() {
-
-        if (!this.expression) {
-            return [];
-        }
-
-        const text =
-            this.normalize(this.expression);
-
-        const concepts = [];
-
-        for (
-            const concept
-            of this.dictionary.concepts || []
-        ) {
-
-            if (
-                this.matchEntry(
-                    text,
-                    concept
-                )
-            ) {
-
-                concepts.push({
-
-                    id:
-                        concept.id,
-
-                    word:
-                        concept.word,
-
-                    category:
-                        concept.category,
-
-                    aliases:
-                        Array.isArray(
-                            concept.aliases
-                        )
-                            ? concept.aliases
-                            : undefined
-
-                });
-
-            }
-
-        }
-
-        return concepts;
-
-    }
-
-
-    extractPredicate() {
-
-        if (!this.expression) {
-            return null;
-        }
-
-        return PredicateRegistry.findByLanguage(
-            this.language,
-            this.expression,
-            (text, form) =>
-                this.containsWord(
-                    this.normalize(text),
-                    form
-                )
-        );
-
-    }
-
-
-    extractStructures() {
-
-        const text =
-            this.normalize(this.expression);
-
-        if (!text) {
-            return [];
-        }
-
-        const rules =
-            this.getStructureRules(
-                this.language
-            );
-
-        const structures = [];
-
-        for (const rule of rules) {
-
-            const markerFound =
-                rule.markers.some(
-                    marker =>
-                        this.containsWord(
-                            text,
-                            marker
-                        )
-                        ||
-                        text.includes(
-                            this.normalize(marker)
-                        )
-                );
-
-            if (!markerFound) {
-                continue;
-            }
-
-            const formFound =
-                !rule.forms
-                ||
-                rule.forms.some(
-                    form =>
-                        text.includes(
-                            this.normalize(form)
-                        )
-                );
-
-            if (!formFound) {
-                continue;
-            }
-
-            const matchedMarkers =
-                rule.markers.filter(
-                    marker =>
-                        this.containsWord(
-                            text,
-                            marker
-                        )
-                        ||
-                        text.includes(
-                            this.normalize(marker)
-                        )
-                );
-
-            structures.push({
-
-                type:
-                    rule.type,
-
-                language:
-                    this.language,
-
-                markers:
-                    matchedMarkers
-
-            });
-
-        }
-
-        return structures;
-
-    }
-
-
-    getStructureRules(language) {
-
-        const rules = {
-
-            "zh-CN": [
-
-                {
-                    type: "purpose",
-                    markers: ["为了"]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "从那时起",
-                        "当",
-                        "同时",
-                        "一年前",
-                        "去年",
-                        "以前",
-                        "在...的时候"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "如果",
-                        "假如",
-                        "要是"
-                    ],
-                    forms: [
-                        "本来",
-                        "早知道",
-                        "不会",
-                        "就不会",
-                        "就不"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "虽然",
-                        "尽管",
-                        "即使"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "据说",
-                        "人们说",
-                        "有人说"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "那些",
-                        "凡是"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "明天",
-                        "将",
-                        "以后"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "让我们",
-                        "一起"
-                    ]
-                }
-
-            ],
-
-            "en-US": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "so that",
-                        "in order that"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "since",
-                        "while",
-                        "when",
-                        "after",
-                        "before",
-                        "a year ago",
-                        "years ago",
-                        "last year",
-                        "a month ago",
-                        "months ago",
-                        "last month",
-                        "a week ago",
-                        "weeks ago",
-                        "last week"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "if"
-                    ],
-                    forms: [
-                        "had",
-                        "would have",
-                        "could have",
-                        "might have"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "although",
-                        "though",
-                        "even though"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "it is said",
-                        "it is known",
-                        "it is believed"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "those who",
-                        "who",
-                        "which",
-                        "that"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "tomorrow",
-                        "will",
-                        "shall"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "let us",
-                        "let's"
-                    ]
-                }
-
-            ],
-
-            "es-ES": [
-
-                {
-                    type: "purpose",
-                    markers: [
-                        "para que"
-                    ]
-                },
-
-                {
-                    type: "temporal",
-                    markers: [
-                        "desde que",
-                        "mientras",
-                        "cuando",
-                        "después de",
-                        "antes de",
-                        "hace un año",
-                        "hace años",
-                        "el año pasado",
-                        "hace un mes",
-                        "hace meses",
-                        "el mes pasado",
-                        "hace una semana",
-                        "hace semanas",
-                        "la semana pasada"
-                    ]
-                },
-
-                {
-                    type: "conditional-counterfactual",
-                    markers: [
-                        "si"
-                    ],
-                    forms: [
-                        "hubiera",
-                        "hubieras",
-                        "hubierais",
-                        "hubieran",
-                        "habría",
-                        "habrías",
-                        "habríais",
-                        "habrían"
-                    ]
-                },
-
-                {
-                    type: "concessive",
-                    markers: [
-                        "aunque"
-                    ]
-                },
-
-                {
-                    type: "impersonal",
-                    markers: [
-                        "se dice",
-                        "se sabe",
-                        "se cree"
-                    ]
-                },
-
-                {
-                    type: "relative",
-                    markers: [
-                        "quienes",
-                        "que"
-                    ]
-                },
-
-                {
-                    type: "future",
-                    markers: [
-                        "mañana",
-                        "futuro"
-                    ]
-                },
-
-                {
-                    type: "imperative-inclusive",
-                    markers: [
-                        "démoslo",
-                        "disfrutémoslo",
-                        "vamos a"
-                    ]
-                }
-
-            ]
-
-        };
-
-        return rules[language] || [];
-
-    }
-
-
-    buildUniversalExpression(
-        objects,
-        concepts,
-        predicate,
-        structures
-    ) {
-
-        let subject = null;
-        let object = null;
-
-        if (objects.length > 0) {
-            subject = objects[0].id;
-        }
-
-        if (
-            predicate &&
-            predicate.id === "identity"
-        ) {
-
-            if (
-                !subject &&
-                this.isFirstPersonIdentity()
-            ) {
-
-                subject = "object.self";
-
-            }
-
-            if (concepts.length > 0) {
-                object = concepts[0].id;
-            }
-
-        }
-
-        const condition =
-            structures.some(
-                structure =>
-                    structure.type ===
-                    "conditional-counterfactual"
-            )
-                ? {
-                    type: "counterfactual"
-                }
-                : null;
-
-        return UniversalExpression.from({
-
-            subject,
-
-            predicate:
-                predicate
-                    ? predicate.id
-                    : null,
-
-            object,
-
-            attributes: [],
-
-            relation:
-                structures,
-
-            modality: null,
-
-            quantity: null,
-
-            time:
-                structures.some(
-                    structure =>
-                        structure.type === "temporal"
-                        ||
-                        structure.type === "future"
-                )
-                    ? {
-                        detected: true
-                    }
-                    : null,
-
-            condition,
-
-            originalExpression:
-                this.expression,
-
-            sourceLanguage:
-                this.language
-
-        });
-
-    }
-
-
-    isFirstPersonIdentity() {
-
-        const language =
-            String(
-                this.language || ""
-            ).trim();
-
-        const text =
-            this.normalize(this.expression);
-
-        const firstPersonForms = {
-
-            "zh-CN": [
-                "我"
-            ],
-
-            "en-US": [
-                "i",
-                "me",
-                "my",
-                "mine"
-            ],
-
-            "es-ES": [
-                "yo",
-                "soy",
-                "me"
-            ],
-
-            "fr-FR": [
-                "je",
-                "suis",
-                "moi"
-            ],
-
-            "de-DE": [
-                "ich",
-                "bin",
-                "mir",
-                "mich"
-            ],
-
-            "it-IT": [
-                "io",
-                "sono",
-                "me"
-            ],
-
-            "pt-PT": [
-                "eu",
-                "sou",
-                "me"
-            ]
-
-        };
-
-        const forms =
-            firstPersonForms[language] || [];
-
-        for (const form of forms) {
-
-            if (
-                this.containsWord(
-                    text,
-                    form
-                )
-            ) {
-
-                return true;
-
-            }
-
-        }
-
-        return false;
-
-    }
-
-
-    matchEntry(
-        text,
-        entry
-    ) {
-
-        const aliases =
-            Array.isArray(entry.aliases)
-                ? entry.aliases
-                : [entry.word];
-
-        for (const alias of aliases) {
-
-            if (
-                this.containsWord(
-                    text,
-                    alias
-                )
-            ) {
-
-                return true;
-
-            }
-
-        }
-
-        return false;
-
-    }
-
-
-    normalize(text) {
-
-        return String(text || "")
-            .toLowerCase()
-            .replace(
-                /[.,!?;:()[\]{}"'“”‘’、！？；：，（）【】《》]/g,
-                " "
-            )
-            .replace(
-                /\s+/g,
-                " "
-            )
-            .trim();
-
-    }
-
-
-    containsWord(
-        text,
-        word
-    ) {
-
-        const normalizedWord =
-            this.normalize(word);
-
-        if (!normalizedWord) {
-            return false;
-        }
-
-        if (
-            /[\u4e00-\u9fff]/.test(
-                normalizedWord
-            )
-        ) {
-
-            return text.includes(
-                normalizedWord
-            );
-
-        }
-
-        const escaped =
-            normalizedWord.replace(
-                /[.*+?^${}()|[\]\\]/g,
-                "\\$&"
-            );
-
-        return new RegExp(
-            `(?:^|\\s)${escaped}(?:\\s|$)`,
-            "i"
-        ).test(text);
 
     }
 

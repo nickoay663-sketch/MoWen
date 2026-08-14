@@ -1,4 +1,4 @@
-class UniversalExpression {
+﻿class UniversalExpression {
 
     constructor(data = {}) {
 

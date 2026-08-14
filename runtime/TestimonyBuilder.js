@@ -25,9 +25,6 @@ class TestimonyBuilder {
 
         if (universalExpression) {
 
-            testimony.language =
-                universalExpression.sourceLanguage;
-
             testimony.expressionType =
                 "UniversalExpression";
 

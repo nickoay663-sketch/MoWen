@@ -24,13 +24,14 @@ class HonestRuntime {
     ) {
 
         this.expression =
-            expression || "";
+            typeof expression === "string"
+                ? expression.trim()
+                : String(expression ?? "").trim();
 
         this.options =
             options || {};
 
     }
-
 
     run() {
 
@@ -42,87 +43,73 @@ class HonestRuntime {
         const runtimeVersion =
             RuntimeContract.identity.runtimeVersion;
 
-
         const pipeline = [
 
             "RecognitionEngine",
-
             "DefinitionEngine",
-
             "SearchEngine",
-
             "EvidenceEngine",
-
             "CorrespondenceEngine",
-
             "ReasoningEngine",
-
             "ResponsibilityEngine",
-
             "ReconstructionEngine",
-
             "GeneratorEngine",
-
             "SelfCheckEngine"
 
         ];
 
-
         const identity =
             new MoWenIdentity().run();
-
 
         const testimony =
             new TestimonyBuilder(
                 this.expression
             ).run();
 
-
         const testimonyValidation =
             new TestimonyValidator(
                 testimony
             ).run();
 
+        const languageSystem =
+            this.options.languageSystem ??
+            this.options.language ??
+            null;
 
         const languageAdapter =
             new LanguageAdapter(
-                this.options.language || "unknown"
+                languageSystem
             );
 
-
-        const language =
-            languageAdapter.adapt(
+        const languageConnection =
+            languageAdapter.connect(
                 this.expression
             );
-
 
         const recognitionEngine =
             new RecognitionEngine(
                 this.expression,
-                language.language
+                languageConnection.languageSystem
             );
-
 
         const recognition =
             recognitionEngine.execute();
-
 
         this.recordTrace(
             trace,
             recognition
         );
 
-
         const semanticObject = {
 
             originalContent:
                 this.expression,
 
-            language:
-                language.language,
+            languageSystem:
+                languageConnection.languageSystem,
 
             languageAdapter:
-                language,
+                languageConnection,
 
             objects:
                 recognition.objects || [],
@@ -141,38 +128,31 @@ class HonestRuntime {
 
         };
 
-
         const definitionEngine =
             new DefinitionEngine(
                 semanticObject
             );
 
-
         const definition =
             definitionEngine.execute();
-
 
         this.recordTrace(
             trace,
             definition
         );
 
-
         const searchEngine =
             new SearchEngine(
                 semanticObject
             );
 
-
         const search =
             searchEngine.execute();
-
 
         this.recordTrace(
             trace,
             search
         );
-
 
         const evidenceEngine =
             new EvidenceEngine({
@@ -183,16 +163,13 @@ class HonestRuntime {
 
             });
 
-
         const evidence =
             evidenceEngine.execute();
-
 
         this.recordTrace(
             trace,
             evidence
         );
-
 
         const correspondenceEngine =
             new CorrespondenceEngine({
@@ -207,16 +184,13 @@ class HonestRuntime {
 
             });
 
-
         const correspondence =
             correspondenceEngine.execute();
-
 
         this.recordTrace(
             trace,
             correspondence
         );
-
 
         const reasoningEngine =
             new ReasoningEngine({
@@ -228,16 +202,13 @@ class HonestRuntime {
 
             });
 
-
         const reasoning =
             reasoningEngine.execute();
-
 
         this.recordTrace(
             trace,
             reasoning
         );
-
 
         const responsibilityEngine =
             new ResponsibilityEngine({
@@ -252,16 +223,13 @@ class HonestRuntime {
 
             });
 
-
         const responsibility =
             responsibilityEngine.execute();
-
 
         this.recordTrace(
             trace,
             responsibility
         );
-
 
         const reconstructionEngine =
             new ReconstructionEngine({
@@ -280,16 +248,13 @@ class HonestRuntime {
 
             });
 
-
         const reconstruction =
             reconstructionEngine.execute();
-
 
         this.recordTrace(
             trace,
             reconstruction
         );
-
 
         const generatorEngine =
             new GeneratorEngine({
@@ -310,20 +275,16 @@ class HonestRuntime {
 
             });
 
-
         const generator =
             generatorEngine.execute();
-
 
         this.recordTrace(
             trace,
             generator
         );
 
-
         const engineRegistry =
             new EngineRegistry();
-
 
         const engineInstances = {
 
@@ -356,7 +317,6 @@ class HonestRuntime {
 
         };
 
-
         for (
             const [name, engine]
             of Object.entries(engineInstances)
@@ -369,51 +329,37 @@ class HonestRuntime {
 
         }
 
-
         const engines = {
 
             recognition,
-
             definition,
-
             search,
-
             evidence,
-
             correspondence,
-
             reasoning,
-
             responsibility,
-
             reconstruction,
-
             generator
 
         };
 
-
         const registryValidation =
             engineRegistry.validate();
-
 
         const registryVersionValidation =
             engineRegistry.validateVersions(
                 RuntimeContract.version
             );
 
-
         runtimeResult.runtimeVersion =
             runtimeVersion;
-
 
         runtimeResult.setMetadata({
 
             contractVersion:
                 RuntimeContract.version,
 
-            runtimeVersion:
-                runtimeVersion,
+            runtimeVersion,
 
             engineCount:
                 engineRegistry.list().length,
@@ -424,69 +370,52 @@ class HonestRuntime {
 
         });
 
-
         runtimeResult.recognition =
             recognition;
-
 
         runtimeResult.definition =
             definition;
 
-
         runtimeResult.testimony =
             testimony;
-
 
         runtimeResult.testimonyValidation =
             testimonyValidation;
 
-
         runtimeResult.search =
             search;
-
 
         runtimeResult.evidence =
             evidence;
 
-
         runtimeResult.correspondence =
             correspondence;
-
 
         runtimeResult.reasoning =
             reasoning;
 
-
         runtimeResult.responsibility =
             responsibility;
-
 
         runtimeResult.responsibilityModel =
             responsibility.responsibilities || [];
 
-
         runtimeResult.reconstruction =
             reconstruction;
-
 
         runtimeResult.generator =
             generator;
 
-
         runtimeResult.engineRegistry =
             engineRegistry;
-
 
         runtimeResult.testimonyChain = {
 
             testimony,
-
             testimonyValidation,
-
             responsibility
 
         };
-
 
         runtimeResult.verificationBoundary = {
 
@@ -501,28 +430,22 @@ class HonestRuntime {
 
         };
 
-
         runtimeResult.setPipeline(
             pipeline
         );
-
 
         runtimeResult.setTrace(
             trace
         );
 
-
         runtimeResult.identity =
             identity;
-
 
         runtimeResult.contract =
             RuntimeContract;
 
-
         runtimeResult.semanticObject =
             semanticObject;
-
 
         const selfCheck =
             new SelfCheckEngine({
@@ -545,33 +468,30 @@ class HonestRuntime {
 
             }).execute();
 
-
         this.recordTrace(
             trace,
             selfCheck
         );
 
-
         runtimeResult.selfCheck =
             selfCheck;
-
 
         runtimeResult.setTrace(
             trace
         );
 
-
         return runtimeResult;
 
     }
 
-
-    recordTrace(trace, result) {
+    recordTrace(
+        trace,
+        result
+    ) {
 
         if (!result) {
             return;
         }
-
 
         trace.push({
 
@@ -589,6 +509,5 @@ class HonestRuntime {
     }
 
 }
-
 
 export default HonestRuntime;

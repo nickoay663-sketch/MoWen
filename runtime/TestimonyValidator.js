@@ -1,4 +1,4 @@
-class TestimonyValidator {
+﻿class TestimonyValidator {
 
     constructor(testimony) {
 
@@ -10,16 +10,13 @@ class TestimonyValidator {
     run() {
 
         const passed =
-
-            this.testimony
-
-            &&
-
-            this.testimony.type === "Testimony"
-
-            &&
-
-            typeof this.testimony.content === "string";
+            !!(
+                this.testimony
+                &&
+                this.testimony.type === "Testimony"
+                &&
+                typeof this.testimony.content === "string"
+            );
 
         return {
 
@@ -30,20 +27,11 @@ class TestimonyValidator {
                 "1.0",
 
             status:
-
                 passed
-
                     ? "Passed"
-
                     : "Failed",
 
-            passed,
-
-            result: {
-
-                passed
-
-            }
+            passed
 
         };
 

@@ -17,7 +17,9 @@ class Testimony {
             input;
 
         this.content =
-            input;
+            input instanceof UniversalExpression
+                ? input.originalExpression
+                : input;
 
         this.language =
             null;
@@ -30,9 +32,6 @@ class Testimony {
 
         this.concepts =
             [];
-
-        this.metadata =
-            {};
 
         this.universalExpression =
             input instanceof UniversalExpression

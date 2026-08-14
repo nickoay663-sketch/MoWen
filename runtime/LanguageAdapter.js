@@ -1,57 +1,29 @@
-﻿import LanguageDetector from "./LanguageDetector.js";
+﻿class LanguageAdapter {
 
-class LanguageAdapter {
+    constructor(languageSystem = null) {
 
-    constructor(language = "unknown") {
-
-        this.language =
-            typeof language === "string" &&
-            language.trim()
-                ? language.trim()
-                : "unknown";
+        this.languageSystem =
+            languageSystem || null;
 
     }
 
-
-    adapt(expression) {
+    connect(expression) {
 
         const text =
             typeof expression === "string"
                 ? expression.trim()
                 : String(expression ?? "").trim();
 
-        const detected =
-            new LanguageDetector(text).run();
-
-        const language =
-            this.language !== "unknown"
-                ? this.language
-                : detected.language;
-
         return {
-
-            language,
-
-            languageKnown:
-                language !== "unknown",
-
-            detectedLanguage:
-                detected.language,
-
-            detectedLanguages:
-                detected.languages,
-
-            mixed:
-                detected.mixed,
-
-            confidence:
-                detected.confidence,
 
             expression:
                 text,
 
-            adapter:
-                "LanguageAdapter",
+            languageSystem:
+                this.languageSystem,
+
+            connected:
+                this.languageSystem !== null,
 
             status:
                 "connected"
@@ -60,14 +32,12 @@ class LanguageAdapter {
 
     }
 
+    adapt(expression) {
 
-    connect(expression) {
-
-        return this.adapt(expression);
+        return this.connect(expression);
 
     }
 
 }
-
 
 export default LanguageAdapter;

@@ -296,7 +296,7 @@ class EngineBase {
         const valid =
             supported === true &&
             verificationStatus ===
-                "SUPPORTED" &&
+            "SUPPORTED" &&
             verifiedEvidenceCount > 0 &&
             correspondenceSupported === true;
 
