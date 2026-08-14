@@ -1,68 +1,100 @@
-const RuntimeContract = {
+﻿const RuntimeContract = {
 
     version:
         "10.2",
-
 
     principles: {
 
         definition:
             "没有定义，就没有推理。",
 
-
         runtime:
             "没有 Contract，就没有 Runtime。",
-
 
         registry:
             "没有注册，就没有可信运行。",
 
-
         result:
             "没有 RuntimeResult，就没有统一运行结果。",
-
 
         epistemicBoundary:
             "搜索可以扩大所见，但不能扩大所证。",
 
-
         evidenceBoundary:
             "所见信息不得自动成为已验证证据。",
-
 
         correspondenceBoundary:
             "证据存在不得自动等于证据支持表达。",
 
-
         reasoningBoundary:
             "推理不得超过已经验证的对应关系和证据支持范围。",
-
 
         responsibilityBoundary:
             "责任要求不得超过当前责任链能够承担的范围。",
 
-
         ignoranceBoundary:
-            "证据不足时必须允许 UNKNOWN，不得将未知强制解释为错误。"
+            "证据不足时必须允许 UNKNOWN，不得将未知强制解释为错误。",
+
+        externalLanguageBoundary:
+            "语言系统属于外部表达环境，莫问只连接、携带并运行，不拥有、不制造、不替代。"
 
     },
 
+    externalLanguageContract: {
+
+        owner:
+            "external",
+
+        runtimeRole:
+            "responsibility-runtime",
+
+        allowedFunctions: [
+
+            "supply",
+            "connect",
+            "preserve",
+            "carry"
+
+        ],
+
+        prohibitedFunctions: [
+
+            "runtime-ownership",
+            "runtime-creation",
+            "runtime-replacement",
+            "unverified-language-construction"
+
+        ],
+
+        identityPreservation:
+            true,
+
+        sameObjectRequired:
+            true,
+
+        runtimeMustNotOwn:
+            true,
+
+        runtimeMustNotCreate:
+            true,
+
+        runtimeMustNotInterpret:
+            true
+
+    },
 
     identity: {
 
         name:
             "MoWen Runtime",
 
-
         runtimeVersion:
             "10.2",
-
 
         contractVersion:
             "10.2"
 
     },
-
 
     epistemicStates: {
 
@@ -95,64 +127,49 @@ const RuntimeContract = {
 
     },
 
-
     epistemicRules: {
 
         discoveredIsNotVerified:
             true,
 
-
         verifiedIsNotAutomaticallySupported:
             true,
-
 
         supportRequiresVerifiedEvidence:
             true,
 
-
         supportRequiresCorrespondence:
             true,
-
 
         contradictionRequiresSufficientCounterEvidence:
             true,
 
-
         insufficientEvidenceAllowsUnknown:
             true,
-
 
         unknownIsNotFalse:
             true,
 
-
         unknownIsNotTrue:
             true,
-
 
         searchCannotExpandProof:
             true,
 
-
         searchCannotCreateEvidence:
             true,
 
-
         reasoningCannotExceedEvidence:
             true,
-
 
         responsibilityCannotExceedSupport:
             true
 
     },
 
-
     boundaryTransitions: {
 
-        search:
-
-        {
+        search: {
 
             input:
                 "Expression",
@@ -174,10 +191,7 @@ const RuntimeContract = {
 
         },
 
-
-        evidence:
-
-        {
+        evidence: {
 
             input:
                 "DISCOVERED",
@@ -196,10 +210,7 @@ const RuntimeContract = {
 
         },
 
-
-        correspondence:
-
-        {
+        correspondence: {
 
             requires:
                 [
@@ -217,10 +228,7 @@ const RuntimeContract = {
 
         },
 
-
-        reasoning:
-
-        {
+        reasoning: {
 
             requires:
                 [
@@ -239,10 +247,7 @@ const RuntimeContract = {
 
         },
 
-
-        responsibility:
-
-        {
+        responsibility: {
 
             requires:
                 "reasoning-result",
@@ -266,146 +271,99 @@ const RuntimeContract = {
 
     },
 
-
     domainKnowledgeContract: {
 
         purpose:
             "为专业领域提供相关定义、规则、标准、关系和来源，不直接替 Runtime 制造结论。",
 
-
         allowedFunctions: [
-
             "definition",
-
             "terminology",
-
             "rule",
-
             "standard",
-
             "relationship",
-
             "source-discovery",
-
             "domain-context"
-
         ],
 
-
         prohibitedFunctions: [
-
             "automatic-certainty",
-
             "automatic-support",
-
             "automatic-conclusion",
-
             "automatic-contradiction"
-
         ]
 
     },
-
 
     pipeline: {
 
         input:
             "Expression",
 
-
         output:
             "RuntimeResult",
-
 
         engines: [
 
             "RecognitionEngine",
-
             "DefinitionEngine",
-
             "SearchEngine",
-
             "EvidenceEngine",
-
             "CorrespondenceEngine",
-
             "ReasoningEngine",
-
             "ResponsibilityEngine",
-
             "ReconstructionEngine",
-
             "GeneratorEngine",
-
             "SelfCheckEngine"
 
         ]
 
     },
 
-
     engineContract: {
 
         version:
             "2.1",
 
-
         requiredFields: [
 
             "engine",
-
             "version",
-
             "status",
-
             "result",
-
             "trace",
-
             "questions",
-
             "nextRuntimeState",
-
             "principle",
-
             "metadata"
 
         ],
-
 
         fieldTypes: {
 
             engine:
                 "string",
 
-
             version:
                 "string",
-
 
             status:
                 "string",
 
-
             principle:
                 "string",
-
 
             metadata:
                 "object",
 
-
             result:
                 "object",
-
 
             trace:
                 "array",
 
-
             questions:
                 "array",
-
 
             nextRuntimeState:
                 "string"
@@ -414,25 +372,18 @@ const RuntimeContract = {
 
     },
 
-
     searchContract: {
 
         outputState:
             "DISCOVERED",
 
-
         requiredFields: [
-
             "source",
-
             "content"
-
         ],
-
 
         verificationStatus:
             "UNVERIFIED",
-
 
         rules: {
 
@@ -452,32 +403,21 @@ const RuntimeContract = {
 
     },
 
-
     evidenceContract: {
 
         allowedStates: [
-
             "UNVERIFIED",
-
             "VERIFIED"
-
         ],
-
 
         requiredFields: [
-
             "source",
-
             "content",
-
             "verificationStatus"
-
         ],
-
 
         verifiedRequires:
             "explicit-verification",
-
 
         rules: {
 
@@ -494,28 +434,18 @@ const RuntimeContract = {
 
     },
 
-
     correspondenceContract: {
 
         requiredInputs: [
-
             "definition",
-
             "verifiedEvidence"
-
         ],
-
 
         requiredFields: [
-
             "matched",
-
             "supported",
-
             "verificationStatus"
-
         ],
-
 
         rules: {
 
@@ -532,23 +462,15 @@ const RuntimeContract = {
 
     },
 
-
     reasoningContract: {
 
         allowedStates: [
-
             "SUPPORTED",
-
             "CONTRADICTED",
-
             "UNKNOWN",
-
             "PARTIAL",
-
             "UNRESOLVED"
-
         ],
-
 
         rules: {
 
@@ -571,23 +493,15 @@ const RuntimeContract = {
 
     },
 
-
     responsibilityContract: {
 
         allowedStates: [
-
             "SUPPORTED",
-
             "CONTRADICTED",
-
             "UNKNOWN",
-
             "PARTIAL",
-
             "UNRESOLVED"
-
         ],
-
 
         rules: {
 
@@ -610,109 +524,69 @@ const RuntimeContract = {
 
     },
 
-
     runtimeResultContract: {
 
         requiredFields: [
 
             "runtimeVersion",
-
             "generatedAt",
-
             "metadata",
-
             "recognition",
-
             "definition",
-
             "testimony",
-
             "testimonyValidation",
-
             "search",
-
             "evidence",
-
             "correspondence",
-
             "reasoning",
-
             "responsibility",
-
             "responsibilityModel",
-
             "reconstruction",
-
             "generator",
-
             "selfCheck",
-
             "engineRegistry",
-
             "testimonyChain",
-
             "verificationBoundary",
-
             "identity",
-
             "contract",
-
             "semanticObject",
-
             "runtimeTrace",
-
             "pipeline"
 
         ]
 
     },
 
-
     metadataContract: {
 
         requiredFields: [
-
             "runtimeVersion",
-
             "contractVersion",
-
             "engineCount",
-
             "generatedAt"
-
         ]
 
     },
-
 
     registryContract: {
 
         required:
             true,
 
-
         requiredMetadataFields: [
-
             "name",
-
             "version",
-
             "status",
-
             "nextRuntimeState",
-
             "capabilities"
-
         ]
 
     },
-
 
     executionContract: {
 
         required:
             true,
-
 
         principle:
             "Every Engine must provide a unified execution capability."
@@ -720,6 +594,5 @@ const RuntimeContract = {
     }
 
 };
-
 
 export default RuntimeContract;
