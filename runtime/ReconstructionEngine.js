@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class ReconstructionEngine extends EngineBase {
 
@@ -7,49 +7,40 @@ class ReconstructionEngine extends EngineBase {
         super(
             "ReconstructionEngine",
             "7.0",
-         "莫问重构责任链结构，不增加未经验证的信息。"
+            "莫问重构责任链结构，不增加未经验证的信息。"
         );
 
-        this.runtimeObject = runtimeObject || {};
+        this.runtimeObject =
+            runtimeObject || {};
 
     }
 
 
     execute() {
 
-
         const metadata =
             this.buildMetadata();
-
 
         const reconstruction =
             this.buildReconstruction();
 
-
         return {
-
 
             engine:
                 this.engine,
 
-
             version:
                 this.version,
-
 
             semanticObject:
                 this.runtimeObject.semanticObject,
 
-
             principle:
                 this.principle,
 
-
             metadata,
 
-
             reconstruction,
-
 
             result: {
 
@@ -59,34 +50,22 @@ class ReconstructionEngine extends EngineBase {
 
             },
 
-
             trace:
                 this.runtimeObject.runtimeTrace || [],
-
 
             nextRuntimeState:
                 "GeneratorEngine",
 
-
             status:
-
                 reconstruction.responsibilityCount > 0
-
                     ? "reconstruction-evaluated"
-
                     : "need-reconstruction",
 
-
             questions:
-
                 reconstruction.responsibilityCount > 0
-
                     ? []
-
                     : [
-
                         "当前责任链是否完整？"
-
                     ]
 
         };
@@ -94,37 +73,25 @@ class ReconstructionEngine extends EngineBase {
     }
 
 
-
-
     buildMetadata() {
 
-
         return {
-
 
             reconstructedAt:
                 new Date().toISOString(),
 
-
             runtimeVersion:
                 this.runtimeObject.contract?.identity?.runtimeVersion || "",
-
 
             contractVersion:
                 this.runtimeObject.contract?.version || "",
 
-
             engineCount:
-
                 Object.keys(
-
                     this.runtimeObject.engines || {}
-
                 ).length,
 
-
             traceCount:
-
                 (this.runtimeObject.runtimeTrace || []).length
 
         };
@@ -132,29 +99,18 @@ class ReconstructionEngine extends EngineBase {
     }
 
 
-
-
     buildReconstruction() {
 
-
         const responsibilities =
-
             this.runtimeObject.responsibility?.responsibilities || [];
 
-
         const sources =
-
             responsibilities.flatMap(
-
                 item => item.sources || []
-
             );
 
-
         const evidenceChain =
-
             responsibilities.map(
-
                 item => ({
 
                     definition:
@@ -167,92 +123,64 @@ class ReconstructionEngine extends EngineBase {
                         item.sourceCount || 0
 
                 })
-
             );
 
+        const language =
+            this.runtimeObject.semanticObject?.languageSystem ||
+            this.runtimeObject.semanticObject?.language ||
+            null;
 
         return {
 
-
             originalExpression:
-
                 this.runtimeObject.semanticObject?.originalContent || "",
-
 
             reconstructedExpression:
-
                 this.runtimeObject.semanticObject?.originalContent || "",
 
-
-            language:
-
-                this.runtimeObject.semanticObject?.language || null,
-
+            language,
 
             responsibilityChain:
-
                 responsibilities,
 
-
             responsibilityCount:
-
                 responsibilities.length,
-
 
             evidenceChain,
 
-
             sources,
 
-
             sourceCount:
-
                 sources.length,
 
-
             boundaries: {
-
 
                 evidence:
                     "preserved",
 
-
                 source:
                     "preserved",
-
 
                 responsibility:
                     "preserved"
 
             },
 
-
             expansion:
-
                 false,
 
-
             reconstructionType:
-
                 "responsibility-chain-reconstruction",
 
-
             verificationStatus:
-
                 responsibilities.length > 0
-
                     ? "evaluated"
-
                     : "missing-responsibility",
 
-
             runtimeTrace:
-
                 this.runtimeObject.runtimeTrace || [],
 
-
             engineRegistry:
-
                 this.runtimeObject.engineRegistry?.describe?.() || []
 
         };
