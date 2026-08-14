@@ -1,5 +1,6 @@
 ﻿import UniversalExpression from "./UniversalExpression.js";
 
+
 class Testimony {
 
     constructor(input = null) {
@@ -21,8 +22,18 @@ class Testimony {
                 ? input.originalExpression
                 : input;
 
+        /*
+         * The language system belongs to the
+         * external expression environment.
+         *
+         * Testimony preserves the supplied system.
+         * MoWen does not own or interpret it.
+         */
+
         this.language =
-            null;
+            input instanceof UniversalExpression
+                ? input.sourceLanguage
+                : null;
 
         this.expressionType =
             null;
@@ -41,5 +52,6 @@ class Testimony {
     }
 
 }
+
 
 export default Testimony;

@@ -125,9 +125,18 @@ class ReconstructionEngine extends EngineBase {
                 })
             );
 
+        /*
+         * The language system is supplied externally.
+         *
+         * MoWen preserves the exact supplied object
+         * through the runtime boundary.
+         *
+         * MoWen does not detect, construct,
+         * interpret, or own the language system.
+         */
+
         const language =
-            this.runtimeObject.semanticObject?.languageSystem ||
-            this.runtimeObject.semanticObject?.language ||
+            this.runtimeObject.semanticObject?.languageSystem ??
             null;
 
         return {
@@ -162,7 +171,10 @@ class ReconstructionEngine extends EngineBase {
                     "preserved",
 
                 responsibility:
-                    "preserved"
+                    "preserved",
+
+                language:
+                    "externally-supplied-and-preserved"
 
             },
 

@@ -4,7 +4,7 @@
 
         this.languageSystem =
             languageSystem !== null &&
-            languageSystem !== undefined
+                languageSystem !== undefined
                 ? languageSystem
                 : null;
 

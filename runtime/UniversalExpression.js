@@ -38,12 +38,22 @@
                 ? data.originalExpression
                 : "";
 
+        /*
+         * External language system.
+         *
+         * MoWen does not identify,
+         * interpret, construct, or own it.
+         *
+         * The supplied system is preserved
+         * as-is across the runtime boundary.
+         */
+
         this.sourceLanguage =
-            typeof data.sourceLanguage === "string"
-                ? data.sourceLanguage
-                : "unknown";
+            data.sourceLanguage ??
+            null;
 
     }
+
 
     static from(data = {}) {
 
@@ -52,6 +62,7 @@
         );
 
     }
+
 
     toJSON() {
 
@@ -94,11 +105,13 @@
 
     }
 
+
     hasSubject() {
 
         return this.subject !== null;
 
     }
+
 
     hasPredicate() {
 
@@ -106,11 +119,13 @@
 
     }
 
+
     hasObject() {
 
         return this.object !== null;
 
     }
+
 
     hasOriginalExpression() {
 
@@ -120,13 +135,16 @@
 
     }
 
+
     hasSourceLanguage() {
 
         return (
-            this.sourceLanguage !== "unknown"
+            this.sourceLanguage !== null &&
+            this.sourceLanguage !== undefined
         );
 
     }
+
 
     isComplete() {
 
@@ -136,6 +154,7 @@
         );
 
     }
+
 
     isEmpty() {
 
@@ -154,6 +173,7 @@
 
     }
 
+
     clone() {
 
         return UniversalExpression.from(
@@ -161,6 +181,7 @@
         );
 
     }
+
 
     withOriginalExpression(
         expression
@@ -179,8 +200,9 @@
 
     }
 
+
     withSourceLanguage(
-        language
+        languageSystem
     ) {
 
         return UniversalExpression.from({
@@ -188,17 +210,17 @@
             ...this.toJSON(),
 
             sourceLanguage:
-                typeof language === "string"
-                    ? language
-                    : "unknown"
+                languageSystem ??
+                null
 
         });
 
     }
 
+
     static empty(
         originalExpression = "",
-        sourceLanguage = "unknown"
+        sourceLanguage = null
     ) {
 
         return new UniversalExpression({
@@ -212,5 +234,6 @@
     }
 
 }
+
 
 export default UniversalExpression;

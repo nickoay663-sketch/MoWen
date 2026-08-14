@@ -20,7 +20,7 @@ class TestimonyBuilder {
         const testimony =
             new Testimony(
                 universalExpression
-                    || this.input
+                || this.input
             );
 
         if (universalExpression) {
