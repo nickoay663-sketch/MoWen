@@ -3,7 +3,7 @@
     constructor() {
 
         this.version =
-            "1.0";
+            "1.2";
 
         this.name =
             "MoWen Core Governance";
@@ -27,7 +27,8 @@
                 "Epistemic boundary preservation",
                 "External language boundary preservation",
                 "Runtime contract enforcement",
-                "SelfCheck enforcement"
+                "SelfCheck enforcement",
+                "Execution integrity preservation"
 
             ]
 
@@ -60,6 +61,9 @@
                 true,
 
             noSelfCheckBypass:
+                true,
+
+            noExecutionIntegrityBypass:
                 true
 
         };
@@ -82,6 +86,39 @@
                 true
 
         };
+
+        this.executionIntegrity = {
+
+            requiredMethods: [
+
+                "validateCore",
+                "validateBoundaries",
+                "validateExtensions",
+                "validateExecutionIntegrity",
+                "enforce"
+
+            ],
+
+            immutableMethodNames:
+                true,
+
+            executionIntegrityRequired:
+                true
+
+        };
+
+        this.executionIntegrity.methodReferences = {};
+
+        for (
+            const methodName
+            of this.executionIntegrity.requiredMethods
+        ) {
+
+            this.executionIntegrity.methodReferences[
+                methodName
+            ] = this[methodName];
+
+        }
 
     }
 
@@ -106,7 +143,20 @@
                 this.coreBoundaries,
 
             extensionPrinciples:
-                this.extensionPrinciples
+                this.extensionPrinciples,
+
+            executionIntegrity: {
+
+                requiredMethods:
+                    this.executionIntegrity.requiredMethods,
+
+                immutableMethodNames:
+                    this.executionIntegrity.immutableMethodNames,
+
+                executionIntegrityRequired:
+                    this.executionIntegrity.executionIntegrityRequired
+
+            }
 
         };
 
@@ -123,7 +173,8 @@
             "Epistemic boundary preservation",
             "External language boundary preservation",
             "Runtime contract enforcement",
-            "SelfCheck enforcement"
+            "SelfCheck enforcement",
+            "Execution integrity preservation"
 
         ];
 
@@ -224,21 +275,207 @@
     }
 
 
+    validateExecutionIntegrity() {
+
+        const invalid = [];
+
+        const requiredMethods =
+            this.executionIntegrity
+                ?.requiredMethods || [];
+
+        const methodReferences =
+            this.executionIntegrity
+                ?.methodReferences || {};
+
+        for (
+            const methodName
+            of requiredMethods
+        ) {
+
+            const currentMethod =
+                this[methodName];
+
+            const originalMethod =
+                methodReferences[methodName];
+
+            if (
+                typeof currentMethod !== "function"
+            ) {
+
+                invalid.push(
+                    methodName
+                );
+
+                continue;
+
+            }
+
+            if (
+                typeof originalMethod !== "function"
+            ) {
+
+                invalid.push(
+                    `${methodName}:original-reference-missing`
+                );
+
+                continue;
+
+            }
+
+            if (
+                currentMethod !== originalMethod
+            ) {
+
+                invalid.push(
+                    `${methodName}:method-tampered`
+                );
+
+            }
+
+        }
+
+        if (
+            this.executionIntegrity
+                ?.immutableMethodNames
+            !== true
+        ) {
+
+            invalid.push(
+                "immutableMethodNames"
+            );
+
+        }
+
+        if (
+            this.executionIntegrity
+                ?.executionIntegrityRequired
+            !== true
+        ) {
+
+            invalid.push(
+                "executionIntegrityRequired"
+            );
+
+        }
+
+        return {
+
+            passed:
+                invalid.length === 0,
+
+            invalid,
+
+            status:
+                invalid.length === 0
+                    ? "execution-integrity-pass"
+                    : "execution-integrity-failed"
+
+        };
+
+    }
+
+
     enforce() {
 
+        const safeValidate =
+            (methodName, fallback) => {
+
+                try {
+
+                    if (
+                        typeof this[methodName]
+                        !== "function"
+                    ) {
+
+                        return fallback;
+
+                    }
+
+                    return this[methodName]();
+
+                } catch (error) {
+
+                    return {
+
+                        passed:
+                            false,
+
+                        invalid: [
+
+                            `${methodName}:execution-failed`
+
+                        ],
+
+                        error:
+                            error?.message ||
+                            String(error),
+
+                        status:
+                            `${methodName}-execution-failed`
+
+                    };
+
+                }
+
+            };
+
         const core =
-            this.validateCore();
+            safeValidate(
+                "validateCore",
+                {
+                    passed: false,
+                    missing: [
+                        "validateCore"
+                    ],
+                    status:
+                        "core-validation-unavailable"
+                }
+            );
 
         const boundaries =
-            this.validateBoundaries();
+            safeValidate(
+                "validateBoundaries",
+                {
+                    passed: false,
+                    invalid: [
+                        "validateBoundaries"
+                    ],
+                    status:
+                        "boundary-validation-unavailable"
+                }
+            );
 
         const extensions =
-            this.validateExtensions();
+            safeValidate(
+                "validateExtensions",
+                {
+                    passed: false,
+                    invalid: [
+                        "validateExtensions"
+                    ],
+                    status:
+                        "extension-validation-unavailable"
+                }
+            );
+
+        const executionIntegrity =
+            safeValidate(
+                "validateExecutionIntegrity",
+                {
+                    passed: false,
+                    invalid: [
+                        "validateExecutionIntegrity"
+                    ],
+                    status:
+                        "execution-integrity-validation-unavailable"
+                }
+            );
 
         const passed =
             core.passed &&
             boundaries.passed &&
-            extensions.passed;
+            extensions.passed &&
+            executionIntegrity.passed;
 
         return {
 
@@ -256,6 +493,8 @@
             boundaries,
 
             extensions,
+
+            executionIntegrity,
 
             passed,
 

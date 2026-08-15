@@ -636,4 +636,3 @@ class HonestRuntime {
 
 export default HonestRuntime;
 
-
