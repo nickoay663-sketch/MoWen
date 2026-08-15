@@ -15,6 +15,7 @@ import EngineRegistry from "./EngineRegistry.js";
 import RuntimeResult from "./RuntimeResult.js";
 import TestimonyBuilder from "./TestimonyBuilder.js";
 import TestimonyValidator from "./TestimonyValidator.js";
+import CoreGovernance from "./CoreGovernance.js";
 
 class HonestRuntime {
 
@@ -35,6 +36,24 @@ class HonestRuntime {
 
 
     run() {
+
+        const governance =
+            new CoreGovernance();
+
+        const governanceResult =
+            governance.enforce();
+
+        if (
+            governanceResult.passed !== true
+        ) {
+
+            throw new Error(
+                `MoWen Core Governance failed: ${JSON.stringify(
+                    governanceResult
+                )}`
+            );
+
+        }
 
         const trace = [];
 
@@ -519,7 +538,10 @@ class HonestRuntime {
             registryStateBeforeSelfCheck,
 
             registryStateAfterSelfCheck:
-                engineRegistry.list()
+                engineRegistry.list(),
+
+            governance:
+                governanceResult
 
         });
 
@@ -635,4 +657,3 @@ class HonestRuntime {
 }
 
 export default HonestRuntime;
-
