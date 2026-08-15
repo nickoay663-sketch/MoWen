@@ -15,7 +15,7 @@ class MoWenRuntime {
             options || {};
 
         this.version =
-            "10.3";
+            "10.4";
 
     }
 

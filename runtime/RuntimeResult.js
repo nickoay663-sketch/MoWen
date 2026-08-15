@@ -1,9 +1,9 @@
-﻿class RuntimeResult {
+class RuntimeResult {
 
     constructor() {
 
         this.runtimeVersion =
-            "10.3";
+            "10.4";
 
         this.generatedAt =
             new Date().toISOString();
@@ -11,10 +11,10 @@
         this.metadata = {
 
             contractVersion:
-                "10.3",
+                "10.4",
 
             runtimeVersion:
-                "10.3",
+                "10.4",
 
             engineCount:
                 0,

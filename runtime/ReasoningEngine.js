@@ -6,7 +6,7 @@ class ReasoningEngine extends EngineBase {
 
         super(
             "ReasoningEngine",
-            "10.3",
+            "10.4",
             "莫问分析已验证对应关系中的推理边界，不把发现、未验证或未知扩大为结论。"
         );
 
@@ -105,11 +105,11 @@ class ReasoningEngine extends EngineBase {
 
             runtimeVersion:
                 this.semanticObject.contract?.identity?.runtimeVersion ||
-                "10.3",
+                "10.4",
 
             contractVersion:
                 this.semanticObject.contract?.version ||
-                "10.3",
+                "10.4",
 
             engineCount:
                 Object.keys(

@@ -1,4 +1,4 @@
-﻿import EngineBase from "./EngineBase.js";
+import EngineBase from "./EngineBase.js";
 
 class SelfCheckEngine extends EngineBase {
 
@@ -6,7 +6,7 @@ class SelfCheckEngine extends EngineBase {
 
         super(
             "SelfCheckEngine",
-            "10.3",
+            "10.4",
             "莫问检查自身运行完整性、责任边界、证据边界、认识状态边界和外部语言边界，不判断表达结果。"
         );
 

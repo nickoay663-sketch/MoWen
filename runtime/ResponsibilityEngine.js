@@ -6,7 +6,7 @@ class ResponsibilityEngine extends EngineBase {
 
         super(
             "ResponsibilityEngine",
-            "10.3",
+            "10.4",
             "莫问判断表达所要求承担的责任是否超过当前已验证证据能够承担的责任。"
         );
 
@@ -120,12 +120,12 @@ class ResponsibilityEngine extends EngineBase {
                 this.semanticObject.contract
                     ?.identity
                     ?.runtimeVersion ||
-                "10.3",
+                "10.4",
 
             contractVersion:
                 this.semanticObject.contract
                     ?.version ||
-                "10.3",
+                "10.4",
 
             engineCount:
                 Object.keys(
