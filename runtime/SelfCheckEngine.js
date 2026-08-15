@@ -10,7 +10,7 @@ class SelfCheckEngine extends EngineBase {
             "莫问检查自身运行完整性、责任边界、证据边界、认识状态边界和外部语言边界，不判断表达结果。"
         );
 
-        this.runtimeObject =
+        this.runtimeContext =
             runtimeObject || {};
 
     }
@@ -162,7 +162,7 @@ class SelfCheckEngine extends EngineBase {
             },
 
             trace:
-                this.runtimeObject.runtimeTrace || [],
+                this.runtimeContext.runtimeTrace || [],
 
             questions:
                 passed
@@ -191,7 +191,7 @@ class SelfCheckEngine extends EngineBase {
             contract,
             semanticObject,
             engines
-        } = this.runtimeObject;
+        } = this.runtimeContext;
 
         return {
 
@@ -216,10 +216,10 @@ class SelfCheckEngine extends EngineBase {
     validateEngineContract() {
 
         const contract =
-            this.runtimeObject.contract;
+            this.runtimeContext.contract;
 
         const engines =
-            this.runtimeObject.engines || {};
+            this.runtimeContext.engines || {};
 
         const engineContract =
             contract?.engineContract || {};
@@ -323,10 +323,10 @@ class SelfCheckEngine extends EngineBase {
     validateRegistry() {
 
         const registry =
-            this.runtimeObject.engineRegistry;
+            this.runtimeContext.engineRegistry;
 
         const engines =
-            this.runtimeObject.engines || {};
+            this.runtimeContext.engines || {};
 
         const report = {
 
@@ -381,7 +381,7 @@ class SelfCheckEngine extends EngineBase {
     validateRuntimeIntegrity() {
 
         const pipeline =
-            this.runtimeObject.pipeline || [];
+            this.runtimeContext.pipeline || [];
 
         const expected = [
 
@@ -428,7 +428,7 @@ class SelfCheckEngine extends EngineBase {
     validateResponsibilityBoundary() {
 
         const generator =
-            this.runtimeObject.generator || {};
+            this.runtimeContext.generator || {};
 
         const report = {
 
@@ -491,7 +491,7 @@ class SelfCheckEngine extends EngineBase {
     validateEngineDescription() {
 
         const engines =
-            this.runtimeObject.engines || {};
+            this.runtimeContext.engines || {};
 
         const report = {
 
@@ -547,10 +547,10 @@ class SelfCheckEngine extends EngineBase {
     validateRuntimeResult() {
 
         const result =
-            this.runtimeObject.runtimeResult;
+            this.runtimeContext.runtimeResult;
 
         const requiredFields =
-            this.runtimeObject.contract
+            this.runtimeContext.contract
                 ?.runtimeResultContract
                 ?.requiredFields || [];
 
@@ -575,7 +575,7 @@ class SelfCheckEngine extends EngineBase {
     validateEpistemicBoundary() {
 
         const runtimeObject =
-            this.runtimeObject || {};
+            this.runtimeContext || {};
 
         const contract =
             runtimeObject.contract || {};
@@ -718,15 +718,10 @@ class SelfCheckEngine extends EngineBase {
         };
 
         inspect(runtimeObject.evidence);
-
         inspect(runtimeObject.correspondence);
-
         inspect(runtimeObject.reasoning);
-
         inspect(runtimeObject.responsibility);
-
         inspect(runtimeObject.reconstruction);
-
         inspect(runtimeObject.generator);
 
         const forbiddenPromotion =
@@ -790,13 +785,13 @@ class SelfCheckEngine extends EngineBase {
     validateExternalLanguageBoundary() {
 
         const contract =
-            this.runtimeObject.contract || {};
+            this.runtimeContext.contract || {};
 
         const languageContract =
             contract.externalLanguageContract || {};
 
         const semanticObject =
-            this.runtimeObject.semanticObject || {};
+            this.runtimeContext.semanticObject || {};
 
         const connection =
             semanticObject.languageAdapter || {};
@@ -1065,11 +1060,11 @@ class SelfCheckEngine extends EngineBase {
                 epistemicReport.states,
 
             runtimeTrace:
-                this.runtimeObject.runtimeTrace || [],
+                this.runtimeContext.runtimeTrace || [],
 
             traceCount:
                 (
-                    this.runtimeObject.runtimeTrace || []
+                    this.runtimeContext.runtimeTrace || []
                 ).length
 
         };
