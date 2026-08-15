@@ -1,4 +1,5 @@
 ﻿import EngineBase from "./EngineBase.js";
+import ExternalSourceConnector from "./ExternalSourceConnector.js";
 
 class SearchEngine extends EngineBase {
 
@@ -6,7 +7,7 @@ class SearchEngine extends EngineBase {
 
         super(
             "SearchEngine",
-            "11.0",
+            "12.0",
             "莫问搜索运行所需的信息来源。搜索可以扩大所见，但不能扩大所证。"
         );
 
@@ -82,7 +83,9 @@ class SearchEngine extends EngineBase {
                         "search",
 
                     status:
-                        "completed",
+                        searchResult.sources.length > 0
+                            ? "completed"
+                            : "empty",
 
                     outputState:
                         searchResult.outputState,
@@ -98,7 +101,7 @@ class SearchEngine extends EngineBase {
                 searchResult.sources.length > 0
                     ? []
                     : [
-                        "没有发现新的搜索来源。"
+                        "没有发现新的外部来源。"
                     ],
 
             nextRuntimeState:
@@ -138,45 +141,64 @@ class SearchEngine extends EngineBase {
         }
 
 
+        const connector =
+            new ExternalSourceConnector({
+
+                keyword:
+                    content,
+
+                sources:
+                    this.semanticObject.searchResults
+
+            });
+
+
+        const connectionResult =
+            connector.run();
+
+
         const suppliedSources =
-            this.getSuppliedSources();
+            Array.isArray(
+                connectionResult.sources
+            )
+                ? connectionResult.sources
+                : [];
 
 
-        const runtimeInput =
-            {
+        const runtimeInput = {
 
-                source:
-                    "RuntimeInput",
+            source:
+                "RuntimeInput",
 
-                content,
+            content,
 
-                type:
-                    "input",
+            type:
+                "input",
 
-                state:
-                    "DISCOVERED",
+            state:
+                "DISCOVERED",
 
-                verificationStatus:
-                    "UNVERIFIED",
+            verificationStatus:
+                "UNVERIFIED",
 
-                independent:
-                    false
+            independent:
+                false
 
-            };
+        };
 
 
-        const sources = [
-
-            runtimeInput,
-
-            ...suppliedSources
-
-        ];
-
+        /*
+         * RuntimeInput 不是外部搜索结果。
+         *
+         * 它只是保存用户原始表达，
+         * 因此不能被计入外部来源数量，
+         * 也不能被当作独立证据。
+         */
 
         return {
 
-            sources,
+            sources:
+                suppliedSources,
 
             outputState:
                 "DISCOVERED",
@@ -185,103 +207,14 @@ class SearchEngine extends EngineBase {
                 "UNVERIFIED",
 
             knowledgeExpanded:
-                sources.length > 1,
+                suppliedSources.length > 0,
 
             evidenceExpanded:
-                false
+                false,
+
+            runtimeInput
 
         };
-
-    }
-
-
-    getSuppliedSources() {
-
-        const supplied =
-            this.semanticObject.searchResults;
-
-
-        if (!Array.isArray(supplied)) {
-
-            return [];
-
-        }
-
-
-        return supplied
-            .filter(item => {
-
-                return (
-
-                    item &&
-
-                    typeof item === "object" &&
-
-                    (
-
-                        item.source ||
-
-                        item.url ||
-
-                        item.content
-
-                    )
-
-                );
-
-            })
-            .map(item => {
-
-                return {
-
-                    source:
-                        item.source ||
-                        item.url ||
-                        "ExternalSearchResult",
-
-                    url:
-                        item.url || null,
-
-                    title:
-                        item.title || null,
-
-                    content:
-                        item.content || "",
-
-                    type:
-                        item.type || "external",
-
-                    state:
-                        "DISCOVERED",
-
-                    verificationStatus:
-                        item.verificationStatus ||
-                        "UNVERIFIED",
-
-                    verified:
-                        item.verified === true,
-
-                    verificationBasis:
-                        item.verificationBasis ||
-                        null,
-
-                    verificationSource:
-                        item.verificationSource ||
-                        null,
-
-                    verifier:
-                        item.verifier ||
-                        null,
-
-                    supportsClaim:
-                        item.supportsClaim === true,
-
-                    independent:
-                        item.independent === true
-
-                };
-
-            });
 
     }
 
