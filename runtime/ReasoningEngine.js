@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class ReasoningEngine extends EngineBase {
 
@@ -76,7 +76,7 @@ class ReasoningEngine extends EngineBase {
 
     buildMetadata() {
 
-        const reasonings =
+        const correspondences =
             Array.isArray(
                 this.semanticObject.correspondences
             )
@@ -84,19 +84,19 @@ class ReasoningEngine extends EngineBase {
                 : [];
 
         const supportedCount =
-            reasonings.filter(
+            correspondences.filter(
                 item =>
-                    item.verificationStatus === "SUPPORTED"
+                    this.isSupported(item)
             ).length;
 
         const unverifiedCount =
-            reasonings.filter(
+            correspondences.filter(
                 item =>
                     item.verificationStatus === "UNVERIFIED"
             ).length;
 
         const unknownCount =
-            reasonings.filter(
+            correspondences.filter(
                 item =>
                     item.verificationStatus === "UNKNOWN"
             ).length;
@@ -163,11 +163,28 @@ class ReasoningEngine extends EngineBase {
                 "UNKNOWN";
 
             const supported =
-                verificationStatus === "SUPPORTED" &&
-                item.supported === true &&
-                item.matched === true &&
-                verifiedEvidenceCount > 0 &&
-                sourceAvailable;
+                this.isSupported({
+
+                    ...item,
+
+                    evidenceCount,
+
+                    verifiedEvidenceCount,
+
+                    sourceCount,
+
+                    sourceAvailable,
+
+                    verificationStatus
+
+                });
+
+            const effectiveVerificationStatus =
+                supported
+                    ? "SUPPORTED"
+                    : this.normalizeUnsupportedStatus(
+                        verificationStatus
+                    );
 
             const assumptions =
                 this.detectAssumptions({
@@ -182,7 +199,8 @@ class ReasoningEngine extends EngineBase {
 
                     sourceAvailable,
 
-                    verificationStatus,
+                    verificationStatus:
+                        effectiveVerificationStatus,
 
                     supported
 
@@ -201,7 +219,8 @@ class ReasoningEngine extends EngineBase {
 
                     sourceAvailable,
 
-                    verificationStatus,
+                    verificationStatus:
+                        effectiveVerificationStatus,
 
                     supported
 
@@ -220,7 +239,8 @@ class ReasoningEngine extends EngineBase {
 
                     sourceAvailable,
 
-                    verificationStatus,
+                    verificationStatus:
+                        effectiveVerificationStatus,
 
                     supported
 
@@ -257,7 +277,7 @@ class ReasoningEngine extends EngineBase {
                 supported,
 
                 epistemicState:
-                    verificationStatus,
+                    effectiveVerificationStatus,
 
                 reasoningStrength:
                     strength,
@@ -272,9 +292,7 @@ class ReasoningEngine extends EngineBase {
                     "responsibility-bounded-reasoning",
 
                 verificationStatus:
-                    supported
-                        ? "SUPPORTED"
-                        : verificationStatus,
+                    effectiveVerificationStatus,
 
                 conclusionBoundary:
                     supported
@@ -291,6 +309,44 @@ class ReasoningEngine extends EngineBase {
             };
 
         });
+
+    }
+
+
+    isSupported(item) {
+
+        return (
+
+            item.verificationStatus === "SUPPORTED" &&
+
+            item.supported === true &&
+
+            item.matched === true &&
+
+            Number(item.verifiedEvidenceCount || 0) > 0 &&
+
+            item.sourceAvailable === true &&
+
+            Number(item.sourceCount || 0) > 0
+
+        );
+
+    }
+
+
+    normalizeUnsupportedStatus(status) {
+
+        if (
+            status === "UNVERIFIED" ||
+            status === "UNKNOWN" ||
+            status === "VERIFIED_BUT_NOT_LINKED"
+        ) {
+
+            return status;
+
+        }
+
+        return "UNKNOWN";
 
     }
 
@@ -415,8 +471,7 @@ class ReasoningEngine extends EngineBase {
     evaluateStrength(item) {
 
         if (
-            item.verificationStatus !== "SUPPORTED" ||
-            item.supported !== true
+            !this.isSupported(item)
         ) {
 
             return "none";
