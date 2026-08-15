@@ -617,42 +617,52 @@ class SelfCheckEngine extends EngineBase {
             "UNVERIFIED",
             "VERIFIED",
             "SUPPORTED",
+            "CONTRADICTED",
             "UNKNOWN",
+            "PARTIAL",
+            "UNRESOLVED",
+            "OUT_OF_DOMAIN",
             "VERIFIED_BUT_NOT_LINKED"
 
         ]);
 
-        const inspect = value => {
+        /*
+         * SelfCheck 不把整个 Runtime 对象树中的
+         * verificationStatus 当作独立认识状态。
+         *
+         * 同一个状态会在 Evidence -> Correspondence
+         * -> Reasoning -> Responsibility -> Reconstruction
+         * -> Generator 中被携带。
+         *
+         * 这些携带字段不是新的认识状态。
+         *
+         * SelfCheck 只检查 Runtime 的最终边界对象，
+         * 以及各层明确产生的 epistemicState。
+         */
+
+        const inspectState = value => {
 
             if (!value) {
-
                 return;
-
             }
 
             if (Array.isArray(value)) {
 
                 for (const item of value) {
-
-                    inspect(item);
-
+                    inspectState(item);
                 }
 
                 return;
-
             }
 
             if (
                 typeof value !== "object"
             ) {
-
                 return;
-
             }
 
             const state =
-                value.epistemicState ||
-                value.verificationStatus;
+                value.epistemicState;
 
             if (typeof state === "string") {
 
@@ -677,6 +687,20 @@ class SelfCheckEngine extends EngineBase {
                     reports.unknown++;
 
                 } else if (
+                    state === "CONTRADICTED" ||
+                    state === "PARTIAL" ||
+                    state === "UNRESOLVED" ||
+                    state === "OUT_OF_DOMAIN"
+                ) {
+
+                    /*
+                     * 这些是合法认识状态。
+                     *
+                     * 当前统计结构没有为它们单独设置
+                     * 计数槽，因此不进入 invalid。
+                     */
+
+                } else if (
                     state === "VERIFIED_BUT_NOT_LINKED"
                 ) {
 
@@ -690,15 +714,15 @@ class SelfCheckEngine extends EngineBase {
 
             }
 
+            /*
+             * 只继续检查明确存在 epistemicState 的子对象。
+             * verificationStatus 本身不是新的 epistemic state。
+             */
+
             for (const key of Object.keys(value)) {
 
-                if (
-                    key === "epistemicState" ||
-                    key === "verificationStatus"
-                ) {
-
+                if (key === "epistemicState") {
                     continue;
-
                 }
 
                 const child =
@@ -709,7 +733,18 @@ class SelfCheckEngine extends EngineBase {
                     typeof child === "object"
                 ) {
 
-                    inspect(child);
+                    if (
+                        Array.isArray(child)
+                        ||
+                        Object.prototype.hasOwnProperty.call(
+                            child,
+                            "epistemicState"
+                        )
+                    ) {
+
+                        inspectState(child);
+
+                    }
 
                 }
 
@@ -717,15 +752,42 @@ class SelfCheckEngine extends EngineBase {
 
         };
 
-        inspect(runtimeObject.evidence);
-        inspect(runtimeObject.correspondence);
-        inspect(runtimeObject.reasoning);
-        inspect(runtimeObject.responsibility);
-        inspect(runtimeObject.reconstruction);
-        inspect(runtimeObject.generator);
+        /*
+         * 只从 Runtime 各阶段的正式输出读取
+         * epistemicState。
+         *
+         * 不读取 searchResults 的原始
+         * verificationStatus。
+         *
+         * 这保证攻击者提交：
+         *
+         * verified: true
+         * verificationStatus: VERIFIED
+         *
+         * 不会直接污染 SelfCheck。
+         */
+
+        inspectState(runtimeObject.evidence);
+        inspectState(runtimeObject.correspondence);
+        inspectState(runtimeObject.reasoning);
+        inspectState(runtimeObject.responsibility);
+
+        /*
+         * Reconstruction / Generator 只作为最终边界检查，
+         * 不重复计入整个对象树。
+         */
+
+        const finalEpistemicState =
+            runtimeObject.responsibility?.epistemicState ||
+            runtimeObject.reasoning?.epistemicState ||
+            null;
 
         const forbiddenPromotion =
             reports.discovered > 0 &&
+            reports.supported > 0 &&
+            reports.verified === 0;
+
+        const unsupportedPromotion =
             reports.supported > 0 &&
             reports.verified === 0;
 
@@ -744,18 +806,18 @@ class SelfCheckEngine extends EngineBase {
             boundaryState === null ||
             allowedStates.has(boundaryState);
 
+        const finalStateValid =
+            finalEpistemicState === null ||
+            allowedStates.has(finalEpistemicState);
+
         const passed =
             reports.invalid === 0 &&
             !forbiddenPromotion &&
+            !unsupportedPromotion &&
             boundaryValid &&
-            (
-                contractStateCount === 0 ||
-                contractStateCount >= 1
-            ) &&
-            (
-                contractRuleCount === 0 ||
-                contractRuleCount >= 1
-            );
+            finalStateValid &&
+            contractStateCount >= 1 &&
+            contractRuleCount >= 1;
 
         return {
 
@@ -772,6 +834,14 @@ class SelfCheckEngine extends EngineBase {
 
             boundaryValid,
 
+            finalEpistemicState,
+
+            finalStateValid,
+
+            forbiddenPromotion,
+
+            unsupportedPromotion,
+
             status:
                 passed
                     ? "epistemic-boundary-pass"
@@ -780,7 +850,6 @@ class SelfCheckEngine extends EngineBase {
         };
 
     }
-
 
     validateExternalLanguageBoundary() {
 

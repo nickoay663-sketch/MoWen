@@ -137,6 +137,13 @@ class HonestRuntime {
             concepts:
                 recognition.concepts || [],
 
+            searchResults:
+                Array.isArray(
+                    this.options.searchResults
+                )
+                    ? this.options.searchResults
+                    : [],
+
             testimony,
 
             testimonyValidation,
@@ -303,247 +310,22 @@ class HonestRuntime {
             generator
         );
 
-        const engineRegistry =
-            new EngineRegistry();
-
-        const selfCheckEngine =
-            new SelfCheckEngine({
-
-                pipeline,
-
-                contract:
-                    RuntimeContract,
-
-                engines:
-                    null,
-
-                engineRegistry,
-
-                semanticObject,
-
-                runtimeResult,
-
-                runtimeTrace:
-                    trace
-
-            });
-
-        const engineInstances = {
-
-            recognition:
-                recognitionEngine,
-
-            definition:
-                definitionEngine,
-
-            search:
-                searchEngine,
-
-            evidence:
-                evidenceEngine,
-
-            correspondence:
-                correspondenceEngine,
-
-            reasoning:
-                reasoningEngine,
-
-            responsibility:
-                responsibilityEngine,
-
-            reconstruction:
-                reconstructionEngine,
-
-            generator:
-                generatorEngine,
-
-            selfCheck:
-                selfCheckEngine
-
-        };
-
-        const executionResults = {
-
-            recognition,
-            definition,
-            search,
-            evidence,
-            correspondence,
-            reasoning,
-            responsibility,
-            reconstruction,
-            generator
-
-        };
 
         /*
-         * Register every completed Engine before SelfCheck.
-         * SelfCheck must inspect the complete runtime registry.
+         * ---------------------------------------------------------
+         * RuntimeResult provisional state
+         * ---------------------------------------------------------
+         *
+         * SelfCheck 必须在最终输出生成前，
+         * 看到完整的运行链。
+         *
+         * 因此这里先写入所有已经完成的 Engine 结果。
+         * 这不是最终 complete()，
+         * 而是 SelfCheck 的审计输入快照。
          */
-        for (
-            const [name, engine]
-            of Object.entries(engineInstances)
-        ) {
-
-            if (name === "selfCheck") {
-                continue;
-            }
-
-            engineRegistry.register(
-                name,
-                engine,
-                executionResults[name] || {}
-            );
-
-        }
-
-        /*
-         * SelfCheck itself has not executed yet, therefore its final
-         * execution result does not exist. A provisional contract-shaped
-         * registration makes the runtime registry complete before
-         * SelfCheck begins. The provisional record is replaced by the
-         * real SelfCheck result immediately after execution.
-         */
-        const selfCheckRegistration = {
-
-            engine:
-                "SelfCheckEngine",
-
-            version:
-                selfCheckEngine.version,
-
-            status:
-                selfCheckEngine.status,
-
-            principle:
-                selfCheckEngine.principle,
-
-            metadata:
-                selfCheckEngine.metadata(),
-
-            result:
-                {},
-
-            trace:
-                trace,
-
-            questions:
-                [],
-
-            nextRuntimeState:
-                "RuntimeCompleted"
-
-        };
-
-        engineRegistry.register(
-            "selfCheck",
-            selfCheckEngine,
-            selfCheckRegistration
-        );
-
-        const engines = {
-
-            recognition,
-            definition,
-            search,
-            evidence,
-            correspondence,
-            reasoning,
-            responsibility,
-            reconstruction,
-            generator,
-
-            selfCheck:
-                selfCheckRegistration
-
-        };
-
-        const registryStateBeforeSelfCheck =
-            engineRegistry.list();
-
-        const selfCheckContext =
-        {
-
-            pipeline,
-
-            contract:
-                RuntimeContract,
-
-            engines,
-
-            engineRegistry,
-
-            semanticObject,
-
-            runtimeResult,
-
-            runtimeTrace:
-                trace
-
-        };
-
-        /*
-         * SelfCheckEngine reads this.runtimeObject directly.
-         * Inject the final complete context immediately before execution.
-         */
-        selfCheckEngine.runtimeContext =
-            selfCheckContext;
-
-        const selfCheck =
-            selfCheckEngine.execute();
-
-        this.recordTrace(
-            trace,
-            selfCheck
-        );
-
-        /*
-         * Replace the provisional registry result with the real
-         * SelfCheck execution result.
-         */
-        engines.selfCheck =
-            selfCheck;
-
-        engineRegistry.register(
-            "selfCheck",
-            selfCheckEngine,
-            selfCheck
-        );
-
-        const registryValidation =
-            engineRegistry.validate();
-
-        const registryVersionValidation =
-            engineRegistry.validateVersions(
-                RuntimeContract.version
-            );
 
         runtimeResult.runtimeVersion =
             runtimeVersion;
-
-        runtimeResult.setMetadata({
-
-            contractVersion:
-                RuntimeContract.version,
-
-            runtimeVersion,
-
-            engineCount:
-                engineRegistry.list().length,
-
-            registryValidation,
-
-            registryVersionValidation,
-
-            registryStateBeforeSelfCheck,
-
-            registryStateAfterSelfCheck:
-                engineRegistry.list(),
-
-            governance:
-                governanceResult
-
-        });
 
         runtimeResult.recognition =
             recognition;
@@ -580,12 +362,6 @@ class HonestRuntime {
 
         runtimeResult.generator =
             generator;
-
-        runtimeResult.selfCheck =
-            selfCheck;
-
-        runtimeResult.engineRegistry =
-            engineRegistry;
 
         runtimeResult.testimonyChain = {
 
@@ -624,6 +400,315 @@ class HonestRuntime {
 
         runtimeResult.semanticObject =
             semanticObject;
+
+
+        /*
+         * ---------------------------------------------------------
+         * Engine Registry
+         * ---------------------------------------------------------
+         */
+
+        const engineRegistry =
+            new EngineRegistry();
+
+        const engineInstances = {
+
+            recognition:
+                recognitionEngine,
+
+            definition:
+                definitionEngine,
+
+            search:
+                searchEngine,
+
+            evidence:
+                evidenceEngine,
+
+            correspondence:
+                correspondenceEngine,
+
+            reasoning:
+                reasoningEngine,
+
+            responsibility:
+                responsibilityEngine,
+
+            reconstruction:
+                reconstructionEngine,
+
+            generator:
+                generatorEngine
+
+        };
+
+        const executionResults = {
+
+            recognition,
+            definition,
+            search,
+            evidence,
+            correspondence,
+            reasoning,
+            responsibility,
+            reconstruction,
+            generator
+
+        };
+
+        for (
+            const [name, engine]
+            of Object.entries(engineInstances)
+        ) {
+
+            engineRegistry.register(
+                name,
+                engine,
+                executionResults[name] || {}
+            );
+
+        }
+
+
+        /*
+         * ---------------------------------------------------------
+         * SelfCheck
+         * ---------------------------------------------------------
+         *
+         * SelfCheck 现在接收完整运行链。
+         *
+         * 不再只接收 runtimeResult 空壳。
+         */
+
+        const selfCheckEngine =
+            new SelfCheckEngine({
+
+                pipeline,
+
+                contract:
+                    RuntimeContract,
+
+                engines:
+                    null,
+
+                engineRegistry,
+
+                semanticObject,
+
+                runtimeResult,
+
+                evidence,
+
+                correspondence,
+
+                reasoning,
+
+                responsibility,
+
+                reconstruction,
+
+                generator,
+
+                verificationBoundary:
+                    runtimeResult.verificationBoundary,
+
+                runtimeTrace:
+                    trace
+
+            });
+
+
+        /*
+         * SelfCheck 自身先注册，
+         * 但使用的是合法的预执行注册描述。
+         */
+
+        const selfCheckRegistration = {
+
+            engine:
+                "SelfCheckEngine",
+
+            version:
+                selfCheckEngine.version,
+
+            status:
+                selfCheckEngine.status,
+
+            principle:
+                selfCheckEngine.principle,
+
+            metadata:
+                selfCheckEngine.metadata(),
+
+            result:
+                {},
+
+            trace:
+                trace,
+
+            questions:
+                [],
+
+            nextRuntimeState:
+                "RuntimeCompleted"
+
+        };
+
+        engineRegistry.register(
+            "selfCheck",
+            selfCheckEngine,
+            selfCheckRegistration
+        );
+
+
+        /*
+         * ---------------------------------------------------------
+         * SelfCheck engine context
+         * ---------------------------------------------------------
+         *
+         * 注意：
+         * engines 使用 Engine 输出结果，
+         * 而不是 Engine 实例。
+         *
+         * Registry 使用 Engine 实例。
+         */
+
+        const engines = {
+
+            recognition,
+            definition,
+            search,
+            evidence,
+            correspondence,
+            reasoning,
+            responsibility,
+            reconstruction,
+            generator,
+
+            selfCheck:
+                selfCheckRegistration
+
+        };
+
+        const registryStateBeforeSelfCheck =
+            engineRegistry.list();
+
+        const selfCheckContext = {
+
+            pipeline,
+
+            contract:
+                RuntimeContract,
+
+            engines,
+
+            engineRegistry,
+
+            semanticObject,
+
+            runtimeResult,
+
+            evidence,
+
+            correspondence,
+
+            reasoning,
+
+            responsibility,
+
+            reconstruction,
+
+            generator,
+
+            verificationBoundary:
+                runtimeResult.verificationBoundary,
+
+            runtimeTrace:
+                trace
+
+        };
+
+        selfCheckEngine.runtimeContext =
+            selfCheckContext;
+
+
+        /*
+         * SelfCheck 正式执行。
+         */
+
+        const selfCheck =
+            selfCheckEngine.execute();
+
+        this.recordTrace(
+            trace,
+            selfCheck
+        );
+
+
+        /*
+         * SelfCheck 完成后才写入最终 RuntimeResult。
+         */
+
+        engines.selfCheck =
+            selfCheck;
+
+        engineRegistry.register(
+            "selfCheck",
+            selfCheckEngine,
+            selfCheck
+        );
+
+
+        /*
+         * ---------------------------------------------------------
+         * Registry validation
+         * ---------------------------------------------------------
+         */
+
+        const registryValidation =
+            engineRegistry.validate();
+
+        const registryVersionValidation =
+            engineRegistry.validateVersions(
+                RuntimeContract.version
+            );
+
+
+        runtimeResult.setMetadata({
+
+            contractVersion:
+                RuntimeContract.version,
+
+            runtimeVersion,
+
+            engineCount:
+                engineRegistry.list().length,
+
+            registryValidation,
+
+            registryVersionValidation,
+
+            registryStateBeforeSelfCheck,
+
+            registryStateAfterSelfCheck:
+                engineRegistry.list(),
+
+            governance:
+                governanceResult
+
+        });
+
+
+        runtimeResult.selfCheck =
+            selfCheck;
+
+        runtimeResult.engineRegistry =
+            engineRegistry.describe();
+
+
+        /*
+         * SelfCheck 本身已经进入最终 RuntimeResult。
+         */
 
         return runtimeResult;
 

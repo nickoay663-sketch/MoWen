@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class ResponsibilityEngine extends EngineBase {
 
@@ -6,8 +6,8 @@ class ResponsibilityEngine extends EngineBase {
 
         super(
             "ResponsibilityEngine",
-            "10.4",
-            "莫问判断表达所要求承担的责任是否超过当前已验证证据能够承担的责任。"
+            "10.5",
+            "莫问判断表达所要求承担的责任是否超过当前可直接核验的已验证证据能够承担的责任。"
         );
 
         this.semanticObject =
@@ -93,22 +93,27 @@ class ResponsibilityEngine extends EngineBase {
         const supportedCount =
             reasonings.filter(
                 reasoning =>
-                    reasoning.verificationStatus ===
-                    "SUPPORTED"
+                    this.hasActualVerifiedSupport(
+                        reasoning
+                    )
             ).length;
 
         const unverifiedCount =
             reasonings.filter(
                 reasoning =>
-                    reasoning.verificationStatus ===
-                    "UNVERIFIED"
+                    (
+                        reasoning.verificationStatus ||
+                        reasoning.epistemicState
+                    ) === "UNVERIFIED"
             ).length;
 
         const unknownCount =
             reasonings.filter(
                 reasoning =>
-                    reasoning.verificationStatus ===
-                    "UNKNOWN"
+                    (
+                        reasoning.verificationStatus ||
+                        reasoning.epistemicState
+                    ) === "UNKNOWN"
             ).length;
 
         return this.metadata({
@@ -163,21 +168,107 @@ class ResponsibilityEngine extends EngineBase {
         return reasonings.map(
             reasoning => {
 
+                /*
+                 * 责任层不接受上游声明的：
+                 *
+                 * verificationStatus
+                 * supported
+                 * verifiedEvidenceCount
+                 * sourceAvailable
+                 *
+                 * 作为事实。
+                 *
+                 * ResponsibilityEngine 必须从当前
+                 * reasoning 中实际携带的证据数组
+                 * 重新建立责任能力。
+                 */
+
+                const verifiedEvidences =
+                    this.extractActualVerifiedEvidence(
+                        reasoning
+                    );
+
+                const evidences =
+                    Array.isArray(reasoning.evidences)
+                        ? reasoning.evidences
+                        : [];
+
+                const evidenceCount =
+                    evidences.length;
+
+                const verifiedEvidenceCount =
+                    verifiedEvidences.length;
+
+                const sourceCount =
+                    this.countActualSources(
+                        verifiedEvidences
+                    );
+
+                const sourceAvailable =
+                    sourceCount > 0;
+
+                const actualSupport =
+                    verifiedEvidenceCount > 0 &&
+                    sourceAvailable &&
+                    this.actualEvidenceSupportsDefinition(
+                        verifiedEvidences,
+                        reasoning.definition
+                    );
+
+                const actualVerificationStatus =
+                    this.deriveVerificationStatus({
+                        reasoning,
+                        verifiedEvidenceCount,
+                        actualSupport
+                    });
+
+                const normalizedReasoning = {
+
+                    ...reasoning,
+
+                    evidences,
+
+                    verifiedEvidences,
+
+                    evidenceCount,
+
+                    verifiedEvidenceCount,
+
+                    sourceCount,
+
+                    sourceAvailable,
+
+                    supported:
+                        actualSupport,
+
+                    verificationStatus:
+                        actualVerificationStatus,
+
+                    epistemicState:
+                        actualVerificationStatus
+
+                };
+
                 const demand =
                     this.analyzeResponsibilityDemand(
-                        reasoning
+                        normalizedReasoning
                     );
 
                 const capacity =
                     this.analyzeResponsibilityCapacity(
-                        reasoning
+                        normalizedReasoning
                     );
 
                 const boundary =
                     this.calculateBoundary(
                         demand,
                         capacity,
-                        reasoning
+                        normalizedReasoning
+                    );
+
+                const verifiedEvidenceRequired =
+                    this.calculateVerifiedEvidenceRequirement(
+                        normalizedReasoning
                     );
 
                 return {
@@ -207,11 +298,9 @@ class ResponsibilityEngine extends EngineBase {
                                 : [],
 
                         evidenceRequired:
-                            reasoning.evidenceCount || 0,
+                            evidenceCount,
 
-                        verifiedEvidenceRequired:
-                            reasoning.verifiedEvidenceCount ||
-                            0,
+                        verifiedEvidenceRequired,
 
                         verificationRequired:
                             true
@@ -226,31 +315,24 @@ class ResponsibilityEngine extends EngineBase {
                         reasoning.definition,
 
                     supported:
-                        reasoning.supported === true,
+                        actualSupport,
 
                     epistemicState:
-                        reasoning.epistemicState ||
-                        reasoning.verificationStatus ||
-                        "UNKNOWN",
+                        actualVerificationStatus,
 
-                    evidenceCount:
-                        reasoning.evidenceCount || 0,
+                    evidenceCount,
 
-                    verifiedEvidenceCount:
-                        reasoning.verifiedEvidenceCount ||
-                        0,
+                    verifiedEvidenceCount,
 
-                    sourceCount:
-                        reasoning.sourceCount || 0,
+                    sourceCount,
 
-                    sourceAvailable:
-                        reasoning.sourceAvailable === true,
+                    sourceAvailable,
 
                     sources:
-                        reasoning.evidences || [],
+                        evidences,
 
                     verifiedSources:
-                        reasoning.verifiedEvidences || [],
+                        verifiedEvidences,
 
                     responsibilityDemand:
                         demand,
@@ -281,7 +363,7 @@ class ResponsibilityEngine extends EngineBase {
                         capacity.level,
 
                     sourceResponsibility:
-                        reasoning.sourceAvailable === true
+                        sourceAvailable
                             ? "available"
                             : "missing",
 
@@ -292,8 +374,7 @@ class ResponsibilityEngine extends EngineBase {
                         "subject-responsibility-evaluation",
 
                     verificationStatus:
-                        reasoning.verificationStatus ||
-                        "UNKNOWN",
+                        actualVerificationStatus,
 
                     runtimeTrace:
                         this.semanticObject
@@ -308,6 +389,170 @@ class ResponsibilityEngine extends EngineBase {
 
             }
         );
+
+    }
+
+
+    /*
+     * 只接受实际存在于 evidences /
+     * verifiedEvidences 数组中的证据。
+     *
+     * 不能使用：
+     *
+     * reasoning.verifiedEvidenceCount
+     * reasoning.supported
+     * reasoning.verificationStatus
+     *
+     * 这些只是声明。
+     */
+
+    extractActualVerifiedEvidence(reasoning) {
+
+        const candidates =
+            Array.isArray(
+                reasoning.verifiedEvidences
+            )
+                ? reasoning.verifiedEvidences
+                : [];
+
+        return candidates.filter(
+            evidence =>
+                evidence &&
+                evidence.verificationStatus ===
+                    "VERIFIED" &&
+                evidence.epistemicState ===
+                    "VERIFIED" &&
+                evidence.verificationBasis != null &&
+                evidence.sourceAvailable === true
+        );
+
+    }
+
+
+    countActualSources(evidences) {
+
+        return new Set(
+
+            evidences
+                .map(
+                    evidence =>
+                        evidence.source
+                )
+                .filter(Boolean)
+
+        ).size;
+
+    }
+
+
+    actualEvidenceSupportsDefinition(
+        evidences,
+        definition
+    ) {
+
+        if (
+            !definition ||
+            !Array.isArray(evidences) ||
+            evidences.length === 0
+        ) {
+
+            return false;
+
+        }
+
+        return evidences.some(
+            evidence =>
+                evidence.supportsClaim === true
+        );
+
+    }
+
+
+    deriveVerificationStatus({
+        reasoning,
+        verifiedEvidenceCount,
+        actualSupport
+    }) {
+
+        if (actualSupport) {
+
+            return "SUPPORTED";
+
+        }
+
+        if (verifiedEvidenceCount > 0) {
+
+            return "VERIFIED_BUT_NOT_LINKED";
+
+        }
+
+        if (
+            reasoning.verificationStatus ===
+            "CONTRADICTED"
+        ) {
+
+            return "CONTRADICTED";
+
+        }
+
+        if (
+            reasoning.verificationStatus ===
+            "UNVERIFIED"
+        ) {
+
+            return "UNVERIFIED";
+
+        }
+
+        return "UNKNOWN";
+
+    }
+
+
+    hasActualVerifiedSupport(reasoning) {
+
+        const evidences =
+            this.extractActualVerifiedEvidence(
+                reasoning
+            );
+
+        return (
+            evidences.length > 0 &&
+            this.actualEvidenceSupportsDefinition(
+                evidences,
+                reasoning.definition
+            )
+        );
+
+    }
+
+
+    calculateVerifiedEvidenceRequirement(reasoning) {
+
+        const verificationStatus =
+            reasoning.verificationStatus ||
+            reasoning.epistemicState ||
+            "UNKNOWN";
+
+        if (
+            verificationStatus ===
+            "SUPPORTED"
+        ) {
+
+            return 1;
+
+        }
+
+        if (
+            verificationStatus ===
+            "CONTRADICTED"
+        ) {
+
+            return 0;
+
+        }
+
+        return 1;
 
     }
 
@@ -379,19 +624,9 @@ class ResponsibilityEngine extends EngineBase {
         let level =
             "none";
 
-        /*
-         * 核心边界：
-         *
-         * UNKNOWN      -> 不产生证据责任能力
-         * UNVERIFIED   -> 不产生证据责任能力
-         * VERIFIED_BUT_NOT_LINKED
-         *              -> 来源可信，但不能证明当前主张
-         * SUPPORTED    -> 才允许产生支持能力
-         */
-
         if (
             verificationStatus ===
-            "SUPPORTED" &&
+                "SUPPORTED" &&
             verifiedEvidenceCount > 0 &&
             sourceAvailable
         ) {
@@ -403,7 +638,7 @@ class ResponsibilityEngine extends EngineBase {
 
         if (
             verificationStatus ===
-            "SUPPORTED" &&
+                "SUPPORTED" &&
             verifiedEvidenceCount > 3 &&
             sourceAvailable
         ) {
@@ -440,7 +675,8 @@ class ResponsibilityEngine extends EngineBase {
             "UNKNOWN";
 
         if (
-            verificationStatus !== "SUPPORTED"
+            verificationStatus !==
+            "SUPPORTED"
         ) {
 
             return {
@@ -449,7 +685,7 @@ class ResponsibilityEngine extends EngineBase {
                     "exceeded",
 
                 explanation:
-                    "当前表达的责任要求超过未经验证、未知或尚未建立支持关系的信息能力。",
+                    "当前表达的责任要求超过当前可直接核验的已验证证据能力。",
 
                 epistemicBoundary:
                     "UNKNOWN_OR_UNVERIFIED"

@@ -1,4 +1,4 @@
-class RuntimeResult {
+﻿class RuntimeResult {
 
     constructor() {
 
@@ -24,88 +24,36 @@ class RuntimeResult {
 
         };
 
-        this.recognition =
-            null;
-
-        this.definition =
-            null;
-
-        this.testimony =
-            null;
-
-        this.testimonyValidation =
-            null;
-
-        this.search =
-            null;
-
-        this.evidence =
-            null;
-
-        this.correspondence =
-            null;
-
-        this.reasoning =
-            null;
-
-        this.responsibility =
-            null;
-
-        this.responsibilityModel =
-            null;
-
-        this.reconstruction =
-            null;
-
-        this.generator =
-            null;
-
-        this.selfCheck =
-            null;
-
-        this.engineRegistry =
-            null;
-
-        this.testimonyChain =
-            null;
-
-        this.verificationBoundary =
-            null;
-
-        this.identity =
-            null;
-
-        this.contract =
-            null;
-
-        this.semanticObject =
-            null;
-
-        this.runtimeTrace =
-            [];
-
-        this.pipeline =
-            [];
-
-        this.epistemicState =
-            "UNKNOWN";
+        this.recognition = null;
+        this.definition = null;
+        this.testimony = null;
+        this.testimonyValidation = null;
+        this.search = null;
+        this.evidence = null;
+        this.correspondence = null;
+        this.reasoning = null;
+        this.responsibility = null;
+        this.responsibilityModel = null;
+        this.reconstruction = null;
+        this.generator = null;
+        this.selfCheck = null;
+        this.engineRegistry = null;
+        this.testimonyChain = null;
+        this.verificationBoundary = null;
+        this.identity = null;
+        this.contract = null;
+        this.semanticObject = null;
+        this.runtimeTrace = [];
+        this.pipeline = [];
+        this.epistemicState = "UNKNOWN";
 
         this.epistemicBoundary = {
 
-            discovered:
-                0,
-
-            unverified:
-                0,
-
-            verified:
-                0,
-
-            supported:
-                0,
-
-            unknown:
-                0
+            discovered: 0,
+            unverified: 0,
+            verified: 0,
+            supported: 0,
+            unknown: 0
 
         };
 
@@ -117,7 +65,6 @@ class RuntimeResult {
         this.metadata = {
 
             ...this.metadata,
-
             ...metadata,
 
             runtimeVersion:
@@ -179,7 +126,9 @@ class RuntimeResult {
     setResponsibilityModel(model = []) {
 
         this.responsibilityModel =
-            model;
+            Array.isArray(model)
+                ? model
+                : [];
 
         return this;
 
@@ -211,13 +160,9 @@ class RuntimeResult {
         const allowedStates = [
 
             "DISCOVERED",
-
             "UNVERIFIED",
-
             "VERIFIED",
-
             "SUPPORTED",
-
             "UNKNOWN"
 
         ];
@@ -237,7 +182,6 @@ class RuntimeResult {
         this.epistemicBoundary = {
 
             ...this.epistemicBoundary,
-
             ...boundary
 
         };
@@ -286,7 +230,7 @@ class RuntimeResult {
 
         const unknownCount =
             correspondence.verificationStatus ===
-            "UNKNOWN"
+                "UNKNOWN"
                 ? 1
                 : 0;
 
@@ -330,7 +274,19 @@ class RuntimeResult {
 
         this.buildEpistemicBoundary();
 
-        return {
+        /*
+         * RuntimeResult 是最终输出边界。
+         *
+         * 这里绝不能返回 this 作为 result，
+         * 否则会形成：
+         *
+         * result -> RuntimeResult -> result
+         *
+         * 同时也不能把运行时 EngineRegistry 实例
+         * 原样暴露到最终 JSON。
+         */
+
+        const output = {
 
             runtimeVersion:
                 this.runtimeVersion,
@@ -381,7 +337,7 @@ class RuntimeResult {
                 this.selfCheck,
 
             engineRegistry:
-                this.engineRegistry,
+                this.serializeEngineRegistry(),
 
             testimonyChain:
                 this.testimonyChain,
@@ -408,15 +364,132 @@ class RuntimeResult {
                 this.epistemicState,
 
             epistemicBoundary:
-                this.epistemicBoundary,
-
-            result:
-                this
+                this.epistemicBoundary
 
         };
+
+        return output;
+
+    }
+
+
+    serializeEngineRegistry() {
+
+        const registry =
+            this.engineRegistry;
+
+        if (!registry) {
+
+            return [];
+
+        }
+
+        /*
+         * EngineRegistry 实例只允许通过
+         * describe() 进入 RuntimeResult。
+         */
+
+        if (
+            typeof registry.describe ===
+            "function"
+        ) {
+
+            const described =
+                registry.describe();
+
+            return this.makeSerializable(
+                described
+            );
+
+        }
+
+        /*
+         * 如果上游已经传入纯数据，
+         * 同样允许保留。
+         */
+
+        return this.makeSerializable(
+            registry
+        );
+
+    }
+
+
+    makeSerializable(value, seen = new WeakSet()) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return value;
+
+        }
+
+        if (
+            typeof value !== "object"
+        ) {
+
+            return value;
+
+        }
+
+        if (
+            seen.has(value)
+        ) {
+
+            return undefined;
+
+        }
+
+        seen.add(value);
+
+        if (Array.isArray(value)) {
+
+            return value
+                .map(
+                    item =>
+                        this.makeSerializable(
+                            item,
+                            seen
+                        )
+                )
+                .filter(
+                    item =>
+                        item !== undefined
+                );
+
+        }
+
+        const output = {};
+
+        for (
+            const [key, item]
+            of Object.entries(value)
+        ) {
+
+            const serialized =
+                this.makeSerializable(
+                    item,
+                    seen
+                );
+
+            if (
+                serialized !== undefined
+            ) {
+
+                output[key] =
+                    serialized;
+
+            }
+
+        }
+
+        return output;
 
     }
 
 }
+
 
 export default RuntimeResult;

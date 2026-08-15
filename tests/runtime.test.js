@@ -1,4 +1,4 @@
-import MoWenRuntime from "../runtime/index.js";
+﻿import MoWenRuntime from "../runtime/index.js";
 
 
 const runtime =
@@ -35,7 +35,7 @@ const checks = {
 
     runtimeVersion:
 
-        runtimeResult.runtimeVersion === "10.3",
+        runtimeResult.runtimeVersion === "10.4",
 
 
     runtimeTrace:
@@ -109,7 +109,6 @@ const checks = {
 };
 
 
-
 const passed =
 
     Object.values(checks)
@@ -117,13 +116,12 @@ const passed =
         .every(Boolean);
 
 
-
 if (passed) {
 
 
     console.log(
 
-        "MoWen Runtime v10.3 Test Passed."
+        "MoWen Runtime v10.4 Test Passed."
 
     );
 
@@ -133,7 +131,7 @@ if (passed) {
 
     console.log(
 
-        "MoWen Runtime v10.3 Test Failed."
+        "MoWen Runtime v10.4 Test Failed."
 
     );
 

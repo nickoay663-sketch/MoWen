@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class EvidenceEngine extends EngineBase {
 
@@ -6,8 +6,8 @@ class EvidenceEngine extends EngineBase {
 
         super(
             "EvidenceEngine",
-            "10.4",
-            "莫问记录并验证表达相关证据，不把发现扩大为证明。"
+            "10.5",
+            "莫问记录表达相关证据，但没有可识别的验证行为时，不将外部声明提升为已验证证据。"
         );
 
         this.semanticObject =
@@ -169,15 +169,18 @@ class EvidenceEngine extends EngineBase {
 
 
         return candidates
+
             .filter(
                 item =>
                     item &&
                     typeof item === "object"
             )
+
             .map(
                 item =>
                     this.normalizeEvidence(item)
             )
+
             .filter(
                 item =>
                     item !== null
@@ -221,21 +224,48 @@ class EvidenceEngine extends EngineBase {
         }
 
 
-        const explicitVerified =
+        /*
+         * Evidence Boundary v10.5
+         *
+         * External declarations such as:
+         *
+         *   verified: true
+         *   verificationStatus: "VERIFIED"
+         *   verificationBasis: "..."
+         *
+         * are claims supplied by the input.
+         *
+         * They are NOT Runtime verification records.
+         *
+         * Because the current Runtime has no independent
+         * verification engine or verification record,
+         * such claims cannot promote evidence to VERIFIED.
+         */
+
+        const externallyClaimedVerified =
             item.verified === true ||
             item.verificationStatus === "VERIFIED";
 
 
-        const verificationBasis =
+        const externalVerificationBasis =
             item.verificationBasis ||
             item.verificationSource ||
             item.verifier ||
             null;
 
 
-        const verified =
-            explicitVerified &&
-            !!verificationBasis;
+        /*
+         * No Runtime verification record exists yet.
+         *
+         * Therefore every supplied/search-derived evidence
+         * remains UNVERIFIED.
+         */
+
+        const verificationStatus =
+            "UNVERIFIED";
+
+        const epistemicState =
+            "UNVERIFIED";
 
 
         return {
@@ -252,31 +282,29 @@ class EvidenceEngine extends EngineBase {
                 item.origin ||
                 "supplied",
 
-            epistemicState:
-                verified
-                    ? "VERIFIED"
-                    : "DISCOVERED",
+            epistemicState,
 
-            verificationStatus:
-                verified
-                    ? "VERIFIED"
-                    : "UNVERIFIED",
+            verificationStatus,
 
-            verificationBasis,
+            verificationBasis:
+                null,
+
+            externalVerificationClaim:
+                externallyClaimedVerified,
+
+            externalVerificationBasis,
 
             independent:
-                item.independent !== false,
-
-            supportsClaim:
-                item.supportsClaim === true,
+                item.independent === true,
 
             sourceAvailable:
                 !!source,
 
+            supportsClaim:
+                item.supportsClaim === true,
+
             evidenceBoundary:
-                verified
-                    ? "VERIFIED"
-                    : "UNVERIFIED"
+                "UNVERIFIED"
 
         };
 

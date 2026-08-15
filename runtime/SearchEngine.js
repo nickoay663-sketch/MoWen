@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class SearchEngine extends EngineBase {
 
@@ -255,7 +255,26 @@ class SearchEngine extends EngineBase {
                         "DISCOVERED",
 
                     verificationStatus:
+                        item.verificationStatus ||
                         "UNVERIFIED",
+
+                    verified:
+                        item.verified === true,
+
+                    verificationBasis:
+                        item.verificationBasis ||
+                        null,
+
+                    verificationSource:
+                        item.verificationSource ||
+                        null,
+
+                    verifier:
+                        item.verifier ||
+                        null,
+
+                    supportsClaim:
+                        item.supportsClaim === true,
 
                     independent:
                         item.independent === true
