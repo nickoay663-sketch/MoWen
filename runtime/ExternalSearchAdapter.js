@@ -10,7 +10,7 @@ class ExternalSearchAdapter {
             "ExternalSearchAdapter";
 
         this.version =
-            "1.2";
+            "1.3";
 
         this.enabled =
             options.enabled === true;
@@ -50,29 +50,6 @@ class ExternalSearchAdapter {
         }
 
 
-        /*
-         * ---------------------------------------------------------
-         * External Search Capability Boundary
-         *
-         * Adapter 负责：
-         *
-         * 1. 接收 Runtime 搜索请求
-         * 2. 调用外部 Provider
-         * 3. 清洗 Provider 来源
-         * 4. 转换为 CapabilityContract
-         * 5. 通过 CapabilityAdmission
-         *
-         * Adapter 不：
-         *
-         * - 创建 Evidence
-         * - 验证事实
-         * - 支持 Claim
-         * - 生成 Conclusion
-         * - 提升 epistemic state
-         * ---------------------------------------------------------
-         */
-
-
         if (!this.enabled) {
 
             return this.buildCapabilityResponse({
@@ -80,9 +57,17 @@ class ExternalSearchAdapter {
                 status:
                     "adapter-disabled",
 
-                output: null,
+                output: {
 
-                sources: []
+                    query:
+                        normalizedQuery
+
+                },
+
+                sources: [],
+
+                admissionExpected:
+                    "REJECT"
 
             });
 
@@ -96,9 +81,17 @@ class ExternalSearchAdapter {
                 status:
                     "provider-unavailable",
 
-                output: null,
+                output: {
 
-                sources: []
+                    query:
+                        normalizedQuery
+
+                },
+
+                sources: [],
+
+                admissionExpected:
+                    "REJECT"
 
             });
 
@@ -122,7 +115,12 @@ class ExternalSearchAdapter {
                 status:
                     "provider-error",
 
-                output: null,
+                output: {
+
+                    query:
+                        normalizedQuery
+
+                },
 
                 sources: [],
 
@@ -130,7 +128,10 @@ class ExternalSearchAdapter {
                     error &&
                         error.message
                         ? error.message
-                        : String(error)
+                        : String(error),
+
+                admissionExpected:
+                    "REJECT"
 
             });
 
@@ -180,7 +181,10 @@ class ExternalSearchAdapter {
 
             },
 
-            sources
+            sources,
+
+            admissionExpected:
+                "PASS"
 
         });
 
@@ -199,7 +203,10 @@ class ExternalSearchAdapter {
             [],
 
         error =
-            null
+            null,
+
+        admissionExpected =
+            "PASS"
 
     } = {}) {
 
@@ -262,7 +269,15 @@ class ExternalSearchAdapter {
 
 
         const admission =
-            new CapabilityAdmission();
+            new CapabilityAdmission({
+
+                trustedProvider:
+                    this.name,
+
+                trustedProviderVersion:
+                    this.version
+
+            });
 
 
         const admissionResult =
@@ -289,8 +304,80 @@ class ExternalSearchAdapter {
                 capability:
                     null,
 
+                capabilityAdmission:
+                    "REJECT",
+
                 admission:
-                    admissionResult
+                    admissionResult,
+
+                error
+
+            };
+
+        }
+
+
+        if (
+            admissionExpected === "REJECT"
+        ) {
+
+            return {
+
+                status,
+
+                query:
+                    output?.query ||
+                    "",
+
+                sources: [],
+
+                capability:
+                    response,
+
+                capabilityAdmission:
+                    "REJECT",
+
+                admission: {
+
+                    ...admissionResult,
+
+                    admitted:
+                        false,
+
+                    status:
+                        "capability-rejected",
+
+                    admission:
+                        "REJECT",
+
+                    errors: [
+
+                        `Capability unavailable: ${status}.`
+
+                    ],
+
+                    trace: [
+
+                        ...admissionResult.trace,
+
+                        {
+
+                            engine:
+                                "ExternalSearchAdapter",
+
+                            action:
+                                "capability-availability",
+
+                            status:
+                                "rejected"
+
+                        }
+
+                    ]
+
+                },
+
+                error
 
             };
 
@@ -310,6 +397,9 @@ class ExternalSearchAdapter {
 
             capability:
                 response,
+
+            capabilityAdmission:
+                "PASS",
 
             admission:
                 admissionResult,

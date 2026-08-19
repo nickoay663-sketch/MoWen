@@ -9,20 +9,37 @@ class CapabilityAdmission {
             "CapabilityAdmission";
 
         this.version =
-            "1.0";
+            "1.1";
+
+        this.trustedProvider =
+            options.trustedProvider ||
+            null;
+
+        this.trustedProviderVersion =
+            options.trustedProviderVersion ??
+            null;
 
     }
 
 
     admit(response) {
 
-        const validation =
-            CapabilityContract.validate(
-                response
+        const admission =
+            CapabilityContract.admit(
+                response,
+                {
+                    provider:
+                        this.trustedProvider,
+
+                    providerVersion:
+                        this.trustedProviderVersion
+                }
             );
 
 
-        if (!validation.valid) {
+        if (
+            admission.admitted !== true
+        ) {
 
             return {
 
@@ -36,7 +53,7 @@ class CapabilityAdmission {
                     "REJECT",
 
                 errors:
-                    validation.errors,
+                    admission.errors || [],
 
                 response:
                     null,
@@ -49,7 +66,7 @@ class CapabilityAdmission {
                             "CapabilityAdmission",
 
                         action:
-                            "validate-capability",
+                            "trusted-capability-admission",
 
                         status:
                             "rejected"
@@ -77,7 +94,8 @@ class CapabilityAdmission {
             errors:
                 [],
 
-            response,
+            response:
+                admission.response,
 
             trace: [
 
@@ -87,7 +105,7 @@ class CapabilityAdmission {
                         "CapabilityAdmission",
 
                     action:
-                        "validate-capability",
+                        "trusted-capability-admission",
 
                     status:
                         "passed"
@@ -97,6 +115,7 @@ class CapabilityAdmission {
             ]
 
         };
+        
 
     }
 
@@ -104,12 +123,53 @@ class CapabilityAdmission {
     isAdmitted(response) {
 
         const result =
-            this.admit(response);
+            this.admit(
+                response
+            );
 
 
         return (
             result.admitted === true
         );
+
+    }
+
+
+    contract() {
+
+        return {
+
+            name:
+                this.name,
+
+            version:
+                this.version,
+
+            trustedProvider:
+                this.trustedProvider,
+
+            trustedProviderVersion:
+                this.trustedProviderVersion,
+
+            principles: [
+
+                "TRUSTED_PROVIDER_REQUIRED",
+
+                "PROVIDER_VERSION_MUST_MATCH",
+
+                "CAPABILITY_CONTRACT_MUST_VALIDATE",
+
+                "REJECT_UNTRUSTED_CAPABILITY",
+
+                "NO_RUNTIME_EVIDENCE_CREATION",
+
+                "NO_RUNTIME_VERIFICATION",
+
+                "NO_RUNTIME_CONCLUSION"
+
+            ]
+
+        };
 
     }
 

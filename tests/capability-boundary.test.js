@@ -3,47 +3,92 @@
 const cases = [
 
     {
-        name: "DISABLED_ADAPTER",
+        name:
+            "DISABLED_ADAPTER",
+
+        expectedAdmission:
+            "REJECT",
+
+        expectedExternalSources:
+            0,
 
         options: {
+
             externalSearchAdapter: {
                 enabled: false
             }
+
         }
+
     },
 
     {
-        name: "NO_PROVIDER",
+        name:
+            "NO_PROVIDER",
+
+        expectedAdmission:
+            "REJECT",
+
+        expectedExternalSources:
+            0,
 
         options: {
+
             externalSearchAdapter: {
                 enabled: true
             }
+
         }
+
     },
 
     {
-        name: "EMPTY_PROVIDER",
+        name:
+            "EMPTY_PROVIDER",
+
+        expectedAdmission:
+            "PASS",
+
+        expectedExternalSources:
+            0,
 
         options: {
+
             externalSearchAdapter: {
-                enabled: true,
+
+                enabled:
+                    true,
 
                 provider:
                     async () => ({
-                        sources: []
+
+                        sources:
+                            []
+
                     })
+
             }
+
         }
+
     },
 
     {
-        name: "REAL_PROVIDER",
+        name:
+            "REAL_PROVIDER",
+
+        expectedAdmission:
+            "PASS",
+
+        expectedExternalSources:
+            1,
 
         options: {
+
             externalSearchAdapter: {
 
-                enabled: true,
+                enabled:
+                    true,
 
                 provider:
                     async () => ({
@@ -51,6 +96,7 @@ const cases = [
                         sources: [
 
                             {
+
                                 source:
                                     "TestProvider",
 
@@ -79,7 +125,9 @@ const cases = [
                     })
 
             }
+
         }
+
     }
 
 ];
@@ -89,8 +137,11 @@ for (const testCase of cases) {
 
     const runtime =
         new HonestRuntime(
+
             "测试 Capability 边界",
+
             testCase.options
+
         );
 
 
@@ -110,33 +161,56 @@ for (const testCase of cases) {
 
     const externalSources =
         sources.filter(
+
             source =>
-                source.source !== "RuntimeInput"
+                source.source !==
+                "RuntimeInput"
+
         );
 
 
     const externalSourceBoundaryValid =
         externalSources.every(
+
             source =>
-                source.state === "DISCOVERED" &&
-                source.verificationStatus === "UNVERIFIED" &&
-                source.epistemicState === "DISCOVERED" &&
-                source.verified === false &&
-                source.supportsClaim === false
+
+                source.state ===
+                    "DISCOVERED" &&
+
+                source.verificationStatus ===
+                    "UNVERIFIED" &&
+
+                source.epistemicState ===
+                    "DISCOVERED" &&
+
+                source.verified ===
+                    false &&
+
+                source.supportsClaim ===
+                    false
+
         );
 
 
     const evidenceBoundaryValid =
-        search.metadata?.evidenceCreated !== true &&
-        search.result?.evidenceCreated !== true;
+
+        search.metadata?.evidenceCreated !==
+            true &&
+
+        search.result?.evidenceCreated !==
+            true;
 
 
     const capabilityAdmissionValid =
-        testCase.name === "DISABLED_ADAPTER" ||
-        testCase.name === "NO_PROVIDER" ||
-        testCase.name === "EMPTY_PROVIDER"
-            ? search.capabilityAdmission === "PASS"
-            : search.capabilityAdmission === "PASS";
+
+        search.capabilityAdmission ===
+        testCase.expectedAdmission;
+
+
+    const externalSourceCountValid =
+
+        externalSources.length ===
+        testCase.expectedExternalSources;
 
 
     const selfCheckPassed =
@@ -152,16 +226,26 @@ for (const testCase of cases) {
 
 
     const passed =
+
         capabilityAdmissionValid &&
+
+        externalSourceCountValid &&
+
         externalSourceBoundaryValid &&
+
         evidenceBoundaryValid &&
+
         selfCheckPassed &&
+
         boundaryPassed &&
+
         epistemicPassed;
 
 
     console.log(
+
         JSON.stringify(
+
             {
 
                 name:
@@ -169,19 +253,33 @@ for (const testCase of cases) {
 
                 passed,
 
+                expected: {
+
+                    capabilityAdmission:
+                        testCase.expectedAdmission,
+
+                    externalSourceCount:
+                        testCase.expectedExternalSources
+
+                },
+
+                actual: {
+
+                    capabilityAdmission:
+                        search.capabilityAdmission,
+
+                    externalSourceCount:
+                        externalSources.length
+
+                },
+
                 search: {
 
                     status:
                         search.status,
 
-                    capabilityAdmission:
-                        search.capabilityAdmission,
-
                     sourceCount:
                         search.metadata?.sourceCount,
-
-                    externalSourceCount:
-                        externalSources.length,
 
                     evidenceCreated:
                         search.metadata?.evidenceCreated
@@ -189,7 +287,9 @@ for (const testCase of cases) {
                 },
 
                 externalSources:
+
                     externalSources.map(
+
                         source => ({
 
                             source:
@@ -214,12 +314,16 @@ for (const testCase of cases) {
                                 source.independent
 
                         })
+
                     ),
 
                 boundaryAssertions: {
 
                     capabilityAdmission:
                         capabilityAdmissionValid,
+
+                    externalSourceCount:
+                        externalSourceCountValid,
 
                     externalSourceBoundary:
                         externalSourceBoundaryValid,
@@ -249,16 +353,22 @@ for (const testCase of cases) {
                 }
 
             },
+
             null,
+
             2
+
         )
+
     );
 
 
     if (!passed) {
 
         throw new Error(
+
             `Capability boundary test failed: ${testCase.name}`
+
         );
 
     }
