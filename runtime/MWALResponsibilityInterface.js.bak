@@ -2,105 +2,43 @@
 
 /**
  * MoWen Accountability Layer
- * Responsibility Interface v2.2
+ * Responsibility Interface v2.1
  *
- * Provenance Boundary:
- *
- *     MWAL translates trusted responsibility records.
- *     MWAL never trusts authority claimed by the event envelope.
+ * Purpose:
+ * Convert the normalized responsibility records carried by
+ * ResponsibilityEvent into the MWAL responsibility envelope.
  *
  * Core rule:
  *
- *     Event metadata is descriptive.
- *     Responsibility records are authoritative only when they
- *     carry an explicit Runtime provenance marker.
+ *     Translate responsibility facts.
+ *     Do not manufacture responsibility facts.
  *
- * Therefore:
+ * This interface does not:
+ * - create evidence
+ * - verify facts
+ * - infer human identity
+ * - infer responsibility
+ * - assign legal responsibility
+ * - manufacture signatures
+ * - manufacture event identifiers
+ * - authorize propagation
+ * - export Runtime internals
  *
- *     event.epistemicState       -> NEVER authoritative
- *     event.responsibilityState  -> NEVER authoritative
- *     event.propagationState     -> NEVER authoritative
- *     event.supported            -> NEVER authoritative
+ * Runtime objects such as:
+ * - semanticObject
+ * - engineRegistry
+ * - engines
+ * - runtimeContext
  *
- * Only normalized ResponsibilityEngine records carrying the
- * explicit MoWen Runtime provenance marker may establish MWAL
- * verification or responsibility state.
+ * are explicitly excluded from the MWAL boundary.
  */
 
 class MWALResponsibilityInterface {
 
-    static VERSION = "2.2";
+    static VERSION = "2.1";
 
     static NAME =
         "MWALResponsibilityInterface";
-
-    static PROVENANCE_MARKER =
-        "MoWen.ResponsibilityEngine";
-
-    static PROVENANCE_VERSION =
-        "1.0";
-
-
-    /*
-     * =========================================================
-     * Trusted Responsibility Record Detection
-     * =========================================================
-     *
-     * A record is not trusted merely because its shape looks like
-     * a responsibility record.
-     *
-     * MWAL requires explicit provenance.
-     *
-     * This prevents an untrusted caller from manufacturing:
-     *
-     *     VERIFIED
-     *     ESTABLISHED
-     *     ALLOW
-     *
-     * merely by constructing an object with those fields.
-     */
-
-    static isTrustedResponsibilityRecord(
-        record
-    ) {
-
-        if (
-            !record ||
-            typeof record !==
-                "object" ||
-            Array.isArray(record)
-        ) {
-
-            return false;
-
-        }
-
-        const provenance =
-            record.provenance ||
-            record.sourceProvenance ||
-            null;
-
-        if (
-            !provenance ||
-            typeof provenance !==
-                "object"
-        ) {
-
-            return false;
-
-        }
-
-        return (
-
-            provenance.provider ===
-                MWALResponsibilityInterface.PROVENANCE_MARKER &&
-
-            provenance.version ===
-                MWALResponsibilityInterface.PROVENANCE_VERSION
-
-        );
-
-    }
 
 
     /*
@@ -108,12 +46,9 @@ class MWALResponsibilityInterface {
      * Verification State Mapping
      * =========================================================
      *
-     * IMPORTANT:
+     * This is a translation only.
      *
-     * This method accepts only a value already extracted from a
-     * trusted responsibility record.
-     *
-     * The event envelope must never be used as a fallback.
+     * No state is upgraded during mapping.
      */
 
     static mapVerificationState(
@@ -158,38 +93,19 @@ class MWALResponsibilityInterface {
      * Responsibility State Mapping
      * =========================================================
      *
-     * No trusted record:
+     * Responsibility state is derived only from the explicit
+     * responsibility record.
      *
-     *     UNESTABLISHED
-     *
-     * This is intentionally stronger than UNKNOWN at the MWAL
-     * responsibility boundary.
-     *
-     * MWAL must not claim that responsibility is merely unknown
-     * when no responsibility authority has crossed the boundary.
+     * No responsibility may be upgraded merely because a
+     * ResponsibilityEvent exists.
      */
 
     static mapResponsibilityState(
         responsibilityRecord
     ) {
 
-        if (
-            !MWALResponsibilityInterface
-                .isTrustedResponsibilityRecord(
-                    responsibilityRecord
-                )
-        ) {
-
-            return (
-                MWALContract
-                    .RESPONSIBILITY_STATES
-                    .UNESTABLISHED
-            );
-
-        }
-
         const record =
-            responsibilityRecord;
+            responsibilityRecord || {};
 
         if (
             record.responsibilityState &&
@@ -247,7 +163,7 @@ class MWALResponsibilityInterface {
         return (
             MWALContract
                 .RESPONSIBILITY_STATES
-                .UNESTABLISHED
+                .UNKNOWN
         );
 
     }
@@ -258,17 +174,12 @@ class MWALResponsibilityInterface {
      * Propagation State Mapping
      * =========================================================
      *
-     * PROPAGATION IS NEVER READ FROM THE EVENT.
+     * Propagation is never authorized by this interface.
      *
-     * event.propagationState = ALLOW is therefore ignored.
+     * If the event explicitly carries a valid propagation state,
+     * it may be preserved.
      *
-     * ALLOW may only be derived after:
-     *
-     * 1. trusted responsibility record exists
-     * 2. verification is SUPPORTED
-     * 3. responsibility is ESTABLISHED
-     * 4. boundary is matched
-     * 5. no unresolved responsibility gap exists
+     * Otherwise REQUIRE_VERIFICATION remains mandatory.
      */
 
     static mapPropagationState(
@@ -276,70 +187,35 @@ class MWALResponsibilityInterface {
         responsibilityRecord
     ) {
 
-        const trusted =
-            MWALResponsibilityInterface
-                .isTrustedResponsibilityRecord(
-                    responsibilityRecord
-                );
+        const event =
+            responsibilityEvent || {};
+
+        const explicit =
+            event.propagationState;
+
+        const validStates =
+            Object.values(
+                MWALContract.PROPAGATION_STATES
+            );
 
         if (
-            trusted !== true
+            validStates.includes(explicit)
         ) {
 
-            return (
-                MWALContract
-                    .PROPAGATION_STATES
-                    .REQUIRE_VERIFICATION
-            );
+            return explicit;
 
         }
 
-        const record =
-            responsibilityRecord;
+        /*
+         * A responsibility boundary exceeded or unresolved
+         * capacity gap can never silently enter propagation.
+         */
 
         if (
-            record.responsibilityBoundary?.status ===
+            responsibilityRecord?.responsibilityBoundary?.status ===
                 "exceeded" ||
-            record.responsibilityJudgment?.gap ===
+            responsibilityRecord?.responsibilityJudgment?.gap ===
                 true
-        ) {
-
-            return (
-                MWALContract
-                    .PROPAGATION_STATES
-                    .REQUIRE_VERIFICATION
-            );
-
-        }
-
-        if (
-            record.supported !== true
-        ) {
-
-            return (
-                MWALContract
-                    .PROPAGATION_STATES
-                    .REQUIRE_VERIFICATION
-            );
-
-        }
-
-        if (
-            record.verificationStatus !==
-            MWALContract.VERIFICATION_STATES.SUPPORTED
-        ) {
-
-            return (
-                MWALContract
-                    .PROPAGATION_STATES
-                    .REQUIRE_VERIFICATION
-            );
-
-        }
-
-        if (
-            record.responsibilityBoundary?.status !==
-            "matched"
         ) {
 
             return (
@@ -353,7 +229,7 @@ class MWALResponsibilityInterface {
         return (
             MWALContract
                 .PROPAGATION_STATES
-                .ALLOW
+                .REQUIRE_VERIFICATION
         );
 
     }
@@ -364,10 +240,13 @@ class MWALResponsibilityInterface {
      * Responsibility Record Extraction
      * =========================================================
      *
-     * Only explicitly proven Runtime responsibility records may
-     * cross the MWAL boundary.
+     * IMPORTANT:
      *
-     * Shape alone is insufficient.
+     * Only normalized responsibility records may cross the
+     * MWAL boundary.
+     *
+     * The complete ResponsibilityEngine result is rejected
+     * from direct propagation into MWAL.
      */
 
     static extractResponsibilityRecords(
@@ -377,19 +256,30 @@ class MWALResponsibilityInterface {
         const event =
             responsibilityEvent || {};
 
-        const candidates = [];
-
         if (
             Array.isArray(
                 event.responsibilityRecords
             )
         ) {
 
-            candidates.push(
-                ...event.responsibilityRecords
-            );
+            return event.responsibilityRecords
+                .filter(
+                    record =>
+                        record &&
+                        typeof record ===
+                            "object"
+                );
 
         }
+
+        /*
+         * Compatibility path:
+         *
+         * ResponsibilityEvent v1.1 exposes responsibilityRecords,
+         * but older event objects may not.
+         *
+         * Only the explicit responsibilities array is accepted.
+         */
 
         if (
             Array.isArray(
@@ -397,23 +287,17 @@ class MWALResponsibilityInterface {
             )
         ) {
 
-            candidates.push(
-                ...event.responsibility.responsibilities
-            );
+            return event.responsibility.responsibilities
+                .filter(
+                    record =>
+                        record &&
+                        typeof record ===
+                            "object"
+                );
 
         }
 
-        return [
-            ...new Set(
-                candidates.filter(
-                    record =>
-                        MWALResponsibilityInterface
-                            .isTrustedResponsibilityRecord(
-                                record
-                            )
-                )
-            )
-        ];
+        return [];
 
     }
 
@@ -422,25 +306,24 @@ class MWALResponsibilityInterface {
      * =========================================================
      * Responsibility Projection
      * =========================================================
+     *
+     * This method deliberately creates a new plain object.
+     *
+     * It does NOT pass through:
+     * - semanticObject
+     * - engineRegistry
+     * - engines
+     * - runtimeContext
+     * - metadata
+     * - Engine instances
      */
 
     static projectResponsibility(
         responsibilityRecord
     ) {
 
-        if (
-            !MWALResponsibilityInterface
-                .isTrustedResponsibilityRecord(
-                    responsibilityRecord
-                )
-        ) {
-
-            return null;
-
-        }
-
         const record =
-            responsibilityRecord;
+            responsibilityRecord || {};
 
         return {
 
@@ -548,8 +431,6 @@ class MWALResponsibilityInterface {
      * =========================================================
      * MWAL Envelope Construction
      * =========================================================
-     *
-     * Event-level authority claims are deliberately ignored.
      */
 
     static fromResponsibilityEvent(
@@ -569,14 +450,11 @@ class MWALResponsibilityInterface {
             records[0] || null;
 
         const verificationState =
-            primaryRecord
-                ? MWALResponsibilityInterface
-                    .mapVerificationState(
-                        primaryRecord.epistemicState
-                    )
-                : MWALContract
-                    .VERIFICATION_STATES
-                    .UNKNOWN;
+            MWALResponsibilityInterface
+                .mapVerificationState(
+                    primaryRecord?.epistemicState ||
+                    event.epistemicState
+                );
 
         const responsibilityState =
             MWALResponsibilityInterface
@@ -611,9 +489,8 @@ class MWALResponsibilityInterface {
                 null,
 
             identity:
-                primaryRecord
-                    ?.responsibilityActor
-                    ?.identity ||
+                event.identity ||
+                primaryRecord?.responsibilityActor?.identity ||
                 null,
 
             timestamp:
@@ -761,19 +638,13 @@ class MWALResponsibilityInterface {
                 MWALContract.VERSION,
 
             purpose:
-                "Translate explicitly proven Runtime responsibility records into an MWAL accountability envelope without trusting event-level authority claims.",
+                "Translate normalized ResponsibilityEvent records into an MWAL accountability envelope without exporting Runtime internals or manufacturing responsibility facts.",
 
             principles: Object.freeze([
 
                 "TRANSLATION_NOT_INFERENCE",
 
-                "PROVENANCE_BEFORE_AUTHORITY",
-
                 "NORMALIZED_RECORDS_ONLY",
-
-                "EXPLICIT_RUNTIME_PROVENANCE_REQUIRED",
-
-                "EVENT_STATE_IS_NOT_AUTHORITY",
 
                 "NO_RUNTIME_INTERNAL_EXPORT",
 
@@ -793,11 +664,7 @@ class MWALResponsibilityInterface {
 
                 "NO_LEGAL_JUDGMENT",
 
-                "UNKNOWN_MUST_REMAIN_EXPLICIT",
-
-                "UNESTABLISHED_MUST_REMAIN_EXPLICIT",
-
-                "REQUIRE_VERIFICATION_IS_DEFAULT"
+                "UNKNOWN_MUST_REMAIN_EXPLICIT"
 
             ]),
 
@@ -818,18 +685,6 @@ class MWALResponsibilityInterface {
                 "nextRuntimeState"
 
             ]),
-
-            provenance: Object.freeze({
-
-                provider:
-                    MWALResponsibilityInterface
-                        .PROVENANCE_MARKER,
-
-                version:
-                    MWALResponsibilityInterface
-                        .PROVENANCE_VERSION
-
-            }),
 
             invariants:
                 MWALContract.invariants()

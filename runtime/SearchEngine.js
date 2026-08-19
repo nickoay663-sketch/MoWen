@@ -7,8 +7,8 @@ class SearchEngine extends EngineBase {
 
         super(
             "SearchEngine",
-            "12.0",
-            "莫问搜索运行所需的信息来源。搜索可以扩大所见，但不能扩大所证。"
+            "15.1",
+            "莫问搜索运行所需的信息来源。搜索可以扩大所见，但不能扩大所证。外部能力必须经过 Capability Admission。运行时提供的搜索结果必须进入统一发现链，但不得因此自动获得验证资格。"
         );
 
         this.semanticObject =
@@ -17,58 +17,70 @@ class SearchEngine extends EngineBase {
     }
 
 
-    execute() {
+    async execute() {
 
         const searchResult =
-            this.search();
+            await this.search();
+
+
+        const sources =
+            Array.isArray(searchResult.sources)
+                ? searchResult.sources
+                : [];
 
 
         return this.result({
 
             status:
-                searchResult.sources.length > 0
-                    ? "search-completed"
-                    : "search-empty",
+                "completed",
 
             metadata:
                 this.metadata({
 
                     sourceCount:
-                        searchResult.sources.length,
+                        sources.length,
 
                     outputState:
-                        searchResult.outputState,
+                        searchResult.outputState ||
+                        "DISCOVERED",
 
                     verificationState:
-                        searchResult.verificationState,
+                        searchResult.verificationState ||
+                        "UNVERIFIED",
 
-                    knowledgeExpanded:
-                        searchResult.knowledgeExpanded,
+                    evidenceCreated:
+                        searchResult.evidenceCreated === true,
 
-                    evidenceExpanded:
-                        searchResult.evidenceExpanded
+                    capability:
+                        searchResult.capability || null
 
                 }),
 
-            sources:
-                searchResult.sources,
+            sources,
+
+            capability:
+                searchResult.capability || null,
+
+            capabilityAdmission:
+                searchResult.capabilityAdmission || null,
 
             result: {
 
-                sources:
-                    searchResult.sources,
+                sources,
+
+                sourceCount:
+                    sources.length,
 
                 outputState:
-                    searchResult.outputState,
+                    searchResult.outputState ||
+                    "DISCOVERED",
 
                 verificationState:
-                    searchResult.verificationState,
+                    searchResult.verificationState ||
+                    "UNVERIFIED",
 
-                knowledgeExpanded:
-                    searchResult.knowledgeExpanded,
-
-                evidenceExpanded:
-                    searchResult.evidenceExpanded
+                evidenceCreated:
+                    searchResult.evidenceCreated === true
 
             },
 
@@ -80,29 +92,23 @@ class SearchEngine extends EngineBase {
                         "SearchEngine",
 
                     action:
-                        "search",
+                        "search-runtime-input",
 
                     status:
-                        searchResult.sources.length > 0
-                            ? "completed"
-                            : "empty",
+                        "completed"
 
-                    outputState:
-                        searchResult.outputState,
+                },
 
-                    verificationState:
-                        searchResult.verificationState
-
-                }
+                ...(Array.isArray(searchResult.trace)
+                    ? searchResult.trace
+                    : [])
 
             ],
 
             questions:
-                searchResult.sources.length > 0
-                    ? []
-                    : [
-                        "没有发现新的外部来源。"
-                    ],
+                Array.isArray(searchResult.questions)
+                    ? searchResult.questions
+                    : [],
 
             nextRuntimeState:
                 "EvidenceEngine"
@@ -112,93 +118,208 @@ class SearchEngine extends EngineBase {
     }
 
 
-    search() {
+    async search() {
 
         const content =
             this.semanticObject.originalContent || "";
 
 
-        if (!content) {
+        /*
+         * ---------------------------------------------------------
+         * Runtime Input
+         * ---------------------------------------------------------
+         */
 
-            return {
+        const runtimeSources =
+            content
+                ? [
 
-                sources: [],
+                    {
 
-                outputState:
-                    "DISCOVERED",
+                        source:
+                            "RuntimeInput",
 
-                verificationState:
-                    "UNVERIFIED",
+                        content,
 
-                knowledgeExpanded:
-                    false,
+                        type:
+                            "runtime-input",
 
-                evidenceExpanded:
-                    false
+                        origin:
+                            "runtime",
 
-            };
+                        state:
+                            "DISCOVERED",
 
-        }
+                        verificationStatus:
+                            "UNVERIFIED",
+
+                        epistemicState:
+                            "DISCOVERED",
+
+                        verified:
+                            false,
+
+                        supportsClaim:
+                            false,
+
+                        independent:
+                            false
+
+                    }
+
+                ]
+                : [];
 
 
-        const connector =
+        /*
+         * ---------------------------------------------------------
+         * Supplied Search Results
+         *
+         * HonestRuntime 可以接收外部已经发现的信息。
+         *
+         * 这里的职责只有：
+         *
+         *   1. 接收
+         *   2. 统一进入 SearchResult
+         *   3. 保留原始声明
+         *
+         * SearchEngine 不把：
+         *
+         *   verified
+         *   verificationStatus
+         *   verificationBasis
+         *
+         * 转换成 Runtime 验证。
+         *
+         * 因此：
+         *
+         *   外部声称 VERIFIED
+         *          ↓
+         *   SearchEngine
+         *          ↓
+         *   DISCOVERED
+         *          ↓
+         *   EvidenceEngine
+         *          ↓
+         *   UNVERIFIED
+         *
+         * 真正的 VERIFIED 必须由 Runtime 验证记录产生。
+         * ---------------------------------------------------------
+         */
+
+        const suppliedSearchResults =
+            Array.isArray(
+                this.semanticObject.searchResults
+            )
+                ? this.semanticObject.searchResults
+                    .filter(
+                        item =>
+                            item &&
+                            typeof item === "object"
+                    )
+                    .map(
+                        item => ({
+
+                            ...item,
+
+                            origin:
+                                item.origin ||
+                                "supplied-search-result",
+
+                            state:
+                                "DISCOVERED",
+
+                            epistemicState:
+                                "DISCOVERED",
+
+                            verificationStatus:
+                                "UNVERIFIED",
+
+                            verified:
+                                false
+
+                        })
+                    )
+                : [];
+
+
+        /*
+         * ---------------------------------------------------------
+         * External Capability
+         *
+         * SearchEngine 只接收 Capability 的发现结果。
+         *
+         * Capability 不制造证据。
+         * Capability 不执行验证。
+         * Capability 不生成结论。
+         * ---------------------------------------------------------
+         */
+
+        const externalConnector =
+            this.semanticObject.externalSourceConnector ||
             new ExternalSourceConnector({
 
                 keyword:
                     content,
 
-                sources:
-                    this.semanticObject.searchResults
+                adapter:
+                    this.semanticObject.externalSearchAdapter,
+
+                adapterOptions:
+                    this.semanticObject.externalSearchAdapterOptions ||
+                    {}
 
             });
 
 
-        const connectionResult =
-            connector.run();
+        const externalResult =
+            await externalConnector.run();
 
 
-        const suppliedSources =
-            Array.isArray(
-                connectionResult.sources
-            )
-                ? connectionResult.sources
+        const externalSources =
+            externalResult &&
+                Array.isArray(externalResult.sources)
+                ? externalResult.sources
                 : [];
 
 
-        const runtimeInput = {
-
-            source:
-                "RuntimeInput",
-
-            content,
-
-            type:
-                "input",
-
-            state:
-                "DISCOVERED",
-
-            verificationStatus:
-                "UNVERIFIED",
-
-            independent:
-                false
-
-        };
-
-
         /*
-         * RuntimeInput 不是外部搜索结果。
+         * ---------------------------------------------------------
+         * Unified Discovery Sources
          *
-         * 它只是保存用户原始表达，
-         * 因此不能被计入外部来源数量，
-         * 也不能被当作独立证据。
+         * 顺序：
+         *
+         * RuntimeInput
+         * Supplied Search Results
+         * External Capability Results
+         *
+         * 全部只能进入 DISCOVERED 层。
+         * ---------------------------------------------------------
          */
+
+        const sources = [
+
+            ...runtimeSources,
+
+            ...suppliedSearchResults,
+
+            ...externalSources
+
+        ];
+
 
         return {
 
-            sources:
-                suppliedSources,
+            status:
+                externalResult &&
+                    externalResult.status
+                    ? externalResult.status
+                    : "completed",
+
+            sources,
+
+            sourceCount:
+                sources.length,
 
             outputState:
                 "DISCOVERED",
@@ -206,13 +327,34 @@ class SearchEngine extends EngineBase {
             verificationState:
                 "UNVERIFIED",
 
-            knowledgeExpanded:
-                suppliedSources.length > 0,
+            evidenceCreated:
+                externalResult &&
+                externalResult.result &&
+                externalResult.result.evidenceCreated === true,
 
-            evidenceExpanded:
-                false,
+            capability:
+                externalResult &&
+                    externalResult.capability
+                    ? externalResult.capability
+                    : null,
 
-            runtimeInput
+            capabilityAdmission:
+                externalResult &&
+                    externalResult.capability
+                    ? externalResult.capability.admission || null
+                    : null,
+
+            trace:
+                externalResult &&
+                    Array.isArray(externalResult.trace)
+                    ? externalResult.trace
+                    : [],
+
+            questions:
+                externalResult &&
+                    Array.isArray(externalResult.questions)
+                    ? externalResult.questions
+                    : []
 
         };
 

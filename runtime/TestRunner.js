@@ -1,9 +1,9 @@
-import HonestRuntime from "../runtime/HonestRuntime.js";
+﻿import HonestRuntime from "../runtime/HonestRuntime.js";
 import TestCases from "./TestCases.js";
 
 class TestRunner {
 
-    run() {
+    async run() {
 
         const results = [];
 
@@ -18,7 +18,7 @@ class TestRunner {
                 new HonestRuntime(test.input);
 
             const output =
-                runtime.run();
+                await runtime.run();
 
 
             const status =
@@ -60,7 +60,6 @@ class TestRunner {
             total: results.length,
 
             passed,
-
             failed,
 
             results

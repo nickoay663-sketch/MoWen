@@ -1,8 +1,12 @@
-﻿class RuntimeResult {
+﻿import RuntimeContract from "./RuntimeContract.js";
+
+class RuntimeResult {
 
     constructor() {
 
         this.runtimeVersion =
+            RuntimeContract.identity?.runtimeVersion ||
+            RuntimeContract.version ||
             "10.4";
 
         this.generatedAt =
@@ -11,10 +15,12 @@
         this.metadata = {
 
             contractVersion:
+                RuntimeContract.identity?.contractVersion ||
+                RuntimeContract.version ||
                 "10.4",
 
             runtimeVersion:
-                "10.4",
+                this.runtimeVersion,
 
             engineCount:
                 0,
@@ -45,17 +51,68 @@
         this.semanticObject = null;
         this.runtimeTrace = [];
         this.pipeline = [];
-        this.epistemicState = "UNKNOWN";
+
+        this.epistemicState =
+            this.getContractState("unknown", "UNKNOWN");
 
         this.epistemicBoundary = {
 
             discovered: 0,
             unverified: 0,
             verified: 0,
+            verifiedButNotLinked: 0,
             supported: 0,
-            unknown: 0
+            unknown: 0,
+            contradicted: 0,
+            partial: 0,
+            unresolved: 0,
+            outOfDomain: 0,
+            evidenceCount: 0,
+            reasoningEvaluated: 0
 
         };
+
+    }
+
+
+    getContractStates() {
+
+        return (
+            RuntimeContract.epistemicStates ||
+            {}
+        );
+
+    }
+
+
+    getContractState(key, fallback = null) {
+
+        const states =
+            this.getContractStates();
+
+        return (
+            states[key] ||
+            fallback
+        );
+
+    }
+
+
+    isDeclaredEpistemicState(state) {
+
+        if (
+            typeof state !== "string"
+        ) {
+
+            return false;
+
+        }
+
+        return Object
+            .values(
+                this.getContractStates()
+            )
+            .includes(state);
 
     }
 
@@ -157,20 +214,13 @@
 
     setEpistemicState(state = "UNKNOWN") {
 
-        const allowedStates = [
-
-            "DISCOVERED",
-            "UNVERIFIED",
-            "VERIFIED",
-            "SUPPORTED",
-            "UNKNOWN"
-
-        ];
-
         this.epistemicState =
-            allowedStates.includes(state)
+            this.isDeclaredEpistemicState(state)
                 ? state
-                : "UNKNOWN";
+                : this.getContractState(
+                    "unknown",
+                    "UNKNOWN"
+                );
 
         return this;
 
@@ -193,60 +243,256 @@
 
     buildEpistemicBoundary() {
 
-        const correspondence =
+        const evidenceResult =
+            this.evidence || {};
+
+        const correspondenceResult =
             this.correspondence || {};
 
-        const reasoning =
+        const reasoningResult =
             this.reasoning || {};
 
-        const evidences =
+
+        const correspondences =
             Array.isArray(
-                correspondence.evidences
+                correspondenceResult.correspondences
             )
-                ? correspondence.evidences
+                ? correspondenceResult.correspondences
                 : [];
 
-        const verifiedEvidenceCount =
-            Number(
-                correspondence.verifiedEvidenceCount || 0
-            );
 
-        const unverifiedEvidenceCount =
-            Number(
-                correspondence.unverifiedEvidenceCount || 0
-            );
+        const reasoningItems =
+            Array.isArray(
+                reasoningResult.reasonings
+            )
+                ? reasoningResult.reasonings
+                : [];
+
+
+        /*
+         * ---------------------------------------------------------
+         * Evidence Boundary
+         *
+         * EvidenceEngine 是发现 / 验证状态的直接来源。
+         *
+         * RuntimeResult 不根据搜索数量制造验证状态。
+         * ---------------------------------------------------------
+         */
+
+        const evidenceMetadata =
+            evidenceResult.metadata || {};
 
         const evidenceCount =
             Number(
-                correspondence.evidenceCount ||
-                evidences.length ||
+                evidenceMetadata.evidenceCount ||
+                evidenceResult.evidences?.length ||
                 0
             );
 
+        const evidenceUnverifiedCount =
+            Number(
+                evidenceMetadata.unverifiedCount ||
+                0
+            );
+
+        const evidenceVerifiedCount =
+            Number(
+                evidenceMetadata.verifiedCount ||
+                0
+            );
+
+        const evidenceDiscoveredCount =
+            Number(
+                evidenceMetadata.discoveredCount ||
+                0
+            );
+
+
+        /*
+         * ---------------------------------------------------------
+         * Correspondence Boundary
+         *
+         * CorrespondenceEngine 的真实对应关系位于：
+         *
+         * correspondence.correspondences[]
+         *
+         * verificationStatus 是对应层状态。
+         *
+         * 只有 Contract 已声明的状态才允许进入边界统计。
+         * ---------------------------------------------------------
+         */
+
+        const supportedState =
+            this.getContractState(
+                "supported",
+                "SUPPORTED"
+            );
+
+        const unknownState =
+            this.getContractState(
+                "unknown",
+                "UNKNOWN"
+            );
+
+        const verifiedButNotLinkedState =
+            this.getContractState(
+                "verifiedButNotLinked",
+                "VERIFIED_BUT_NOT_LINKED"
+            );
+
+        const contradictedState =
+            this.getContractState(
+                "contradicted",
+                "CONTRADICTED"
+            );
+
+        const partialState =
+            this.getContractState(
+                "partial",
+                "PARTIAL"
+            );
+
+        const unresolvedState =
+            this.getContractState(
+                "unresolved",
+                "UNRESOLVED"
+            );
+
+        const outOfDomainState =
+            this.getContractState(
+                "outOfDomain",
+                "OUT_OF_DOMAIN"
+            );
+
+        const unverifiedState =
+            this.getContractState(
+                "unverified",
+                "UNVERIFIED"
+            );
+
+
         const supportedCount =
-            correspondence.supported === true
-                ? 1
-                : 0;
+            correspondences.filter(
+                item =>
+                    item?.supported === true &&
+                    item?.verificationStatus ===
+                    supportedState
+            ).length;
+
 
         const unknownCount =
-            correspondence.verificationStatus ===
-                "UNKNOWN"
-                ? 1
-                : 0;
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    unknownState
+            ).length;
+
+
+        const correspondenceUnverifiedCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    unverifiedState
+            ).length;
+
+
+        const verifiedButNotLinkedCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    verifiedButNotLinkedState
+            ).length;
+
+
+        const contradictedCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    contradictedState
+            ).length;
+
+
+        const partialCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    partialState
+            ).length;
+
+
+        const unresolvedCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    unresolvedState
+            ).length;
+
+
+        const outOfDomainCount =
+            correspondences.filter(
+                item =>
+                    item?.verificationStatus ===
+                    outOfDomainState
+            ).length;
+
+
+        /*
+         * ---------------------------------------------------------
+         * Final evidence verification counts
+         *
+         * EvidenceEngine 是事实来源。
+         *
+         * Correspondence 只能决定：
+         *
+         * 是否已经形成支持关系。
+         * ---------------------------------------------------------
+         */
+
+        const unverifiedCount =
+            evidenceUnverifiedCount > 0
+                ? evidenceUnverifiedCount
+                : correspondenceUnverifiedCount;
+
+        const verifiedCount =
+            evidenceVerifiedCount;
+
+
+        /*
+         * ---------------------------------------------------------
+         * Discovered
+         *
+         * DISCOVERED 表示 Runtime 已发现资料。
+         *
+         * 优先读取 EvidenceEngine 的 discoveredCount，
+         * 其次读取 SearchEngine sourceCount。
+         *
+         * 不把 DISCOVERED 转换为 VERIFIED。
+         * ---------------------------------------------------------
+         */
+
+        const discoveredCount =
+            evidenceDiscoveredCount > 0
+                ? evidenceDiscoveredCount
+                : Number(
+                    this.search?.metadata?.sourceCount ||
+                    this.search?.sources?.length ||
+                    0
+                );
+
 
         this.epistemicBoundary = {
 
             discovered:
-                Number(
-                    this.search?.metadata?.sourceCount ||
-                    0
-                ),
+                discoveredCount,
 
             unverified:
-                unverifiedEvidenceCount,
+                unverifiedCount,
 
             verified:
-                verifiedEvidenceCount,
+                verifiedCount,
+
+            verifiedButNotLinked:
+                verifiedButNotLinkedCount,
 
             supported:
                 supportedCount,
@@ -254,14 +500,22 @@
             unknown:
                 unknownCount,
 
+            contradicted:
+                contradictedCount,
+
+            partial:
+                partialCount,
+
+            unresolved:
+                unresolvedCount,
+
+            outOfDomain:
+                outOfDomainCount,
+
             evidenceCount,
 
             reasoningEvaluated:
-                Array.isArray(
-                    reasoning.reasonings
-                )
-                    ? reasoning.reasonings.length
-                    : 0
+                reasoningItems.length
 
         };
 
@@ -273,18 +527,6 @@
     complete() {
 
         this.buildEpistemicBoundary();
-
-        /*
-         * RuntimeResult 是最终输出边界。
-         *
-         * 这里绝不能返回 this 作为 result，
-         * 否则会形成：
-         *
-         * result -> RuntimeResult -> result
-         *
-         * 同时也不能把运行时 EngineRegistry 实例
-         * 原样暴露到最终 JSON。
-         */
 
         const output = {
 
@@ -384,11 +626,6 @@
 
         }
 
-        /*
-         * EngineRegistry 实例只允许通过
-         * describe() 进入 RuntimeResult。
-         */
-
         if (
             typeof registry.describe ===
             "function"
@@ -402,11 +639,6 @@
             );
 
         }
-
-        /*
-         * 如果上游已经传入纯数据，
-         * 同样允许保留。
-         */
 
         return this.makeSerializable(
             registry
@@ -490,6 +722,5 @@
     }
 
 }
-
 
 export default RuntimeResult;

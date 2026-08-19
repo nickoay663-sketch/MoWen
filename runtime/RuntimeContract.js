@@ -1,7 +1,7 @@
-const RuntimeContract = {
+﻿const RuntimeContract = {
 
     version:
-        "10.4",
+        "10.6",
 
     principles: {
 
@@ -36,7 +36,13 @@ const RuntimeContract = {
             "证据不足时必须允许 UNKNOWN，不得将未知强制解释为错误。",
 
         externalLanguageBoundary:
-            "语言系统属于外部表达环境，莫问只连接、携带并运行，不拥有、不制造、不替代。"
+            "语言系统属于外部表达环境，莫问只连接、携带并运行，不拥有、不制造、不替代。",
+
+        lifecycleBoundary:
+            "Runtime 只有完成全部 Engine 执行、Registry 校验、SelfCheck 并进入 RuntimeClosed 后，才允许返回最终 RuntimeResult。",
+
+        responsibilityEventBoundary:
+            "ResponsibilityEvent 必须来源于已经完成 SelfCheck 的 RuntimeResult，并通过事件自身验证，不允许绕过 Runtime 生命周期直接发布责任事件。"
 
     },
 
@@ -89,10 +95,10 @@ const RuntimeContract = {
             "MoWen Runtime",
 
         runtimeVersion:
-            "10.4",
+            "10.6",
 
         contractVersion:
-            "10.4"
+            "10.6"
 
     },
 
@@ -106,6 +112,9 @@ const RuntimeContract = {
 
         verified:
             "VERIFIED",
+
+        verifiedButNotLinked:
+            "VERIFIED_BUT_NOT_LINKED",
 
         supported:
             "SUPPORTED",
@@ -133,6 +142,12 @@ const RuntimeContract = {
             true,
 
         verifiedIsNotAutomaticallySupported:
+            true,
+
+        verifiedDoesNotMeanLinked:
+            true,
+
+        verifiedButNotLinkedCannotBecomeSupportedWithoutCorrespondence:
             true,
 
         supportRequiresVerifiedEvidence:
@@ -185,6 +200,7 @@ const RuntimeContract = {
             prohibited:
                 [
                     "VERIFIED",
+                    "VERIFIED_BUT_NOT_LINKED",
                     "SUPPORTED",
                     "CONTRADICTED"
                 ]
@@ -199,11 +215,19 @@ const RuntimeContract = {
             output:
                 "UNVERIFIED",
 
+            mayBecome:
+                [
+                    "VERIFIED",
+                    "UNKNOWN",
+                    "UNRESOLVED"
+                ],
+
             verifiedRequires:
                 "explicit-verification",
 
             prohibitedAutomaticPromotion:
                 [
+                    "VERIFIED_BUT_NOT_LINKED",
                     "SUPPORTED",
                     "CONTRADICTED"
                 ]
@@ -220,6 +244,7 @@ const RuntimeContract = {
             output:
                 [
                     "SUPPORTED",
+                    "VERIFIED_BUT_NOT_LINKED",
                     "UNRESOLVED"
                 ],
 
@@ -233,6 +258,7 @@ const RuntimeContract = {
             requires:
                 [
                     "VERIFIED",
+                    "VERIFIED_BUT_NOT_LINKED",
                     "SUPPORTED"
                 ],
 
@@ -264,7 +290,8 @@ const RuntimeContract = {
             prohibitedPromotion:
                 [
                     "UNKNOWN->FALSE",
-                    "UNKNOWN->TRUE"
+                    "UNKNOWN->TRUE",
+                    "VERIFIED_BUT_NOT_LINKED->SUPPORTED"
                 ]
 
         }
@@ -455,6 +482,9 @@ const RuntimeContract = {
             supportRequiresSpecificCorrespondence:
                 true,
 
+            verifiedButNotLinkedMustRemainExplicit:
+                true,
+
             unsupportedCorrespondenceMustRemainUnresolved:
                 true
 
@@ -478,6 +508,9 @@ const RuntimeContract = {
                 true,
 
             correspondenceRequiredForSupport:
+                true,
+
+            verifiedButNotLinkedCannotBeTreatedAsSupport:
                 true,
 
             insufficientSupportMeansUnknown:
@@ -518,9 +551,80 @@ const RuntimeContract = {
                 true,
 
             unsupportedConclusionCannotBePromoted:
+                true,
+
+            verifiedButNotLinkedCannotCarrySupportResponsibility:
                 true
 
         }
+
+    },
+
+    runtimeLifecycleContract: {
+
+        required:
+            true,
+
+        pipelineMustComplete:
+            true,
+
+        registryMustComplete:
+            true,
+
+        registryValidationRequired:
+            true,
+
+        registryVersionValidationRequired:
+            true,
+
+        selfCheckRequired:
+            true,
+
+        selfCheckMustPass:
+            true,
+
+        runtimeClosedStateRequired:
+            true,
+
+        executionPendingMustBeZero:
+            true,
+
+        runtimeResultMayReturnOnlyAfterClosure:
+            true,
+
+        requiredRuntimeState:
+            "RuntimeClosed"
+
+    },
+
+    responsibilityEventContract: {
+
+        required:
+            true,
+
+        type:
+            "MWAL.ResponsibilityEvent",
+
+        source:
+            "MoWen Runtime",
+
+        requiresRuntimeClosure:
+            true,
+
+        requiresSelfCheckPassed:
+            true,
+
+        requiresValidation:
+            true,
+
+        validationMustPass:
+            true,
+
+        publishabilityMustBeDerivedFromValidatedEvent:
+            true,
+
+        bypassProhibited:
+            true
 
     },
 
@@ -554,7 +658,6 @@ const RuntimeContract = {
             "pipeline",
             "epistemicState",
             "epistemicBoundary"
-
         ]
 
     },
@@ -562,6 +665,7 @@ const RuntimeContract = {
     metadataContract: {
 
         requiredFields: [
+
             "runtimeVersion",
             "contractVersion",
             "engineCount",
@@ -576,11 +680,13 @@ const RuntimeContract = {
             true,
 
         requiredMetadataFields: [
+
             "name",
             "version",
             "status",
             "nextRuntimeState",
             "capabilities"
+
         ]
 
     },

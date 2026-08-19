@@ -10,7 +10,6 @@ const runtime = new HonestRuntime(
                 title: "伪验证来源",
                 content: "该事件已经被证实。",
 
-                // 攻击载荷
                 verified: true,
                 verificationStatus: "VERIFIED",
                 verificationBasis: "外部声明",
@@ -25,7 +24,7 @@ const runtime = new HonestRuntime(
 );
 
 const result =
-    runtime.run().complete();
+    await runtime.run();
 
 const evidence =
     result.evidence || {};
@@ -57,19 +56,13 @@ const epistemicState =
     null;
 
 const attackBlocked =
-    verifiedEvidenceCount === 0
-    &&
-    supported === false
-    &&
-    responsibilityPassed === false
-    &&
+    verifiedEvidenceCount === 0 &&
+    supported === false &&
+    responsibilityPassed === false &&
     (
-        epistemicState === "UNVERIFIED"
-        ||
-        epistemicState === "UNKNOWN"
-        ||
-        epistemicState === "UNRESOLVED"
-        ||
+        epistemicState === "UNVERIFIED" ||
+        epistemicState === "UNKNOWN" ||
+        epistemicState === "UNRESOLVED" ||
         epistemicState === null
     );
 
@@ -88,7 +81,8 @@ console.log(
                 supported,
                 responsibilityPassed,
                 selfCheckPassed:
-                    selfCheck.passed === true
+                    selfCheck?.result?.passed === true ||
+                    selfCheck?.passed === true
             },
 
             assertions: {
@@ -106,16 +100,17 @@ console.log(
 
             selfCheck: {
                 passed:
-                    selfCheck.passed === true,
+                    selfCheck?.result?.passed === true ||
+                    selfCheck?.passed === true,
 
                 epistemicBoundaryStatus:
-                    selfCheck.epistemicReport?.status,
+                    selfCheck?.epistemicReport?.status,
 
                 forbiddenPromotion:
-                    selfCheck.epistemicReport?.forbiddenPromotion,
+                    selfCheck?.epistemicReport?.forbiddenPromotion,
 
                 unsupportedPromotion:
-                    selfCheck.epistemicReport?.unsupportedPromotion
+                    selfCheck?.epistemicReport?.unsupportedPromotion
             }
         },
         null,

@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class SelfCheckEngine extends EngineBase {
 
@@ -325,53 +325,300 @@ class SelfCheckEngine extends EngineBase {
         const registry =
             this.runtimeContext.engineRegistry;
 
-        const engines =
-            this.runtimeContext.engines || {};
+        const pipeline =
+            Array.isArray(
+                this.runtimeContext.pipeline
+            )
+                ? this.runtimeContext.pipeline
+                : [];
 
         const report = {
 
             passed:
                 true,
 
+            expectedCount:
+                pipeline.length,
+
+            registeredCount:
+                0,
+
             registered:
                 [],
 
             missing:
-                []
+                [],
+
+            unexpected:
+                [],
+
+            executionPending:
+                [],
+
+            executionCompleted:
+                [],
+
+            status:
+                "registry-check-pending"
 
         };
 
         if (!registry) {
 
-            report.passed = false;
+            report.passed =
+                false;
 
             report.missing.push(
                 "EngineRegistry"
             );
 
+            report.status =
+                "registry-failed";
+
             return report;
 
         }
 
-        for (const engineName of Object.keys(engines)) {
+        /*
+         * Registry 本身才是“是否完成注册”的权威来源。
+         *
+         * 不再使用 runtimeContext.engines 判断注册完整性。
+         *
+         * runtimeContext.engines 只表示：
+         * 已经完成 execution() 并写入共享 executionResults
+         */
 
-            if (registry.has(engineName)) {
+        const registeredNames =
+            registry.list();
+
+        report.registeredCount =
+            registeredNames.length;
+
+        /*
+         * Pipeline 使用 Engine class name，
+         * Registry 使用 runtime registration name。
+         */
+
+        const registryName =
+            pipelineName => {
+
+                const map = {
+
+                    RecognitionEngine:
+                        "recognition",
+
+                    DefinitionEngine:
+                        "definition",
+
+                    SearchEngine:
+                        "search",
+
+                    EvidenceEngine:
+                        "evidence",
+
+                    CorrespondenceEngine:
+                        "correspondence",
+
+                    ReasoningEngine:
+                        "reasoning",
+
+                    ResponsibilityEngine:
+                        "responsibility",
+
+                    ReconstructionEngine:
+                        "reconstruction",
+
+                    GeneratorEngine:
+                        "generator",
+
+                    SelfCheckEngine:
+                        "selfCheck"
+
+                };
+
+                return map[pipelineName] ||
+                    pipelineName;
+
+            };
+
+
+        const expectedRegistryNames =
+            pipeline.map(
+                registryName
+            );
+
+
+        /*
+         * 所有 Pipeline Engine 都必须已经注册。
+         */
+
+        for (
+            const name
+            of expectedRegistryNames
+        ) {
+
+            if (
+                registry.has(name)
+            ) {
 
                 report.registered.push(
-                    engineName
+                    name
                 );
 
             } else {
 
-                report.passed = false;
+                report.passed =
+                    false;
 
                 report.missing.push(
-                    engineName
+                    name
                 );
 
             }
 
         }
+
+
+        /*
+         * Registry 中不允许出现 Pipeline 之外的未知 Engine。
+         */
+
+        for (
+            const name
+            of registeredNames
+        ) {
+
+            if (
+                !expectedRegistryNames.includes(
+                    name
+                )
+            ) {
+
+                report.passed =
+                    false;
+
+                report.unexpected.push(
+                    name
+                );
+
+            }
+
+        }
+
+
+        /*
+         * SelfCheck 执行时自身尚未产生 executionResult。
+         *
+         * 这是正常的生命周期状态，不属于 Registry failure。
+         */
+
+        for (
+            const name
+            of expectedRegistryNames
+        ) {
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    this.runtimeContext.engines || {},
+                    name
+                )
+            ) {
+
+                report.executionCompleted.push(
+                    name
+                );
+
+            } else {
+
+                report.executionPending.push(
+                    name
+                );
+
+            }
+
+        }
+
+
+        /*
+         * SelfCheck 必须是唯一允许在自身执行阶段
+         * 尚未拥有 executionResult 的 Engine。
+         */
+
+        const selfCheckRegistered =
+            registry.has(
+                "selfCheck"
+            );
+
+        const selfCheckExecutionPending =
+            report.executionPending.includes(
+                "selfCheck"
+            );
+
+        const invalidPending =
+            report.executionPending.filter(
+                name =>
+                    name !== "selfCheck"
+            );
+
+        if (
+            !selfCheckRegistered
+        ) {
+
+            report.passed =
+                false;
+
+            if (
+                !report.missing.includes(
+                    "selfCheck"
+                )
+            ) {
+
+                report.missing.push(
+                    "selfCheck"
+                );
+
+            }
+
+        }
+
+        if (
+            invalidPending.length > 0
+        ) {
+
+            report.passed =
+                false;
+
+        }
+
+
+        /*
+         * 正常情况下：
+         *
+         * Registry = 10
+         * Pipeline = 10
+         * executionCompleted = 9
+         * executionPending = ["selfCheck"]
+         */
+
+        report.executionPending =
+            report.executionPending;
+
+        report.executionCompleted =
+            report.executionCompleted;
+
+        report.selfCheckRegistered =
+            selfCheckRegistered;
+
+        report.selfCheckExecutionPending =
+            selfCheckExecutionPending;
+
+        report.invalidPending =
+            invalidPending;
+
+        report.status =
+            report.passed
+                ? "registry-pass"
+                : "registry-failed";
 
         return report;
 
@@ -580,11 +827,27 @@ class SelfCheckEngine extends EngineBase {
         const contract =
             runtimeObject.contract || {};
 
+        /*
+         * Contract 是认识状态的唯一权威来源。
+         *
+         * SelfCheck 不再自行维护第二套 epistemic state
+         * 白名单。
+         */
+
         const epistemicStates =
             contract.epistemicStates || {};
 
         const epistemicRules =
             contract.epistemicRules || {};
+
+        const declaredStates =
+            new Set(
+                Object.values(epistemicStates)
+                    .filter(
+                        state =>
+                            typeof state === "string"
+                    )
+            );
 
         const verificationBoundary =
             runtimeObject.verificationBoundary || {};
@@ -600,10 +863,25 @@ class SelfCheckEngine extends EngineBase {
             verified:
                 0,
 
+            verifiedButNotLinked:
+                0,
+
             supported:
                 0,
 
             unknown:
+                0,
+
+            contradicted:
+                0,
+
+            partial:
+                0,
+
+            unresolved:
+                0,
+
+            outOfDomain:
                 0,
 
             invalid:
@@ -611,34 +889,9 @@ class SelfCheckEngine extends EngineBase {
 
         };
 
-        const allowedStates = new Set([
+        const invalidStates = [];
 
-            "DISCOVERED",
-            "UNVERIFIED",
-            "VERIFIED",
-            "SUPPORTED",
-            "CONTRADICTED",
-            "UNKNOWN",
-            "PARTIAL",
-            "UNRESOLVED",
-            "OUT_OF_DOMAIN",
-            "VERIFIED_BUT_NOT_LINKED"
-
-        ]);
-
-        /*
-         * SelfCheck 不把整个 Runtime 对象树中的
-         * verificationStatus 当作独立认识状态。
-         *
-         * 同一个状态会在 Evidence -> Correspondence
-         * -> Reasoning -> Responsibility -> Reconstruction
-         * -> Generator 中被携带。
-         *
-         * 这些携带字段不是新的认识状态。
-         *
-         * SelfCheck 只检查 Runtime 的最终边界对象，
-         * 以及各层明确产生的 epistemicState。
-         */
+        const inspectedObjects = new WeakSet();
 
         const inspectState = value => {
 
@@ -646,19 +899,40 @@ class SelfCheckEngine extends EngineBase {
                 return;
             }
 
+            if (
+                typeof value === "object"
+            ) {
+
+                if (
+                    inspectedObjects.has(value)
+                ) {
+
+                    return;
+
+                }
+
+                inspectedObjects.add(value);
+
+            }
+
             if (Array.isArray(value)) {
 
                 for (const item of value) {
+
                     inspectState(item);
+
                 }
 
                 return;
+
             }
 
             if (
                 typeof value !== "object"
             ) {
+
                 return;
+
             }
 
             const state =
@@ -666,83 +940,67 @@ class SelfCheckEngine extends EngineBase {
 
             if (typeof state === "string") {
 
-                if (state === "DISCOVERED") {
-
-                    reports.discovered++;
-
-                } else if (state === "UNVERIFIED") {
-
-                    reports.unverified++;
-
-                } else if (state === "VERIFIED") {
-
-                    reports.verified++;
-
-                } else if (state === "SUPPORTED") {
-
-                    reports.supported++;
-
-                } else if (state === "UNKNOWN") {
-
-                    reports.unknown++;
-
-                } else if (
-                    state === "CONTRADICTED" ||
-                    state === "PARTIAL" ||
-                    state === "UNRESOLVED" ||
-                    state === "OUT_OF_DOMAIN"
+                if (
+                    !declaredStates.has(state)
                 ) {
-
-                    /*
-                     * 这些是合法认识状态。
-                     *
-                     * 当前统计结构没有为它们单独设置
-                     * 计数槽，因此不进入 invalid。
-                     */
-
-                } else if (
-                    state === "VERIFIED_BUT_NOT_LINKED"
-                ) {
-
-                    reports.verified++;
-
-                } else {
 
                     reports.invalid++;
 
-                }
+                    invalidStates.push({
 
-            }
+                        state,
 
-            /*
-             * 只继续检查明确存在 epistemicState 的子对象。
-             * verificationStatus 本身不是新的 epistemic state。
-             */
+                        reason:
+                            "epistemicState 未被 RuntimeContract.epistemicStates 声明。"
 
-            for (const key of Object.keys(value)) {
+                    });
 
-                if (key === "epistemicState") {
-                    continue;
-                }
+                } else {
 
-                const child =
-                    value[key];
+                    switch (state) {
 
-                if (
-                    child &&
-                    typeof child === "object"
-                ) {
+                        case "DISCOVERED":
+                            reports.discovered++;
+                            break;
 
-                    if (
-                        Array.isArray(child)
-                        ||
-                        Object.prototype.hasOwnProperty.call(
-                            child,
-                            "epistemicState"
-                        )
-                    ) {
+                        case "UNVERIFIED":
+                            reports.unverified++;
+                            break;
 
-                        inspectState(child);
+                        case "VERIFIED":
+                            reports.verified++;
+                            break;
+
+                        case "VERIFIED_BUT_NOT_LINKED":
+                            reports.verifiedButNotLinked++;
+                            break;
+
+                        case "SUPPORTED":
+                            reports.supported++;
+                            break;
+
+                        case "CONTRADICTED":
+                            reports.contradicted++;
+                            break;
+
+                        case "UNKNOWN":
+                            reports.unknown++;
+                            break;
+
+                        case "PARTIAL":
+                            reports.partial++;
+                            break;
+
+                        case "UNRESOLVED":
+                            reports.unresolved++;
+                            break;
+
+                        case "OUT_OF_DOMAIN":
+                            reports.outOfDomain++;
+                            break;
+
+                        default:
+                            break;
 
                     }
 
@@ -750,21 +1008,37 @@ class SelfCheckEngine extends EngineBase {
 
             }
 
+            for (
+                const [key, child]
+                of Object.entries(value)
+            ) {
+
+                if (
+                    key === "epistemicState"
+                ) {
+
+                    continue;
+
+                }
+
+                if (
+                    child &&
+                    typeof child === "object"
+                ) {
+
+                    inspectState(child);
+
+                }
+
+            }
+
         };
 
+
         /*
-         * 只从 Runtime 各阶段的正式输出读取
-         * epistemicState。
+         * 只检查 Runtime 正式阶段输出。
          *
-         * 不读取 searchResults 的原始
-         * verificationStatus。
-         *
-         * 这保证攻击者提交：
-         *
-         * verified: true
-         * verificationStatus: VERIFIED
-         *
-         * 不会直接污染 SelfCheck。
+         * verificationStatus 不被当作新的 epistemicState。
          */
 
         inspectState(runtimeObject.evidence);
@@ -772,52 +1046,137 @@ class SelfCheckEngine extends EngineBase {
         inspectState(runtimeObject.reasoning);
         inspectState(runtimeObject.responsibility);
 
-        /*
-         * Reconstruction / Generator 只作为最终边界检查，
-         * 不重复计入整个对象树。
-         */
 
         const finalEpistemicState =
             runtimeObject.responsibility?.epistemicState ||
             runtimeObject.reasoning?.epistemicState ||
             null;
 
-        const forbiddenPromotion =
-            reports.discovered > 0 &&
-            reports.supported > 0 &&
-            reports.verified === 0;
-
-        const unsupportedPromotion =
-            reports.supported > 0 &&
-            reports.verified === 0;
-
-        const contractStateCount =
-            Object.keys(epistemicStates).length;
-
-        const contractRuleCount =
-            Object.keys(epistemicRules).length;
-
         const boundaryState =
             verificationBoundary.epistemicState ||
             verificationBoundary.verificationStatus ||
             null;
 
-        const boundaryValid =
+
+        const boundaryStateValid =
             boundaryState === null ||
-            allowedStates.has(boundaryState);
+            declaredStates.has(boundaryState);
+
+        if (
+            boundaryState !== null &&
+            !boundaryStateValid
+        ) {
+
+            reports.invalid++;
+
+            invalidStates.push({
+
+                state:
+                    boundaryState,
+
+                location:
+                    "verificationBoundary",
+
+                reason:
+                    "verificationBoundary 状态未被 RuntimeContract.epistemicStates 声明。"
+
+            });
+
+        }
+
 
         const finalStateValid =
             finalEpistemicState === null ||
-            allowedStates.has(finalEpistemicState);
+            declaredStates.has(finalEpistemicState);
+
+        if (
+            finalEpistemicState !== null &&
+            !finalStateValid
+        ) {
+
+            reports.invalid++;
+
+            invalidStates.push({
+
+                state:
+                    finalEpistemicState,
+
+                location:
+                    "finalEpistemicState",
+
+                reason:
+                    "最终认识状态未被 RuntimeContract.epistemicStates 声明。"
+
+            });
+
+        }
+
+
+        /*
+         * Contract 本身必须声明认识状态与认识规则。
+         */
+
+        const contractStateCount =
+            declaredStates.size;
+
+        const contractRuleCount =
+            Object.keys(epistemicRules).length;
+
+
+        /*
+         * 关键边界：
+         *
+         * VERIFIED_BUT_NOT_LINKED 不能直接成为 SUPPORTED。
+         */
+
+        const forbiddenPromotion =
+            reports.verifiedButNotLinked > 0 &&
+            reports.supported > 0 &&
+            epistemicRules
+                .verifiedButNotLinkedCannotBecomeSupportedWithoutCorrespondence === true
+            &&
+            !this.hasValidCorrespondenceSupport(
+                runtimeObject
+            );
+
+
+        /*
+         * SUPPORTED 必须有 VERIFIED。
+         */
+
+        const unsupportedPromotion =
+            reports.supported > 0 &&
+            reports.verified === 0 &&
+            epistemicRules
+                .supportRequiresVerifiedEvidence === true;
+
+
+        /*
+         * 搜索发现不能直接成为验证。
+         */
+
+        const discoveredPromotion =
+            reports.discovered > 0 &&
+            reports.verified > 0 &&
+            reports.unverified === 0 &&
+            epistemicRules
+                .discoveredIsNotVerified === true
+            &&
+            this.hasUnexplainedVerification(
+                runtimeObject
+            );
+
 
         const passed =
+            contractStateCount >= 1 &&
+            contractRuleCount >= 1 &&
             reports.invalid === 0 &&
+            boundaryStateValid &&
+            finalStateValid &&
             !forbiddenPromotion &&
             !unsupportedPromotion &&
-            boundaryValid &&
-            finalStateValid &&
-            contractStateCount >= 1 &&
-            contractRuleCount >= 1;
+            !discoveredPromotion;
+
 
         return {
 
@@ -827,12 +1186,18 @@ class SelfCheckEngine extends EngineBase {
 
             contractRuleCount,
 
+            declaredStates:
+                Array.from(declaredStates),
+
             states:
                 reports,
 
+            invalidStates,
+
             boundaryState,
 
-            boundaryValid,
+            boundaryValid:
+                boundaryStateValid,
 
             finalEpistemicState,
 
@@ -842,6 +1207,8 @@ class SelfCheckEngine extends EngineBase {
 
             unsupportedPromotion,
 
+            discoveredPromotion,
+
             status:
                 passed
                     ? "epistemic-boundary-pass"
@@ -850,6 +1217,55 @@ class SelfCheckEngine extends EngineBase {
         };
 
     }
+
+
+    hasValidCorrespondenceSupport(runtimeObject) {
+
+        const correspondence =
+            runtimeObject.correspondence || {};
+
+        const correspondences =
+            Array.isArray(
+                correspondence.correspondences
+            )
+                ? correspondence.correspondences
+                : [];
+
+        return correspondences.some(
+            item =>
+                item &&
+                item.supported === true &&
+                (
+                    item.verificationStatus ===
+                    "SUPPORTED"
+                )
+        );
+
+    }
+
+
+    hasUnexplainedVerification(runtimeObject) {
+
+        const evidence =
+            runtimeObject.evidence || {};
+
+        const metadata =
+            evidence.metadata || {};
+
+        const verifiedCount =
+            Number(
+                metadata.verifiedCount || 0
+            );
+
+        const explicitVerification =
+            evidence.explicitVerification === true ||
+            evidence.verificationPerformed === true ||
+            verifiedCount > 0;
+
+        return !explicitVerification;
+
+    }
+
 
     validateExternalLanguageBoundary() {
 
@@ -967,7 +1383,7 @@ class SelfCheckEngine extends EngineBase {
                     "registry-failure",
 
                 impact:
-                    "Engine 未完成注册。"
+                    "Engine 未完成注册或 Registry 与 Runtime Pipeline 不一致。"
 
             });
 
@@ -1023,7 +1439,7 @@ class SelfCheckEngine extends EngineBase {
                     "epistemic-boundary-failure",
 
                 impact:
-                    "认识状态发生越界，发现、未验证、已验证与支持状态未保持边界。"
+                    "认识状态发生越界，Runtime 出现 Contract 未声明状态，或发现、验证、对应、支持之间发生非法提升。"
 
             });
 
@@ -1090,9 +1506,19 @@ class SelfCheckEngine extends EngineBase {
                 new Date().toISOString(),
 
             checkedEngines:
-                Object.keys(
-                    contractReport.engines
-                ),
+                registryReport.registered || [],
+
+            registeredEngineCount:
+                registryReport.registeredCount || 0,
+
+            expectedEngineCount:
+                registryReport.expectedCount || 0,
+
+            executionCompleted:
+                registryReport.executionCompleted || [],
+
+            executionPending:
+                registryReport.executionPending || [],
 
             registryStatus:
                 registryReport.passed
@@ -1127,6 +1553,12 @@ class SelfCheckEngine extends EngineBase {
 
             epistemicStates:
                 epistemicReport.states,
+
+            invalidEpistemicStates:
+                epistemicReport.invalidStates,
+
+            declaredEpistemicStates:
+                epistemicReport.declaredStates,
 
             runtimeTrace:
                 this.runtimeContext.runtimeTrace || [],

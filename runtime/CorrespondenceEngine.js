@@ -1,4 +1,4 @@
-import EngineBase from "./EngineBase.js";
+﻿import EngineBase from "./EngineBase.js";
 
 class CorrespondenceEngine extends EngineBase {
 
@@ -6,8 +6,8 @@ class CorrespondenceEngine extends EngineBase {
 
         super(
             "CorrespondenceEngine",
-            "10.4",
-            "莫问判断定义、证据与表达之间的真实对应关系，不把发现或未验证证据扩大为支持。"
+            "10.6",
+            "莫问判断定义、证据与表达之间的真实对应关系，不把发现、未验证或仅已验证但未建立对应关系的证据扩大为支持。"
         );
 
         this.semanticObject =
@@ -24,13 +24,21 @@ class CorrespondenceEngine extends EngineBase {
         const supportedCount =
             correspondences.filter(
                 item =>
-                    item.supported === true
+                    item.supported === true &&
+                    item.verificationStatus === "SUPPORTED"
             ).length;
 
         const unverifiedCount =
             correspondences.filter(
                 item =>
                     item.verificationStatus === "UNVERIFIED"
+            ).length;
+
+        const verifiedButNotLinkedCount =
+            correspondences.filter(
+                item =>
+                    item.verificationStatus ===
+                    "VERIFIED_BUT_NOT_LINKED"
             ).length;
 
         const unknownCount =
@@ -57,6 +65,8 @@ class CorrespondenceEngine extends EngineBase {
 
                     unverifiedCount,
 
+                    verifiedButNotLinkedCount,
+
                     unknownCount
 
                 }),
@@ -72,6 +82,8 @@ class CorrespondenceEngine extends EngineBase {
                     supportedCount,
 
                     unverifiedCount,
+
+                    verifiedButNotLinkedCount,
 
                     unknownCount
 
@@ -99,7 +111,8 @@ class CorrespondenceEngine extends EngineBase {
             questions:
                 correspondences.some(
                     item =>
-                        item.verificationStatus !== "SUPPORTED"
+                        item.verificationStatus !==
+                        "SUPPORTED"
                 )
                     ? [
                         "definition-evidence correspondence verification required"
@@ -165,19 +178,72 @@ class CorrespondenceEngine extends EngineBase {
             );
 
 
+        /*
+         * =========================================================
+         * CORRESPONDENCE BOUNDARY v10.6
+         * =========================================================
+         *
+         * EvidenceEngine 已经完成第一道边界：
+         *
+         *   DISCOVERED / UNVERIFIED
+         *       ≠
+         *   VERIFIED
+         *
+         * CorrespondenceEngine 再完成第二道边界：
+         *
+         *   VERIFIED
+         *       ≠
+         *   SUPPORTED
+         *
+         * VERIFIED 只能说明 Runtime 存在可识别的验证记录。
+         *
+         * 只有：
+         *
+         *   1. independent === true
+         *   2. verificationStatus === VERIFIED
+         *   3. epistemicState === VERIFIED
+         *   4. supportsClaim === true
+         *
+         * 才能建立当前 Definition 的 SUPPORTED。
+         *
+         * =========================================================
+         */
+
         const verifiedEvidences =
             independentEvidences.filter(
                 evidence =>
-                    evidence.verificationStatus === "VERIFIED" &&
-                    evidence.epistemicState === "VERIFIED"
+                    evidence.verificationStatus ===
+                        "VERIFIED" &&
+                    evidence.epistemicState ===
+                        "VERIFIED" &&
+                    evidence.runtimeVerificationRecord ===
+                        true &&
+                    evidence.sourceAvailable ===
+                        true
             );
 
 
         const unverifiedEvidences =
             independentEvidences.filter(
                 evidence =>
-                    evidence.verificationStatus === "UNVERIFIED" ||
-                    evidence.epistemicState === "DISCOVERED"
+                    evidence.verificationStatus ===
+                        "UNVERIFIED" ||
+                    evidence.epistemicState ===
+                        "DISCOVERED"
+            );
+
+
+        const verifiedButNotLinkedEvidences =
+            verifiedEvidences.filter(
+                evidence =>
+                    evidence.supportsClaim !== true
+            );
+
+
+        const supportingVerifiedEvidences =
+            verifiedEvidences.filter(
+                evidence =>
+                    evidence.supportsClaim === true
             );
 
 
@@ -189,28 +255,8 @@ class CorrespondenceEngine extends EngineBase {
             verifiedEvidences.length > 0;
 
 
-        /*
-         * 核心边界：
-         *
-         * 有搜索结果 ≠ 有证据
-         * 有未验证证据 ≠ 已证明
-         * 有已验证来源 ≠ 自动证明当前定义
-         *
-         * 只有明确存在：
-         * 1. 定义
-         * 2. 独立证据
-         * 3. VERIFIED 状态
-         * 4. 明确支持当前主张
-         *
-         * 才允许进入 SUPPORTED。
-         */
-
         const supported =
-            verifiedSourceAvailable &&
-            verifiedEvidences.some(
-                evidence =>
-                    evidence.supportsClaim === true
-            );
+            supportingVerifiedEvidences.length > 0;
 
 
         let verificationStatus =
@@ -232,13 +278,29 @@ class CorrespondenceEngine extends EngineBase {
                 "UNVERIFIED";
 
         } else if (
-            independentEvidences.length > 0
+            verifiedButNotLinkedEvidences.length > 0
+        ) {
+
+            verificationStatus =
+                "VERIFIED_BUT_NOT_LINKED";
+
+        } else if (
+            verifiedEvidences.length > 0
         ) {
 
             verificationStatus =
                 "VERIFIED_BUT_NOT_LINKED";
 
         }
+
+
+        /*
+         * SUPPORTED 是 CorrespondenceEngine 自己建立的关系结果，
+         * 不是 EvidenceEngine 提供的事实字段。
+         */
+
+        const epistemicState =
+            verificationStatus;
 
 
         return {
@@ -252,8 +314,14 @@ class CorrespondenceEngine extends EngineBase {
             verifiedEvidenceCount:
                 verifiedEvidences.length,
 
+            supportingVerifiedEvidenceCount:
+                supportingVerifiedEvidences.length,
+
             unverifiedEvidenceCount:
                 unverifiedEvidences.length,
+
+            verifiedButNotLinkedEvidenceCount:
+                verifiedButNotLinkedEvidences.length,
 
             matched:
                 supported,
@@ -269,8 +337,7 @@ class CorrespondenceEngine extends EngineBase {
 
             verificationStatus,
 
-            epistemicState:
-                verificationStatus,
+            epistemicState,
 
             definition,
 
@@ -279,7 +346,11 @@ class CorrespondenceEngine extends EngineBase {
 
             verifiedEvidences,
 
+            supportingVerifiedEvidences,
+
             unverifiedEvidences,
+
+            verifiedButNotLinkedEvidences,
 
             responsibilityBoundary:
                 supported

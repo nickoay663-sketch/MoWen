@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MoWen Accountability Layer
  * MWAL Contract v1.0
  *
@@ -25,12 +25,6 @@ class MWALContract {
     static PRINCIPLE =
         "Expression is signed, and publication is preceded by responsibility review.";
 
-    /**
-     * MWAL responsibility states.
-     *
-     * These states describe the epistemic and responsibility
-     * condition of an expression. They do not constitute legal judgment.
-     */
     static RESPONSIBILITY_STATES = Object.freeze({
         UNKNOWN: "UNKNOWN",
         UNESTABLISHED: "UNESTABLISHED",
@@ -39,9 +33,6 @@ class MWALContract {
         DISPUTED: "DISPUTED"
     });
 
-    /**
-     * Verification states.
-     */
     static VERIFICATION_STATES = Object.freeze({
         UNKNOWN: "UNKNOWN",
         UNVERIFIED: "UNVERIFIED",
@@ -51,9 +42,6 @@ class MWALContract {
         CONTRADICTED: "CONTRADICTED"
     });
 
-    /**
-     * Propagation decisions.
-     */
     static PROPAGATION_STATES = Object.freeze({
         ALLOW: "ALLOW",
         ALLOW_WITH_BOUNDARY: "ALLOW_WITH_BOUNDARY",
@@ -62,7 +50,19 @@ class MWALContract {
     });
 
     /**
-     * Required fields for every MWAL responsibility event.
+     * Required structural fields.
+     *
+     * IMPORTANT:
+     *
+     * undefined means the field does not exist.
+     *
+     * null means the field exists but its value is explicitly unknown
+     * or not established.
+     *
+     * MWAL must preserve this distinction because:
+     *
+     * UNKNOWN MUST REMAIN EXPLICIT
+     * NO_IDENTITY_INFERENCE
      */
     static REQUIRED_FIELDS = Object.freeze([
         "eventId",
@@ -76,9 +76,6 @@ class MWALContract {
         "contractVersion"
     ]);
 
-    /**
-     * Fields describing the responsibility boundary.
-     */
     static RESPONSIBILITY_FIELDS = Object.freeze([
         "subject",
         "scope",
@@ -86,9 +83,6 @@ class MWALContract {
         "limitations"
     ]);
 
-    /**
-     * Fields used for auditability.
-     */
     static AUDIT_FIELDS = Object.freeze([
         "eventId",
         "timestamp",
@@ -103,9 +97,9 @@ class MWALContract {
     /**
      * Create a normalized MWAL contract envelope.
      *
-     * This method does not claim that the supplied information is true.
-     * It only establishes the standard structure in which the information
-     * is recorded and audited.
+     * This method records supplied information only.
+     * It does not infer identity, responsibility, evidence,
+     * verification, signature, or propagation authority.
      */
     static createEnvelope(data = {}) {
 
@@ -123,24 +117,24 @@ class MWALContract {
                 data.expression || null,
 
             identity:
-                data.identity || null,
+                data.identity ?? null,
 
             timestamp:
                 data.timestamp || null,
 
             verificationState:
-                data.verificationState ||
+                data.verificationState ??
                 MWALContract.VERIFICATION_STATES.UNKNOWN,
 
             responsibilityState:
-                data.responsibilityState ||
+                data.responsibilityState ??
                 MWALContract.RESPONSIBILITY_STATES.UNKNOWN,
 
             responsibility:
-                data.responsibility || null,
+                data.responsibility ?? null,
 
             propagationState:
-                data.propagationState ||
+                data.propagationState ??
                 MWALContract.PROPAGATION_STATES.REQUIRE_VERIFICATION,
 
             evidence:
@@ -154,29 +148,32 @@ class MWALContract {
                     : [],
 
             signature:
-                data.signature || null,
+                data.signature ?? null,
 
             runtimeVersion:
-                data.runtimeVersion || null,
+                data.runtimeVersion ?? null,
 
             contractVersion:
-                data.contractVersion || null
+                data.contractVersion ?? null
         };
     }
 
     /**
-     * Validate the structural compliance of a MWAL envelope.
+     * Validate structural MWAL compliance.
      *
-     * Validation here means contract compliance only.
-     * It does not mean factual truth.
+     * Contract validation is NOT factual verification.
+     *
+     * A field with value null is structurally present.
+     * This is required so explicit unknown values remain unknown
+     * rather than being converted into an artificial identity,
+     * responsibility, or certainty.
      */
     static validate(envelope = {}) {
 
         const missingFields =
             MWALContract.REQUIRED_FIELDS.filter(
                 field =>
-                    envelope[field] === undefined ||
-                    envelope[field] === null
+                    envelope[field] === undefined
             );
 
         const validVerificationStates =
@@ -255,9 +252,9 @@ class MWALContract {
     }
 
     /**
-     * Determine whether an envelope may enter a propagation pipeline.
+     * Determine whether an envelope may enter propagation.
      *
-     * MWAL never converts uncertainty into certainty.
+     * Structural validity does not grant propagation authority.
      */
     static canPropagate(envelope = {}) {
 
@@ -272,15 +269,12 @@ class MWALContract {
             envelope.propagationState ===
             MWALContract.PROPAGATION_STATES.ALLOW
         ) ||
-        (
-            envelope.propagationState ===
-            MWALContract.PROPAGATION_STATES.ALLOW_WITH_BOUNDARY
-        );
+            (
+                envelope.propagationState ===
+                MWALContract.PROPAGATION_STATES.ALLOW_WITH_BOUNDARY
+            );
     }
 
-    /**
-     * Contract-level invariants.
-     */
     static invariants() {
 
         return Object.freeze([

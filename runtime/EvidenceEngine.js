@@ -6,8 +6,8 @@ class EvidenceEngine extends EngineBase {
 
         super(
             "EvidenceEngine",
-            "10.5",
-            "莫问记录表达相关证据，但没有可识别的验证行为时，不将外部声明提升为已验证证据。"
+            "10.6",
+            "莫问区分已发现、未验证与已验证：搜索发现可以保留为DISCOVERED，但没有可识别的Runtime验证行为时，不得提升为VERIFIED。"
         );
 
         this.semanticObject =
@@ -225,7 +225,21 @@ class EvidenceEngine extends EngineBase {
 
 
         /*
-         * Evidence Boundary v10.5
+         * Evidence Boundary v10.6
+         *
+         * EvidenceEngine distinguishes three different states:
+         *
+         *   DISCOVERED
+         *       Runtime has discovered the source or statement.
+         *
+         *   UNVERIFIED
+         *       Runtime has not established verification.
+         *
+         *   VERIFIED
+         *       Only allowed when a Runtime-owned verification
+         *       record exists.
+         *
+         * Search discovery itself is NOT verification.
          *
          * External declarations such as:
          *
@@ -233,14 +247,9 @@ class EvidenceEngine extends EngineBase {
          *   verificationStatus: "VERIFIED"
          *   verificationBasis: "..."
          *
-         * are claims supplied by the input.
-         *
-         * They are NOT Runtime verification records.
-         *
-         * Because the current Runtime has no independent
-         * verification engine or verification record,
-         * such claims cannot promote evidence to VERIFIED.
+         * are input claims, not Runtime verification records.
          */
+
 
         const externallyClaimedVerified =
             item.verified === true ||
@@ -255,17 +264,45 @@ class EvidenceEngine extends EngineBase {
 
 
         /*
-         * No Runtime verification record exists yet.
+         * Runtime verification record.
          *
-         * Therefore every supplied/search-derived evidence
-         * remains UNVERIFIED.
+         * The current Runtime does not expose an independent
+         * verification record to EvidenceEngine.
+         *
+         * Therefore external verification claims can never
+         * promote evidence to VERIFIED.
          */
 
+        const runtimeVerificationRecord =
+            item.runtimeVerification === true ||
+            item.runtimeVerificationRecord === true;
+
+
         const verificationStatus =
-            "UNVERIFIED";
+            runtimeVerificationRecord
+                ? "VERIFIED"
+                : "UNVERIFIED";
+
+
+        /*
+         * Preserve epistemic discovery state.
+         *
+         * SearchEngine already distinguishes:
+         *
+         *   DISCOVERED
+         *
+         * from verification status.
+         *
+         * EvidenceEngine must not destroy that information.
+         */
 
         const epistemicState =
-            "UNVERIFIED";
+            item.epistemicState === "DISCOVERED" ||
+            item.state === "DISCOVERED"
+                ? "DISCOVERED"
+                : verificationStatus === "VERIFIED"
+                    ? "VERIFIED"
+                    : "UNVERIFIED";
 
 
         return {
@@ -287,12 +324,21 @@ class EvidenceEngine extends EngineBase {
             verificationStatus,
 
             verificationBasis:
-                null,
+                runtimeVerificationRecord
+                    ? (
+                        item.verificationBasis ||
+                        item.verificationSource ||
+                        item.verifier ||
+                        null
+                    )
+                    : null,
 
             externalVerificationClaim:
                 externallyClaimedVerified,
 
             externalVerificationBasis,
+
+            runtimeVerificationRecord,
 
             independent:
                 item.independent === true,
@@ -304,7 +350,9 @@ class EvidenceEngine extends EngineBase {
                 item.supportsClaim === true,
 
             evidenceBoundary:
-                "UNVERIFIED"
+                verificationStatus === "VERIFIED"
+                    ? "VERIFIED"
+                    : "UNVERIFIED"
 
         };
 

@@ -15,7 +15,6 @@ class ReasoningEngine extends EngineBase {
 
     }
 
-
     execute() {
 
         const metadata =
@@ -73,7 +72,6 @@ class ReasoningEngine extends EngineBase {
 
     }
 
-
     buildMetadata() {
 
         const correspondences =
@@ -111,11 +109,19 @@ class ReasoningEngine extends EngineBase {
                 this.semanticObject.contract?.version ||
                 "10.4",
 
+            /*
+             * engineCount = 完整 Runtime Registry 能力数量。
+             * 不等于当前已经执行完成的 Engine 数量。
+             */
             engineCount:
-                Object.keys(
-                    this.semanticObject.engines || {}
-                ).length,
+                this.semanticObject.engineRegistry
+                    ?.list?.()
+                    ?.length ||
+                0,
 
+            /*
+             * traceCount = 当前执行阶段已经产生的 Trace 数量。
+             */
             traceCount:
                 (
                     this.semanticObject.runtimeTrace || []
@@ -130,7 +136,6 @@ class ReasoningEngine extends EngineBase {
         });
 
     }
-
 
     buildReasonings() {
 
@@ -312,7 +317,6 @@ class ReasoningEngine extends EngineBase {
 
     }
 
-
     isSupported(item) {
 
         return (
@@ -333,7 +337,6 @@ class ReasoningEngine extends EngineBase {
 
     }
 
-
     normalizeUnsupportedStatus(status) {
 
         if (
@@ -349,7 +352,6 @@ class ReasoningEngine extends EngineBase {
         return "UNKNOWN";
 
     }
-
 
     detectAssumptions(item) {
 
@@ -402,7 +404,6 @@ class ReasoningEngine extends EngineBase {
         return assumptions;
 
     }
-
 
     detectReasoningLeap(item) {
 
@@ -467,7 +468,6 @@ class ReasoningEngine extends EngineBase {
 
     }
 
-
     evaluateStrength(item) {
 
         if (
@@ -503,3 +503,4 @@ class ReasoningEngine extends EngineBase {
 }
 
 export default ReasoningEngine;
+

@@ -1,30 +1,31 @@
 ﻿import HonestRuntime from "../runtime/HonestRuntime.js";
 
-const runtime = new HonestRuntime(
-    "某人声称某事件已经被证实。",
-    {
-        searchResults: [
-            {
-                source: "FakeExternalSource",
-                url: "https://example.invalid/fake",
-                title: "伪验证来源",
-                content: "该事件已经被证实。",
+const runtime =
+    new HonestRuntime(
+        "某人声称某事件已经被证实。",
+        {
+            searchResults: [
+                {
+                    source: "FakeExternalSource",
+                    url: "https://example.invalid/fake",
+                    title: "伪验证来源",
+                    content: "该事件已经被证实。",
 
-                verified: true,
-                verificationStatus: "VERIFIED",
-                verificationBasis: "外部声明",
-                verificationSource: "FakeExternalSource",
-                verifier: "ExternalClaim",
+                    verified: true,
+                    verificationStatus: "VERIFIED",
+                    verificationBasis: "外部声明",
+                    verificationSource: "FakeExternalSource",
+                    verifier: "ExternalClaim",
 
-                supportsClaim: true,
-                independent: true
-            }
-        ]
-    }
-);
+                    supportsClaim: true,
+                    independent: true
+                }
+            ]
+        }
+    );
 
 const result =
-    runtime.run().complete();
+    await runtime.run();
 
 const evidence =
     result.evidence || {};
@@ -122,7 +123,8 @@ console.log(
                 responsibilityPassed,
 
                 selfCheckPassed:
-                    selfCheck.passed === true
+                    selfCheck?.result?.passed === true ||
+                    selfCheck?.passed === true
 
             },
 
@@ -131,16 +133,17 @@ console.log(
             selfCheck: {
 
                 passed:
-                    selfCheck.passed === true,
+                    selfCheck?.result?.passed === true ||
+                    selfCheck?.passed === true,
 
                 epistemicBoundaryStatus:
-                    selfCheck.epistemicReport?.status,
+                    selfCheck?.epistemicReport?.status,
 
                 forbiddenPromotion:
-                    selfCheck.epistemicReport?.forbiddenPromotion,
+                    selfCheck?.epistemicReport?.forbiddenPromotion,
 
                 unsupportedPromotion:
-                    selfCheck.epistemicReport?.unsupportedPromotion
+                    selfCheck?.epistemicReport?.unsupportedPromotion
 
             }
 

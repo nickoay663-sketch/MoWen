@@ -1,5 +1,33 @@
-import HonestRuntime from "./HonestRuntime.js";
+﻿import HonestRuntime from "./HonestRuntime.js";
 import ReportFormatter from "./ReportFormatter.js";
+
+/*
+ * =========================================================
+ * MoWen Runtime
+ * =========================================================
+ *
+ * Publish Boundary:
+ *
+ *     HonestRuntime
+ *          ↓
+ *     runtimeResult
+ *          ↓
+ *     ReportFormatter
+ *          ↓
+ *        report
+ *
+ * report is the ONLY publishable output.
+ *
+ * Generator.report is an internal Runtime result.
+ * It MUST NOT bypass ReportFormatter / MWAL Publish Boundary.
+ *
+ * Therefore:
+ *
+ *     Generator.report ─X→ final
+ *
+ * No Generator.report bypass is permitted here.
+ * =========================================================
+ */
 
 class MoWenRuntime {
 
@@ -20,13 +48,20 @@ class MoWenRuntime {
     }
 
 
-    run() {
+    async run() {
 
         const runtimeResult =
-            new HonestRuntime(
+            await new HonestRuntime(
                 this.expression,
                 this.options
             ).run();
+
+        /*
+         * MWAL Publish Boundary
+         *
+         * ReportFormatter is the only component allowed
+         * to construct the publishable report.
+         */
 
         const report =
             new ReportFormatter(
@@ -48,12 +83,20 @@ class MoWenRuntime {
 
             },
 
+            /*
+             * Internal Runtime result remains available for
+             * Runtime consumers and testing.
+             *
+             * It is NOT the publish boundary.
+             */
+
             runtimeResult,
 
-            report,
+            /*
+             * Sole publishable output.
+             */
 
-            final:
-                runtimeResult.generator?.report || null
+            report
 
         };
 

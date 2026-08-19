@@ -1,14 +1,9 @@
-﻿import CapabilityContract from "./CapabilityContract.js";
-import CapabilityAdmission from "./CapabilityAdmission.js";
-import MWALContract from "./MWALContract.js";
-import MWALResponsibilityInterface from "./MWALResponsibilityInterface.js";
-
-class CoreGovernance {
+﻿class CoreGovernance {
 
     constructor() {
 
         this.version =
-            "1.3";
+            "1.2";
 
         this.name =
             "MoWen Core Governance";
@@ -33,9 +28,7 @@ class CoreGovernance {
                 "External language boundary preservation",
                 "Runtime contract enforcement",
                 "SelfCheck enforcement",
-                "Execution integrity preservation",
-                "Capability boundary preservation",
-                "MWAL responsibility boundary preservation"
+                "Execution integrity preservation"
 
             ]
 
@@ -43,29 +36,54 @@ class CoreGovernance {
 
         this.coreBoundaries = {
 
-            noCoreExpansion: true,
-            noEvidenceFabrication: true,
-            noResponsibilityExpansion: true,
-            noEpistemicPromotion: true,
-            noExternalLanguageOwnership: true,
-            noExternalLanguageInterpretation: true,
-            noPipelineBypass: true,
-            noContractBypass: true,
-            noSelfCheckBypass: true,
-            noExecutionIntegrityBypass: true,
+            noCoreExpansion:
+                true,
 
-            noCapabilityBypass: true,
-            noMWALBypass: true
+            noEvidenceFabrication:
+                true,
+
+            noResponsibilityExpansion:
+                true,
+
+            noEpistemicPromotion:
+                true,
+
+            noExternalLanguageOwnership:
+                true,
+
+            noExternalLanguageInterpretation:
+                true,
+
+            noPipelineBypass:
+                true,
+
+            noContractBypass:
+                true,
+
+            noSelfCheckBypass:
+                true,
+
+            noExecutionIntegrityBypass:
+                true
 
         };
 
         this.extensionPrinciples = {
 
-            extensionsMayGrow: true,
-            extensionsMustNotReplaceCore: true,
-            extensionsMustNotModifyCoreRules: true,
-            extensionsMustRespectContracts: true,
-            extensionsMustRemainAuditable: true
+            extensionsMayGrow:
+                true,
+
+            extensionsMustNotReplaceCore:
+                true,
+
+            extensionsMustNotModifyCoreRules:
+                true,
+
+            extensionsMustRespectContracts:
+                true,
+
+            extensionsMustRemainAuditable:
+                true
 
         };
 
@@ -76,8 +94,6 @@ class CoreGovernance {
                 "validateCore",
                 "validateBoundaries",
                 "validateExtensions",
-                "validateCapabilityBoundary",
-                "validateMWALBoundary",
                 "validateExecutionIntegrity",
                 "enforce"
 
@@ -158,9 +174,7 @@ class CoreGovernance {
             "External language boundary preservation",
             "Runtime contract enforcement",
             "SelfCheck enforcement",
-            "Execution integrity preservation",
-            "Capability boundary preservation",
-            "MWAL responsibility boundary preservation"
+            "Execution integrity preservation"
 
         ];
 
@@ -261,149 +275,6 @@ class CoreGovernance {
     }
 
 
-    validateCapabilityBoundary() {
-
-        const invalid = [];
-
-        if (
-            typeof CapabilityContract.version !==
-            "function"
-        ) {
-
-            invalid.push(
-                "CapabilityContract.version"
-            );
-
-        }
-
-        if (
-            typeof CapabilityContract.validate !==
-            "function"
-        ) {
-
-            invalid.push(
-                "CapabilityContract.validate"
-            );
-
-        }
-
-        if (
-            typeof CapabilityContract.createResponse !==
-            "function"
-        ) {
-
-            invalid.push(
-                "CapabilityContract.createResponse"
-            );
-
-        }
-
-        if (
-            typeof CapabilityAdmission !==
-            "function"
-        ) {
-
-            invalid.push(
-                "CapabilityAdmission"
-            );
-
-        }
-
-        return {
-
-            passed:
-                invalid.length === 0,
-
-            invalid,
-
-            status:
-                invalid.length === 0
-                    ? "capability-boundary-pass"
-                    : "capability-boundary-failed"
-
-        };
-
-    }
-
-
-    validateMWALBoundary() {
-
-        const invalid = [];
-
-        if (
-            typeof MWALContract.validate !==
-            "function"
-        ) {
-
-            invalid.push(
-                "MWALContract.validate"
-            );
-
-        }
-
-        if (
-            typeof MWALContract.createEnvelope !==
-            "function"
-        ) {
-
-            invalid.push(
-                "MWALContract.createEnvelope"
-            );
-
-        }
-
-        if (
-            typeof MWALContract.canPropagate !==
-            "function"
-        ) {
-
-            invalid.push(
-                "MWALContract.canPropagate"
-            );
-
-        }
-
-        if (
-            typeof MWALResponsibilityInterface
-                .fromResponsibilityEvent !==
-            "function"
-        ) {
-
-            invalid.push(
-                "MWALResponsibilityInterface.fromResponsibilityEvent"
-            );
-
-        }
-
-        if (
-            typeof MWALResponsibilityInterface
-                .isTrustedResponsibilityRecord !==
-            "function"
-        ) {
-
-            invalid.push(
-                "MWALResponsibilityInterface.isTrustedResponsibilityRecord"
-            );
-
-        }
-
-        return {
-
-            passed:
-                invalid.length === 0,
-
-            invalid,
-
-            status:
-                invalid.length === 0
-                    ? "mwal-boundary-pass"
-                    : "mwal-boundary-failed"
-
-        };
-
-    }
-
-
     validateExecutionIntegrity() {
 
         const invalid = [];
@@ -428,8 +299,7 @@ class CoreGovernance {
                 methodReferences[methodName];
 
             if (
-                typeof currentMethod !==
-                "function"
+                typeof currentMethod !== "function"
             ) {
 
                 invalid.push(
@@ -441,8 +311,7 @@ class CoreGovernance {
             }
 
             if (
-                typeof originalMethod !==
-                "function"
+                typeof originalMethod !== "function"
             ) {
 
                 invalid.push(
@@ -454,8 +323,7 @@ class CoreGovernance {
             }
 
             if (
-                currentMethod !==
-                originalMethod
+                currentMethod !== originalMethod
             ) {
 
                 invalid.push(
@@ -468,7 +336,8 @@ class CoreGovernance {
 
         if (
             this.executionIntegrity
-                ?.immutableMethodNames !== true
+                ?.immutableMethodNames
+            !== true
         ) {
 
             invalid.push(
@@ -479,7 +348,8 @@ class CoreGovernance {
 
         if (
             this.executionIntegrity
-                ?.executionIntegrityRequired !== true
+                ?.executionIntegrityRequired
+            !== true
         ) {
 
             invalid.push(
@@ -513,8 +383,8 @@ class CoreGovernance {
                 try {
 
                     if (
-                        typeof this[methodName] !==
-                        "function"
+                        typeof this[methodName]
+                        !== "function"
                     ) {
 
                         return fallback;
@@ -527,10 +397,13 @@ class CoreGovernance {
 
                     return {
 
-                        passed: false,
+                        passed:
+                            false,
 
                         invalid: [
+
                             `${methodName}:execution-failed`
+
                         ],
 
                         error:
@@ -551,7 +424,9 @@ class CoreGovernance {
                 "validateCore",
                 {
                     passed: false,
-                    missing: ["validateCore"],
+                    missing: [
+                        "validateCore"
+                    ],
                     status:
                         "core-validation-unavailable"
                 }
@@ -562,7 +437,9 @@ class CoreGovernance {
                 "validateBoundaries",
                 {
                     passed: false,
-                    invalid: ["validateBoundaries"],
+                    invalid: [
+                        "validateBoundaries"
+                    ],
                     status:
                         "boundary-validation-unavailable"
                 }
@@ -573,35 +450,11 @@ class CoreGovernance {
                 "validateExtensions",
                 {
                     passed: false,
-                    invalid: ["validateExtensions"],
+                    invalid: [
+                        "validateExtensions"
+                    ],
                     status:
                         "extension-validation-unavailable"
-                }
-            );
-
-        const capabilityBoundary =
-            safeValidate(
-                "validateCapabilityBoundary",
-                {
-                    passed: false,
-                    invalid: [
-                        "validateCapabilityBoundary"
-                    ],
-                    status:
-                        "capability-boundary-validation-unavailable"
-                }
-            );
-
-        const mwalBoundary =
-            safeValidate(
-                "validateMWALBoundary",
-                {
-                    passed: false,
-                    invalid: [
-                        "validateMWALBoundary"
-                    ],
-                    status:
-                        "mwal-boundary-validation-unavailable"
                 }
             );
 
@@ -622,8 +475,6 @@ class CoreGovernance {
             core.passed &&
             boundaries.passed &&
             extensions.passed &&
-            capabilityBoundary.passed &&
-            mwalBoundary.passed &&
             executionIntegrity.passed;
 
         return {
@@ -642,10 +493,6 @@ class CoreGovernance {
             boundaries,
 
             extensions,
-
-            capabilityBoundary,
-
-            mwalBoundary,
 
             executionIntegrity,
 

@@ -6,8 +6,8 @@ class ResponsibilityEngine extends EngineBase {
 
         super(
             "ResponsibilityEngine",
-            "10.5",
-            "莫问判断表达所要求承担的责任是否超过当前可直接核验的已验证证据能够承担的责任。"
+            "10.6",
+            "莫问仅依据当前运行中实际提取、实际来源、实际验证并实际建立对应关系的证据计算责任能力，不信任上游声明的验证、支持或容量字段。"
         );
 
         this.semanticObject =
@@ -125,14 +125,15 @@ class ResponsibilityEngine extends EngineBase {
                 this.semanticObject.contract
                     ?.identity
                     ?.runtimeVersion ||
-                "10.4",
+                "10.6",
 
             contractVersion:
                 this.semanticObject.contract
                     ?.version ||
-                "10.4",
+                "10.6",
 
             engineCount:
+                this.semanticObject.engineRegistry?.list?.().length ||
                 Object.keys(
                     this.semanticObject.engines || {}
                 ).length,
@@ -169,18 +170,15 @@ class ResponsibilityEngine extends EngineBase {
             reasoning => {
 
                 /*
-                 * 责任层不接受上游声明的：
+                 * =====================================================
+                 * GATE 6
+                 * =====================================================
                  *
-                 * verificationStatus
-                 * supported
-                 * verifiedEvidenceCount
-                 * sourceAvailable
+                 * Never trust upstream responsibility-capacity fields.
                  *
-                 * 作为事实。
-                 *
-                 * ResponsibilityEngine 必须从当前
-                 * reasoning 中实际携带的证据数组
-                 * 重新建立责任能力。
+                 * All responsibility capacity is reconstructed from
+                 * actual evidence observed during this execution.
+                 * =====================================================
                  */
 
                 const verifiedEvidences =
@@ -196,20 +194,28 @@ class ResponsibilityEngine extends EngineBase {
                 const evidenceCount =
                     evidences.length;
 
-                const verifiedEvidenceCount =
-                    verifiedEvidences.length;
-
                 const sourceCount =
                     this.countActualSources(
-                        verifiedEvidences
+                        evidences
                     );
 
                 const sourceAvailable =
                     sourceCount > 0;
 
+                const verifiedEvidenceCount =
+                    verifiedEvidences.length;
+
+                const verifiedSourceCount =
+                    this.countActualSources(
+                        verifiedEvidences
+                    );
+
+                const verifiedSourceAvailable =
+                    verifiedSourceCount > 0;
+
                 const actualSupport =
                     verifiedEvidenceCount > 0 &&
-                    sourceAvailable &&
+                    verifiedSourceAvailable &&
                     this.actualEvidenceSupportsDefinition(
                         verifiedEvidences,
                         reasoning.definition
@@ -217,11 +223,19 @@ class ResponsibilityEngine extends EngineBase {
 
                 const actualVerificationStatus =
                     this.deriveVerificationStatus({
+
                         reasoning,
+
                         verifiedEvidenceCount,
+
                         actualSupport
+
                     });
 
+                /*
+                 * The normalized object is reconstructed from actual
+                 * runtime observations. Upstream claims are overwritten.
+                 */
                 const normalizedReasoning = {
 
                     ...reasoning,
@@ -237,6 +251,10 @@ class ResponsibilityEngine extends EngineBase {
                     sourceCount,
 
                     sourceAvailable,
+
+                    verifiedSourceCount,
+
+                    verifiedSourceAvailable,
 
                     supported:
                         actualSupport,
@@ -254,10 +272,25 @@ class ResponsibilityEngine extends EngineBase {
                         normalizedReasoning
                     );
 
+                /*
+                 * IMPORTANT:
+                 *
+                 * Capacity is derived ONLY from actual normalized
+                 * evidence values produced above.
+                 */
                 const capacity =
-                    this.analyzeResponsibilityCapacity(
-                        normalizedReasoning
-                    );
+                    this.deriveActualResponsibilityCapacity({
+
+                        verificationStatus:
+                            actualVerificationStatus,
+
+                        verifiedEvidenceCount,
+
+                        verifiedSourceCount,
+
+                        actualSupport
+
+                    });
 
                 const boundary =
                     this.calculateBoundary(
@@ -272,6 +305,16 @@ class ResponsibilityEngine extends EngineBase {
                     );
 
                 return {
+
+                    provenance: {
+
+                        provider:
+                            "MoWen.ResponsibilityEngine",
+
+                        version:
+                            "1.0"
+
+                    },
 
                     testimony,
 
@@ -327,6 +370,10 @@ class ResponsibilityEngine extends EngineBase {
                     sourceCount,
 
                     sourceAvailable,
+
+                    verifiedSourceCount,
+
+                    verifiedSourceAvailable,
 
                     sources:
                         evidences,
@@ -393,24 +440,11 @@ class ResponsibilityEngine extends EngineBase {
     }
 
 
-    /*
-     * 只接受实际存在于 evidences /
-     * verifiedEvidences 数组中的证据。
-     *
-     * 不能使用：
-     *
-     * reasoning.verifiedEvidenceCount
-     * reasoning.supported
-     * reasoning.verificationStatus
-     *
-     * 这些只是声明。
-     */
-
     extractActualVerifiedEvidence(reasoning) {
 
         const candidates =
             Array.isArray(
-                reasoning.verifiedEvidences
+                reasoning?.verifiedEvidences
             )
                 ? reasoning.verifiedEvidences
                 : [];
@@ -419,9 +453,9 @@ class ResponsibilityEngine extends EngineBase {
             evidence =>
                 evidence &&
                 evidence.verificationStatus ===
-                    "VERIFIED" &&
+                "VERIFIED" &&
                 evidence.epistemicState ===
-                    "VERIFIED" &&
+                "VERIFIED" &&
                 evidence.verificationBasis != null &&
                 evidence.sourceAvailable === true
         );
@@ -433,10 +467,17 @@ class ResponsibilityEngine extends EngineBase {
 
         return new Set(
 
-            evidences
+            (Array.isArray(evidences)
+                ? evidences
+                : []
+            )
                 .map(
                     evidence =>
-                        evidence.source
+                        evidence &&
+                        (
+                            evidence.source ||
+                            evidence.url
+                        )
                 )
                 .filter(Boolean)
 
@@ -462,6 +503,7 @@ class ResponsibilityEngine extends EngineBase {
 
         return evidences.some(
             evidence =>
+                evidence &&
                 evidence.supportsClaim === true
         );
 
@@ -487,7 +529,7 @@ class ResponsibilityEngine extends EngineBase {
         }
 
         if (
-            reasoning.verificationStatus ===
+            reasoning?.verificationStatus ===
             "CONTRADICTED"
         ) {
 
@@ -496,7 +538,7 @@ class ResponsibilityEngine extends EngineBase {
         }
 
         if (
-            reasoning.verificationStatus ===
+            reasoning?.verificationStatus ===
             "UNVERIFIED"
         ) {
 
@@ -520,7 +562,7 @@ class ResponsibilityEngine extends EngineBase {
             evidences.length > 0 &&
             this.actualEvidenceSupportsDefinition(
                 evidences,
-                reasoning.definition
+                reasoning?.definition
             )
         );
 
@@ -530,8 +572,8 @@ class ResponsibilityEngine extends EngineBase {
     calculateVerifiedEvidenceRequirement(reasoning) {
 
         const verificationStatus =
-            reasoning.verificationStatus ||
-            reasoning.epistemicState ||
+            reasoning?.verificationStatus ||
+            reasoning?.epistemicState ||
             "UNKNOWN";
 
         if (
@@ -607,28 +649,65 @@ class ResponsibilityEngine extends EngineBase {
     }
 
 
-    analyzeResponsibilityCapacity(reasoning) {
+    /*
+     * =====================================================
+     * GATE 6 CAPACITY DERIVATION
+     * =====================================================
+     *
+     * This method deliberately does NOT accept a reasoning object.
+     *
+     * It receives only values reconstructed by ResponsibilityEngine
+     * from actual evidence in the current execution.
+     *
+     * Therefore fields such as:
+     *
+     * reasoning.supported
+     * reasoning.verificationStatus
+     * reasoning.verifiedEvidenceCount
+     * reasoning.verifiedSourceAvailable
+     * reasoning.responsibilityCapacity
+     *
+     * cannot directly manufacture responsibility capacity.
+     * =====================================================
+     */
+    deriveActualResponsibilityCapacity({
 
-        const verificationStatus =
-            reasoning.verificationStatus ||
-            "UNKNOWN";
+        verificationStatus,
 
-        const verifiedEvidenceCount =
-            Number(
-                reasoning.verifiedEvidenceCount || 0
-            );
+        verifiedEvidenceCount,
 
-        const sourceAvailable =
-            reasoning.sourceAvailable === true;
+        verifiedSourceCount,
+
+        actualSupport
+
+    }) {
+
+        const actualVerifiedEvidenceCount =
+            Number.isFinite(
+                Number(verifiedEvidenceCount)
+            )
+                ? Number(verifiedEvidenceCount)
+                : 0;
+
+        const actualVerifiedSourceCount =
+            Number.isFinite(
+                Number(verifiedSourceCount)
+            )
+                ? Number(verifiedSourceCount)
+                : 0;
+
+        const actualSourceAvailable =
+            actualVerifiedSourceCount > 0;
 
         let level =
             "none";
 
         if (
             verificationStatus ===
-                "SUPPORTED" &&
-            verifiedEvidenceCount > 0 &&
-            sourceAvailable
+            "SUPPORTED" &&
+            actualSupport === true &&
+            actualVerifiedEvidenceCount > 0 &&
+            actualSourceAvailable
         ) {
 
             level =
@@ -638,9 +717,10 @@ class ResponsibilityEngine extends EngineBase {
 
         if (
             verificationStatus ===
-                "SUPPORTED" &&
-            verifiedEvidenceCount > 3 &&
-            sourceAvailable
+            "SUPPORTED" &&
+            actualSupport === true &&
+            actualVerifiedEvidenceCount > 3 &&
+            actualVerifiedSourceCount > 0
         ) {
 
             level =
@@ -652,12 +732,20 @@ class ResponsibilityEngine extends EngineBase {
 
             level,
 
-            verifiedEvidenceCount,
+            verifiedEvidenceCount:
+                actualVerifiedEvidenceCount,
 
-            sourceAvailable,
+            sourceAvailable:
+                actualSourceAvailable,
+
+            verifiedSourceCount:
+                actualVerifiedSourceCount,
+
+            actualSupport:
+                actualSupport === true,
 
             source:
-                "verified-evidence-and-correspondence"
+                "actual-runtime-verified-evidence"
 
         };
 
@@ -750,5 +838,6 @@ class ResponsibilityEngine extends EngineBase {
     }
 
 }
+
 
 export default ResponsibilityEngine;
