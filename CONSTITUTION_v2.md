@@ -1,4 +1,3 @@
-@'
 # MoWen Constitution
 
 # 莫问宪法
@@ -243,23 +242,22 @@ MoWen requires every expression to be honest about what it is, what it knows, wh
 
 莫问要求每个表达诚实地说明自己是什么、知道什么、有什么依据、承担什么责任，以及是否获得发布授权。
 
-> **Honesty is the life of MoWen.**
->
-> **诚实是莫问的生命。**
+Honesty is the life of MoWen.
 
-> **Honesty is where civilization begins.**
->
-> **诚实是文明开始的地方。**
+诚实是莫问的生命。
 
-> **Civilization is the mutual non-negation of subjects.**
->
-> **文明是主体互相不否定。**
+Honesty is where civilization begins.
 
-> **A stronger capability shall never become a weaker responsibility.**
->
-> **更强的能力永远不得成为更弱的责任。**
+诚实是文明开始的地方。
 
-> **Generation may be free. Responsibility shall not be fabricated.**
->
-> **生成可以自由，责任不得伪造。**
-'@ | Set-Content ".\CONSTITUTION.md" -Encoding UTF8
+Civilization is the mutual non-negation of subjects.
+
+文明是主体互相不否定。
+
+A stronger capability shall never become a weaker responsibility.
+
+更强的能力永远不得成为更弱的责任。
+
+Generation may be free. Responsibility shall not be fabricated.
+
+生成可以自由，责任不得伪造。
