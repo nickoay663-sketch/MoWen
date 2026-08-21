@@ -51,7 +51,7 @@ const cases = [
 for (const item of cases) {
 
     const result =
-        new MoWenRuntime(
+        await new MoWenRuntime(
             item.text,
             {
                 languageSystem:
@@ -60,19 +60,22 @@ for (const item of cases) {
         ).run();
 
     const carried =
-        result.runtimeResult.semanticObject.languageSystem;
+        result.runtimeResult?.semanticObject?.languageSystem;
 
     console.log({
         language: item.name,
         sameObject:
-            carried === item.languageSystem,
-        definition:
-            result.runtimeResult.definition?.languageSystem === item.languageSystem,
+            result.runtimeResult?.definition?.languageSystem ===
+            item.languageSystem,
+        carriedName:
+            carried?.name,
         reconstruction:
-            result.runtimeResult.reconstruction?.reconstruction?.language === item.languageSystem,
+            result.runtimeResult?.reconstruction?.reconstruction?.language ===
+            item.languageSystem,
         generator:
-            result.runtimeResult.generator?.report?.language === item.languageSystem,
+            result.runtimeResult?.generator?.report?.language ===
+            item.languageSystem,
         selfCheck:
-            result.runtimeResult.selfCheck?.status
+            result.runtimeResult?.selfCheck?.status
     });
 }

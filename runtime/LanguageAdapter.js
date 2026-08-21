@@ -37,7 +37,8 @@
                 : String(expression ?? "").trim();
 
         const connected =
-            this.languageSystem !== null;
+            this.languageSystem !== null &&
+            this.languageSystem !== undefined;
 
         return {
 
@@ -81,7 +82,8 @@
     isConnected() {
 
         return (
-            this.languageSystem !== null
+            this.languageSystem !== null &&
+            this.languageSystem !== undefined
         );
 
     }

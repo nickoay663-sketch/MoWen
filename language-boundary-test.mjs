@@ -15,7 +15,7 @@ const text = `ท่านผู้มีเกียรติครับ, โ�
 การตัดสินใจที่ดีที่สุดได้ถูกทีมของเราเลือกแล้ว`;
 
 const r =
-    new MoWenRuntime(
+    await new MoWenRuntime(
         text,
         {
             languageSystem:
@@ -24,7 +24,7 @@ const r =
     ).run();
 
 const carried =
-    r.runtimeResult.semanticObject?.languageSystem;
+    r.runtimeResult?.semanticObject?.languageSystem;
 
 console.log("same-object=",
     carried === externalLanguageSystem
@@ -43,17 +43,20 @@ console.log("version=",
 );
 
 console.log("definition=",
-    r.runtimeResult.definition?.languageSystem === externalLanguageSystem
+    r.runtimeResult?.definition?.languageSystem ===
+    externalLanguageSystem
 );
 
 console.log("reconstruction=",
-    r.runtimeResult.reconstruction?.reconstruction?.language === externalLanguageSystem
+    r.runtimeResult?.reconstruction?.reconstruction?.language ===
+    externalLanguageSystem
 );
 
 console.log("generator=",
-    r.runtimeResult.generator?.report?.language === externalLanguageSystem
+    r.runtimeResult?.generator?.report?.language ===
+    externalLanguageSystem
 );
 
 console.log("selfCheck=",
-    r.runtimeResult.selfCheck?.status
+    r.runtimeResult?.selfCheck?.status
 );

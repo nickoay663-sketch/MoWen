@@ -10,6 +10,7 @@ class TestimonyBuilder {
 
     }
 
+
     run() {
 
         const universalExpression =
@@ -17,19 +18,23 @@ class TestimonyBuilder {
                 ? this.input
                 : null;
 
+
         const testimony =
             new Testimony(
                 universalExpression
                 || this.input
             );
 
+
         if (universalExpression) {
 
             testimony.expressionType =
                 "UniversalExpression";
 
+
             testimony.universalExpression =
                 universalExpression;
+
 
             testimony.metadata = {
 
@@ -43,10 +48,12 @@ class TestimonyBuilder {
 
         }
 
+
         return testimony;
 
     }
 
 }
+
 
 export default TestimonyBuilder;

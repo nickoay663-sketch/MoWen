@@ -17,6 +17,7 @@ import RuntimeResult from "./RuntimeResult.js";
 import TestimonyBuilder from "./TestimonyBuilder.js";
 import TestimonyValidator from "./TestimonyValidator.js";
 import CoreGovernance from "./CoreGovernance.js";
+import UniversalExpression from "./UniversalExpression.js";
 
 class HonestRuntime {
 
@@ -92,7 +93,15 @@ class HonestRuntime {
 
         const testimony =
             new TestimonyBuilder(
-                this.expression
+                UniversalExpression.from({
+                    originalExpression:
+                        this.expression,
+
+                    sourceLanguage:
+                        this.options.languageSystem ??
+                        this.options.language ??
+                        null
+                })
             ).run();
 
         const testimonyValidation =
@@ -1583,85 +1592,19 @@ class HonestRuntime {
          * ---------------------------------------------------------
          * FINAL RUNTIME CLOSURE
          *
-         * Closure Gate 已通过。
+         * Closure Gate 必须先通过。
          *
-         * 现在才允许宣布：
+         * 只有在以下条件全部成立后：
+         *
+         *   Registry 完整
+         *   Execution 全部完成
+         *   Execution Pending = 0
+         *   SelfCheck = passed
+         *
+         * 才允许写入：
          *
          *   RuntimeClosed
-         * ---------------------------------------------------------
-         */
-
-        runtimeContext.runtimeState =
-            "RuntimeClosed";
-
-        runtimeResult.setMetadata({
-
-            contractVersion:
-                RuntimeContract.version,
-
-            runtimeVersion,
-
-            engineCount:
-                engineRegistry.list().length,
-
-            registryValidation,
-
-            registryVersionValidation,
-
-            registryStateBeforeSelfCheck:
-                registryState,
-
-            registryStateAfterSelfCheck:
-                engineRegistry.list(),
-
-            executionCompleted:
-                finalExecutionCompleted,
-
-            executionPending:
-                finalExecutionPending,
-
-            executionCompletedCount:
-                finalExecutionCompleted.length,
-
-            executionExpectedCount:
-                pipeline.length,
-
-            executionComplete:
-                finalExecutionComplete,
-
-            runtimeState:
-                runtimeContext.runtimeState,
-
-            governance:
-                governanceResult,
-
-            responsibilityEvent: {
-
-                type:
-                    responsibilityEvent.type,
-
-                version:
-                    responsibilityEvent.version,
-
-                epistemicState:
-                    responsibilityEvent.epistemicState,
-
-                publishable:
-                    responsibilityEventPublishable,
-
-                validation:
-                    responsibilityEventValidation
-
-            }
-
-        });
-
-        /*
-         * ---------------------------------------------------------
-         * Final invariant assertion
          *
-         * 此处只是验证刚刚完成的 Closure Gate，
-         * 不再参与决定是否 Closed。
          * ---------------------------------------------------------
          */
 
@@ -1669,9 +1612,20 @@ class HonestRuntime {
             registryState.length === pipeline.length &&
             finalExecutionCompleted.length === pipeline.length &&
             finalExecutionPending.length === 0 &&
-            selfCheck?.result?.passed === true &&
-            runtimeContext.runtimeState ===
-            "RuntimeClosed";
+            selfCheck?.result?.passed === true;
+
+        /*
+         * ---------------------------------------------------------
+         * Final closure invariant
+         *
+         * 这里验证“是否具备关闭资格”。
+         *
+         * 此时 RuntimeState 仍然不能作为判断条件，
+         * 因为 RuntimeClosed 尚未写入。
+         *
+         * 先检验，再写入。
+         * ---------------------------------------------------------
+         */
 
         if (!runtimeClosed) {
 
@@ -1724,6 +1678,83 @@ class HonestRuntime {
             );
 
         }
+
+        /*
+         * ---------------------------------------------------------
+         * ONLY NOW:
+         *
+         * Closure Gate 已经通过。
+         *
+         * 才正式写入 RuntimeClosed。
+         * ---------------------------------------------------------
+         */
+
+        runtimeContext.runtimeState =
+            "RuntimeClosed";
+
+        runtimeResult.setMetadata({
+
+            contractVersion:
+                RuntimeContract.version,
+
+            runtimeVersion,
+
+            engineCount:
+                engineRegistry.list().length,
+
+            registryValidation,
+
+            registryVersionValidation,
+
+            registryStateBeforeSelfCheck:
+                registryState,
+
+            registryStateAfterSelfCheck:
+                engineRegistry.list(),
+
+            executionCompleted:
+                finalExecutionCompleted,
+
+            executionPending:
+                finalExecutionPending,
+
+            executionCompletedCount:
+                finalExecutionCompleted.length,
+
+            executionExpectedCount:
+                pipeline.length,
+
+            executionComplete:
+                finalExecutionComplete,
+
+            runtimeState:
+                runtimeContext.runtimeState,
+
+            runtimeClosed,
+
+            governance:
+                governanceResult,
+
+            responsibilityEvent: {
+
+                type:
+                    responsibilityEvent.type,
+
+                version:
+                    responsibilityEvent.version,
+
+                epistemicState:
+                    responsibilityEvent.epistemicState,
+
+                publishable:
+                    responsibilityEventPublishable,
+
+                validation:
+                    responsibilityEventValidation
+
+            }
+
+        });
 
         return runtimeResult;
 
@@ -1857,4 +1888,7 @@ class HonestRuntime {
 }
 
 export default HonestRuntime;
+
+
+
 
