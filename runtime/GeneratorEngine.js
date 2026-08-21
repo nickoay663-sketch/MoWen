@@ -6,8 +6,8 @@ class GeneratorEngine extends EngineBase {
 
         super(
             "GeneratorEngine",
-            "7.1",
-            "莫问生成责任链报告，只保留责任引擎已经允许承担的状态，不提升、不修饰、不越过责任边界。"
+            "10.7",
+            "莫问生成责任边界内的最终表达，只输出重构层已经允许承担的内容，不重新验证、不提升认识状态、不越过责任边界。"
         );
 
         this.runtimeObject =
@@ -23,6 +23,11 @@ class GeneratorEngine extends EngineBase {
 
         const report =
             this.buildReport();
+
+        const publishableText =
+            this.buildPublishableText(
+                report
+            );
 
         return {
 
@@ -45,11 +50,15 @@ class GeneratorEngine extends EngineBase {
 
             report,
 
+            publishableText,
+
             result: {
 
                 metadata,
 
                 report,
+
+                publishableText,
 
                 generator:
                     true
@@ -83,10 +92,16 @@ class GeneratorEngine extends EngineBase {
                 new Date().toISOString(),
 
             runtimeVersion:
-                this.runtimeObject.contract?.identity?.runtimeVersion || "",
+                this.runtimeObject.contract?.identity?.runtimeVersion ||
+                this.runtimeObject.contract?.version ||
+                "",
 
             contractVersion:
-                this.runtimeObject.contract?.version || "",
+                this.runtimeObject.contract?.version ||
+                "",
+
+            engineVersion:
+                this.version,
 
             pipeline:
                 this.runtimeObject.pipeline || [],
@@ -97,7 +112,16 @@ class GeneratorEngine extends EngineBase {
                 ).length,
 
             traceCount:
-                (this.runtimeObject.runtimeTrace || []).length
+                (this.runtimeObject.runtimeTrace || []).length,
+
+            generationMode:
+                "responsibility-bound-final-expression",
+
+            publicationRule:
+                "generator-does-not-upgrade-epistemic-state",
+
+            publishableTextRule:
+                "publishableText-requires-publishable-report"
 
         };
 
@@ -107,7 +131,9 @@ class GeneratorEngine extends EngineBase {
     buildReport() {
 
         const reconstruction =
-            this.runtimeObject.reconstruction?.reconstruction || {};
+            this.runtimeObject.reconstruction?.reconstruction ||
+            this.runtimeObject.reconstruction ||
+            {};
 
         const responsibilities =
             Array.isArray(
@@ -142,6 +168,20 @@ class GeneratorEngine extends EngineBase {
                 ? reconstruction.sources
                 : [];
 
+        const reconstructionState =
+            reconstruction.reconstructionState ||
+            "UNKNOWN";
+
+        const verificationStatus =
+            this.calculateReportVerificationStatus(
+                normalizedResponsibilities,
+                reconstructionState
+            );
+
+        const publishable =
+            reconstruction.publishable === true &&
+            verificationStatus === "SUPPORTED";
+
         return {
 
             expression:
@@ -152,6 +192,8 @@ class GeneratorEngine extends EngineBase {
 
             language:
                 reconstruction.language || null,
+
+            reconstructionState,
 
             responsibilities:
                 normalizedResponsibilities,
@@ -172,13 +214,18 @@ class GeneratorEngine extends EngineBase {
             expansion:
                 reconstruction.expansion === true,
 
+            sourceExpansion:
+                reconstruction.sourceExpansion === true,
+
+            evidenceExpansion:
+                reconstruction.evidenceExpansion === true,
+
+            publishable,
+
             reportType:
                 "responsibility-verification-report",
 
-            verificationStatus:
-                this.calculateReportVerificationStatus(
-                    normalizedResponsibilities
-                ),
+            verificationStatus,
 
             runtimeTrace:
                 this.runtimeObject.runtimeTrace || [],
@@ -209,17 +256,6 @@ class GeneratorEngine extends EngineBase {
             item.epistemicState ||
             "UNKNOWN";
 
-        /*
-         * 最终报告边界：
-         *
-         * responsibilityBoundary = exceeded
-         *
-         * 永远不能继续输出 SUPPORTED。
-         *
-         * Generator 不重新验证证据，
-         * 只阻止已经越界的状态继续传播。
-         */
-
         if (
             boundaryStatus === "exceeded"
         ) {
@@ -244,11 +280,6 @@ class GeneratorEngine extends EngineBase {
 
         }
 
-
-        /*
-         * 只有责任边界明确 matched，
-         * 才允许保留 SUPPORTED。
-         */
 
         if (
             originalVerificationStatus === "SUPPORTED" &&
@@ -277,10 +308,6 @@ class GeneratorEngine extends EngineBase {
         }
 
 
-        /*
-         * 其他状态一律不得提升。
-         */
-
         return {
 
             ...item,
@@ -303,7 +330,8 @@ class GeneratorEngine extends EngineBase {
 
 
     calculateReportVerificationStatus(
-        responsibilities
+        responsibilities,
+        reconstructionState
     ) {
 
         if (
@@ -334,13 +362,14 @@ class GeneratorEngine extends EngineBase {
                 item =>
                     item.supported === true &&
                     item.verificationStatus ===
-                        "SUPPORTED" &&
+                    "SUPPORTED" &&
                     item.responsibilityBoundary?.status ===
-                        "matched"
+                    "matched"
             );
 
         if (
-            allSupported
+            allSupported &&
+            reconstructionState === "SUPPORTED"
         ) {
 
             return "SUPPORTED";
@@ -348,6 +377,48 @@ class GeneratorEngine extends EngineBase {
         }
 
         return "UNVERIFIED";
+
+    }
+
+
+    buildPublishableText(
+        report
+    ) {
+
+        /*
+         * MWAL 最终发布闸门。
+         *
+         * Generator 不重新验证证据，
+         * 但必须服从自己刚刚生成的责任报告。
+         *
+         * publishable !== true
+         *       ↓
+         * publishableText = ""
+         */
+
+        if (
+            !report ||
+            report.publishable !== true
+        ) {
+
+            return "";
+
+        }
+
+        const reconstructed =
+            typeof report.reconstructedExpression === "string"
+                ? report.reconstructedExpression.trim()
+                : "";
+
+        if (
+            reconstructed.length === 0
+        ) {
+
+            return "";
+
+        }
+
+        return reconstructed;
 
     }
 
