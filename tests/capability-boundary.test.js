@@ -175,19 +175,19 @@ for (const testCase of cases) {
             source =>
 
                 source.state ===
-                    "DISCOVERED" &&
+                "DISCOVERED" &&
 
                 source.verificationStatus ===
-                    "UNVERIFIED" &&
+                "UNVERIFIED" &&
 
                 source.epistemicState ===
-                    "DISCOVERED" &&
+                "DISCOVERED" &&
 
                 source.verified ===
-                    false &&
+                false &&
 
                 source.supportsClaim ===
-                    false
+                false
 
         );
 
@@ -195,10 +195,10 @@ for (const testCase of cases) {
     const evidenceBoundaryValid =
 
         search.metadata?.evidenceCreated !==
-            true &&
+        true &&
 
         search.result?.evidenceCreated !==
-            true;
+        true;
 
 
     const capabilityAdmissionValid =

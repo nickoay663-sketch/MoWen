@@ -1,7 +1,7 @@
 ﻿const RuntimeContract = {
 
     version:
-        "10.6",
+        "10.7",
 
     principles: {
 
@@ -95,10 +95,10 @@
             "MoWen Runtime",
 
         runtimeVersion:
-            "10.6",
+            "10.7",
 
         contractVersion:
-            "10.6"
+            "10.7"
 
     },
 
@@ -658,6 +658,7 @@
             "pipeline",
             "epistemicState",
             "epistemicBoundary"
+
         ]
 
     },
@@ -670,6 +671,7 @@
             "contractVersion",
             "engineCount",
             "generatedAt"
+
         ]
 
     },

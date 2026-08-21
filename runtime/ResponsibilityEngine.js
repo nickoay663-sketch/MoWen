@@ -6,7 +6,7 @@ class ResponsibilityEngine extends EngineBase {
 
         super(
             "ResponsibilityEngine",
-            "10.6",
+            "10.7",
             "莫问仅依据当前运行中实际提取、实际来源、实际验证并实际建立对应关系的证据计算责任能力，不信任上游声明的验证、支持或容量字段。"
         );
 
@@ -37,6 +37,20 @@ class ResponsibilityEngine extends EngineBase {
                     "exceeded"
             );
 
+        const primaryResponsibility =
+            responsibilities[0] || {};
+
+        const epistemicState =
+            primaryResponsibility.epistemicState ||
+            "UNKNOWN";
+
+        const verificationStatus =
+            primaryResponsibility.verificationStatus ||
+            "UNKNOWN";
+
+        const supported =
+            primaryResponsibility.supported === true;
+
         return this.result({
 
             semanticObject:
@@ -49,11 +63,27 @@ class ResponsibilityEngine extends EngineBase {
 
             responsibilities,
 
+            epistemicState,
+
+            verificationStatus,
+
+            supported,
+
+            passed,
+
+            status,
+
             result: {
 
                 metadata,
 
                 responsibilities,
+
+                epistemicState,
+
+                verificationStatus,
+
+                supported,
 
                 passed,
 
@@ -125,12 +155,12 @@ class ResponsibilityEngine extends EngineBase {
                 this.semanticObject.contract
                     ?.identity
                     ?.runtimeVersion ||
-                "10.6",
+                "10.7",
 
             contractVersion:
                 this.semanticObject.contract
                     ?.version ||
-                "10.6",
+                "10.7",
 
             engineCount:
                 this.semanticObject.engineRegistry?.list?.().length ||

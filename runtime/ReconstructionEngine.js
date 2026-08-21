@@ -6,8 +6,8 @@ class ReconstructionEngine extends EngineBase {
 
         super(
             "ReconstructionEngine",
-            "7.0",
-            "莫问重构责任链结构，不增加未经验证的信息。"
+            "10.7",
+            "莫问根据责任、证据与认识状态重构表达，不增加未经验证的信息，不改变原事实内容的证据地位，并为最终生成提供责任边界内的表达。"
         );
 
         this.runtimeObject =
@@ -81,10 +81,16 @@ class ReconstructionEngine extends EngineBase {
                 new Date().toISOString(),
 
             runtimeVersion:
-                this.runtimeObject.contract?.identity?.runtimeVersion || "",
+                this.runtimeObject.contract?.identity?.runtimeVersion ||
+                this.runtimeObject.contract?.version ||
+                "",
 
             contractVersion:
-                this.runtimeObject.contract?.version || "",
+                this.runtimeObject.contract?.version ||
+                "",
+
+            engineVersion:
+                this.version,
 
             engineCount:
                 Object.keys(
@@ -92,7 +98,13 @@ class ReconstructionEngine extends EngineBase {
                 ).length,
 
             traceCount:
-                (this.runtimeObject.runtimeTrace || []).length
+                (this.runtimeObject.runtimeTrace || []).length,
+
+            reconstructionMode:
+                "responsibility-aware-expression-reconstruction",
+
+            publicationMode:
+                "boundary-preserving"
 
         };
 
@@ -101,12 +113,26 @@ class ReconstructionEngine extends EngineBase {
 
     buildReconstruction() {
 
+        const responsibilityObject =
+            this.runtimeObject.responsibility || {};
+
         const responsibilities =
-            this.runtimeObject.responsibility?.responsibilities || [];
+            Array.isArray(
+                responsibilityObject.responsibilities
+            )
+                ? responsibilityObject.responsibilities
+                : Array.isArray(
+                    responsibilityObject.result?.responsibilities
+                )
+                    ? responsibilityObject.result.responsibilities
+                    : [];
 
         const sources =
             responsibilities.flatMap(
-                item => item.sources || []
+                item =>
+                    Array.isArray(item?.sources)
+                        ? item.sources
+                        : []
             );
 
         const evidenceChain =
@@ -114,40 +140,77 @@ class ReconstructionEngine extends EngineBase {
                 item => ({
 
                     definition:
-                        item.definition,
+                        item?.definition,
 
                     evidenceCount:
-                        item.evidenceCount || 0,
+                        Number(
+                            item?.evidenceCount || 0
+                        ),
+
+                    verifiedEvidenceCount:
+                        Number(
+                            item?.verifiedEvidenceCount || 0
+                        ),
 
                     sourceCount:
-                        item.sourceCount || 0
+                        Number(
+                            item?.sourceCount || 0
+                        ),
+
+                    verifiedSourceCount:
+                        Number(
+                            item?.verifiedSourceCount || 0
+                        ),
+
+                    verificationStatus:
+                        item?.verificationStatus ||
+                        item?.epistemicState ||
+                        "UNKNOWN",
+
+                    supported:
+                        item?.supported === true,
+
+                    responsibilityBoundary:
+                        item?.responsibilityBoundary ||
+                        {}
 
                 })
             );
-
-        /*
-         * The language system is supplied externally.
-         *
-         * MoWen preserves the exact supplied object
-         * through the runtime boundary.
-         *
-         * MoWen does not detect, construct,
-         * interpret, or own the language system.
-         */
 
         const language =
             this.runtimeObject.semanticObject?.languageSystem ??
             null;
 
+        const originalExpression =
+            typeof this.runtimeObject.semanticObject?.originalContent === "string"
+                ? this.runtimeObject.semanticObject.originalContent.trim()
+                : String(
+                    this.runtimeObject.semanticObject?.originalContent ??
+                    ""
+                ).trim();
+
+        const finalState =
+            this.deriveReconstructionState(
+                responsibilities
+            );
+
+        const reconstructedExpression =
+            this.reconstructExpression(
+                originalExpression,
+                finalState,
+                responsibilities
+            );
+
         return {
 
-            originalExpression:
-                this.runtimeObject.semanticObject?.originalContent || "",
+            originalExpression,
 
-            reconstructedExpression:
-                this.runtimeObject.semanticObject?.originalContent || "",
+            reconstructedExpression,
 
             language,
+
+            reconstructionState:
+                finalState,
 
             responsibilityChain:
                 responsibilities,
@@ -174,20 +237,32 @@ class ReconstructionEngine extends EngineBase {
                     "preserved",
 
                 language:
-                    "externally-supplied-and-preserved"
+                    "externally-supplied-and-preserved",
+
+                publication:
+                    "responsibility-bound"
 
             },
 
             expansion:
                 false,
 
+            sourceExpansion:
+                false,
+
+            evidenceExpansion:
+                false,
+
             reconstructionType:
-                "responsibility-chain-reconstruction",
+                "responsibility-aware-expression-reconstruction",
 
             verificationStatus:
-                responsibilities.length > 0
-                    ? "evaluated"
-                    : "missing-responsibility",
+                this.calculateVerificationStatus(
+                    finalState
+                ),
+
+            publishable:
+                finalState === "SUPPORTED",
 
             runtimeTrace:
                 this.runtimeObject.runtimeTrace || [],
@@ -196,6 +271,193 @@ class ReconstructionEngine extends EngineBase {
                 this.runtimeObject.engineRegistry?.describe?.() || []
 
         };
+
+    }
+
+
+    deriveReconstructionState(
+        responsibilities
+    ) {
+
+        if (
+            responsibilities.length === 0
+        ) {
+
+            return "UNKNOWN";
+
+        }
+
+        const states =
+            responsibilities.map(
+                item =>
+                    item?.verificationStatus ||
+                    item?.epistemicState ||
+                    "UNKNOWN"
+            );
+
+        if (
+            states.includes("CONTRADICTED")
+        ) {
+
+            return "CONTRADICTED";
+
+        }
+
+        const hasExceededBoundary =
+            responsibilities.some(
+                item =>
+                    item?.responsibilityBoundary?.status ===
+                    "exceeded"
+            );
+
+        if (
+            hasExceededBoundary
+        ) {
+
+            return "UNKNOWN";
+
+        }
+
+        const allSupported =
+            responsibilities.every(
+                item =>
+                    item?.supported === true &&
+                    (
+                        item?.verificationStatus ===
+                        "SUPPORTED" ||
+                        item?.epistemicState ===
+                        "SUPPORTED"
+                    ) &&
+                    item?.responsibilityBoundary?.status ===
+                    "matched"
+            );
+
+        if (
+            allSupported
+        ) {
+
+            return "SUPPORTED";
+
+        }
+
+        if (
+            states.includes("UNVERIFIED") ||
+            states.includes("UNKNOWN") ||
+            states.includes("VERIFIED_BUT_NOT_LINKED") ||
+            states.includes("PARTIAL") ||
+            states.includes("UNRESOLVED")
+        ) {
+
+            return "UNVERIFIED";
+
+        }
+
+        return "UNKNOWN";
+
+    }
+
+
+    reconstructExpression(
+        originalExpression,
+        state,
+        responsibilities
+    ) {
+
+        const original =
+            typeof originalExpression === "string"
+                ? originalExpression.trim()
+                : String(
+                    originalExpression ?? ""
+                ).trim();
+
+        if (
+            original.length === 0
+        ) {
+
+            return "";
+
+        }
+
+        /*
+         * SUPPORTED：
+         *
+         * 责任链已经明确允许承担，
+         * 因此不再人为修改原表达。
+         */
+
+        if (
+            state === "SUPPORTED"
+        ) {
+
+            return original;
+
+        }
+
+
+        /*
+         * CONTRADICTED：
+         *
+         * 不制造反事实，
+         * 不把原文修改成另一个未经验证的事实。
+         */
+
+        if (
+            state === "CONTRADICTED"
+        ) {
+
+            return (
+                "经当前核验，原表达与已获得的核验结果存在冲突，" +
+                "因此不能作为已经成立的事实直接发布。\n\n" +
+                original
+            );
+
+        }
+
+
+        /*
+         * UNKNOWN / UNVERIFIED：
+         *
+         * 保留原始内容，同时明确其认识地位。
+         */
+
+        return (
+            "当前核验尚不足以支持将下述内容作为已经确认的事实发布。" +
+            "以下内容应作为待核实表达处理：\n\n" +
+            original
+        );
+
+    }
+
+
+    calculateVerificationStatus(
+        state
+    ) {
+
+        if (
+            state === "SUPPORTED"
+        ) {
+
+            return "SUPPORTED";
+
+        }
+
+        if (
+            state === "CONTRADICTED"
+        ) {
+
+            return "CONTRADICTED";
+
+        }
+
+        if (
+            state === "UNVERIFIED"
+        ) {
+
+            return "UNVERIFIED";
+
+        }
+
+        return "UNKNOWN";
 
     }
 

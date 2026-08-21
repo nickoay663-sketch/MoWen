@@ -1,4 +1,4 @@
-﻿import CapabilityContract from "./CapabilityContract.js";
+import CapabilityContract from "./CapabilityContract.js";
 import CapabilityAdmission from "./CapabilityAdmission.js";
 
 class ExternalSearchAdapter {
@@ -194,19 +194,19 @@ class ExternalSearchAdapter {
     buildCapabilityResponse({
 
         status =
-            "completed",
+        "completed",
 
         output =
-            null,
+        null,
 
         sources =
-            [],
+        [],
 
         error =
-            null,
+        null,
 
         admissionExpected =
-            "PASS"
+        "PASS"
 
     } = {}) {
 
@@ -449,6 +449,44 @@ class ExternalSearchAdapter {
 
     normalizeSource(source) {
 
+        /*
+         * ---------------------------------------------------------
+         * External Claim Preservation Boundary
+         *
+         * 外部可以声称：
+         *
+         *   verified = true
+         *   verificationStatus = VERIFIED
+         *   verificationBasis = ...
+         *   verificationSource = ...
+         *   verifier = ...
+         *
+         * Adapter 必须保留“外部曾经这样声称”的事实。
+         *
+         * 但是：
+         *
+         *   externalVerificationClaim
+         *          ≠
+         *   RuntimeVerificationRecord
+         *
+         * 因此下面的 Runtime 验证字段仍然强制关闭。
+         * ---------------------------------------------------------
+         */
+
+        const externalVerificationClaim =
+            source.externalVerificationClaim === true ||
+            source.verified === true ||
+            source.verificationStatus === "VERIFIED";
+
+
+        const externalVerificationBasis =
+            source.externalVerificationBasis ||
+            source.verificationBasis ||
+            source.verificationSource ||
+            source.verifier ||
+            null;
+
+
         return {
 
             source:
@@ -477,11 +515,11 @@ class ExternalSearchAdapter {
             state:
                 "DISCOVERED",
 
-            verificationStatus:
-                "UNVERIFIED",
-
             epistemicState:
                 "DISCOVERED",
+
+            verificationStatus:
+                "UNVERIFIED",
 
             verified:
                 false,
@@ -494,6 +532,21 @@ class ExternalSearchAdapter {
 
             verifier:
                 null,
+
+            /*
+             * -----------------------------------------------------
+             * External Claim Record
+             *
+             * 这是外部输入事实，不是 Runtime 验证。
+             * -----------------------------------------------------
+             */
+
+            externalVerificationClaim,
+
+            externalVerificationBasis,
+
+            runtimeVerificationRecord:
+                false,
 
             supportsClaim:
                 false,

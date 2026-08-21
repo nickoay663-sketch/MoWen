@@ -6,7 +6,7 @@ class EvidenceEngine extends EngineBase {
 
         super(
             "EvidenceEngine",
-            "10.6",
+            "10.7",
             "莫问区分已发现、未验证与已验证：搜索发现可以保留为DISCOVERED，但没有可识别的Runtime验证行为时，不得提升为VERIFIED。"
         );
 
@@ -225,38 +225,43 @@ class EvidenceEngine extends EngineBase {
 
 
         /*
-         * Evidence Boundary v10.6
+         * ---------------------------------------------------------
+         * Evidence Boundary v10.7
          *
-         * EvidenceEngine distinguishes three different states:
+         * EvidenceEngine distinguishes:
          *
          *   DISCOVERED
-         *       Runtime has discovered the source or statement.
-         *
          *   UNVERIFIED
-         *       Runtime has not established verification.
-         *
          *   VERIFIED
-         *       Only allowed when a Runtime-owned verification
-         *       record exists.
          *
-         * Search discovery itself is NOT verification.
+         * 外部来源可以声明自己已经 VERIFIED。
          *
-         * External declarations such as:
+         * 该声明必须被保留为：
          *
-         *   verified: true
-         *   verificationStatus: "VERIFIED"
-         *   verificationBasis: "..."
+         *   externalVerificationClaim = true
          *
-         * are input claims, not Runtime verification records.
+         * 但绝不能直接成为：
+         *
+         *   runtimeVerificationRecord = true
+         *   verificationStatus = VERIFIED
+         *
+         * 因此：
+         *
+         *   保留外部声明
+         *          ≠
+         *   接受外部验证
+         * ---------------------------------------------------------
          */
 
 
         const externallyClaimedVerified =
+            item.externalVerificationClaim === true ||
             item.verified === true ||
             item.verificationStatus === "VERIFIED";
 
 
         const externalVerificationBasis =
+            item.externalVerificationBasis ||
             item.verificationBasis ||
             item.verificationSource ||
             item.verifier ||
@@ -264,13 +269,20 @@ class EvidenceEngine extends EngineBase {
 
 
         /*
-         * Runtime verification record.
+         * ---------------------------------------------------------
+         * Runtime Verification Record
          *
-         * The current Runtime does not expose an independent
-         * verification record to EvidenceEngine.
+         * 只有 Runtime 自己产生的验证记录，
+         * 才允许进入 VERIFIED。
          *
-         * Therefore external verification claims can never
-         * promote evidence to VERIFIED.
+         * 外部字段：
+         *
+         *   verified
+         *   verificationStatus
+         *   verificationBasis
+         *
+         * 本身都不是 Runtime Verification Record。
+         * ---------------------------------------------------------
          */
 
         const runtimeVerificationRecord =
@@ -285,20 +297,18 @@ class EvidenceEngine extends EngineBase {
 
 
         /*
-         * Preserve epistemic discovery state.
+         * ---------------------------------------------------------
+         * Epistemic State
          *
-         * SearchEngine already distinguishes:
+         * 搜索发现仍然保持 DISCOVERED。
          *
-         *   DISCOVERED
-         *
-         * from verification status.
-         *
-         * EvidenceEngine must not destroy that information.
+         * VERIFIED 只允许来自 Runtime Verification Record。
+         * ---------------------------------------------------------
          */
 
         const epistemicState =
             item.epistemicState === "DISCOVERED" ||
-            item.state === "DISCOVERED"
+                item.state === "DISCOVERED"
                 ? "DISCOVERED"
                 : verificationStatus === "VERIFIED"
                     ? "VERIFIED"
@@ -323,6 +333,11 @@ class EvidenceEngine extends EngineBase {
 
             verificationStatus,
 
+            /*
+             * Runtime verificationBasis 只在
+             * Runtime Verification Record 存在时写入。
+             */
+
             verificationBasis:
                 runtimeVerificationRecord
                     ? (
@@ -333,10 +348,25 @@ class EvidenceEngine extends EngineBase {
                     )
                     : null,
 
+            /*
+             * -----------------------------------------------------
+             * External Claim Preservation
+             *
+             * 这是“外部曾经声称 VERIFIED”的事实，
+             * 不是 Runtime 对该声明真实性的认可。
+             * -----------------------------------------------------
+             */
+
             externalVerificationClaim:
                 externallyClaimedVerified,
 
             externalVerificationBasis,
+
+            /*
+             * -----------------------------------------------------
+             * Runtime Verification Boundary
+             * -----------------------------------------------------
+             */
 
             runtimeVerificationRecord,
 
@@ -347,12 +377,7 @@ class EvidenceEngine extends EngineBase {
                 !!source,
 
             supportsClaim:
-                item.supportsClaim === true,
-
-            evidenceBoundary:
-                verificationStatus === "VERIFIED"
-                    ? "VERIFIED"
-                    : "UNVERIFIED"
+                item.supportsClaim === true
 
         };
 

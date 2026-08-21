@@ -115,7 +115,7 @@ class CapabilityAdmission {
             ]
 
         };
-        
+
 
     }
 

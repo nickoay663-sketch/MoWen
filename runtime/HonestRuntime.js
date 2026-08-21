@@ -146,6 +146,13 @@ class HonestRuntime {
                     ? this.options.searchResults
                     : [],
 
+            evidence:
+                Array.isArray(
+                    this.options.evidence
+                )
+                    ? this.options.evidence
+                    : [],
+
             externalSearchAdapter:
                 this.options.externalSearchAdapter ||
                 null,
@@ -159,7 +166,6 @@ class HonestRuntime {
                 null,
 
             testimony,
-
             testimonyValidation,
 
             identity,
@@ -210,13 +216,23 @@ class HonestRuntime {
             verificationBoundary: null,
 
             /*
-             * Runtime 生命周期状态。
+             * -----------------------------------------------------
+             * Runtime Lifecycle
              *
-             * SelfCheck 执行前为：
-             *   RuntimeExecuting
+             * RuntimeExecuting:
+             *   Runtime 正在执行。
              *
-             * SelfCheck 完成后才允许：
-             *   RuntimeClosed
+             * RuntimeAborted:
+             *   最终关闭条件未满足，Runtime 被阻止返回。
+             *
+             * RuntimeClosed:
+             *   所有最终关闭条件均满足。
+             *
+             * IMPORTANT:
+             *
+             * RuntimeClosed 只能在最终 Closure Gate
+             * 通过之后写入。
+             * -----------------------------------------------------
              */
             runtimeState:
                 "RuntimeExecuting"
@@ -924,11 +940,16 @@ class HonestRuntime {
          *
          * executionResults.selfCheck = selfCheck
          *
-         * 因此此处才允许宣布：
+         * 因此此处只允许宣布：
          *
          * 10 / 10 execution-completed
          *
-         * SelfCheck 本身不能在执行过程中提前宣布自己完成。
+         * 注意：
+         *
+         * executionComplete != RuntimeClosed
+         *
+         * Engine 全部执行完成只是进入最终 Closure Gate，
+         * 不能提前宣布 RuntimeClosed。
          * ---------------------------------------------------------
          */
 
@@ -969,6 +990,30 @@ class HonestRuntime {
 
         if (!finalExecutionComplete) {
 
+            runtimeContext.runtimeState =
+                "RuntimeAborted";
+
+            runtimeResult.setMetadata({
+
+                runtimeVersion,
+
+                contractVersion:
+                    RuntimeContract.version,
+
+                runtimeState:
+                    runtimeContext.runtimeState,
+
+                executionCompleted:
+                    finalExecutionCompleted,
+
+                executionPending:
+                    finalExecutionPending,
+
+                executionComplete:
+                    finalExecutionComplete
+
+            });
+
             throw new Error(
                 `MoWen Runtime execution lifecycle failed: ${JSON.stringify(
                     {
@@ -982,7 +1027,10 @@ class HonestRuntime {
                             finalExecutionCompleted,
 
                         executionPending:
-                            finalExecutionPending
+                            finalExecutionPending,
+
+                        runtimeState:
+                            runtimeContext.runtimeState
                     }
                 )}`
             );
@@ -990,15 +1038,13 @@ class HonestRuntime {
         }
 
         /*
-         * Runtime 到达真正闭环状态。
-         */
-
-        runtimeContext.runtimeState =
-            "RuntimeClosed";
-
-        /*
          * ---------------------------------------------------------
          * Registry validation
+         *
+         * 注意：
+         *
+         * 此处仍然不能写 RuntimeClosed。
+         * Registry 必须先验证。
          * ---------------------------------------------------------
          */
 
@@ -1029,6 +1075,52 @@ class HonestRuntime {
 
         if (!registryComplete) {
 
+            runtimeContext.runtimeState =
+                "RuntimeAborted";
+
+            runtimeResult.setMetadata({
+
+                contractVersion:
+                    RuntimeContract.version,
+
+                runtimeVersion,
+
+                engineCount:
+                    registryState.length,
+
+                registryValidation,
+
+                registryVersionValidation,
+
+                registryStateBeforeSelfCheck:
+                    registryState,
+
+                registryStateAfterSelfCheck:
+                    engineRegistry.list(),
+
+                executionCompleted:
+                    finalExecutionCompleted,
+
+                executionPending:
+                    finalExecutionPending,
+
+                executionCompletedCount:
+                    finalExecutionCompleted.length,
+
+                executionExpectedCount:
+                    pipeline.length,
+
+                executionComplete:
+                    finalExecutionComplete,
+
+                runtimeState:
+                    runtimeContext.runtimeState,
+
+                governance:
+                    governanceResult
+
+            });
+
             throw new Error(
                 `MoWen EngineRegistry integrity failed: ${JSON.stringify(
                     {
@@ -1036,7 +1128,9 @@ class HonestRuntime {
                         registryState,
                         missingPipelineEngines,
                         registryValidation,
-                        registryVersionValidation
+                        registryVersionValidation,
+                        runtimeState:
+                            runtimeContext.runtimeState
                     }
                 )}`
             );
@@ -1046,6 +1140,16 @@ class HonestRuntime {
         runtimeResult.setTrace(
             trace
         );
+
+        /*
+         * ---------------------------------------------------------
+         * IMPORTANT:
+         *
+         * 到这里仍然是 RuntimeExecuting。
+         *
+         * SelfCheck 必须继续参与最终 Closure Gate。
+         * ---------------------------------------------------------
+         */
 
         runtimeResult.setMetadata({
 
@@ -1138,8 +1242,6 @@ class HonestRuntime {
         const responsibilityEvent =
             new ResponsibilityEvent({
 
-                identity,
-
                 expression:
                     this.expression,
 
@@ -1179,6 +1281,28 @@ class HonestRuntime {
             responsibilityEventValidation.passed !== true
         ) {
 
+            runtimeContext.runtimeState =
+                "RuntimeAborted";
+
+            runtimeResult.setMetadata({
+
+                contractVersion:
+                    RuntimeContract.version,
+
+                runtimeVersion,
+
+                runtimeState:
+                    runtimeContext.runtimeState,
+
+                responsibilityEvent: {
+
+                    validation:
+                        responsibilityEventValidation
+
+                }
+
+            });
+
             throw new Error(
                 `MoWen ResponsibilityEvent validation failed: ${JSON.stringify(
                     responsibilityEventValidation
@@ -1203,9 +1327,9 @@ class HonestRuntime {
          * ---------------------------------------------------------
          * FINAL Runtime Metadata
          *
-         * 此处再次写入最终生命周期事实。
-         *
-         * 不使用 SelfCheck 执行前的 pending 状态覆盖最终状态。
+         * 此时仍不能假设 RuntimeClosed。
+         * 先记录 RuntimeExecuting。
+         * 最终 Closure Gate 通过后再覆盖为 RuntimeClosed。
          * ---------------------------------------------------------
          */
 
@@ -1273,7 +1397,7 @@ class HonestRuntime {
 
         /*
          * ---------------------------------------------------------
-         * Final Runtime Closure Assertion
+         * FINAL Runtime Closure Assertion
          * ---------------------------------------------------------
          *
          * Runtime 只有同时满足：
@@ -1281,9 +1405,263 @@ class HonestRuntime {
          * 1. Registry 10/10
          * 2. Execution 10/10
          * 3. SelfCheck passed
-         * 4. RuntimeState = RuntimeClosed
          *
-         * 才允许返回 RuntimeResult。
+         * 才允许写入：
+         *
+         *   RuntimeClosed
+         *
+         * 这是最终 Closure Gate。
+         *
+         * IMPORTANT:
+         *
+         * runtimeState 不再作为 Gate 的输入条件。
+         * 因为 RuntimeClosed 是 Gate 的输出事实，
+         * 不能要求“已经 Closed”才能证明“可以 Closed”。
+         * ---------------------------------------------------------
+         */
+
+        const closureGatePassed =
+            registryState.length === pipeline.length &&
+            finalExecutionCompleted.length === pipeline.length &&
+            finalExecutionPending.length === 0 &&
+            selfCheck?.result?.passed === true;
+
+        if (!closureGatePassed) {
+
+            runtimeContext.runtimeState =
+                "RuntimeAborted";
+
+            runtimeResult.setMetadata({
+
+                contractVersion:
+                    RuntimeContract.version,
+
+                runtimeVersion,
+
+                engineCount:
+                    engineRegistry.list().length,
+
+                registryValidation,
+
+                registryVersionValidation,
+
+                registryStateBeforeSelfCheck:
+                    registryState,
+
+                registryStateAfterSelfCheck:
+                    engineRegistry.list(),
+
+                executionCompleted:
+                    finalExecutionCompleted,
+
+                executionPending:
+                    finalExecutionPending,
+
+                executionCompletedCount:
+                    finalExecutionCompleted.length,
+
+                executionExpectedCount:
+                    pipeline.length,
+
+                executionComplete:
+                    finalExecutionComplete,
+
+                runtimeState:
+                    runtimeContext.runtimeState,
+
+                governance:
+                    governanceResult,
+
+                responsibilityEvent: {
+
+                    type:
+                        responsibilityEvent.type,
+
+                    version:
+                        responsibilityEvent.version,
+
+                    epistemicState:
+                        responsibilityEvent.epistemicState,
+
+                    publishable:
+                        responsibilityEventPublishable,
+
+                    validation:
+                        responsibilityEventValidation
+
+                }
+
+            });
+
+            throw new Error(
+                `MoWen Runtime closure failed: ${JSON.stringify(
+                    {
+                        registryCount:
+                            registryState.length,
+
+                        expectedCount:
+                            pipeline.length,
+
+                        executionCompleted:
+                            finalExecutionCompleted,
+
+                        executionPending:
+                            finalExecutionPending,
+
+                        selfCheckPassed:
+                            selfCheck?.result?.passed === true,
+
+                        selfCheckChecks:
+                            selfCheck?.result?.checks ||
+                            selfCheck?.checks ||
+                            null,
+
+                        selfCheckFailures:
+                            selfCheck?.result?.failureExplanation ||
+                            selfCheck?.failureExplanation ||
+                            null,
+
+                        selfCheckReports: {
+
+                            contract:
+                                selfCheck?.result?.contractReport ||
+                                selfCheck?.contractReport ||
+                                null,
+
+                            registry:
+                                selfCheck?.result?.registryReport ||
+                                selfCheck?.registryReport ||
+                                null,
+
+                            selfDescription:
+                                selfCheck?.result?.selfDescriptionReport ||
+                                selfCheck?.selfDescriptionReport ||
+                                null,
+
+                            runtimeResult:
+                                selfCheck?.result?.runtimeResultReport ||
+                                selfCheck?.runtimeResultReport ||
+                                null,
+
+                            integrity:
+                                selfCheck?.result?.integrityReport ||
+                                selfCheck?.integrityReport ||
+                                null,
+
+                            responsibilityBoundary:
+                                selfCheck?.result?.boundaryReport ||
+                                selfCheck?.boundaryReport ||
+                                null,
+
+                            publicationBoundary:
+                                selfCheck?.result?.publicationBoundaryReport ||
+                                selfCheck?.publicationBoundaryReport ||
+                                null,
+
+                            epistemicBoundary:
+                                selfCheck?.result?.epistemicReport ||
+                                selfCheck?.epistemicReport ||
+                                null,
+
+                            externalLanguageBoundary:
+                                selfCheck?.result?.languageBoundaryReport ||
+                                selfCheck?.languageBoundaryReport ||
+                                null
+
+                        },
+
+                        runtimeState:
+                            runtimeContext.runtimeState
+
+                    }
+                )}`
+            );
+
+        }
+
+        /*
+         * ---------------------------------------------------------
+         * FINAL RUNTIME CLOSURE
+         *
+         * Closure Gate 已通过。
+         *
+         * 现在才允许宣布：
+         *
+         *   RuntimeClosed
+         * ---------------------------------------------------------
+         */
+
+        runtimeContext.runtimeState =
+            "RuntimeClosed";
+
+        runtimeResult.setMetadata({
+
+            contractVersion:
+                RuntimeContract.version,
+
+            runtimeVersion,
+
+            engineCount:
+                engineRegistry.list().length,
+
+            registryValidation,
+
+            registryVersionValidation,
+
+            registryStateBeforeSelfCheck:
+                registryState,
+
+            registryStateAfterSelfCheck:
+                engineRegistry.list(),
+
+            executionCompleted:
+                finalExecutionCompleted,
+
+            executionPending:
+                finalExecutionPending,
+
+            executionCompletedCount:
+                finalExecutionCompleted.length,
+
+            executionExpectedCount:
+                pipeline.length,
+
+            executionComplete:
+                finalExecutionComplete,
+
+            runtimeState:
+                runtimeContext.runtimeState,
+
+            governance:
+                governanceResult,
+
+            responsibilityEvent: {
+
+                type:
+                    responsibilityEvent.type,
+
+                version:
+                    responsibilityEvent.version,
+
+                epistemicState:
+                    responsibilityEvent.epistemicState,
+
+                publishable:
+                    responsibilityEventPublishable,
+
+                validation:
+                    responsibilityEventValidation
+
+            }
+
+        });
+
+        /*
+         * ---------------------------------------------------------
+         * Final invariant assertion
+         *
+         * 此处只是验证刚刚完成的 Closure Gate，
+         * 不再参与决定是否 Closed。
          * ---------------------------------------------------------
          */
 
@@ -1293,12 +1671,36 @@ class HonestRuntime {
             finalExecutionPending.length === 0 &&
             selfCheck?.result?.passed === true &&
             runtimeContext.runtimeState ===
-                "RuntimeClosed";
+            "RuntimeClosed";
 
         if (!runtimeClosed) {
 
+            runtimeContext.runtimeState =
+                "RuntimeAborted";
+
+            runtimeResult.setMetadata({
+
+                contractVersion:
+                    RuntimeContract.version,
+
+                runtimeVersion,
+
+                runtimeState:
+                    runtimeContext.runtimeState,
+
+                executionCompleted:
+                    finalExecutionCompleted,
+
+                executionPending:
+                    finalExecutionPending,
+
+                executionComplete:
+                    finalExecutionComplete
+
+            });
+
             throw new Error(
-                `MoWen Runtime closure failed: ${JSON.stringify(
+                `MoWen Runtime closure invariant failed: ${JSON.stringify(
                     {
                         registryCount:
                             registryState.length,
@@ -1455,5 +1857,4 @@ class HonestRuntime {
 }
 
 export default HonestRuntime;
-
 

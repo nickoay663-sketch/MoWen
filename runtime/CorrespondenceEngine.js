@@ -6,7 +6,7 @@ class CorrespondenceEngine extends EngineBase {
 
         super(
             "CorrespondenceEngine",
-            "10.6",
+            "10.7",
             "莫问判断定义、证据与表达之间的真实对应关系，不把发现、未验证或仅已验证但未建立对应关系的证据扩大为支持。"
         );
 
@@ -180,7 +180,7 @@ class CorrespondenceEngine extends EngineBase {
 
         /*
          * =========================================================
-         * CORRESPONDENCE BOUNDARY v10.6
+         * CORRESPONDENCE BOUNDARY v10.7
          * =========================================================
          *
          * EvidenceEngine 已经完成第一道边界：

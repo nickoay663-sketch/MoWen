@@ -69,13 +69,17 @@ const safeEngine =
             epistemicState:
                 pick(
                     value.epistemicState,
-                    result.epistemicState
+                    result.epistemicState,
+                    result.reconstruction?.reconstructionState,
+                    result.report?.reconstructionState
                 ),
 
             verificationStatus:
                 pick(
                     value.verificationStatus,
-                    result.verificationStatus
+                    result.verificationStatus,
+                    result.reconstruction?.verificationStatus,
+                    result.report?.verificationStatus
                 ),
 
             supported:
@@ -112,6 +116,28 @@ const reasoning =
 const responsibility =
     runtimeResult.responsibility || {};
 
+const reconstruction =
+    runtimeResult.reconstruction || {};
+
+const reconstructionData =
+    reconstruction.reconstruction ||
+    reconstruction.result?.reconstruction ||
+    {};
+
+const generator =
+    runtimeResult.generator || {};
+
+const generatorReport =
+    generator.report ||
+    generator.result?.report ||
+    {};
+
+const publishableText =
+    pick(
+        generator.publishableText,
+        generator.result?.publishableText
+    ) ?? "";
+
 const epistemicBoundary =
     runtimeResult.epistemicBoundary || {};
 
@@ -119,6 +145,7 @@ const epistemicState =
     pick(
         runtimeResult.epistemicState,
         epistemicBoundary.finalState,
+        epistemicBoundary.state,
         responsibility.epistemicState,
         responsibility.result?.epistemicState,
         reasoning.epistemicState,
@@ -151,6 +178,24 @@ const responsibilityPassed =
         responsibility.result?.passed
     );
 
+const reconstructionState =
+    pick(
+        reconstructionData.reconstructionState,
+        reconstructionData.epistemicState,
+        reconstructionData.verificationStatus
+    );
+
+const reconstructionPublishable =
+    reconstructionData.publishable === true;
+
+const generatorPublishable =
+    generatorReport.publishable === true;
+
+const reconstructedExpression =
+    typeof reconstructionData.reconstructedExpression === "string"
+        ? reconstructionData.reconstructedExpression
+        : "";
+
 const selfCheckPassed =
     safeSelfCheck.passed === true;
 
@@ -173,6 +218,25 @@ const assertions = {
     responsibilityDidNotPass:
         responsibilityPassed !== true,
 
+    reconstructionDidNotBecomeSupported:
+        reconstructionState !== "SUPPORTED",
+
+    reconstructionNotPublishable:
+        reconstructionPublishable === false,
+
+    generatorReportNotPublishable:
+        generatorPublishable === false,
+
+    publishableTextIsEmpty:
+        publishableText.trim() === "",
+
+    reconstructionProducedBoundaryExpression:
+        reconstructedExpression.trim().length > 0,
+
+    reconstructionAndPublicationAreSeparated:
+        reconstructedExpression.trim().length > 0 &&
+        publishableText.trim() === "",
+
     selfCheckPassed,
 
     noForbiddenPromotion:
@@ -190,7 +254,7 @@ const allPassed =
 const report = {
 
     test:
-        "MoWen Runtime v10.4 Real-World Honesty Boundary Test",
+        "MoWen Runtime v10.7 Real-World Reconstruction / Publication Boundary Test",
 
     expressionType:
         "外部事实性主张 + 未完成验证",
@@ -217,34 +281,53 @@ const report = {
 
     responsibilityPassed,
 
-    engines: {
+    reconstruction: {
 
-        recognition:
-            safeEngine(runtimeResult.recognition),
+        engine:
+            safeEngine(reconstruction),
 
-        definition:
-            safeEngine(runtimeResult.definition),
+        reconstructionState,
 
-        search:
-            safeEngine(runtimeResult.search),
+        verificationStatus:
+            reconstructionData.verificationStatus ?? null,
 
-        evidence:
-            safeEngine(runtimeResult.evidence),
+        publishable:
+            reconstructionPublishable,
 
-        correspondence:
-            safeEngine(runtimeResult.correspondence),
+        reconstructedExpressionLength:
+            reconstructedExpression.length
 
-        reasoning:
-            safeEngine(runtimeResult.reasoning),
+    },
 
-        responsibility:
-            safeEngine(runtimeResult.responsibility),
+    generator: {
 
-        reconstruction:
-            safeEngine(runtimeResult.reconstruction),
+        engine:
+            safeEngine(generator),
 
-        generator:
-            safeEngine(runtimeResult.generator)
+        verificationStatus:
+            generatorReport.verificationStatus ?? null,
+
+        publishable:
+            generatorPublishable,
+
+        publishableTextLength:
+            publishableText.length
+
+    },
+
+    publicationBoundary: {
+
+        reconstructionProducedExpression:
+            reconstructedExpression.trim().length > 0,
+
+        reconstructionAllowedPublication:
+            reconstructionPublishable,
+
+        generatorAllowedPublication:
+            generatorPublishable,
+
+        publishableTextEmpty:
+            publishableText.trim() === ""
 
     },
 
@@ -285,7 +368,7 @@ console.log(
 if (!allPassed) {
 
     console.error(
-        "REAL-WORLD HONESTY TEST FAILED"
+        "REAL-WORLD RECONSTRUCTION / PUBLICATION BOUNDARY TEST FAILED"
     );
 
     process.exit(1);
@@ -293,5 +376,5 @@ if (!allPassed) {
 }
 
 console.log(
-    "REAL-WORLD HONESTY TEST PASSED"
+    "REAL-WORLD RECONSTRUCTION / PUBLICATION BOUNDARY TEST PASSED"
 );

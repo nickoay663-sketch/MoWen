@@ -1,8 +1,6 @@
-const RuntimeVersion = {
+﻿const RuntimeVersion = {
 
-    name: "MoWen Runtime",
-
-    version: "0.1.0",
+    version: "10.7",
 
     protocol: "Honest Runtime",
 

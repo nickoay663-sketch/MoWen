@@ -1,5 +1,6 @@
 ﻿import HonestRuntime from "./HonestRuntime.js";
 import ReportFormatter from "./ReportFormatter.js";
+import RuntimeContract from "./RuntimeContract.js";
 
 /*
  * =========================================================
@@ -26,6 +27,15 @@ import ReportFormatter from "./ReportFormatter.js";
  *     Generator.report ─X→ final
  *
  * No Generator.report bypass is permitted here.
+ *
+ * Runtime Identity:
+ *
+ *     RuntimeContract.version
+ *          ↓
+ *     MoWenRuntime.version
+ *
+ * The external Runtime facade MUST NOT maintain an
+ * independent hard-coded runtime version.
  * =========================================================
  */
 
@@ -42,8 +52,18 @@ class MoWenRuntime {
         this.options =
             options || {};
 
+        /*
+         * ---------------------------------------------------------
+         * Unified Runtime Identity
+         * ---------------------------------------------------------
+         *
+         * RuntimeContract is the authoritative Runtime version
+         * source for the current Runtime lifecycle.
+         * ---------------------------------------------------------
+         */
+
         this.version =
-            "10.4";
+            RuntimeContract.version;
 
     }
 
@@ -77,6 +97,9 @@ class MoWenRuntime {
 
                 runtimeVersion:
                     this.version,
+
+                contractVersion:
+                    RuntimeContract.version,
 
                 generatedAt:
                     new Date().toISOString()

@@ -51,28 +51,6 @@
                 ? [...runtimeTrace]
                 : [];
 
-        /*
-         * ---------------------------------------------------------
-         * Normalized Responsibility Records
-         *
-         * IMPORTANT:
-         *
-         * ResponsibilityEngine may return a wrapper object such as:
-         *
-         * {
-         *     metadata,
-         *     responsibilities: [...]
-         * }
-         *
-         * The wrapper is Runtime structure.
-         *
-         * ResponsibilityEvent must select the normalized
-         * responsibility record itself as the primary record.
-         *
-         * It must never treat the wrapper as a responsibility fact.
-         * ---------------------------------------------------------
-         */
-
         this.responsibilityRecords =
             this.collectResponsibilityRecords(
                 responsibility
@@ -81,15 +59,6 @@
         const primary =
             this.responsibilityRecords[0] ||
             {};
-
-        /*
-         * ---------------------------------------------------------
-         * Responsibility State
-         *
-         * These fields are projected exclusively from the
-         * normalized responsibility record.
-         * ---------------------------------------------------------
-         */
 
         this.responsibilityBoundary =
             primary.responsibilityBoundary ||
@@ -149,17 +118,6 @@
     }
 
 
-    /*
-     * =========================================================
-     * Normalized Responsibility Record Detection
-     * =========================================================
-     *
-     * A normalized responsibility record contains responsibility
-     * facts produced by ResponsibilityEngine.
-     *
-     * Runtime wrapper objects are not responsibility records.
-     */
-
     isNormalizedResponsibilityRecord(
         record
     ) {
@@ -211,134 +169,61 @@
     }
 
 
-    /*
-     * =========================================================
-     * Responsibility Record Collection
-     * =========================================================
-     *
-     * Priority:
-     *
-     * 1. responsibility.responsibilities
-     * 2. responsibility.result.responsibilities
-     * 3. responsibility.result if it is itself normalized
-     * 4. responsibility if it is itself normalized
-     *
-     * Runtime wrapper objects are never promoted to primary
-     * responsibility records.
-     */
-
     collectResponsibilityRecords(
         responsibility
     ) {
 
-        const records = [];
+        if (
+            !responsibility ||
+            typeof responsibility !== "object"
+        ) {
 
-        const append =
-            candidate => {
+            return [];
 
-                if (
-                    !candidate
-                ) {
+        }
 
-                    return;
+        /*
+         * ResponsibilityEngine owns the normalized responsibility
+         * record collection.
+         *
+         * ResponsibilityEvent must not reconstruct the same
+         * responsibility record from wrapper/result layers.
+         *
+         * Priority:
+         *   1. responsibility.responsibilities
+         *   2. direct normalized responsibility
+         *
+         * Nested result wrappers are intentionally ignored here.
+         */
 
-                }
+        if (
+            Array.isArray(
+                responsibility.responsibilities
+            )
+        ) {
 
-                if (
-                    Array.isArray(candidate)
-                ) {
-
-                    for (
-                        const record
-                        of candidate
-                    ) {
-
-                        if (
-                            this.isNormalizedResponsibilityRecord(
-                                record
-                            )
-                        ) {
-
-                            records.push(
-                                record
-                            );
-
-                        }
-
-                    }
-
-                    return;
-
-                }
-
-                if (
+            return responsibility.responsibilities.filter(
+                record =>
                     this.isNormalizedResponsibilityRecord(
-                        candidate
+                        record
                     )
-                ) {
+            );
 
-                    records.push(
-                        candidate
-                    );
+        }
 
-                }
+        if (
+            this.isNormalizedResponsibilityRecord(
+                responsibility
+            )
+        ) {
 
-            };
+            return [
+                responsibility
+            ];
 
+        }
 
-        /*
-         * ---------------------------------------------------------
-         * Preferred normalized array
-         * ---------------------------------------------------------
-         */
-
-        append(
-            responsibility?.responsibilities
-        );
-
-
-        /*
-         * ---------------------------------------------------------
-         * Nested normalized array
-         * ---------------------------------------------------------
-         */
-
-        append(
-            responsibility?.result?.responsibilities
-        );
-
-
-        /*
-         * ---------------------------------------------------------
-         * Nested result itself
-         * ---------------------------------------------------------
-         */
-
-        append(
-            responsibility?.result
-        );
-
-
-        /*
-         * ---------------------------------------------------------
-         * Direct normalized responsibility object
-         * ---------------------------------------------------------
-         */
-
-        append(
-            responsibility
-        );
-
-
-        /*
-         * ---------------------------------------------------------
-         * Deduplicate records while preserving first-seen order.
-         * ---------------------------------------------------------
-         */
-
-        return [
-            ...new Set(records)
-        ];
+        return [];
 
     }
 
@@ -346,6 +231,23 @@
     /*
      * =========================================================
      * Responsibility Consistency
+     * =========================================================
+     *
+     * Consistency means internal logical agreement.
+     *
+     * IMPORTANT:
+     *
+     * responsibilityBoundary.status === "exceeded"
+     * and responsibilityJudgment.gap === true
+     *
+     * are NOT themselves inconsistencies.
+     *
+     * They are legitimate responsibility-capacity outcomes:
+     *
+     * demand > verified capacity.
+     *
+     * MoWen must preserve these states while still allowing the
+     * responsibility record to be internally consistent.
      * =========================================================
      */
 
@@ -373,6 +275,12 @@
 
         }
 
+        /*
+         * ---------------------------------------------------------
+         * Supported state consistency
+         * ---------------------------------------------------------
+         */
+
         const supportedValues =
             records
                 .filter(
@@ -395,6 +303,12 @@
             );
 
         }
+
+        /*
+         * ---------------------------------------------------------
+         * Verification state consistency
+         * ---------------------------------------------------------
+         */
 
         const verificationValues =
             records
@@ -424,44 +338,86 @@
 
         }
 
-        const boundaryValues =
-            records
-                .map(
-                    record =>
-                        record.responsibilityBoundary?.status
-                )
-                .filter(
-                    status =>
-                        typeof status ===
-                        "string"
+        /*
+         * ---------------------------------------------------------
+         * Boundary / judgment logical consistency
+         *
+         * "exceeded" + gap:true is a valid state.
+         *
+         * It becomes inconsistent only when the same record claims
+         * that the responsibility capacity is sufficient.
+         * ---------------------------------------------------------
+         */
+
+        for (
+            const record
+            of records
+        ) {
+
+            const boundaryStatus =
+                record.responsibilityBoundary?.status;
+
+            const gap =
+                record.responsibilityJudgment?.gap;
+
+            const capacityLevel =
+                record.responsibilityCapacity?.level;
+
+            const actualSupport =
+                record.responsibilityCapacity?.actualSupport;
+
+            if (
+                boundaryStatus ===
+                "exceeded" &&
+                gap === false
+            ) {
+
+                errors.push(
+                    "Responsibility boundary is exceeded while responsibility judgment reports no capacity gap."
                 );
 
-        if (
-            boundaryValues.includes(
-                "exceeded"
-            )
-        ) {
+            }
 
-            errors.push(
-                "Responsibility boundary exceeded."
-            );
+            if (
+                gap === true &&
+                (
+                    capacityLevel ===
+                    "sufficient" ||
+                    capacityLevel ===
+                    "full"
+                )
+            ) {
 
-        }
+                errors.push(
+                    "Responsibility judgment reports a capacity gap while responsibility capacity is sufficient."
+                );
 
-        const gapDetected =
-            records.some(
-                record =>
-                    record.responsibilityJudgment?.gap ===
-                    true
-            );
+            }
 
-        if (
-            gapDetected
-        ) {
+            if (
+                actualSupport ===
+                true &&
+                capacityLevel ===
+                "none"
+            ) {
 
-            errors.push(
-                "Responsibility judgment contains an unresolved capacity gap."
-            );
+                errors.push(
+                    "Responsibility capacity reports no capacity while actual support is true."
+                );
+
+            }
+
+            if (
+                boundaryStatus ===
+                "matched" &&
+                gap === true
+            ) {
+
+                errors.push(
+                    "Responsibility boundary is matched while responsibility judgment reports a capacity gap."
+                );
+
+            }
 
         }
 
@@ -476,12 +432,6 @@
 
     }
 
-
-    /*
-     * =========================================================
-     * Validation
-     * =========================================================
-     */
 
     validate() {
 
@@ -599,12 +549,6 @@
     }
 
 
-    /*
-     * =========================================================
-     * Publication Boundary
-     * =========================================================
-     */
-
     isPublishable() {
 
         if (
@@ -661,12 +605,6 @@
     }
 
 
-    /*
-     * =========================================================
-     * Responsibility State
-     * =========================================================
-     */
-
     getResponsibilityState() {
 
         return {
@@ -699,12 +637,6 @@
 
     }
 
-
-    /*
-     * =========================================================
-     * Serialization
-     * =========================================================
-     */
 
     toJSON() {
 

@@ -1,4 +1,4 @@
-﻿import EngineBase from "./EngineBase.js";
+import EngineBase from "./EngineBase.js";
 
 class SelfCheckEngine extends EngineBase {
 
@@ -39,6 +39,9 @@ class SelfCheckEngine extends EngineBase {
         const boundaryReport =
             this.validateResponsibilityBoundary();
 
+        const publicationBoundaryReport =
+            this.validatePublicationBoundary();
+
         const epistemicReport =
             this.validateEpistemicBoundary();
 
@@ -52,6 +55,7 @@ class SelfCheckEngine extends EngineBase {
                 selfDescriptionReport,
                 integrityReport,
                 boundaryReport,
+                publicationBoundaryReport,
                 epistemicReport,
                 languageBoundaryReport
             );
@@ -61,6 +65,8 @@ class SelfCheckEngine extends EngineBase {
                 failureExplanation
             );
 
+
+
         const auditTrail =
             this.createAuditTrail(
                 contractReport,
@@ -68,6 +74,7 @@ class SelfCheckEngine extends EngineBase {
                 runtimeResultReport,
                 integrityReport,
                 boundaryReport,
+                publicationBoundaryReport,
                 epistemicReport,
                 languageBoundaryReport
             );
@@ -86,6 +93,8 @@ class SelfCheckEngine extends EngineBase {
             integrityReport.passed
             &&
             boundaryReport.passed
+            &&
+            publicationBoundaryReport.passed
             &&
             epistemicReport.passed
             &&
@@ -119,6 +128,8 @@ class SelfCheckEngine extends EngineBase {
 
             boundaryReport,
 
+            publicationBoundaryReport,
+
             epistemicReport,
 
             languageBoundaryReport,
@@ -147,6 +158,8 @@ class SelfCheckEngine extends EngineBase {
 
                 boundaryReport,
 
+                publicationBoundaryReport,
+
                 epistemicReport,
 
                 languageBoundaryReport,
@@ -168,7 +181,7 @@ class SelfCheckEngine extends EngineBase {
                 passed
                     ? []
                     : [
-                        "运行链是否存在责任边界、认识状态边界或外部语言边界违反？"
+                        "运行链是否存在责任边界、发布边界、认识状态边界或外部语言边界违反？"
                     ],
 
             nextRuntimeState:
@@ -182,7 +195,6 @@ class SelfCheckEngine extends EngineBase {
         };
 
     }
-
 
     check() {
 
@@ -645,6 +657,7 @@ class SelfCheckEngine extends EngineBase {
 
         ];
 
+
         const passed =
             expected.length === pipeline.length &&
             expected.every(
@@ -677,6 +690,9 @@ class SelfCheckEngine extends EngineBase {
         const generator =
             this.runtimeContext.generator || {};
 
+        const reportData =
+            generator.report || {};
+
         const report = {
 
             passed:
@@ -696,9 +712,6 @@ class SelfCheckEngine extends EngineBase {
             }
 
         };
-
-        const reportData =
-            generator.report || {};
 
         if (
             reportData.expansion === true
@@ -734,6 +747,214 @@ class SelfCheckEngine extends EngineBase {
 
     }
 
+    validatePublicationBoundary() {
+
+        const generator =
+            this.runtimeContext.generator || {};
+
+        const report =
+            generator.report || {};
+
+        const responsibilities =
+            Array.isArray(
+                report.responsibilities
+            )
+                ? report.responsibilities
+                : [];
+
+        const reconstructionState =
+            report.reconstructionState ||
+            generator.reconstructionState ||
+            "UNKNOWN";
+
+        const verificationStatus =
+            report.verificationStatus ||
+            generator.verificationStatus ||
+            "UNVERIFIED";
+
+        const publishable =
+            generator.publishable === true ||
+            report.publishable === true;
+
+        const publishableText =
+            typeof generator.publishableText === "string"
+                ? generator.publishableText
+                : "";
+
+        /*
+         * ============================================================
+         * Publication Boundary
+         * ============================================================
+         *
+         * 本检查负责确认：
+         *
+         * 1. Runtime 的认识状态与 publishable 声明一致
+         * 2. 不满足 SUPPORTED 的内容必须被阻止发布
+         * 3. publishable=true 时必须存在发布文本
+         * 4. publishable=false 时不得产生发布文本
+         * 5. Responsibility Boundary 不得被越过
+         *
+         * IMPORTANT:
+         *
+         * “未 SUPPORTED”不是 SelfCheck failure。
+         *
+         * 未 SUPPORTED 的正确行为就是：
+         *
+         *     reconstructionState != SUPPORTED
+         *             ↓
+         *     publishable = false
+         *             ↓
+         *     publishableText = ""
+         *
+         * 因此：
+         *
+         * responsibilityBoundaryValid
+         * 不负责判断“是否 SUPPORTED”，
+         * 只负责判断“责任边界是否 exceeded”。
+         * ============================================================
+         */
+
+        /*
+         * ============================================================
+         * Publication Responsibility Gate
+         * ============================================================
+         *
+         * IMPORTANT:
+         *
+         * responsibilityBoundary.status === "exceeded"
+         *
+         * 在未达到 SUPPORTED 时并不是 SelfCheck failure。
+         *
+         * 它表示 ResponsibilityEngine 已经正确阻止当前表达承担
+         * 最终发布责任。
+         *
+         * 因此：
+         *
+         * publishable === false
+         *     -> exceeded 是合法的阻止发布状态
+         *
+         * publishable === true
+         *     -> 不允许存在 exceeded
+         *
+         * SelfCheck 检查的是“发布闸门是否正确执行”，
+         * 而不是要求所有输入最终都必须 SUPPORTED。
+         * ============================================================
+         */
+
+        const responsibilityBoundaryValid =
+            responsibilities.every(
+                item => {
+
+                    if (!item) {
+                        return false;
+                    }
+
+                    const boundary =
+                        item.responsibilityBoundary || {};
+
+                    const exceeded =
+                        boundary.status === "exceeded";
+
+                    /*
+                     * 未达到发布条件：
+                     *
+                     * exceeded === true
+                     * publishable === false
+                     *
+                     * 这是正确的阻止发布结果。
+                     */
+                    if (!publishable) {
+                        return true;
+                    }
+
+                    /*
+                     * 已声明可以发布：
+                     *
+                     * 任何责任边界 exceeded
+                     * 都必须使 Publication Boundary 失败。
+                     */
+                    return !exceeded;
+
+                }
+            );
+
+        const supportedState =
+            reconstructionState === "SUPPORTED" &&
+            verificationStatus === "SUPPORTED";
+
+        /*
+         * SUPPORTED 才允许 publishable=true。
+         *
+         * 非 SUPPORTED 必须 publishable=false。
+         */
+        const publicationClaimValid =
+            publishable === supportedState;
+
+        /*
+         * publishable=true
+         *     -> 必须存在发布文本
+         *
+         * publishable=false
+         *     -> 不得存在发布文本
+         */
+        const textBoundaryValid =
+            publishable
+                ? publishableText.trim().length > 0
+                : publishableText.trim().length === 0;
+
+        /*
+         * SelfCheck 的通过条件：
+         *
+         * 不是要求所有内容最终 SUPPORTED，
+         * 而是要求 Runtime 正确执行“允许发布 / 阻止发布”。
+         */
+        const passed =
+            publicationClaimValid &&
+            textBoundaryValid &&
+            responsibilityBoundaryValid;
+
+        return {
+
+            passed,
+
+            reconstructionState,
+
+            verificationStatus,
+
+            publishable,
+
+            publishableTextPresent:
+                publishableText.trim().length > 0,
+
+            responsibilityBoundaryValid,
+
+            checks: {
+
+                reconstructionSupported:
+                    reconstructionState === "SUPPORTED",
+
+                verificationSupported:
+                    verificationStatus === "SUPPORTED",
+
+                publicationClaim:
+                    publicationClaimValid,
+
+                publishableText:
+                    textBoundaryValid,
+
+                responsibilityBoundary:
+                    responsibilityBoundaryValid
+
+            },
+
+            status:
+                passed
+                    ? "publication-boundary-pass"
+                    : "publication-boundary-failed"
+
+        };
+
+    }
 
     validateEngineDescription() {
 
@@ -1167,6 +1388,7 @@ class SelfCheckEngine extends EngineBase {
             );
 
 
+
         const passed =
             contractStateCount >= 1 &&
             contractRuleCount >= 1 &&
@@ -1308,6 +1530,7 @@ class SelfCheckEngine extends EngineBase {
             languageContract.identityPreservation !== true ||
             sameObject;
 
+
         const passed =
             sameObject &&
             !runtimeOwnsLanguage &&
@@ -1354,6 +1577,7 @@ class SelfCheckEngine extends EngineBase {
         descriptionReport,
         integrityReport,
         boundaryReport,
+        publicationBoundaryReport,
         epistemicReport,
         languageBoundaryReport
 
@@ -1431,6 +1655,20 @@ class SelfCheckEngine extends EngineBase {
 
         }
 
+        if (!publicationBoundaryReport.passed) {
+
+            failures.push({
+
+                problemType:
+                    "publication-boundary-failure",
+
+                impact:
+                    "生成结果违反发布边界：只有满足 Runtime 支持状态并通过责任边界的重构结果才允许形成可发布文本。"
+
+            });
+
+        }
+
         if (!epistemicReport.passed) {
 
             failures.push({
@@ -1472,7 +1710,10 @@ class SelfCheckEngine extends EngineBase {
                 failure.problemType,
 
             action:
-                "修正运行链后重新执行 SelfCheck。",
+                failure.problemType ===
+                "publication-boundary-failure"
+                    ? "禁止发布当前生成结果，返回 Reconstruction / Evidence / Correspondence / Responsibility 链重新检查。"
+                    : "修正运行链后重新执行 SelfCheck。",
 
             reason:
                 failure.impact
@@ -1489,6 +1730,7 @@ class SelfCheckEngine extends EngineBase {
         runtimeResultReport,
         integrityReport,
         boundaryReport,
+        publicationBoundaryReport,
         epistemicReport,
         languageBoundaryReport
 
@@ -1538,6 +1780,14 @@ class SelfCheckEngine extends EngineBase {
                     ? "PASS"
                     : "FAIL",
 
+            publicationBoundaryStatus:
+                publicationBoundaryReport.passed
+                    ? "PASS"
+                    : "FAIL",
+
+            publicationBoundary:
+                publicationBoundaryReport,
+
             epistemicBoundaryStatus:
                 epistemicReport.passed
                     ? "PASS"
@@ -1571,7 +1821,6 @@ class SelfCheckEngine extends EngineBase {
         };
 
     }
-
 
     validateType(value, type) {
 

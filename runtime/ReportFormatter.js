@@ -19,7 +19,7 @@
         return {
 
             version:
-                "10.5",
+                "10.7",
 
             principle:
                 "莫问只整理运行结果，不增加新的判断。",
@@ -362,11 +362,6 @@
                 continue;
 
             }
-
-            /*
-             * 防止 result 内再次出现
-             * 完整 Runtime 结果树。
-             */
 
             if (
                 field === "responsibilities"
@@ -1178,6 +1173,9 @@
                 reconstructedExpression:
                     report.reconstructedExpression || null,
 
+                reconstructionState:
+                    report.reconstructionState || null,
+
                 language:
                     this.safeClone(
                         report.language
@@ -1212,6 +1210,20 @@
                 expansion:
                     report.expansion === true,
 
+                sourceExpansion:
+                    report.sourceExpansion === true,
+
+                evidenceExpansion:
+                    report.evidenceExpansion === true,
+
+                publishable:
+                    report.publishable === true,
+
+                publishableText:
+                    typeof generator.publishableText === "string"
+                        ? generator.publishableText
+                        : "",
+
                 reportType:
                     report.reportType || null,
 
@@ -1228,7 +1240,6 @@
         };
 
     }
-
 
     /*
      * =========================================================

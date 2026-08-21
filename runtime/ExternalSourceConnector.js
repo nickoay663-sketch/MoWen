@@ -39,20 +39,6 @@ class ExternalSourceConnector {
         }
 
 
-        /*
-         * ---------------------------------------------------------
-         * Trusted Adapter Provenance
-         *
-         * CapabilityAdmission 的真实接口只有：
-         *
-         *     admit(response)
-         *
-         * Trusted Context 必须在构造时注入。
-         *
-         * Connector 实际持有的 Adapter 身份才是可信来源。
-         * ---------------------------------------------------------
-         */
-
         this.capabilityAdmission =
             new CapabilityAdmission({
 
@@ -96,20 +82,6 @@ class ExternalSourceConnector {
                 );
 
 
-        /*
-         * ---------------------------------------------------------
-         * Adapter Admission Result
-         *
-         * Connector 不得把 Adapter 已经明确拒绝的 Capability
-         * 重新提升为 PASS。
-         *
-         * 因此：
-         *
-         *   Adapter REJECT → Connector REJECT
-         *   Adapter PASS   → 继续 Provenance 校验
-         * ---------------------------------------------------------
-         */
-
         if (
             searchResult?.capabilityAdmission ===
             "REJECT"
@@ -121,7 +93,7 @@ class ExternalSourceConnector {
                     "ExternalSourceConnector",
 
                 version:
-                    "7.4",
+                    "7.5",
 
                 principle:
                     "Connector 尊重 Adapter 已完成的 Capability Admission，不得将 REJECT 重新提升为 PASS。",
@@ -243,12 +215,6 @@ class ExternalSourceConnector {
         }
 
 
-        /*
-         * ---------------------------------------------------------
-         * Capability Contract
-         * ---------------------------------------------------------
-         */
-
         const adapterCapability =
             searchResult &&
                 searchResult.capability &&
@@ -265,7 +231,7 @@ class ExternalSourceConnector {
                     "ExternalSourceConnector",
 
                 version:
-                    "7.4",
+                    "7.5",
 
                 principle:
                     "外部能力必须由 Adapter 产生合法 CapabilityContract，并经过 Capability Admission 与 Provenance 校验。Connector 不伪造 Capability。",
@@ -366,19 +332,6 @@ class ExternalSourceConnector {
         }
 
 
-        /*
-         * ---------------------------------------------------------
-         * Connector Provenance Validation
-         *
-         * CapabilityAdmission 已经在 constructor 中获得：
-         *
-         *   trustedProvider
-         *   trustedProviderVersion
-         *
-         * 所以这里必须只传 Capability response。
-         * ---------------------------------------------------------
-         */
-
         const admission =
             this.capabilityAdmission.admit(
                 adapterCapability
@@ -395,7 +348,7 @@ class ExternalSourceConnector {
                     "ExternalSourceConnector",
 
                 version:
-                    "7.4",
+                    "7.5",
 
                 principle:
                     "外部能力必须通过 Capability Admission 与 Adapter Provenance 双重边界才能进入 Runtime。Capability 不产生证据、验证或结论。",
@@ -505,31 +458,13 @@ class ExternalSourceConnector {
         }
 
 
-        /*
-         * ---------------------------------------------------------
-         * Capability PASS
-         *
-         * PASS 只代表 Capability 合法并且 Provenance 匹配。
-         *
-         * 不代表：
-         *
-         *   sources > 0
-         *   evidence
-         *   verification
-         *   supportsClaim
-         *   conclusion
-         *
-         * 因此 EMPTY_PROVIDER 合法 PASS。
-         * ---------------------------------------------------------
-         */
-
         return {
 
             engine:
                 "ExternalSourceConnector",
 
             version:
-                "7.4",
+                "7.5",
 
             principle:
                 "莫问连接外部来源，但不把来源内容直接视为证据。Capability PASS 不等于来源存在，更不等于事实已验证。",
@@ -680,6 +615,20 @@ class ExternalSourceConnector {
 
     normalizeSource(source) {
 
+        const externalVerificationClaim =
+            source.externalVerificationClaim === true ||
+            source.verified === true ||
+            source.verificationStatus === "VERIFIED";
+
+
+        const externalVerificationBasis =
+            source.externalVerificationBasis ||
+            source.verificationBasis ||
+            source.verificationSource ||
+            source.verifier ||
+            null;
+
+
         return {
 
             source:
@@ -725,6 +674,18 @@ class ExternalSourceConnector {
 
             verifier:
                 null,
+
+            /*
+             * 外部声明保留为输入事实，
+             * 但永远不成为 Runtime 验证记录。
+             */
+
+            externalVerificationClaim,
+
+            externalVerificationBasis,
+
+            runtimeVerificationRecord:
+                false,
 
             supportsClaim:
                 false,
