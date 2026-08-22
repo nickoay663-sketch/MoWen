@@ -149,11 +149,9 @@ async function handleCheck(
          * MoWen Publish Boundary
          * ---------------------------------------------------------
          *
-         * runtimeResult is an internal Runtime object.
+         * Runtime 内部对象不得直接暴露给外部 API。
          *
-         * It MUST NOT be exposed through the external API.
-         *
-         * Only ReportFormatter-produced `report` is returned.
+         * 这里只返回 ReportFormatter 产生的 publish projection。
          * ---------------------------------------------------------
          */
 
